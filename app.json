@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "School App",
+    "slug": "school-app",
+    "scheme": "school-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "src/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "src/assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "requireFullScreen": true,
+      "infoPlist": {
+        "UIViewControllerBasedStatusBarAppearance": false,
+        "UIStatusBarStyle": "UIStatusBarStyleDefault",
+        "NSPhotoLibraryUsageDescription": "This app does not access photo library",
+        "NSCameraUsageDescription": "This app does not access camera",
+        "UIApplicationSupportsIndirectInputEvents": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.schoolapp.schoolsnap",
+      "versionCode": 1,
+      "compileSdkVersion": 34,
+      "targetSdkVersion": 34,
+      "minSdkVersion": 21,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.VIBRATE"
+      ],
+      "softwareKeyboardLayoutMode": "pan",
+      "statusBarStyle": "dark-content",
+      "statusBarTranslucent": false,
+      "navigationBarStyle": "dark-content",
+      "navigationBarColor": "#ffffff",
+      "enableEdgeToEdge": false,
+      "allowBackup": false,
+      "blocksScreenshots": true
+    },
+    "app_logo": {
+      "favicon": "src/assets/SchooSnap_logo.png"
+    },
+    "web": {
+      "favicon": "src/assets/favicon.png"
+    },
+    "plugins": ["expo-router", "expo-navigation-bar"]
+  }
+}

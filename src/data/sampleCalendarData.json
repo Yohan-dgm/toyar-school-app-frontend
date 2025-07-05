@@ -1,0 +1,238 @@
+{
+  "schoolEvents": {
+    "apiEndpoint": "GET /api/school/events?month=2025-01&student_id=123",
+    "responseFormat": {
+      "success": true,
+      "events": [],
+      "totalEvents": 12,
+      "month": "2025-01"
+    },
+    "sampleData": [
+      {
+        "id": 1,
+        "title": "Mathematics Test - Algebra & Geometry",
+        "date": "2025-01-15",
+        "time": "09:00 AM - 11:00 AM",
+        "type": "exam",
+        "subject": "Mathematics",
+        "teacher": "Mrs. Sarah Perera",
+        "location": "Room 101",
+        "description": "Chapter 5-7 covering algebra and geometry",
+        "grade": "Grade 10",
+        "duration": "2 hours",
+        "materials": ["Calculator", "Ruler", "Pencil"],
+        "isOptional": false,
+        "maxMarks": 100
+      },
+      {
+        "id": 2,
+        "title": "Annual Science Fair 2025",
+        "date": "2025-01-18",
+        "time": "02:00 PM - 06:00 PM",
+        "type": "event",
+        "subject": "Science",
+        "teacher": "Mr. David Wilson",
+        "location": "School Hall",
+        "description": "Annual science exhibition and competition with student projects",
+        "grade": "All Grades",
+        "duration": "4 hours",
+        "materials": ["Project Display", "Presentation"],
+        "isOptional": true,
+        "registrationRequired": true
+      },
+      {
+        "id": 3,
+        "title": "Basketball Championship - Semi Finals",
+        "date": "2025-01-20",
+        "time": "04:00 PM - 06:00 PM",
+        "type": "sports",
+        "subject": "Physical Education",
+        "teacher": "Coach Michael Thompson",
+        "location": "School Basketball Court",
+        "description": "Inter-school basketball championship semi-final match",
+        "grade": "Grade 9-12",
+        "duration": "2 hours",
+        "materials": ["Sports Uniform", "Water Bottle"],
+        "isOptional": true,
+        "teamRequired": true
+      },
+      {
+        "id": 4,
+        "title": "Drama Club Performance - Romeo & Juliet",
+        "date": "2025-01-24",
+        "time": "07:00 PM - 09:00 PM",
+        "type": "cultural",
+        "subject": "Drama & Arts",
+        "teacher": "Ms. Jennifer Adams",
+        "location": "School Auditorium",
+        "description": "Annual drama club performance of Shakespeare's Romeo & Juliet",
+        "grade": "All Grades",
+        "duration": "2 hours",
+        "materials": ["Tickets", "Program"],
+        "isOptional": true,
+        "ticketPrice": "$5"
+      },
+      {
+        "id": 5,
+        "title": "Republic Day Celebration",
+        "date": "2025-01-26",
+        "time": "08:00 AM - 12:00 PM",
+        "type": "holiday",
+        "subject": "National Event",
+        "teacher": "All Staff",
+        "location": "School Grounds",
+        "description": "National Republic Day celebration with flag hoisting and cultural programs",
+        "grade": "All Grades",
+        "duration": "4 hours",
+        "materials": ["Uniform", "Indian Flag"],
+        "isOptional": false,
+        "isNationalHoliday": true
+      },
+      {
+        "id": 6,
+        "title": "Music Concert - Winter Melodies",
+        "date": "2025-02-12",
+        "time": "06:00 PM - 08:00 PM",
+        "type": "cultural",
+        "subject": "Music",
+        "teacher": "Mr. James Rodriguez",
+        "location": "School Auditorium",
+        "description": "Annual winter music concert featuring school choir and orchestra",
+        "grade": "All Grades",
+        "duration": "2 hours",
+        "materials": ["Concert Program"],
+        "isOptional": true,
+        "performanceSlots": 15
+      }
+    ]
+  },
+  "studentAttendance": {
+    "apiEndpoint": "GET /api/student/attendance?month=2025-01&student_id=123",
+    "responseFormat": {
+      "success": true,
+      "attendance": {},
+      "summary": {
+        "totalSchoolDays": 22,
+        "presentDays": 19,
+        "absentDays": 3,
+        "attendancePercentage": 86.4
+      }
+    },
+    "sampleData": {
+      "month": "2025-01",
+      "studentId": "STU123",
+      "studentName": "John Doe",
+      "grade": "Grade 10",
+      "section": "A",
+      "rollNumber": "10A15",
+      "totalSchoolDays": 22,
+      "presentDays": 19,
+      "absentDays": 3,
+      "holidayDays": 9,
+      "attendancePercentage": 86.4,
+      "dailyAttendance": {
+        "2025-01-01": {
+          "status": "holiday",
+          "reason": "New Year's Day",
+          "note": "National Holiday",
+          "isSchoolDay": false
+        },
+        "2025-01-02": {
+          "status": "present",
+          "checkIn": "08:15 AM",
+          "checkOut": "03:30 PM",
+          "isSchoolDay": true,
+          "lateArrival": false
+        },
+        "2025-01-03": {
+          "status": "present",
+          "checkIn": "08:10 AM",
+          "checkOut": "03:30 PM",
+          "isSchoolDay": true,
+          "lateArrival": false
+        },
+        "2025-01-04": {
+          "status": "weekend",
+          "reason": "Saturday",
+          "isSchoolDay": false
+        },
+        "2025-01-05": {
+          "status": "weekend",
+          "reason": "Sunday",
+          "isSchoolDay": false
+        },
+        "2025-01-08": {
+          "status": "absent",
+          "reason": "Sick Leave",
+          "note": "Medical certificate provided",
+          "isSchoolDay": true,
+          "excused": true
+        },
+        "2025-01-26": {
+          "status": "holiday",
+          "reason": "Republic Day",
+          "note": "National Holiday",
+          "isSchoolDay": false
+        },
+        "2025-01-29": {
+          "status": "absent",
+          "reason": "Family Emergency",
+          "note": "Prior permission taken",
+          "isSchoolDay": true,
+          "excused": true
+        },
+        "2025-01-31": {
+          "status": "absent",
+          "reason": "Sick Leave",
+          "note": "Fever - Medical certificate provided",
+          "isSchoolDay": true,
+          "excused": true
+        }
+      },
+      "weeklyStats": {
+        "week1": { "present": 3, "absent": 0, "percentage": 100 },
+        "week2": { "present": 4, "absent": 1, "percentage": 80 },
+        "week3": { "present": 5, "absent": 0, "percentage": 100 },
+        "week4": { "present": 4, "absent": 1, "percentage": 80 },
+        "week5": { "present": 3, "absent": 1, "percentage": 75 }
+      },
+      "monthlyTrend": {
+        "improvement": "+2.5%",
+        "comparedToLastMonth": "Better",
+        "classAverage": 88.2,
+        "ranking": "Above Average"
+      }
+    }
+  },
+  "colorCoding": {
+    "attendance": {
+      "present": "#4CAF50",
+      "absent": "#FF5722",
+      "holiday": "#FF9800",
+      "weekend": "#9E9E9E"
+    },
+    "events": {
+      "exam": "#FF5722",
+      "event": "#4CAF50",
+      "meeting": "#2196F3",
+      "activity": "#FF9800",
+      "sports": "#E91E63",
+      "cultural": "#9C27B0",
+      "holiday": "#795548"
+    }
+  },
+  "apiIntegrationNotes": {
+    "authentication": "Bearer token required in headers",
+    "rateLimit": "100 requests per minute",
+    "caching": "Data cached for 5 minutes",
+    "errorHandling": {
+      "404": "Student or data not found",
+      "403": "Insufficient permissions",
+      "500": "Server error - retry after 30 seconds"
+    },
+    "realTimeUpdates": {
+      "websocket": "wss://api.school.com/ws/attendance",
+      "events": ["attendance_updated", "event_created", "event_modified"]
+    }
+  }
+}

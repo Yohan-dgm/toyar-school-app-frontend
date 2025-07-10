@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { handleNavigationPress } from "../../../utils/navigationFix";
 import { theme } from "../../../styles/theme";
 import Header from "../../../components/common/Header";
-import BottomNavigation from "../../../components/common/BottomNavigation";
+// import BottomNavigation from "../../../components/common/BottomNavigation";
 
 const PersonScreen = () => {
   const handleTabPress = (tabId) => {
@@ -35,7 +35,7 @@ const PersonScreen = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation activeTab="performance" onTabPress={handleTabPress} />
+      {/* <BottomNavigation activeTab="performance" onTabPress={handleTabPress} /> */}
     </SafeAreaView>
   );
 };

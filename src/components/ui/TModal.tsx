@@ -1,6 +1,5 @@
 import React from "react";
-import Modal from "react-native-modal";
-import { View, StyleSheet } from "react-native";
+import { Modal, View, StyleSheet, TouchableOpacity } from "react-native";
 import { TModalProps } from "../types";
 import { theme } from "../styles/theme";
 
@@ -13,24 +12,42 @@ export const TModal: React.FC<TModalProps> = ({
   ...props
 }) => (
   <Modal
-    isVisible={visible}
-    onBackdropPress={onDismiss}
-    style={[variant === "center" ? styles.centered : styles.bottom, style]}
+    visible={visible}
+    transparent={true}
+    animationType="fade"
+    onRequestClose={onDismiss}
     {...props}
   >
-    <View style={styles.content}>{children}</View>
+    <TouchableOpacity
+      style={styles.overlay}
+      activeOpacity={1}
+      onPress={onDismiss}
+    >
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={(e) => e.stopPropagation()}
+        style={[variant === "center" ? styles.centered : styles.bottom, style]}
+      >
+        <View style={styles.content}>{children}</View>
+      </TouchableOpacity>
+    </TouchableOpacity>
   </Modal>
 );
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   centered: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 0,
   },
   bottom: {
     justifyContent: "flex-end",
-    margin: 0,
+    alignItems: "center",
   },
   content: {
     backgroundColor: theme.colors.background,
@@ -38,5 +55,6 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     minWidth: 280,
     minHeight: 100,
+    maxWidth: "90%",
   },
 });

@@ -8,9 +8,14 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
-  Animated,
   Alert,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+} from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -35,26 +40,23 @@ const InputBar: React.FC<InputBarProps> = ({
   const [inputHeight, setInputHeight] = useState(40);
   const insets = useSafeAreaInsets();
   const textInputRef = useRef<TextInput>(null);
-  const sendButtonScale = useRef(new Animated.Value(1)).current;
-  const sendButtonOpacity = useRef(new Animated.Value(0.5)).current;
+  const sendButtonScale = useSharedValue(1);
+  const sendButtonOpacity = useSharedValue(0.5);
 
   const canSend = message.trim().length > 0 && !disabled;
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.spring(sendButtonScale, {
-        toValue: canSend ? 1.1 : 1,
-        useNativeDriver: true,
-        tension: 150,
-        friction: 8,
-      }),
-      Animated.timing(sendButtonOpacity, {
-        toValue: canSend ? 1 : 0.5,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [canSend, sendButtonScale, sendButtonOpacity]);
+    sendButtonScale.value = withSpring(canSend ? 1.1 : 1, {
+      damping: 15,
+      stiffness: 150,
+    });
+    sendButtonOpacity.value = withTiming(canSend ? 1 : 0.5, { duration: 200 });
+  }, [canSend]);
+
+  const sendButtonAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: sendButtonScale.value }],
+    opacity: sendButtonOpacity.value,
+  }));
 
   const handleSend = () => {
     console.log("InputBar handleSend called", {
@@ -90,20 +92,10 @@ const InputBar: React.FC<InputBarProps> = ({
     setInputHeight(40);
 
     // Animate send button
-    Animated.sequence([
-      Animated.spring(sendButtonScale, {
-        toValue: 0.8,
-        useNativeDriver: true,
-        tension: 200,
-        friction: 8,
-      }),
-      Animated.spring(sendButtonScale, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 200,
-        friction: 8,
-      }),
-    ]).start();
+    sendButtonScale.value = withSpring(0.8, { damping: 15, stiffness: 200 });
+    setTimeout(() => {
+      sendButtonScale.value = withSpring(1, { damping: 15, stiffness: 200 });
+    }, 100);
   };
 
   const handleContentSizeChange = (event: any) => {
@@ -169,13 +161,7 @@ const InputBar: React.FC<InputBarProps> = ({
           </View>
 
           <Animated.View
-            style={[
-              styles.sendButtonContainer,
-              {
-                transform: [{ scale: sendButtonScale }],
-                opacity: sendButtonOpacity,
-              },
-            ]}
+            style={[styles.sendButtonContainer, sendButtonAnimatedStyle]}
           >
             <TouchableOpacity
               style={[

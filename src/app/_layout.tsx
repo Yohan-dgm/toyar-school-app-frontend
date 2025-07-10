@@ -19,6 +19,11 @@ import {
 import { Platform, LogBox } from "react-native";
 import "../../global.css";
 
+// Import test utils for API testing (remove in production)
+if (__DEV__) {
+  import("../utils/testActivityFeedAPI");
+}
+
 // Disable LogBox for web to avoid bundling issues
 if (Platform.OS === "web") {
   LogBox.ignoreAllLogs();

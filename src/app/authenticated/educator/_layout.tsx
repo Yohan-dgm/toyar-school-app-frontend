@@ -1,15 +1,19 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import DynamicUserLayout from "../../../components/layouts/DynamicUserLayout";
+import { USER_CATEGORIES } from "../../../constants/userCategories";
 
 export default function EducatorLayout() {
   return (
-    <>
-      <StatusBar style="dark" translucent={false} />
+    <DynamicUserLayout userCategory={USER_CATEGORIES.EDUCATOR}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="students" />
+        <Stack.Screen name="classes" />
+        <Stack.Screen name="assignments" />
+        <Stack.Screen name="reports" />
         <Stack.Screen name="user-management" />
       </Stack>
-    </>
+    </DynamicUserLayout>
   );
 }

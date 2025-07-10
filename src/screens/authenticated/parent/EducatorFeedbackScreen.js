@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme } from "../../../styles/theme";
 import Header from "../../../components/common/Header";
-import BottomNavigation from "../../../components/common/BottomNavigation";
+// import BottomNavigation from "../../../components/common/BottomNavigation";
 
 const EducatorFeedbackScreen = ({ navigation }) => {
   const handleTabPress = (tabId) => {
@@ -14,31 +14,26 @@ const EducatorFeedbackScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.placeholderContainer}>
           <Text style={styles.placeholderTitle}>💬 Educator Feedback</Text>
           <Text style={styles.placeholderSubtitle}>
             Communication with teachers and staff
           </Text>
-          
+
           <View style={styles.comingSoonCard}>
             <Text style={styles.comingSoonTitle}>Coming Soon</Text>
             <Text style={styles.comingSoonText}>
-              • Direct messaging with teachers{"\n"}
-              • Feedback on student behavior{"\n"}
-              • Academic progress notes{"\n"}
-              • Parent-teacher communication{"\n"}
-              • Meeting requests and scheduling
+              • Direct messaging with teachers{"\n"}• Feedback on student
+              behavior{"\n"}• Academic progress notes{"\n"}• Parent-teacher
+              communication{"\n"}• Meeting requests and scheduling
             </Text>
           </View>
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        activeTab="feedback" 
-        onTabPress={handleTabPress}
-      />
+      {/* BottomNavigation temporarily disabled during migration */}
     </SafeAreaView>
   );
 };

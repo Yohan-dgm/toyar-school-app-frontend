@@ -1,24 +1,41 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   Dimensions,
   Modal,
   Image,
   ScrollView,
   Platform,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/AuthContext";
-import { setIsAuthenticated } from "../../state-store/slices/app-slice";
+import { logout } from "../../state-store/slices/app-slice";
 import { theme } from "../../styles/theme";
 import { LinearGradient } from "expo-linear-gradient";
+import {
+  USER_CATEGORIES,
+  getUserCategoryDisplayName,
+} from "../../constants/userCategories";
+
+// Import section components
+import ProfileSection from "../drawer/sections/profile/ProfileSection";
+import PrivacyPolicySection from "../drawer/sections/privacy/PrivacyPolicySection";
+import TermsConditionsSection from "../drawer/sections/terms/TermsConditionsSection";
+import SettingsSection from "../drawer/sections/settings/SettingsSection";
+import PaymentSection from "../drawer/sections/payment/PaymentSection";
+import HelpSupportSection from "../drawer/sections/help/HelpSupportSection";
+import NotificationsSection from "../drawer/sections/notifications/NotificationsSection";
 
 const { width, height } = Dimensions.get("window");
 const DRAWER_WIDTH = width * 0.8;
@@ -27,48 +44,54 @@ const DrawerMenu = ({ isVisible, onClose }) => {
   const { user, setUser } = useAuth();
   const router = useRouter();
   const dispatch = useDispatch();
-  const slideAnim = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
-  const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const { sessionData } = useSelector((state) => state.app);
+  const slideAnim = useSharedValue(-DRAWER_WIDTH);
+  const overlayOpacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
+
+  // Get user category from session data
+  const userCategory =
+    sessionData?.user_category || sessionData?.data?.user_category;
+  const isParent = userCategory === USER_CATEGORIES.PARENT;
+  const userDisplayName = getUserCategoryDisplayName(userCategory);
+
+  console.log(
+    "🏠 DrawerMenu - User category:",
+    userCategory,
+    "Is parent:",
+    isParent
+  );
+
+  // State for section overlay
+  const [sectionOverlayVisible, setSectionOverlayVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
 
   useEffect(() => {
     if (isVisible) {
       // Slide in animation
-      Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(overlayOpacity, {
-          toValue: 0.5,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      slideAnim.value = withTiming(0, { duration: 300 });
+      overlayOpacity.value = withTiming(0.5, { duration: 300 });
     } else {
       // Slide out animation
-      Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: -DRAWER_WIDTH,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.timing(overlayOpacity, {
-          toValue: 0,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      slideAnim.value = withTiming(-DRAWER_WIDTH, { duration: 250 });
+      overlayOpacity.value = withTiming(0, { duration: 250 });
     }
   }, [isVisible]);
+
+  const overlayAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: overlayOpacity.value,
+  }));
+
+  const drawerAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: slideAnim.value }],
+  }));
 
   const handleLogout = () => {
     console.log("🔹 Drawer Menu: Logout pressed");
 
-    // Clear user data and authentication state
+    // Clear user data and authentication state using the proper logout action
     setUser(null);
-    dispatch(setIsAuthenticated(false));
+    dispatch(logout()); // This clears all Redux state including sessionData
 
     // Close drawer first
     onClose();
@@ -79,69 +102,97 @@ const DrawerMenu = ({ isVisible, onClose }) => {
     }, 300); // Small delay to allow drawer close animation
   };
 
-  const menuItems = [
+  const handleSectionOpen = (section) => {
+    console.log(`🔹 Drawer Menu: Opening section: ${section}`);
+    setActiveSection(section);
+    setSectionOverlayVisible(true);
+    onClose(); // Close the drawer
+  };
+
+  const handleSectionClose = () => {
+    console.log("🔹 Drawer Menu: Closing section overlay");
+    setSectionOverlayVisible(false);
+    setActiveSection(null);
+  };
+
+  const handleNavigateToSubSection = (subSection) => {
+    console.log("Navigate to sub-section:", subSection);
+    // Handle sub-section navigation here
+  };
+
+  const renderSection = () => {
+    console.log("🔍 DrawerMenu - Rendering section:", activeSection);
+
+    const commonProps = {
+      onClose: handleSectionClose,
+      onNavigateToSubSection: handleNavigateToSubSection,
+    };
+
+    switch (activeSection) {
+      case "profile":
+        console.log("📱 Rendering ProfileSection");
+        return <ProfileSection {...commonProps} />;
+      case "notifications":
+        console.log("🔔 Rendering NotificationsSection");
+        return <NotificationsSection {...commonProps} />;
+      case "privacy":
+        console.log("🔒 Rendering PrivacyPolicySection");
+        return <PrivacyPolicySection {...commonProps} />;
+      case "terms":
+        console.log("📋 Rendering TermsConditionsSection");
+        return <TermsConditionsSection {...commonProps} />;
+      case "settings":
+        console.log("⚙️ Rendering SettingsSection");
+        return <SettingsSection {...commonProps} />;
+      case "payment":
+        console.log("💳 Rendering PaymentSection");
+        return <PaymentSection {...commonProps} />;
+      case "help":
+        console.log("❓ Rendering HelpSupportSection");
+        return <HelpSupportSection {...commonProps} />;
+      default:
+        console.log("🔄 Rendering default ProfileSection");
+        return <ProfileSection {...commonProps} />;
+    }
+  };
+
+  // Base menu items available to all users
+  const baseMenuItems = [
     {
       id: "profile",
       title: "Profile",
       icon: "person",
-      onPress: () => {
-        console.log("🔹 Drawer Menu: Navigate to Profile");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("profile"),
     },
     {
       id: "notifications",
       title: "Notifications",
       icon: "notifications",
-      onPress: () => {
-        console.log("🔹 Drawer Menu: Navigate to Notifications");
-        onClose();
-      },
-    },
-    {
-      id: "payments",
-      title: "Payments",
-      icon: "payments",
-      onPress: () => {
-        console.log("🔹 Drawer Menu: Navigate to Payments");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("notifications"),
     },
     {
       id: "settings",
       title: "Settings",
       icon: "settings",
-      onPress: () => {
-        console.log("🔹 Drawer Menu: Navigate to Settings");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("settings"),
     },
     {
       id: "help",
       title: "Help & Support",
       icon: "help",
-      onPress: () => {
-        console.log("Navigate to Help");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("help"),
     },
     {
       id: "privacy",
       title: "Privacy Policy",
       icon: "policy",
-      onPress: () => {
-        console.log("Navigate to Privacy Policy");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("privacy"),
     },
     {
       id: "terms",
       title: "Terms & Conditions",
       icon: "description",
-      onPress: () => {
-        console.log("Navigate to Terms");
-        onClose();
-      },
+      onPress: () => handleSectionOpen("terms"),
     },
     {
       id: "logout",
@@ -152,92 +203,123 @@ const DrawerMenu = ({ isVisible, onClose }) => {
     },
   ];
 
+  // Parent-only menu items
+  const parentOnlyItems = [
+    {
+      id: "payments",
+      title: "Payments",
+      icon: "payments",
+      onPress: () => handleSectionOpen("payment"),
+    },
+  ];
+
+  // Combine menu items based on user category
+  const menuItems = isParent
+    ? [
+        ...baseMenuItems.slice(0, 2), // Profile and Notifications
+        ...parentOnlyItems, // Payments (only for parents)
+        ...baseMenuItems.slice(2), // Settings, Help, Privacy, Terms, Logout
+      ]
+    : baseMenuItems;
+
   return (
-    <Modal
-      visible={isVisible}
-      transparent={true}
-      animationType="none"
-      onRequestClose={onClose}
-    >
-      {/* Overlay */}
-      <Animated.View style={[styles.overlay, { opacity: overlayOpacity }]}>
-        <TouchableOpacity
-          style={styles.overlayTouchable}
-          onPress={onClose}
-          activeOpacity={1}
-        />
-      </Animated.View>
-
-      {/* Drawer */}
-      <Animated.View
-        style={[
-          styles.drawer,
-          {
-            transform: [{ translateX: slideAnim }],
-          },
-        ]}
+    <>
+      <Modal
+        visible={isVisible}
+        transparent={true}
+        animationType="none"
+        onRequestClose={onClose}
       >
-        {/* Header Section */}
-        <LinearGradient
-          colors={["rgb(4 46 102)", "rgb(147 42 45)"]}
-          style={[styles.drawerHeader, { paddingTop: insets.top + 20 }]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
+        {/* Overlay */}
+        <Animated.View style={[styles.overlay, overlayAnimatedStyle]}>
+          <TouchableOpacity
+            style={styles.overlayTouchable}
+            onPress={onClose}
+            activeOpacity={1}
+          />
+        </Animated.View>
 
-          <View style={styles.userInfo}>
-            <Image
-              source={require("../../assets/images/sample-profile.png")}
-              style={styles.userAvatar}
-            />
-            <Text style={styles.userName}>
-              {user?.full_name || "Parent User"}
-            </Text>
-            <Text style={styles.userRole}>Parent Account</Text>
-          </View>
-        </LinearGradient>
-
-        {/* Menu Items */}
-        <ScrollView style={styles.menuContainer}>
-          {menuItems.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={[styles.menuItem, item.isLogout && styles.logoutItem]}
-              onPress={item.onPress}
-              activeOpacity={0.7}
-            >
-              <MaterialIcons
-                name={item.icon}
-                size={24}
-                color={item.isLogout ? "#EF4444" : theme.colors.text}
-              />
-              <Text
-                style={[
-                  styles.menuItemText,
-                  item.isLogout && styles.logoutText,
-                ]}
-              >
-                {item.title}
-              </Text>
-              <MaterialIcons
-                name="chevron-right"
-                size={20}
-                color={item.isLogout ? "#EF4444" : "#94A3B8"}
-              />
+        {/* Drawer */}
+        <Animated.View style={[styles.drawer, drawerAnimatedStyle]}>
+          {/* Header Section */}
+          <LinearGradient
+            colors={["rgb(4 46 102)", "rgb(147 42 45)"]}
+            style={[styles.drawerHeader, { paddingTop: insets.top + 20 }]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <MaterialIcons name="close" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-          ))}
-        </ScrollView>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.appVersion}>SchoolSnap v1.0.0</Text>
-          <Text style={styles.footerText}>Nexis College International</Text>
+            <View style={styles.userInfo}>
+              <Image
+                source={require("../../assets/images/sample-profile.png")}
+                style={styles.userAvatar}
+              />
+              <Text style={styles.userName}>
+                {user?.full_name || "Parent User"}
+              </Text>
+              <Text style={styles.userRole}>{userDisplayName} Account</Text>
+            </View>
+          </LinearGradient>
+
+          {/* Menu Items */}
+          <ScrollView style={styles.menuContainer}>
+            {menuItems.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={[styles.menuItem, item.isLogout && styles.logoutItem]}
+                onPress={item.onPress}
+                activeOpacity={0.7}
+              >
+                <MaterialIcons
+                  name={item.icon}
+                  size={24}
+                  color={item.isLogout ? "#EF4444" : theme.colors.text}
+                />
+                <Text
+                  style={[
+                    styles.menuItemText,
+                    item.isLogout && styles.logoutText,
+                  ]}
+                >
+                  {item.title}
+                </Text>
+                <MaterialIcons
+                  name="chevron-right"
+                  size={20}
+                  color={item.isLogout ? "#EF4444" : "#94A3B8"}
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Footer */}
+          <View style={styles.footer}>
+            <Text style={styles.appVersion}>SchoolSnap v1.0.0</Text>
+            <Text style={styles.footerText}>Nexis College International</Text>
+          </View>
+        </Animated.View>
+      </Modal>
+
+      {/* Section Overlay Modal */}
+      <Modal
+        visible={sectionOverlayVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={handleSectionClose}
+      >
+        <View style={styles.sectionOverlay}>
+          <TouchableOpacity
+            style={styles.sectionBackdrop}
+            activeOpacity={1}
+            onPress={handleSectionClose}
+          />
+          <View style={styles.sectionContainer}>{renderSection()}</View>
         </View>
-      </Animated.View>
-    </Modal>
+      </Modal>
+    </>
   );
 };
 
@@ -347,6 +429,29 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.regular,
     fontSize: 12,
     color: "#64748B",
+  },
+  // Section overlay styles
+  sectionOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 2000,
+    backgroundColor: "transparent",
+  },
+  sectionBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  sectionContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: width,
+    height: "100%",
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: { width: -2, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
   },
 });
 

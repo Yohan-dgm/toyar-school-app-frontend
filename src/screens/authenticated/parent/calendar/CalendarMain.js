@@ -16,6 +16,7 @@ const CalendarMain = () => {
     new Date().toISOString().split("T")[0]
   );
   const [calendarViewMode, setCalendarViewMode] = useState("calendar"); // "calendar" or "agenda"
+  const [activeAttendanceTab, setActiveAttendanceTab] = useState("academic"); // "academic", "sport", "event"
   // Tab press handling now done by layout
 
   const handleEventPress = (event) => {
@@ -256,14 +257,17 @@ const CalendarMain = () => {
     },
   ];
 
-  // Complete student attendance data for January 2025
-  // API Structure: GET /api/student/attendance?month=2025-07&student_id=123
+  // Complete student attendance data for July 2025 - Academic, Sport, Event
+  // API Structure: GET /api/student/attendance?month=2025-07&student_id=123&type=academic
   // Response: { attendance: {...}, success: true }
-  const studentAttendance = {
+
+  // Academic Attendance Data
+  const academicAttendance = {
     month: "2025-07",
     studentId: "STU123",
     studentName: "John Doe",
     grade: "Grade 10",
+    type: "academic",
     totalSchoolDays: 22,
     presentDays: 19,
     absentDays: 3,
@@ -410,6 +414,236 @@ const CalendarMain = () => {
     ],
   };
 
+  // Sport Attendance Data
+  const sportAttendance = {
+    month: "2025-07",
+    studentId: "STU123",
+    studentName: "John Doe",
+    grade: "Grade 10",
+    type: "sport",
+    totalSportDays: 12,
+    presentDays: 10,
+    absentDays: 2,
+    holidayDays: 9,
+    weekendDays: 0,
+    attendancePercentage: 83.3,
+    // Sport-specific attendance record
+    dailyAttendance: {
+      "2025-07-02": {
+        status: "present",
+        activity: "Basketball Practice",
+        checkIn: "04:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-03": {
+        status: "present",
+        activity: "Football Training",
+        checkIn: "04:15 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-04": { status: "weekend", reason: "Saturday" },
+      "2025-07-05": { status: "weekend", reason: "Sunday" },
+      "2025-07-09": {
+        status: "present",
+        activity: "Swimming Practice",
+        checkIn: "04:00 PM",
+        checkOut: "05:30 PM",
+      },
+      "2025-07-10": {
+        status: "absent",
+        activity: "Basketball Practice",
+        reason: "Injury",
+        note: "Ankle sprain - Medical certificate provided",
+      },
+      "2025-07-16": {
+        status: "present",
+        activity: "Football Match",
+        checkIn: "03:00 PM",
+        checkOut: "05:00 PM",
+      },
+      "2025-07-17": {
+        status: "present",
+        activity: "Athletics Training",
+        checkIn: "04:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-20": {
+        status: "present",
+        activity: "Basketball Championship",
+        checkIn: "04:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-23": {
+        status: "present",
+        activity: "Swimming Competition",
+        checkIn: "03:30 PM",
+        checkOut: "05:30 PM",
+      },
+      "2025-07-24": {
+        status: "present",
+        activity: "Football Practice",
+        checkIn: "04:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-30": {
+        status: "present",
+        activity: "Athletics Meet",
+        checkIn: "03:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-31": {
+        status: "absent",
+        activity: "Basketball Practice",
+        reason: "Family Event",
+        note: "Prior permission taken",
+      },
+    },
+    recentAttendance: [
+      {
+        date: "2025-07-31",
+        status: "absent",
+        reason: "Family Event",
+        activity: "Basketball Practice",
+      },
+      {
+        date: "2025-07-30",
+        status: "present",
+        checkIn: "03:00 PM",
+        activity: "Athletics Meet",
+      },
+      {
+        date: "2025-07-24",
+        status: "present",
+        checkIn: "04:00 PM",
+        activity: "Football Practice",
+      },
+      {
+        date: "2025-07-23",
+        status: "present",
+        checkIn: "03:30 PM",
+        activity: "Swimming Competition",
+      },
+      {
+        date: "2025-07-20",
+        status: "present",
+        checkIn: "04:00 PM",
+        activity: "Basketball Championship",
+      },
+    ],
+  };
+
+  // Event Attendance Data
+  const eventAttendance = {
+    month: "2025-07",
+    studentId: "STU123",
+    studentName: "John Doe",
+    grade: "Grade 10",
+    type: "event",
+    totalEventDays: 8,
+    presentDays: 7,
+    absentDays: 1,
+    holidayDays: 9,
+    weekendDays: 0,
+    attendancePercentage: 87.5,
+    // Event-specific attendance record
+    dailyAttendance: {
+      "2025-07-03": {
+        status: "present",
+        event: "Republic Day Celebration",
+        checkIn: "08:00 AM",
+        checkOut: "12:00 PM",
+      },
+      "2025-07-04": {
+        status: "present",
+        event: "Drama Club Performance",
+        checkIn: "07:00 PM",
+        checkOut: "09:00 PM",
+      },
+      "2025-07-05": {
+        status: "present",
+        event: "Art Exhibition",
+        checkIn: "03:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-12": {
+        status: "present",
+        event: "Music Concert",
+        checkIn: "06:00 PM",
+        checkOut: "08:00 PM",
+      },
+      "2025-07-18": {
+        status: "present",
+        event: "Science Fair",
+        checkIn: "02:00 PM",
+        checkOut: "06:00 PM",
+      },
+      "2025-07-22": {
+        status: "present",
+        event: "Parent-Teacher Conference",
+        checkIn: "04:00 PM",
+        checkOut: "08:00 PM",
+      },
+      "2025-07-25": {
+        status: "absent",
+        event: "Cultural Program",
+        reason: "Sick Leave",
+        note: "Fever - Medical certificate provided",
+      },
+      "2025-07-28": {
+        status: "present",
+        event: "Awards Ceremony",
+        checkIn: "10:00 AM",
+        checkOut: "12:00 PM",
+      },
+    },
+    recentAttendance: [
+      {
+        date: "2025-07-28",
+        status: "present",
+        checkIn: "10:00 AM",
+        event: "Awards Ceremony",
+      },
+      {
+        date: "2025-07-25",
+        status: "absent",
+        reason: "Sick Leave",
+        event: "Cultural Program",
+      },
+      {
+        date: "2025-07-22",
+        status: "present",
+        checkIn: "04:00 PM",
+        event: "Parent-Teacher Conference",
+      },
+      {
+        date: "2025-07-18",
+        status: "present",
+        checkIn: "02:00 PM",
+        event: "Science Fair",
+      },
+      {
+        date: "2025-07-12",
+        status: "present",
+        checkIn: "06:00 PM",
+        event: "Music Concert",
+      },
+    ],
+  };
+
+  // Get current attendance data based on active tab
+  const getCurrentAttendanceData = () => {
+    switch (activeAttendanceTab) {
+      case "academic":
+        return academicAttendance;
+      case "sport":
+        return sportAttendance;
+      case "event":
+        return eventAttendance;
+      default:
+        return academicAttendance;
+    }
+  };
+
   // Create marked dates for school events calendar
   const getSchoolEventsMarkedDates = () => {
     const marked = {};
@@ -439,10 +673,11 @@ const CalendarMain = () => {
   // Create marked dates for student attendance calendar
   const getAttendanceMarkedDates = () => {
     const marked = {};
+    const currentAttendance = getCurrentAttendanceData();
 
     // Mark attendance dates with color coding
-    Object.keys(studentAttendance.dailyAttendance).forEach((date) => {
-      const record = studentAttendance.dailyAttendance[date];
+    Object.keys(currentAttendance.dailyAttendance).forEach((date) => {
+      const record = currentAttendance.dailyAttendance[date];
       marked[date] = {
         customStyles: {
           container: {
@@ -543,7 +778,8 @@ const CalendarMain = () => {
 
   // Get attendance for selected date
   const getAttendanceForDate = (date) => {
-    return studentAttendance.dailyAttendance[date] || null;
+    const currentAttendance = getCurrentAttendanceData();
+    return currentAttendance.dailyAttendance[date] || null;
   };
 
   const formatDate = (dateString) => {
@@ -941,6 +1177,66 @@ const CalendarMain = () => {
             </Text>
           </View>
 
+          {/* Attendance Type Tabs */}
+          <View style={styles.attendanceTabsContainer}>
+            <View style={styles.attendanceTabs}>
+              <TouchableOpacity
+                style={[
+                  styles.attendanceTab,
+                  activeAttendanceTab === "academic" &&
+                    styles.activeAttendanceTab,
+                ]}
+                onPress={() => setActiveAttendanceTab("academic")}
+              >
+                <Text
+                  style={[
+                    styles.attendanceTabText,
+                    activeAttendanceTab === "academic" &&
+                      styles.activeAttendanceTabText,
+                  ]}
+                >
+                  Academic
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.attendanceTab,
+                  activeAttendanceTab === "sport" && styles.activeAttendanceTab,
+                ]}
+                onPress={() => setActiveAttendanceTab("sport")}
+              >
+                <Text
+                  style={[
+                    styles.attendanceTabText,
+                    activeAttendanceTab === "sport" &&
+                      styles.activeAttendanceTabText,
+                  ]}
+                >
+                  Sport
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.attendanceTab,
+                  activeAttendanceTab === "event" && styles.activeAttendanceTab,
+                ]}
+                onPress={() => setActiveAttendanceTab("event")}
+              >
+                <Text
+                  style={[
+                    styles.attendanceTabText,
+                    activeAttendanceTab === "event" &&
+                      styles.activeAttendanceTabText,
+                  ]}
+                >
+                  Event
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
           {/* Attendance Legend */}
           <View style={styles.attendanceLegend}>
             <View style={styles.legendItem}>
@@ -1003,7 +1299,11 @@ const CalendarMain = () => {
         {/* Attendance Summary */}
         <View style={styles.attendanceContainer}>
           <View style={styles.attendanceHeader}>
-            <Text style={styles.sectionTitle}>Attendance Summary</Text>
+            <Text style={styles.sectionTitle}>
+              {activeAttendanceTab.charAt(0).toUpperCase() +
+                activeAttendanceTab.slice(1)}{" "}
+              Attendance Summary
+            </Text>
             <TouchableOpacity
               style={styles.viewDetailsButton}
               onPress={handleAttendancePress}
@@ -1021,7 +1321,7 @@ const CalendarMain = () => {
             <View style={styles.attendanceStats}>
               <View style={styles.attendanceStat}>
                 <Text style={styles.attendanceNumber}>
-                  {studentAttendance.presentDays}
+                  {getCurrentAttendanceData().presentDays}
                 </Text>
                 <Text style={styles.attendanceLabel}>Present</Text>
                 <View
@@ -1034,7 +1334,7 @@ const CalendarMain = () => {
 
               <View style={styles.attendanceStat}>
                 <Text style={styles.attendanceNumber}>
-                  {studentAttendance.absentDays}
+                  {getCurrentAttendanceData().absentDays}
                 </Text>
                 <Text style={styles.attendanceLabel}>Absent</Text>
                 <View
@@ -1047,7 +1347,7 @@ const CalendarMain = () => {
 
               <View style={styles.attendanceStat}>
                 <Text style={styles.attendanceNumber}>
-                  {studentAttendance.attendancePercentage}%
+                  {getCurrentAttendanceData().attendancePercentage}%
                 </Text>
                 <Text style={styles.attendanceLabel}>Rate</Text>
                 <View
@@ -1061,45 +1361,58 @@ const CalendarMain = () => {
 
             <View style={styles.recentAttendanceContainer}>
               <Text style={styles.recentAttendanceTitle}>
-                Recent Attendance
+                Recent{" "}
+                {activeAttendanceTab.charAt(0).toUpperCase() +
+                  activeAttendanceTab.slice(1)}{" "}
+                Attendance
               </Text>
               <View style={styles.recentAttendanceList}>
-                {studentAttendance.recentAttendance.map((record, index) => (
-                  <View key={index} style={styles.attendanceRecord}>
-                    <Text style={styles.attendanceDate}>
-                      {formatDate(record.date)}
-                    </Text>
-                    <View
-                      style={[
-                        styles.attendanceStatus,
-                        {
-                          backgroundColor:
+                {getCurrentAttendanceData().recentAttendance.map(
+                  (record, index) => (
+                    <View key={index} style={styles.attendanceRecord}>
+                      <View style={styles.attendanceRecordInfo}>
+                        <Text style={styles.attendanceDate}>
+                          {formatDate(record.date)}
+                        </Text>
+                        {/* Show activity/event info for sport/event attendance */}
+                        {(record.activity || record.event) && (
+                          <Text style={styles.attendanceActivity}>
+                            {record.activity || record.event}
+                          </Text>
+                        )}
+                      </View>
+                      <View
+                        style={[
+                          styles.attendanceStatus,
+                          {
+                            backgroundColor:
+                              record.status === "present"
+                                ? "#4CAF50"
+                                : record.status === "absent"
+                                  ? "#FF5722"
+                                  : record.status === "holiday"
+                                    ? "#FF9800"
+                                    : "#9E9E9E",
+                          },
+                        ]}
+                      >
+                        <MaterialIcons
+                          name={
                             record.status === "present"
-                              ? "#4CAF50"
+                              ? "check"
                               : record.status === "absent"
-                                ? "#FF5722"
+                                ? "close"
                                 : record.status === "holiday"
-                                  ? "#FF9800"
-                                  : "#9E9E9E",
-                        },
-                      ]}
-                    >
-                      <MaterialIcons
-                        name={
-                          record.status === "present"
-                            ? "check"
-                            : record.status === "absent"
-                              ? "close"
-                              : record.status === "holiday"
-                                ? "beach-access"
-                                : "help"
-                        }
-                        size={12}
-                        color="#FFFFFF"
-                      />
+                                  ? "beach-access"
+                                  : "help"
+                          }
+                          size={12}
+                          color="#FFFFFF"
+                        />
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  )
+                )}
               </View>
             </View>
           </View>
@@ -1666,7 +1979,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   attendanceRecord: {
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
   },
   attendanceDate: {
     fontFamily: theme.fonts.regular,
@@ -1928,6 +2246,53 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     textAlign: "center",
     marginTop: theme.spacing.xs,
+  },
+  // Attendance Tab Styles
+  attendanceTabsContainer: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+  },
+  attendanceTabs: {
+    flexDirection: "row",
+    backgroundColor: "#F5F5F5",
+    borderRadius: 8,
+    padding: 4,
+  },
+  attendanceTab: {
+    flex: 1,
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    alignItems: "center",
+    borderRadius: 6,
+    marginHorizontal: 2,
+  },
+  activeAttendanceTab: {
+    backgroundColor: theme.colors.primary,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  attendanceTabText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 14,
+    color: "#666666",
+  },
+  activeAttendanceTabText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
+  // Enhanced Attendance Record Styles
+  attendanceRecordInfo: {
+    flex: 1,
+  },
+  attendanceActivity: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#888888",
+    marginTop: 2,
+    fontStyle: "italic",
   },
 });
 

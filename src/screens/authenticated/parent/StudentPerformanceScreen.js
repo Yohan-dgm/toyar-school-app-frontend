@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme } from "../../../styles/theme";
 import Header from "../../../components/common/Header";
-import BottomNavigation from "../../../components/common/BottomNavigation";
+// import BottomNavigation from "../../../components/common/BottomNavigation";
 
 const StudentPerformanceScreen = ({ navigation }) => {
   const handleTabPress = (tabId) => {
@@ -14,30 +14,26 @@ const StudentPerformanceScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.placeholderContainer}>
           <Text style={styles.placeholderTitle}>📊 Student Performance</Text>
           <Text style={styles.placeholderSubtitle}>
             Track your child's academic progress
           </Text>
-          
+
           <View style={styles.comingSoonCard}>
             <Text style={styles.comingSoonTitle}>Under Construction</Text>
             <Text style={styles.comingSoonText}>
-              • Academic performance tracking{"\n"}
-              • Grade reports and analytics{"\n"}
-              • Progress charts and trends{"\n"}
-              • Subject-wise performance breakdown
+              • Academic performance tracking{"\n"}• Grade reports and analytics
+              {"\n"}• Progress charts and trends{"\n"}• Subject-wise performance
+              breakdown
             </Text>
           </View>
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        activeTab="performance" 
-        onTabPress={handleTabPress}
-      />
+      {/* <BottomNavigation activeTab="performance" onTabPress={handleTabPress} /> */}
     </SafeAreaView>
   );
 };

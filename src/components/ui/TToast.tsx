@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import { TToastProps } from "../types";
 import { theme } from "../styles/theme";
 
@@ -10,27 +15,23 @@ export const TToast: React.FC<TToastProps> = ({
   style,
   ...props
 }) => {
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    fadeAnim.value = withTiming(1, { duration: 300 });
     const timer = setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+      fadeAnim.value = withTiming(0, { duration: 300 });
     }, duration);
     return () => clearTimeout(timer);
-  }, [fadeAnim, duration]);
+  }, [duration]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: fadeAnim.value,
+  }));
 
   return (
     <Animated.View
-      style={[styles.toast, styles[type], style, { opacity: fadeAnim }]}
+      style={[styles.toast, styles[type], style, animatedStyle]}
       {...props}
     >
       <Text style={styles.text}>{message}</Text>

@@ -1,5 +1,8 @@
 import { apiServer1 } from "@/api/api-server-1";
 import appSlice from "@/state-store/slices/app-slice";
+import schoolPostsSlice from "@/state-store/slices/school-life/school-posts-slice";
+import classPostsSlice from "@/state-store/slices/school-life/class-posts-slice";
+import studentPostsSlice from "@/state-store/slices/school-life/student-posts-slice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import {
@@ -52,6 +55,9 @@ export const rtkQueryErrorLogger: Middleware =
 const rootReducer = combineReducers({
   app: appSlice,
   apiServer1: apiServer1.reducer,
+  schoolPosts: schoolPostsSlice,
+  classPosts: classPostsSlice,
+  studentPosts: studentPostsSlice,
 });
 export type RootReducer = ReturnType<typeof rootReducer>;
 const persistedReducer = persistReducer<RootReducer>(

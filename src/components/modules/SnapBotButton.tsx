@@ -3,12 +3,18 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   Dimensions,
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Animatable from "react-native-animatable";
+// import * as Animatable from "react-native-animatable";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  withSequence,
+} from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
@@ -17,96 +23,63 @@ interface SnapBotButtonProps {
 }
 
 export const SnapBotButton: React.FC<SnapBotButtonProps> = ({ onPress }) => {
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const glowAnim = useRef(new Animated.Value(0)).current;
+  const pulseScale = useSharedValue(1);
+  const glowOpacity = useSharedValue(0);
 
   useEffect(() => {
     // Pulse animation
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
+    pulseScale.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 1000 }),
+        withTiming(1, { duration: 1000 })
+      ),
+      -1,
+      false
     );
 
     // Glow animation
-    const glowAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(glowAnim, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ])
+    glowOpacity.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2000 }),
+        withTiming(0, { duration: 2000 })
+      ),
+      -1,
+      false
     );
-
-    pulseAnimation.start();
-    glowAnimation.start();
-
-    return () => {
-      pulseAnimation.stop();
-      glowAnimation.stop();
-    };
   }, []);
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
+  }));
+
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: glowOpacity.value,
+  }));
 
   return (
     <View style={styles.container}>
       {/* Glow effect */}
-      <Animated.View
-        style={[
-          styles.glowContainer,
-          {
-            opacity: glowAnim,
-            transform: [{ scale: pulseAnim }],
-          },
-        ]}
-      />
+      <Animated.View style={[styles.glowContainer, glowStyle, pulseStyle]} />
 
       {/* Main button */}
-      <Animatable.View animation="bounceIn" duration={1000} delay={500}>
-        <Animated.View
-          style={[
-            styles.buttonContainer,
-            {
-              transform: [{ scale: pulseAnim }],
-            },
-          ]}
+      <Animated.View style={[styles.buttonContainer, pulseStyle]}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onPress}
+          activeOpacity={0.8}
         >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={onPress}
-            activeOpacity={0.8}
-          >
-            <Image
-              source={require("../../assets/snapbot.png")}
-              style={styles.buttonIcon}
-              resizeMode="contain"
-            />
+          <Image
+            source={require("../../assets/snapbot.png")}
+            style={styles.buttonIcon}
+            resizeMode="contain"
+          />
 
-            {/* Notification dot */}
-            <View style={styles.notificationDot}>
-              <Animatable.View
-                animation="pulse"
-                iterationCount="infinite"
-                style={styles.notificationDotInner}
-              />
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      </Animatable.View>
+          {/* Notification dot */}
+          <View style={styles.notificationDot}>
+            <Animated.View style={[styles.notificationDotInner, pulseStyle]} />
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 };

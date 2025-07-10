@@ -6,6 +6,7 @@ const appSlice = createSlice({
     token: null,
     isAuthenticated: false,
     sessionData: null,
+    user: null,
   },
   reducers: {
     setToken: (state, action) => {
@@ -17,13 +18,19 @@ const appSlice = createSlice({
     setSessionData: (state, action) => {
       state.sessionData = action.payload;
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
     logout: (state) => {
       state.token = null;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.sessionData = null;
     },
   },
 });
 
-export const { setToken, logout, setIsAuthenticated, setSessionData } =
+export const { setToken, logout, setIsAuthenticated, setSessionData, setUser } =
   appSlice.actions;
 
 export default appSlice.reducer;

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { TextInput, View, Text, StyleSheet, Animated } from "react-native";
+import { TextInput, View, Text, StyleSheet } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 import { TInputFieldProps } from "../types";
 import { theme } from "../styles/theme";
 
@@ -14,29 +19,26 @@ export const TInputField: React.FC<TInputFieldProps> = ({
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const animatedValue = new Animated.Value(value ? 1 : 0);
+  const animatedValue = useSharedValue(value ? 1 : 0);
 
   const handleFocus = () => {
     setIsFocused(true);
     if (variant === "floating") {
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
+      animatedValue.value = withTiming(1, { duration: 200 });
     }
   };
 
   const handleBlur = () => {
     setIsFocused(false);
     if (variant === "floating" && !value) {
-      Animated.timing(animatedValue, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-      }).start();
+      animatedValue.value = withTiming(0, { duration: 200 });
     }
   };
+
+  const animatedLabelStyle = useAnimatedStyle(() => ({
+    top: animatedValue.value * (8 - 20) + 20, // interpolate from 20 to 8
+    fontSize: animatedValue.value * (12 - 16) + 16, // interpolate from 16 to 12
+  }));
 
   const borderColor = error
     ? theme.colors.error
@@ -49,21 +51,7 @@ export const TInputField: React.FC<TInputFieldProps> = ({
   return (
     <View style={[styles.container, style]}>
       {variant === "floating" && (
-        <Animated.Text
-          style={[
-            styles.floatingLabel,
-            {
-              top: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 8],
-              }),
-              fontSize: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [16, 12],
-              }),
-            },
-          ]}
-        >
+        <Animated.Text style={[styles.floatingLabel, animatedLabelStyle]}>
           {placeholder}
         </Animated.Text>
       )}

@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme } from "../../styles/theme";
 import Header from "../common/Header";
-import BottomNavigation from "../common/BottomNavigation";
+// import BottomNavigation from "../common/BottomNavigation";
 
 const NavigationDemo = () => {
   const [activeTab, setActiveTab] = useState("schoolLife");
@@ -160,7 +160,7 @@ const NavigationDemo = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
+      {/* BottomNavigation temporarily disabled during migration */}
     </SafeAreaView>
   );
 };

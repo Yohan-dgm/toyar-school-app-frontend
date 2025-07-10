@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { theme } from "../../../styles/theme";
 import Header from "../../../components/common/Header";
-import BottomNavigation from "../../../components/common/BottomNavigation";
+// import BottomNavigation from "../../../components/common/BottomNavigation";
 
 const StudentAcademicScreen = ({ navigation }) => {
   const handleTabPress = (tabId) => {
@@ -14,31 +14,26 @@ const StudentAcademicScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.placeholderContainer}>
           <Text style={styles.placeholderTitle}>📚 Student Academic</Text>
           <Text style={styles.placeholderSubtitle}>
             Academic resources and curriculum information
           </Text>
-          
+
           <View style={styles.comingSoonCard}>
             <Text style={styles.comingSoonTitle}>Coming Soon</Text>
             <Text style={styles.comingSoonText}>
-              • Curriculum and syllabus details{"\n"}
-              • Assignment submissions{"\n"}
-              • Study materials and resources{"\n"}
-              • Academic calendar and schedules{"\n"}
-              • Subject-wise learning objectives
+              • Curriculum and syllabus details{"\n"}• Assignment submissions
+              {"\n"}• Study materials and resources{"\n"}• Academic calendar and
+              schedules{"\n"}• Subject-wise learning objectives
             </Text>
           </View>
         </View>
       </ScrollView>
 
-      <BottomNavigation 
-        activeTab="academic" 
-        onTabPress={handleTabPress}
-      />
+      {/* BottomNavigation temporarily disabled during migration */}
     </SafeAreaView>
   );
 };

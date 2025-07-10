@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Platform, Animated } from "react-native";
+import { Platform, View } from "react-native";
 import { Home, Users } from "@/lib/icons";
 import { BlurView } from "expo-blur";
 
-// Animated Tab Icon Component for smooth transitions
+// Simple Tab Icon Component without complex animations
 const AnimatedTabIcon = ({
   focused,
   IconComponent,
@@ -15,45 +15,25 @@ const AnimatedTabIcon = ({
   IconComponent: any;
   size?: number;
 }) => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const backgroundOpacityAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    // Scale animation
-    Animated.spring(scaleAnim, {
-      toValue: focused ? 1.1 : 1,
-      useNativeDriver: true,
-      tension: 150,
-      friction: 8,
-    }).start();
-
-    // Background opacity animation
-    Animated.timing(backgroundOpacityAnim, {
-      toValue: focused ? 1 : 0,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }, [focused]);
-
   return (
-    <Animated.View
+    <View
       style={{
         width: 40,
         height: 40,
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
-        transform: [{ scale: scaleAnim }],
+        backgroundColor: focused ? "rgba(45, 45, 45, 0.1)" : "transparent",
+        transform: [{ scale: focused ? 1.05 : 1 }],
       }}
     >
-      <Animated.View
+      <View
         style={{
           position: "absolute",
           width: 40,
           height: 40,
           borderRadius: 20,
-          backgroundColor: "#2D2D2D",
-          opacity: backgroundOpacityAnim,
+          backgroundColor: focused ? "#2D2D2D" : "transparent",
           shadowColor: "#000000",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: focused ? 0.15 : 0,
@@ -62,7 +42,7 @@ const AnimatedTabIcon = ({
         }}
       />
       <IconComponent size={size} color={focused ? "#FFFFFF" : "#333333"} />
-    </Animated.View>
+    </View>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,30 +10,117 @@ import {
   Dimensions,
   StatusBar,
   Platform,
+  Animated,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { useAuth } from "../../context/AuthContext";
 import { useDrawer } from "../../context/DrawerContext";
+import { useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/theme";
 import DrawerMenu from "./DrawerMenu";
+import StudentProfileModal from "../../screens/authenticated/parent/parent-student-profile/StudentProfileModal";
+import {
+  USER_CATEGORIES,
+  getUserCategoryDisplayName,
+} from "../../constants/userCategories";
 
 const { width } = Dimensions.get("window");
 
 const Header = () => {
   const { user } = useAuth();
   const { isDrawerOpen, openDrawer, closeDrawer } = useDrawer();
+  const { user: reduxUser, sessionData } = useSelector((state) => state.app);
+
+  // Get user category from session data
+  const userCategory =
+    sessionData?.user_category || sessionData?.data?.user_category;
+  const isParent = userCategory === USER_CATEGORIES.PARENT;
+  const userDisplayName = getUserCategoryDisplayName(userCategory);
+
+  // Debug logging
+  console.log("🏠 Header - Redux user:", JSON.stringify(reduxUser, null, 2));
+  console.log("🏠 Header - Auth context user:", JSON.stringify(user, null, 2));
+  console.log(
+    "🏠 Header - User category:",
+    userCategory,
+    "Is parent:",
+    isParent
+  );
   const [showStudentSelector, setShowStudentSelector] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
-  const insets = useSafeAreaInsets();
+  const [showStudentProfile, setShowStudentProfile] = useState(false);
 
-  // Get current time for greeting
-  const getCurrentGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
+  // Animation for profile picture border (temporarily disabled)
+  // const borderColorAnimation = useRef(new Animated.Value(0)).current;
+  // const shadowOpacityAnimation = useRef(new Animated.Value(0)).current;
+  // const scaleAnimation = useRef(new Animated.Value(1)).current;
+
+  // useEffect(() => {
+  //   // Create pulsing border animation
+  //   const pulseAnimation = Animated.loop(
+  //     Animated.sequence([
+  //       Animated.timing(borderColorAnimation, {
+  //         toValue: 1,
+  //         duration: 2000,
+  //         useNativeDriver: false, // Keep false for color/shadow animations
+  //       }),
+  //       Animated.timing(borderColorAnimation, {
+  //         toValue: 0,
+  //         duration: 2000,
+  //         useNativeDriver: false, // Keep false for color/shadow animations
+  //       }),
+  //     ])
+  //   );
+
+  //   // Create shadow animation
+  //   const shadowAnimation = Animated.loop(
+  //     Animated.sequence([
+  //       Animated.timing(shadowOpacityAnimation, {
+  //         toValue: 1,
+  //         duration: 2000,
+  //         useNativeDriver: false, // Keep false for shadow animations
+  //       }),
+  //       Animated.timing(shadowOpacityAnimation, {
+  //         toValue: 0,
+  //         duration: 2000,
+  //         useNativeDriver: false, // Keep false for shadow animations
+  //       }),
+  //     ])
+  //   );
+
+  //   pulseAnimation.start();
+  //   shadowAnimation.start();
+
+  //   return () => {
+  //     pulseAnimation.stop();
+  //     shadowAnimation.stop();
+  //   };
+  // }, []);
+
+  const handleProfilePress = () => {
+    // Scale animation on press (temporarily disabled)
+    // Animated.sequence([
+    //   Animated.timing(scaleAnimation, {
+    //     toValue: 0.95,
+    //     duration: 100,
+    //     useNativeDriver: true,
+    //   }),
+    //   Animated.timing(scaleAnimation, {
+    //     toValue: 1,
+    //     duration: 100,
+    //     useNativeDriver: true,
+    //   }),
+    // ]).start();
+
+    // Show student profile modal instead of selector
+    setShowStudentProfile(true);
+  };
+
+  const handleDropdownPress = () => {
+    // Show student selector modal
+    setShowStudentSelector(true);
   };
 
   // Mock notification data - replace with real data from API
@@ -76,24 +163,120 @@ const Header = () => {
   const students = [
     {
       id: 1,
-      name: "senu Perera",
+      name: "Senu Perera",
       profileImage: require("../../assets/images/sample-profile.png"),
       studentId: "NX001",
       campus: "Yakkala College",
+      grade: "Grade 12",
+      gpa: "3.85",
+      timeline: [
+        {
+          year: "2024",
+          grade: "Grade 12",
+          gpa: "3.85",
+          badges: ["Prefect", "Science Captain", "Honor Roll"],
+          achievements: [
+            "National Science Olympiad - Gold Medal",
+            "Inter-school Debate Championship Winner",
+            "Academic Excellence Award",
+            "Leadership Excellence Certificate",
+          ],
+        },
+        {
+          year: "2023",
+          grade: "Grade 11",
+          gpa: "3.78",
+          badges: ["Class Monitor", "Science Club President"],
+          achievements: [
+            "Regional Mathematics Competition - Silver Medal",
+            "School Science Fair - First Place",
+            "Outstanding Student Award",
+            "Community Service Recognition",
+          ],
+        },
+        {
+          year: "2022",
+          grade: "Grade 10",
+          gpa: "3.65",
+          badges: ["Library Assistant", "Environmental Club Member"],
+          achievements: [
+            "Perfect Attendance Award",
+            "English Essay Competition - Second Place",
+            "School Sports Day - Track & Field Bronze",
+            "Volunteer of the Month - March 2022",
+          ],
+        },
+        {
+          year: "2021",
+          grade: "Grade 9",
+          gpa: "3.45",
+          badges: ["New Student", "Art Club Member"],
+          achievements: [
+            "Welcome Week Best Newcomer",
+            "Art Exhibition Participant",
+            "School Choir Member",
+            "Academic Improvement Award",
+          ],
+        },
+      ],
     },
     {
       id: 2,
-      name: "hasith Perera",
+      name: "Hasith Perera",
       profileImage: require("../../assets/images/sample-profile.png"),
-      studentId: "NX001",
+      studentId: "NX002",
       campus: "Yakkala College",
+      grade: "Grade 10",
+      gpa: "3.92",
+      timeline: [
+        {
+          year: "2024",
+          grade: "Grade 10",
+          gpa: "3.92",
+          badges: ["Sports Captain", "Mathematics Olympiad Team"],
+          achievements: [
+            "Provincial Swimming Championship - Gold Medal",
+            "Mathematics Olympiad - National Qualifier",
+            "Student Council Vice President",
+            "Academic Excellence Award",
+          ],
+        },
+        {
+          year: "2023",
+          grade: "Grade 9",
+          gpa: "3.88",
+          badges: ["Swimming Team Captain", "Honor Student"],
+          achievements: [
+            "Inter-school Swimming Meet - 3 Gold Medals",
+            "Mathematics Competition - District Winner",
+            "Perfect Attendance Award",
+            "Leadership Skills Certificate",
+          ],
+        },
+      ],
     },
     {
       id: 3,
-      name: "niki Perera",
+      name: "Niki Perera",
       profileImage: require("../../assets/images/sample-profile.png"),
-      studentId: "NX001",
+      studentId: "NX003",
       campus: "Yakkala College",
+      grade: "Grade 8",
+      gpa: "3.75",
+      timeline: [
+        {
+          year: "2024",
+          grade: "Grade 8",
+          gpa: "3.75",
+          badges: ["Drama Club President", "Creative Writing Award"],
+          achievements: [
+            "School Drama Festival - Best Actor",
+            "Creative Writing Competition - First Place",
+            "Student Newspaper Editor",
+            "Community Service Award",
+          ],
+        },
+      ],
     },
   ];
 
@@ -195,57 +378,86 @@ const Header = () => {
           />
           <View style={styles.userInfoContainer}>
             <Text style={styles.userName}>
-              {user?.full_name || "Sarah Perera"}
+              {reduxUser?.username || user?.full_name || "Sarah Perera"}
             </Text>
-            <Text style={styles.userRole}>Parent Account</Text>
+            <Text style={styles.userRole}>{userDisplayName} Account</Text>
           </View>
         </View>
 
-        {/* <Text style={[styles.label, { marginBottom: 4 }]}> */}
+        {/* Right Side - Enhanced Student Selector (Only for Parents) */}
+        {isParent && (
+          <View style={styles.studentSelector}>
+            {/* Animated Profile Picture */}
+            <TouchableOpacity
+              style={styles.profileContainer}
+              onPress={handleProfilePress}
+              activeOpacity={0.8}
+            >
+              {/* Static view (animations temporarily disabled) */}
+              <View style={styles.animatedBorderContainer}>
+                <View>
+                  <Image
+                    source={currentStudent.profileImage}
+                    style={styles.selectedStudentImage}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
 
-        {/* Right Side - Student Selector */}
-        <TouchableOpacity
-          style={styles.studentSelector}
-          onPress={() => setShowStudentSelector(true)}
-        >
-          <Image
-            source={currentStudent.profileImage}
-            style={[styles.selectedStudentImage, { Width: 80 }]}
-          />
-          <View style={styles.selectedStudentInfo}>
-            <Text style={styles.selectedStudentName}>
-              {currentStudent.name}
-            </Text>
-            <Text style={styles.selectedStudentId}>
-              {currentStudent.studentId}
-            </Text>
+            {/* Student Info */}
+            <TouchableOpacity
+              style={styles.selectedStudentInfo}
+              onPress={handleDropdownPress}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.selectedStudentName}>
+                {currentStudent.name}
+              </Text>
+              <Text style={styles.selectedStudentId}>
+                {currentStudent.studentId}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Dropdown Arrow */}
+            <TouchableOpacity
+              onPress={handleDropdownPress}
+              style={styles.dropdownArrow}
+              activeOpacity={0.7}
+            >
+              <MaterialIcons
+                name="keyboard-arrow-down"
+                size={16}
+                color="#666"
+              />
+            </TouchableOpacity>
           </View>
-          <MaterialIcons name="keyboard-arrow-down" size={10} color="#666" />
-        </TouchableOpacity>
+        )}
       </View>
 
-      {/* Student Selection Modal */}
-      <Modal
-        visible={showStudentSelector}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowStudentSelector(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          onPress={() => setShowStudentSelector(false)}
+      {/* Student Selection Modal (Only for Parents) */}
+      {isParent && (
+        <Modal
+          visible={showStudentSelector}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowStudentSelector(false)}
         >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Student</Text>
-            <FlatList
-              data={students}
-              renderItem={renderStudentItem}
-              keyExtractor={(item) => item.id.toString()}
-              style={styles.studentList}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
+          <TouchableOpacity
+            style={styles.modalOverlay}
+            onPress={() => setShowStudentSelector(false)}
+          >
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Select Student</Text>
+              <FlatList
+                data={students}
+                renderItem={renderStudentItem}
+                keyExtractor={(item) => item.id.toString()}
+                style={styles.studentList}
+              />
+            </View>
+          </TouchableOpacity>
+        </Modal>
+      )}
 
       {/* Notification Modal */}
       <Modal
@@ -315,6 +527,15 @@ const Header = () => {
         </TouchableOpacity>
       </Modal>
 
+      {/* Student Profile Modal (Only for Parents) */}
+      {isParent && (
+        <StudentProfileModal
+          visible={showStudentProfile}
+          onClose={() => setShowStudentProfile(false)}
+          student={currentStudent}
+        />
+      )}
+
       {/* Drawer Menu */}
       <DrawerMenu isVisible={isDrawerOpen} onClose={closeDrawer} />
     </View>
@@ -324,7 +545,7 @@ const Header = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    paddingBottom: theme.spacing.md,
+    paddingBottom: 2,
   },
   topSection: {
     flexDirection: "row",
@@ -422,17 +643,53 @@ const styles = StyleSheet.create({
   studentSelector: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: 20,
-    minWidth: 160,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: 25,
+    minWidth: 180,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  profileContainer: {
+    marginRight: theme.spacing.sm,
+  },
+  animatedBorderContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 3,
+    borderColor: "rgba(146, 7, 52, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: theme.colors.primary,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   selectedStudentImage: {
-    width: 24,
-    height: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
+  },
+  dropdownArrow: {
+    padding: theme.spacing.xs,
+    marginLeft: theme.spacing.xs,
     borderRadius: 12,
-    marginRight: theme.spacing.xs,
+    backgroundColor: "rgba(146, 7, 52, 0.1)",
   },
   selectedStudentInfo: {
     flex: 1,

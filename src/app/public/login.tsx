@@ -15,6 +15,7 @@ import { authApi } from "@/api/auth-api";
 import {
   setIsAuthenticated,
   setSessionData,
+  setUser,
 } from "@/state-store/slices/app-slice";
 
 // Form validation schema
@@ -64,6 +65,8 @@ export default function LoginScreen() {
     });
 
     try {
+      console.log("🔄 Public Login - Starting login request...");
+
       // Use loginUserTrigger pattern as requested
       const response = await loginUserTrigger({
         pin: data.pin,
@@ -71,11 +74,69 @@ export default function LoginScreen() {
         password: data.password,
       }).unwrap();
 
-      console.log("Login successful:", response);
+      console.log(
+        "🎉 Public Login - Login successful:",
+        JSON.stringify(response, null, 2)
+      );
+
+      // Extract user data from response
+      if (response?.data) {
+        const userData = {
+          id: response.data.id,
+          full_name: response.data.full_name,
+          username: response.data.username,
+          email: response.data.email,
+          user_type_list: response.data.user_type_list,
+        };
+        dispatch(setUser(userData));
+        console.log(
+          "👤 Public Login - User data stored in Redux:",
+          JSON.stringify(userData, null, 2)
+        );
+      } else {
+        console.log("⚠️ Public Login - No user data found in response");
+      }
+
+      // Extract user category first (handle malformed field names from backend)
+      let userCategory = response?.data?.user_category;
+
+      // If user_category is undefined, check for malformed field names
+      if (!userCategory) {
+        const dataKeys = Object.keys(response?.data || {});
+        const userCategoryKey = dataKeys.find((key) =>
+          key.trim().toLowerCase().includes("user_category")
+        );
+        if (userCategoryKey) {
+          userCategory = response.data[userCategoryKey];
+          console.log(
+            "🔄 Public Login - Found malformed user_category field:",
+            userCategoryKey,
+            "with value:",
+            userCategory
+          );
+        }
+      }
+
+      // Create enhanced session data that includes user_category at root level
+      const enhancedSessionData = {
+        ...response,
+        // Flatten user_category and user_role to root level for easy access
+        user_category: userCategory, // Use the cleaned userCategory value
+        user_role: response?.data?.user_role,
+      };
 
       // Dispatch authentication state
       dispatch(setIsAuthenticated(true));
-      dispatch(setSessionData(response));
+      dispatch(setSessionData(enhancedSessionData));
+
+      console.log(
+        "🔄 Public Login - Enhanced session data stored:",
+        enhancedSessionData
+      );
+      console.log(
+        "🔄 Public Login - user_category:",
+        enhancedSessionData.user_category
+      );
 
       // Show success toast
       Toast.show({
@@ -86,10 +147,33 @@ export default function LoginScreen() {
         visibilityTime: 3000,
       });
 
-      // Redirect to authenticated area based on user role
-      const userRole = response?.user_role || response?.role || "parent";
+      console.log(
+        "🔄 Public Login - Redirecting based on user_category:",
+        userCategory
+      );
+
+      // Map user category to route
+      const getUserCategoryRoute = (category) => {
+        const categoryMap = {
+          1: "parent",
+          2: "educator",
+          3: "sport_coach",
+          4: "counselor",
+          5: "admin",
+          6: "management",
+          7: "top_management",
+        };
+        return categoryMap[category] || "parent";
+      };
+
+      const targetRoute = getUserCategoryRoute(userCategory);
+      console.log(
+        "🔄 Public Login - Target route:",
+        `/authenticated/${targetRoute}`
+      );
+
       setTimeout(() => {
-        router.replace(`/authenticated/${userRole}`);
+        router.replace(`/authenticated/${targetRoute}`);
       }, 1000);
     } catch (error: any) {
       console.log("Login error:", error);

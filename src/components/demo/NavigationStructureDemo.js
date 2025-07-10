@@ -11,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/theme";
 import { handleNavigationPress } from "../../utils/navigationFix";
 import Header from "../common/Header";
-import BottomNavigation from "../common/BottomNavigation";
+// import BottomNavigation from "../common/BottomNavigation";
 
 const NavigationStructureDemo = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("schoolLife");
@@ -288,7 +288,7 @@ const NavigationStructureDemo = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <BottomNavigation activeTab={activeTab} onTabPress={handleTabPress} />
+      {/* BottomNavigation temporarily disabled during migration */}
     </SafeAreaView>
   );
 };

@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { handleNavigationPress } from "../../../utils/navigationFix";
 import { theme } from "../../../styles/theme";
 import Header from "../../../components/common/Header";
-import BottomNavigation from "../../../components/common/BottomNavigation";
+// import BottomNavigation from "../../../components/common/BottomNavigation";
 
 const FavoriteScreen = () => {
   const handleTabPress = (tabId) => {
@@ -35,7 +35,7 @@ const FavoriteScreen = () => {
         </View>
       </ScrollView>
 
-      <BottomNavigation activeTab="favorite" onTabPress={handleTabPress} />
+      {/* <BottomNavigation activeTab="favorite" onTabPress={handleTabPress} /> */}
     </SafeAreaView>
   );
 };

@@ -2,13 +2,19 @@ import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
-  Animated,
-  Easing,
   StyleSheet,
   StatusBar,
   Image,
   Dimensions,
 } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  Easing,
+  runOnJS,
+} from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 
@@ -19,195 +25,97 @@ interface SplashScreenProps {
 export const SplashScreen: React.FC<SplashScreenProps> = ({
   onAnimationComplete,
 }) => {
-  // Animation values
-  const logoScale = useRef(new Animated.Value(0.3)).current;
-  const logoOpacity = useRef(new Animated.Value(0)).current;
-  const titleOpacity = useRef(new Animated.Value(0)).current;
-  const titleTranslateY = useRef(new Animated.Value(30)).current;
-  const subtitleOpacity = useRef(new Animated.Value(0)).current;
-  const progressOpacity = useRef(new Animated.Value(0)).current;
-  const progressWidth = useRef(new Animated.Value(0)).current;
-  const backgroundOpacity = useRef(new Animated.Value(0)).current;
-  const floatingElement1 = useRef(new Animated.Value(0)).current;
-  const floatingElement2 = useRef(new Animated.Value(0)).current;
-  const floatingElement3 = useRef(new Animated.Value(0)).current;
+  // Simplified animation values using Reanimated 3
+  const logoScale = useSharedValue(0.3);
+  const logoOpacity = useSharedValue(0);
+  const titleOpacity = useSharedValue(0);
+  const titleTranslateY = useSharedValue(30);
+  const subtitleOpacity = useSharedValue(0);
+  const progressOpacity = useSharedValue(0);
+  const progressWidth = useSharedValue(0);
+  const backgroundOpacity = useSharedValue(0);
 
   useEffect(() => {
-    // Background fade in
-    Animated.timing(backgroundOpacity, {
-      toValue: 1,
+    // Simplified animations using Reanimated 3
+    backgroundOpacity.value = withTiming(1, { duration: 800 });
+
+    logoScale.value = withSpring(1, { damping: 15, stiffness: 100 });
+    logoOpacity.value = withTiming(1, {
       duration: 800,
-      useNativeDriver: true,
-    }).start();
+      easing: Easing.out(Easing.cubic),
+    });
 
-    // Logo entrance animation
-    Animated.parallel([
-      Animated.spring(logoScale, {
-        toValue: 1,
-        tension: 100,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(logoOpacity, {
-        toValue: 1,
-        duration: 800,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // Title animation
+    // Title animation with delay
     setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(titleOpacity, {
-          toValue: 1,
-          duration: 600,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }),
-        Animated.spring(titleTranslateY, {
-          toValue: 0,
-          tension: 120,
-          friction: 8,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      titleOpacity.value = withTiming(1, {
+        duration: 600,
+        easing: Easing.out(Easing.cubic),
+      });
+      titleTranslateY.value = withSpring(0, {
+        damping: 12,
+        stiffness: 120,
+      });
     }, 400);
 
     // Subtitle animation
     setTimeout(() => {
-      Animated.timing(subtitleOpacity, {
-        toValue: 1,
+      subtitleOpacity.value = withTiming(1, {
         duration: 500,
         easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }).start();
+      });
     }, 800);
 
     // Progress bar animation
     setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(progressOpacity, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(progressWidth, {
-          toValue: 1,
-          duration: 1500,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: false,
-        }),
-      ]).start();
+      progressOpacity.value = withTiming(1, { duration: 400 });
+      progressWidth.value = withTiming(1, {
+        duration: 1500,
+        easing: Easing.out(Easing.cubic),
+      });
     }, 1000);
 
-    // Floating elements animations
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(floatingElement1, {
-          toValue: 1,
-          duration: 3000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(floatingElement1, {
-          toValue: 0,
-          duration: 3000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(floatingElement2, {
-          toValue: 1,
-          duration: 4000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(floatingElement2, {
-          toValue: 0,
-          duration: 4000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(floatingElement3, {
-          toValue: 1,
-          duration: 5000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(floatingElement3, {
-          toValue: 0,
-          duration: 5000,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-
-    // Call completion after 4s
-    const timer = setTimeout(() => {
-      onAnimationComplete?.();
+    // Complete animation after 4 seconds
+    setTimeout(() => {
+      if (onAnimationComplete) {
+        runOnJS(onAnimationComplete)();
+      }
     }, 4000);
-    return () => clearTimeout(timer);
   }, []);
 
-  // Interpolations for floating elements
-  const float1Y = floatingElement1.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -20],
-  });
+  // Animated styles
+  const backgroundStyle = useAnimatedStyle(() => ({
+    opacity: backgroundOpacity.value,
+  }));
 
-  const float2Y = floatingElement2.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 15],
-  });
+  const logoStyle = useAnimatedStyle(() => ({
+    opacity: logoOpacity.value,
+    transform: [{ scale: logoScale.value }],
+  }));
 
-  const float3Y = floatingElement3.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -10],
-  });
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
+  }));
 
-  const progressWidthInterpolated = progressWidth.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0%", "100%"],
-  });
+  const subtitleStyle = useAnimatedStyle(() => ({
+    opacity: subtitleOpacity.value,
+  }));
+
+  const progressContainerStyle = useAnimatedStyle(() => ({
+    opacity: progressOpacity.value,
+  }));
+
+  const progressBarStyle = useAnimatedStyle(() => ({
+    width: `${progressWidth.value * 100}%`,
+  }));
 
   return (
     <>
       <StatusBar barStyle="dark-content" translucent={false} />
-      <Animated.View style={[styles.container, { opacity: backgroundOpacity }]}>
+      <Animated.View style={[styles.container, backgroundStyle]}>
         {/* Background Decorative Elements */}
         <View style={styles.backgroundElements}>
-          {/* Floating geometric shapes */}
-          <Animated.View
-            style={[
-              styles.floatingElement1,
-              { transform: [{ translateY: float1Y }] },
-            ]}
-          />
-          <Animated.View
-            style={[
-              styles.floatingElement2,
-              { transform: [{ translateY: float2Y }] },
-            ]}
-          />
-          <Animated.View
-            style={[
-              styles.floatingElement3,
-              { transform: [{ translateY: float3Y }] },
-            ]}
-          />
-
-          {/* Gradient circles */}
+          {/* Simplified gradient circles */}
           <View style={styles.gradientCircle1} />
           <View style={styles.gradientCircle2} />
           <View style={styles.gradientCircle3} />
@@ -216,15 +124,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
         {/* Main Content */}
         <View style={styles.content}>
           {/* Logo Container */}
-          <Animated.View
-            style={[
-              styles.logoContainer,
-              {
-                opacity: logoOpacity,
-                transform: [{ scale: logoScale }],
-              },
-            ]}
-          >
+          <Animated.View style={[styles.logoContainer, logoStyle]}>
             <Image
               source={require("@/assets/SchooSnap_logo.png")}
               style={styles.logoImage}
@@ -233,37 +133,22 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           </Animated.View>
 
           {/* Title */}
-          <Animated.View
-            style={[
-              styles.titleContainer,
-              {
-                opacity: titleOpacity,
-                transform: [{ translateY: titleTranslateY }],
-              },
-            ]}
-          >
+          <Animated.View style={[styles.titleContainer, titleStyle]}>
             <Text style={styles.title}>SchoolSnap</Text>
             <View style={styles.titleUnderline} />
           </Animated.View>
 
           {/* Subtitle */}
-          <Animated.Text
-            style={[styles.subtitle, { opacity: subtitleOpacity }]}
-          >
+          <Animated.Text style={[styles.subtitle, subtitleStyle]}>
             Connect. Learn. Grow.
           </Animated.Text>
 
           {/* Progress Bar */}
           <Animated.View
-            style={[styles.progressContainer, { opacity: progressOpacity }]}
+            style={[styles.progressContainer, progressContainerStyle]}
           >
             <View style={styles.progressTrack}>
-              <Animated.View
-                style={[
-                  styles.progressBar,
-                  { width: progressWidthInterpolated },
-                ]}
-              />
+              <Animated.View style={[styles.progressBar, progressBarStyle]} />
             </View>
             <Text style={styles.progressText}>Loading...</Text>
           </Animated.View>

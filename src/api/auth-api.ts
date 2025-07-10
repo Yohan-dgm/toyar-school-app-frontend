@@ -1,4 +1,4 @@
-import { setToken } from "@/state-store/slices/app-slice";
+import { setToken, setUser } from "@/state-store/slices/app-slice";
 import { apiServer1 } from "./api-server-1";
 
 // const getCookie = (cookieName: string): string | undefined => {
@@ -61,33 +61,47 @@ export const authApi = apiServer1
           };
         },
         transformResponse: (apiResponse: any) => {
-          console.log("Login response:", apiResponse);
+          console.log(
+            "🔥 Auth API - Raw response received:",
+            JSON.stringify(apiResponse, null, 2)
+          );
 
-          // Extract user data and role information
-          if (apiResponse?.data) {
-            return {
-              token: apiResponse.data.token,
-              user: apiResponse.data.user,
-              user_role:
-                apiResponse.data.user?.role || apiResponse.data.user?.user_role,
-              permissions: apiResponse.data.permissions,
-              ...apiResponse.data,
-            };
-          }
-
+          // Return the response as-is, but log it for debugging
+          // The login component will handle the data extraction
           return apiResponse;
         },
         async onQueryStarted(_, { dispatch, queryFulfilled }) {
           try {
+            console.log("🚀 Auth API - onQueryStarted called");
             const { data } = await queryFulfilled;
-            console.log("Processed login data:", data);
+            console.log(
+              "✅ Auth API - Query fulfilled with data:",
+              JSON.stringify(data, null, 2)
+            );
 
-            // Store the token in Redux
-            if (data.token) {
-              dispatch(setToken(data.token));
+            // Store the token from the API response
+            if (data?.data?.token) {
+              dispatch(setToken(data.data.token));
+              console.log("🔑 Auth API - Token stored:", data.data.token);
+            }
+
+            // Store user data from the API response
+            if (data?.data) {
+              const userData = {
+                id: data.data.id,
+                full_name: data.data.full_name,
+                username: data.data.username,
+                email: data.data.email,
+                user_type_list: data.data.user_type_list,
+              };
+              dispatch(setUser(userData));
+              console.log(
+                "👤 Auth API - User data stored:",
+                JSON.stringify(userData, null, 2)
+              );
             }
           } catch (error) {
-            console.error("Login error:", error);
+            console.error("❌ Auth API - Login error:", error);
           }
         },
       }),

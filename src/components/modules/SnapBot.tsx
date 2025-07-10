@@ -4,14 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
   Dimensions,
   Image,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as Animatable from "react-native-animatable";
+// import * as Animatable from "react-native-animatable";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  runOnJS,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChatProvider } from "../../contexts/ChatContext";
 import ChatScreen from "../chat/ChatScreen";
@@ -27,8 +33,8 @@ interface SnapBotProps {
 }
 
 export const SnapBot: React.FC<SnapBotProps> = ({ isVisible, onClose }) => {
-  const slideAnim = useRef(new Animated.Value(height)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const slideY = useSharedValue(height);
+  const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
 
   // Test API function
@@ -53,42 +59,19 @@ export const SnapBot: React.FC<SnapBotProps> = ({ isVisible, onClose }) => {
     console.log("SnapBot visibility changed:", isVisible);
     if (isVisible) {
       console.log("Animating SnapBot in...");
-      // Animate in
-      Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 100,
-          friction: 8,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        console.log("SnapBot animation in completed");
-      });
+      slideY.value = withSpring(0, { damping: 15, stiffness: 100 });
+      opacity.value = withTiming(1, { duration: 300 });
     } else {
       console.log("Animating SnapBot out...");
-      // Animate out
-      Animated.parallel([
-        Animated.spring(slideAnim, {
-          toValue: height,
-          useNativeDriver: true,
-          tension: 100,
-          friction: 8,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        console.log("SnapBot animation out completed");
-      });
+      slideY.value = withSpring(height, { damping: 15, stiffness: 100 });
+      opacity.value = withTiming(0, { duration: 200 });
     }
   }, [isVisible]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideY.value }],
+    opacity: opacity.value,
+  }));
 
   if (!isVisible) {
     return null;
@@ -101,15 +84,7 @@ export const SnapBot: React.FC<SnapBotProps> = ({ isVisible, onClose }) => {
         activeOpacity={1}
         onPress={onClose}
       />
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            opacity: opacityAnim,
-            transform: [{ translateY: slideAnim }],
-          },
-        ]}
-      >
+      <Animated.View style={[styles.container, animatedStyle]}>
         <View style={styles.chatContainer}>
           {/* Header */}
           <View style={styles.header}>

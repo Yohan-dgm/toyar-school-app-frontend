@@ -23,9 +23,11 @@ import { authApi } from "@/api/auth-api";
 import {
   setIsAuthenticated,
   setSessionData,
+  setUser as setReduxUser,
 } from "@/state-store/slices/app-slice";
 import { useAuth } from "@/context/AuthContext";
 import { Settings, LogIn } from "@/lib/icons";
+import { getUserCategoryName } from "@/constants/userCategories";
 
 // Enhanced login form validation schema
 const loginSchema = z.object({
@@ -151,13 +153,32 @@ export default function Login() {
       .then((fulfilled) => {
         console.log("Login successful:", fulfilled);
 
-        // Set authentication state
-        dispatch(setIsAuthenticated(true));
-        dispatch(setSessionData(fulfilled));
-
         // Extract user information from API response
         // Handle the actual API response structure
         const userData = fulfilled.data || fulfilled;
+
+        // Create enhanced session data that includes user_category at root level
+        const enhancedSessionData = {
+          ...fulfilled,
+          // Flatten user_category and user_role to root level for easy access
+          user_category: userData.user_category,
+          user_role: userData.user_role,
+          // Also keep the original nested structure for backward compatibility
+          data: {
+            ...userData,
+          },
+        };
+
+        // Set authentication state
+        dispatch(setIsAuthenticated(true));
+        dispatch(setSessionData(enhancedSessionData));
+
+        console.log("Enhanced session data stored:", enhancedSessionData);
+        console.log("🔄 Login - About to redirect after successful login");
+        console.log(
+          "🔄 Login - user_category in enhancedSessionData:",
+          enhancedSessionData.user_category
+        );
         const userTypeList = userData.user_type_list || [];
 
         // Determine user role from user_type_list
@@ -182,7 +203,9 @@ export default function Login() {
                 ? 2
                 : 3;
 
-        // Set user data in our AuthContext
+        // User data is automatically stored in Redux by the auth API's onQueryStarted
+
+        // Set user data in our AuthContext (for backward compatibility)
         const userContextData = {
           id: userId,
           token:
@@ -207,21 +230,45 @@ export default function Login() {
         });
 
         console.log("User role detected:", userRole);
+        console.log("Full userData:", userData);
+        console.log("user_category from userData:", userData.user_category);
 
         // Add a small delay for better UX
         setTimeout(() => {
-          switch (userRole) {
-            case "parent":
-              router.replace("/authenticated/parent");
-              break;
-            case "educator":
-              router.replace("/authenticated/educator");
-              break;
-            case "student":
-              router.replace("/authenticated/student");
-              break;
-            default:
-              router.replace("/authenticated/parent"); // Default fallback
+          // Check if we have user_category in the response (new system)
+          const userCategory = userData.user_category;
+
+          console.log("Checking user_category:", userCategory);
+
+          if (userCategory) {
+            // New system: use user_category number to determine route
+            const categoryName = getUserCategoryName(userCategory);
+            console.log(
+              "User category detected:",
+              userCategory,
+              "->",
+              categoryName
+            );
+            console.log("Redirecting to:", `/authenticated/${categoryName}`);
+            router.replace(`/authenticated/${categoryName}`);
+          } else {
+            console.log(
+              "No user_category found, using legacy user_role system"
+            );
+            // Legacy system: use user_role string
+            switch (userRole) {
+              case "parent":
+                router.replace("/authenticated/parent");
+                break;
+              case "educator":
+                router.replace("/authenticated/educator");
+                break;
+              case "student":
+                router.replace("/authenticated/student");
+                break;
+              default:
+                router.replace("/authenticated/parent"); // Default fallback
+            }
           }
         }, 500);
       })
@@ -551,6 +598,16 @@ export default function Login() {
             ]}
             textStyle={styles.buttonText}
           />
+
+          {/* Debug Button - Only show in development */}
+          {__DEV__ && (
+            <TouchableOpacity
+              style={styles.debugButton}
+              onPress={() => router.push("/debug-session")}
+            >
+              <Text style={styles.debugButtonText}>🔍 Debug Session Data</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Footer */}
@@ -874,5 +931,19 @@ const styles = StyleSheet.create({
     color: "#999999",
     textAlign: "center",
     lineHeight: 20,
+  },
+
+  debugButton: {
+    backgroundColor: "#FF6B35",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 16,
+    alignItems: "center",
+  },
+  debugButtonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

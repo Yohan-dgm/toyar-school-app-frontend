@@ -3,6 +3,13 @@ import appSlice from "@/state-store/slices/app-slice";
 import schoolPostsSlice from "@/state-store/slices/school-life/school-posts-slice";
 import classPostsSlice from "@/state-store/slices/school-life/class-posts-slice";
 import studentPostsSlice from "@/state-store/slices/school-life/student-posts-slice";
+import calendarSlice from "@/state-store/slices/calendar/calendarSlice";
+import studentGrowthSlice from "@/state-store/slices/student-growth/studentGrowthSlice";
+import educatorFeedbackSlice from "@/state-store/slices/educator/educatorFeedbackSliceWithAPI";
+import attendanceSlice from "@/state-store/slices/educator/attendanceSlice";
+import studentAnalysisSlice from "@/state-store/slices/educator/studentAnalysisSlice";
+import { userPostsMiddleware } from "@/state-store/middleware/user-posts-middleware";
+import { studentSelectionMiddleware } from "@/state-store/middleware/student-selection-middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import {
@@ -44,8 +51,14 @@ export const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
-      console.log("isRejectedWithValue", action.error, action.payload);
-      alert(JSON.stringify(action)); // This is just an example. You can replace it with your preferred method for displaying notifications.
+      // Check if this is an authentication error
+      const isAuthError = action.meta?.arg?.endpointName === 'loginUser' || 
+                          action.meta?.baseQueryMeta?.request?.url?.includes('sign-in');
+      
+      if (!isAuthError) {
+        console.log("isRejectedWithValue", action.error, action.payload);
+        alert(JSON.stringify(action)); // This is just an example. You can replace it with your preferred method for displaying notifications.
+      }
     }
     return next(action);
   };
@@ -58,6 +71,11 @@ const rootReducer = combineReducers({
   schoolPosts: schoolPostsSlice,
   classPosts: classPostsSlice,
   studentPosts: studentPostsSlice,
+  calendar: calendarSlice,
+  studentGrowth: studentGrowthSlice,
+  educatorFeedback: educatorFeedbackSlice,
+  attendance: attendanceSlice,
+  studentAnalysis: studentAnalysisSlice,
 });
 export type RootReducer = ReturnType<typeof rootReducer>;
 const persistedReducer = persistReducer<RootReducer>(
@@ -74,7 +92,12 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(apiServer1.middleware, rtkQueryErrorLogger),
+    }).concat(
+      apiServer1.middleware,
+      rtkQueryErrorLogger,
+      userPostsMiddleware,
+      studentSelectionMiddleware
+    ),
   enhancers: getEnhancers,
 });
 

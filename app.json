@@ -21,7 +21,26 @@
         "UIStatusBarStyle": "UIStatusBarStyleDefault",
         "NSPhotoLibraryUsageDescription": "This app does not access photo library",
         "NSCameraUsageDescription": "This app does not access camera",
-        "UIApplicationSupportsIndirectInputEvents": true
+        "UIApplicationSupportsIndirectInputEvents": true,
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSAllowsArbitraryLoadsInWebContent": true,
+          "NSAllowsLocalNetworking": true,
+          "NSExceptionDomains": {
+            "172.20.10.3": {
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSExceptionMinimumTLSVersion": "1.0",
+              "NSIncludesSubdomains": true,
+              "NSExceptionRequiresForwardSecrecy": false
+            },
+            "localhost": {
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSExceptionMinimumTLSVersion": "1.0",
+              "NSIncludesSubdomains": true,
+              "NSExceptionRequiresForwardSecrecy": false
+            }
+          }
+        }
       }
     },
     "android": {
@@ -46,7 +65,9 @@
       "navigationBarColor": "#ffffff",
       "enableEdgeToEdge": false,
       "allowBackup": false,
-      "blocksScreenshots": true
+      "blocksScreenshots": true,
+      "usesCleartextTraffic": true,
+      "networkSecurityConfig": "@xml/network_security_config"
     },
     "app_logo": {
       "favicon": "src/assets/SchooSnap_logo.png"

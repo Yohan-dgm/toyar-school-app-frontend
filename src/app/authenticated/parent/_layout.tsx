@@ -8,6 +8,12 @@ export default function ParentLayout() {
     <DynamicUserLayout userCategory={USER_CATEGORIES.PARENT}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="school-calendar" />
+        <Stack.Screen name="student-growth" />
+        <Stack.Screen name="student-profile" />
+        <Stack.Screen name="notifications-messages" />
+
+        {/* Legacy routes for backward compatibility */}
         <Stack.Screen name="school-life" />
         <Stack.Screen name="educator-feedback" />
         <Stack.Screen name="calendar" />

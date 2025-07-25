@@ -50,7 +50,8 @@ interface StudentPostsState {
     hashtags: string[];
   };
   refreshing: boolean;
-  likedPosts: { [key: number]: boolean };
+  likedPosts: { [userPostKey: string]: boolean }; // Track liked posts per user (format: "userId_postId")
+  currentUserId: number | null; // Store current user ID for user-specific like states
 }
 
 const initialState: StudentPostsState = {
@@ -68,6 +69,7 @@ const initialState: StudentPostsState = {
   },
   refreshing: false,
   likedPosts: {},
+  currentUserId: null,
 };
 
 const studentPostsSlice = createSlice({
@@ -143,6 +145,18 @@ const studentPostsSlice = createSlice({
       };
     },
 
+    // Set current user ID for user-specific like tracking
+    setCurrentUserId: (state, action: PayloadAction<number | null>) => {
+      const newUserId = action.payload;
+
+      // If user changed, clear like states for the previous user
+      if (state.currentUserId !== newUserId) {
+        state.likedPosts = {};
+      }
+
+      state.currentUserId = newUserId;
+    },
+
     // Toggle like status for a post
     toggleLike: (
       state,
@@ -154,8 +168,11 @@ const studentPostsSlice = createSlice({
     ) => {
       const { postId, isLiked, likesCount } = action.payload;
 
-      // Update liked posts tracking
-      state.likedPosts[postId] = isLiked;
+      // Create user-specific key for like tracking (userId_postId)
+      if (state.currentUserId) {
+        const userPostKey = `${state.currentUserId}_${postId}`;
+        state.likedPosts[userPostKey] = isLiked;
+      }
 
       // Update the post in the posts array
       const postIndex = state.posts.findIndex((post) => post.id === postId);
@@ -171,6 +188,7 @@ const studentPostsSlice = createSlice({
       state.pagination = null;
       state.error = null;
       state.likedPosts = {};
+      state.currentUserId = null;
       state.filters = initialState.filters;
       state.currentStudentId = null;
     },
@@ -185,11 +203,22 @@ export const {
   setError,
   setFilters,
   clearFilters,
+  setCurrentUserId,
   toggleLike,
   clearData,
 } = studentPostsSlice.actions;
 
 export default studentPostsSlice.reducer;
+
+// Helper function to get user-specific like state
+export const getUserLikeState = (
+  state: StudentPostsState,
+  postId: number
+): boolean => {
+  if (!state.currentUserId) return false;
+  const userPostKey = `${state.currentUserId}_${postId}`;
+  return state.likedPosts[userPostKey] || false;
+};
 
 /*
 === BACKEND DATA REQUIREMENTS FOR STUDENT POSTS ===

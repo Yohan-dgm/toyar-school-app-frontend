@@ -26,7 +26,7 @@ const DynamicUserLayout: React.FC<DynamicUserLayoutProps> = ({
   const userCategoryName = getUserCategoryName(userCategory);
 
   const handleTabPress = (tabId: string) => {
-    handleNavigationPress(tabId, `${userCategoryName}Layout`);
+    handleNavigationPress(tabId, `${userCategoryName}Layout`, userCategory);
   };
 
   return (
@@ -37,9 +37,7 @@ const DynamicUserLayout: React.FC<DynamicUserLayoutProps> = ({
         <Header />
 
         {/* Content Area - This changes based on route */}
-        <View style={styles.content}>
-          {children}
-        </View>
+        <View style={styles.content}>{children}</View>
 
         {/* Dynamic Bottom Navigation */}
         <DynamicBottomNavigation

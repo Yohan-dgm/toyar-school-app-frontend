@@ -5,8 +5,17 @@ export const apiServer1 = createApi({
     baseUrl: process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1,
     prepareHeaders: (headers, api: any) => {
       const token = api.getState().app.token;
+      console.log("🔐 API Server 1 - Token check:", {
+        tokenExists: !!token,
+        tokenLength: token ? token.length : 0,
+        tokenPreview: token ? `${token.substring(0, 10)}...` : "No token",
+      });
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
+        console.log("🔐 API Server 1 - Authorization header set");
+      } else {
+        console.warn("🔐 API Server 1 - No token found, request may fail");
       }
       headers.set("credentials", "include");
 

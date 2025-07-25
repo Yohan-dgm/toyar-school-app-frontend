@@ -1,26 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Calendar, Agenda } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
+import { useSelector, useDispatch } from "react-redux";
 import { theme } from "../../../../styles/theme";
+// Import calendar Redux actions and selectors
+import {
+  fetchAllCalendarData,
+  selectAllEvents,
+  selectCalendarLoading,
+  selectCalendarError,
+  selectCalendarErrors,
+  selectLastFetched,
+  clearErrors,
+} from "../../../../state-store/slices/calendar/calendarSlice";
 // Header and BottomNavigation now handled by parent layout
 
 const CalendarMain = () => {
+  // Redux hooks
+  const dispatch = useDispatch();
+  const schoolEvents = useSelector(selectAllEvents);
+  const loading = useSelector(selectCalendarLoading);
+  const error = useSelector(selectCalendarError);
+  const errors = useSelector(selectCalendarErrors);
+  const lastFetched = useSelector(selectLastFetched);
+
+  // Local state
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [calendarViewMode, setCalendarViewMode] = useState("calendar"); // "calendar" or "agenda"
+  const [calendarViewMode, setCalendarViewMode] = useState("day"); // "day" or "month"
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [activeAttendanceTab, setActiveAttendanceTab] = useState("academic"); // "academic", "sport", "event"
+  const [compactMode, setCompactMode] = useState(true); // New compact mode state
+
+  // Fetch calendar data on component mount
+  useEffect(() => {
+    console.log(
+      "📅 CalendarMain - Component mounted, fetching calendar data..."
+    );
+    dispatch(fetchAllCalendarData());
+
+    // Clear any previous errors
+    dispatch(clearErrors());
+  }, [dispatch]);
+
+  // Handle errors silently - just log them
+  useEffect(() => {
+    if (error) {
+      console.log("📅 Calendar Error (handled silently):", error);
+      // No alert shown - errors are handled gracefully
+    }
+  }, [error]);
+
+  // Log calendar data updates
+  useEffect(() => {
+    console.log(
+      `📅 Calendar data updated: ${schoolEvents.length} events loaded`
+    );
+    if (errors && errors.length > 0) {
+      console.warn("📅 Some calendar endpoints failed:", errors);
+    }
+  }, [schoolEvents, errors]);
+
   // Tab press handling now done by layout
 
   const handleEventPress = (event) => {
     console.log("Navigate to event detail:", event.title);
+  };
+
+  // Refresh calendar data
+  const handleRefresh = () => {
+    console.log("📅 Refreshing calendar data...");
+    dispatch(fetchAllCalendarData());
   };
 
   const handleAttendancePress = () => {
@@ -35,227 +95,52 @@ const CalendarMain = () => {
     setSelectedDate(day.dateString);
   };
 
-  // Sample school calendar events data - Comprehensive JSON structure
-  // API Structure: GET /api/school/events?month=2025-07&student_id=123
-  // Response: { events: [...], success: true }
-  const schoolEvents = [
-    {
-      id: 1,
-      title: "Mathematics Test - Algebra & Geometry",
-      date: "2025-07-15",
-      time: "09:00 AM - 11:00 AM",
-      type: "exam",
-      subject: "Mathematics",
-      teacher: "Mrs. Sarah Perera",
-      location: "Room 101",
-      description: "Chapter 5-7 covering algebra and geometry",
-      grade: "Grade 10",
-      duration: "2 hours",
-      materials: ["Calculator", "Ruler", "Pencil"],
-    },
-    {
-      id: 2,
-      title: "Annual Science Fair 2025",
-      date: "2025-07-18",
-      time: "02:00 PM - 06:00 PM",
-      type: "event",
-      subject: "Science",
-      teacher: "Mr. David Wilson",
-      location: "School Hall",
-      description:
-        "Annual science exhibition and competition with student projects",
-      grade: "All Grades",
-      duration: "4 hours",
-      materials: ["Project Display", "Presentation"],
-    },
-    {
-      id: 3,
-      title: "Basketball Championship - Semi Finals",
-      date: "2025-07-20",
-      time: "04:00 PM - 06:00 PM",
-      type: "sports",
-      subject: "Physical Education",
-      teacher: "Coach Michael Thompson",
-      location: "School Basketball Court",
-      description: "Inter-school basketball championship semi-final match",
-      grade: "Grade 9-12",
-      duration: "2 hours",
-      materials: ["Sports Uniform", "Water Bottle"],
-    },
-    {
-      id: 4,
-      title: "Parent-Teacher Conference",
-      date: "2025-07-22",
-      time: "04:00 PM - 08:00 PM",
-      type: "meeting",
-      subject: "General",
-      teacher: "All Teachers",
-      location: "Conference Room & Classrooms",
-      description: "Quarterly progress discussion and academic counseling",
-      grade: "All Grades",
-      duration: "4 hours",
-      materials: ["Report Cards", "Progress Reports"],
-    },
-    {
-      id: 5,
-      title: "Drama Club Performance - Romeo & Juliet",
-      date: "2025-07-04",
-      time: "07:00 PM - 09:00 PM",
-      type: "cultural",
-      subject: "Drama & Arts",
-      teacher: "Ms. Jennifer Adams",
-      location: "School Auditorium",
-      description:
-        "Annual drama club performance of Shakespeare's Romeo & Juliet",
-      grade: "All Grades",
-      duration: "2 hours",
-      materials: ["Tickets", "Program"],
-    },
-    {
-      id: 6,
-      title: "Sports Day Practice Session",
-      date: "2025-07-03",
-      time: "10:00 AM - 12:00 PM",
-      type: "sports",
-      subject: "Physical Education",
-      teacher: "Mr. Michael Brown",
-      location: "Sports Ground",
-      description: "Preparation and practice for annual sports day events",
-      grade: "Grade 6-12",
-      duration: "2 hours",
-      materials: ["Sports Uniform", "Running Shoes"],
-    },
-    {
-      id: 7,
-      title: "English Literature Exam",
-      date: "2025-07-04",
-      time: "11:00 AM - 01:00 PM",
-      type: "exam",
-      subject: "English",
-      teacher: "Ms. Emily Davis",
-      location: "Room 205",
-      description: "Poetry and prose analysis examination",
-      grade: "Grade 11",
-      duration: "2 hours",
-      materials: ["Pen", "Answer Sheets"],
-    },
-    {
-      id: 8,
-      title: "Republic Day Celebration",
-      date: "2025-07-03",
-      time: "08:00 AM - 12:00 PM",
-      type: "holiday",
-      subject: "National Event",
-      teacher: "All Staff",
-      location: "School Grounds",
-      description:
-        "National Republic Day celebration with flag hoisting and cultural programs",
-      grade: "All Grades",
-      duration: "4 hours",
-      materials: ["Uniform", "Indian Flag"],
-    },
-    {
-      id: 9,
-      title: "Art Exhibition - Student Showcase",
-      date: "2025-07-05",
-      time: "03:00 PM - 06:00 PM",
-      type: "cultural",
-      subject: "Art",
-      teacher: "Mrs. Lisa Chen",
-      location: "Art Gallery",
-      description:
-        "Student artwork showcase featuring paintings, sculptures, and digital art",
-      grade: "All Grades",
-      duration: "3 hours",
-      materials: ["Art Portfolio"],
-    },
-    {
-      id: 10,
-      title: "Chemistry Lab Practical Exam",
-      date: "2025-07-08",
-      time: "10:30 AM - 12:30 PM",
-      type: "exam",
-      subject: "Chemistry",
-      teacher: "Dr. Robert Smith",
-      location: "Chemistry Lab 3",
-      description:
-        "Practical examination on organic compounds and chemical reactions",
-      grade: "Grade 12",
-      duration: "2 hours",
-      materials: ["Lab Coat", "Safety Goggles", "Lab Manual"],
-    },
-    {
-      id: 11,
-      title: "Music Concert - Summer Melodies",
-      date: "2025-07-12",
-      time: "06:00 PM - 08:00 PM",
-      type: "cultural",
-      subject: "Music",
-      teacher: "Mr. James Rodriguez",
-      location: "School Auditorium",
-      description:
-        "Annual summer music concert featuring school choir and orchestra",
-      grade: "All Grades",
-      duration: "2 hours",
-      materials: ["Concert Program"],
-    },
-    {
-      id: 12,
-      title: "Football Tournament Finals",
-      date: "2025-07-16",
-      time: "03:00 PM - 05:00 PM",
-      type: "sports",
-      subject: "Physical Education",
-      teacher: "Coach Sarah Williams",
-      location: "Football Field",
-      description: "Inter-house football tournament final match",
-      grade: "Grade 8-12",
-      duration: "2 hours",
-      materials: ["Sports Kit", "Team Jersey"],
-    },
-    {
-      id: 13,
-      title: "Weekly Assembly",
-      date: "2025-07-07",
-      time: "08:00 AM - 08:30 AM",
-      type: "meeting",
-      subject: "General",
-      teacher: "Principal Johnson",
-      location: "Main Hall",
-      description: "Weekly school assembly with announcements and awards",
-      grade: "All Grades",
-      duration: "30 minutes",
-      materials: [],
-    },
-    {
-      id: 14,
-      title: "Library Reading Session",
-      date: "2025-07-09",
-      time: "02:00 PM - 03:00 PM",
-      type: "activity",
-      subject: "Literature",
-      teacher: "Ms. Patricia Lee",
-      location: "School Library",
-      description: "Guided reading session for literature enthusiasts",
-      grade: "Grade 6-10",
-      duration: "1 hour",
-      materials: ["Reading Book"],
-    },
-    {
-      id: 15,
-      title: "Computer Programming Workshop",
-      date: "2025-07-11",
-      time: "01:00 PM - 03:00 PM",
-      type: "activity",
-      subject: "Computer Science",
-      teacher: "Mr. Alex Kumar",
-      location: "Computer Lab",
-      description: "Introduction to Python programming for beginners",
-      grade: "Grade 9-12",
-      duration: "2 hours",
-      materials: ["Laptop", "Notebook"],
-    },
-  ];
+  const handleMonthPress = (monthIndex) => {
+    setSelectedMonth(monthIndex);
+    // Set selected date to first day of selected month
+    const newDate = new Date(selectedYear, monthIndex, 1);
+    setSelectedDate(newDate.toISOString().split("T")[0]);
+  };
+
+  const handleDayCalendarPress = () => {
+    setCalendarViewMode("day");
+  };
+
+  const handleMonthCalendarPress = () => {
+    setCalendarViewMode("month");
+  };
+
+  const getMonthName = (monthIndex) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return months[monthIndex];
+  };
+
+  const getEventsForMonth = (monthIndex, year) => {
+    return schoolEvents.filter((event) => {
+      // Use start_date from API response instead of date
+      const eventDate = new Date(event.start_date || event.date);
+      return (
+        eventDate.getMonth() === monthIndex && eventDate.getFullYear() === year
+      );
+    });
+  };
+
+  // schoolEvents now comes from Redux state (selectAllEvents)
+  // The data is fetched from 5 backend API endpoints and normalized
+  // Original dummy data structure is preserved through normalization
 
   // Complete student attendance data for July 2025 - Academic, Sport, Event
   // API Structure: GET /api/student/attendance?month=2025-07&student_id=123&type=academic
@@ -644,17 +529,35 @@ const CalendarMain = () => {
     }
   };
 
-  // Create marked dates for school events calendar
+  // Create marked dates for school events calendar with enhanced highlighting
   const getSchoolEventsMarkedDates = () => {
     const marked = {};
 
-    // Mark school event dates
+    // Mark school event dates with enhanced styling
     schoolEvents.forEach((event) => {
-      marked[event.date] = {
-        marked: true,
-        dotColor: getEventTypeColor(event.type),
-        activeOpacity: 0.7,
-      };
+      const eventDate = event.date;
+      if (!marked[eventDate]) {
+        marked[eventDate] = {
+          customStyles: {
+            container: {
+              backgroundColor: getEventTypeColor(event.type) + "20",
+              borderRadius: 20,
+              borderWidth: 2,
+              borderColor: getEventTypeColor(event.type),
+              width: 40,
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            text: {
+              color: getEventTypeColor(event.type),
+              fontWeight: "bold",
+            },
+          },
+          marked: true,
+          dotColor: getEventTypeColor(event.type),
+        };
+      }
     });
 
     // Mark selected date
@@ -664,6 +567,18 @@ const CalendarMain = () => {
         selected: true,
         selectedColor: theme.colors.primary,
         selectedTextColor: "#FFFFFF",
+        customStyles: {
+          ...marked[selectedDate]?.customStyles,
+          container: {
+            ...marked[selectedDate]?.customStyles?.container,
+            backgroundColor: theme.colors.primary,
+            borderColor: theme.colors.primary,
+          },
+          text: {
+            color: "#FFFFFF",
+            fontWeight: "bold",
+          },
+        },
       };
     }
 
@@ -745,6 +660,8 @@ const CalendarMain = () => {
         return "#9C27B0"; // Purple for cultural events
       case "holiday":
         return "#795548"; // Brown for holidays
+      case "class":
+        return "#9C27B0"; // Purple for special classes
       default:
         return theme.colors.primary;
     }
@@ -766,6 +683,8 @@ const CalendarMain = () => {
         return "theater-comedy";
       case "holiday":
         return "beach-access";
+      case "class":
+        return "star"; // Star icon for special classes
       default:
         return "event";
     }
@@ -773,7 +692,14 @@ const CalendarMain = () => {
 
   // Get school events for selected date
   const getSchoolEventsForDate = (date) => {
-    return schoolEvents.filter((event) => event.date === date);
+    return schoolEvents.filter((event) => {
+      // Check both start_date and end_date for multi-day events
+      const startDate = event.start_date || event.date;
+      const endDate = event.end_date || event.date;
+
+      // Event is on selected date if date falls between start and end dates
+      return date >= startDate && date <= endDate;
+    });
   };
 
   // Get attendance for selected date
@@ -913,105 +839,213 @@ const CalendarMain = () => {
     );
   };
 
+  // Show loading indicator while fetching data
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={styles.loadingText}>Loading calendar data...</Text>
+        {lastFetched && (
+          <Text style={styles.lastFetchedText}>
+            Last updated: {new Date(lastFetched).toLocaleTimeString()}
+          </Text>
+        )}
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header Section */}
-        <View style={styles.headerSection}>
-          <Text style={styles.headerTitle}>📅 School Events Calendar</Text>
-          <Text style={styles.headerSubtitle}>
-            Stay organized with school events and track attendance
-          </Text>
-        </View>
+      {/* Fixed Header Section */}
+      {/* <View>
+        <Text style={styles.headerTitle}>📅 School Events Calendar</Text>
+      </View> */}
 
-        {/* School Events Calendar */}
-        <View style={styles.calendarSection}>
-          {/* Calendar or Agenda View */}
-          <View style={styles.calendarContainer}>
-            {calendarViewMode === "calendar" ? (
-              <Calendar
-                current={selectedDate}
-                onDayPress={handleDayPress}
-                markedDates={getSchoolEventsMarkedDates()}
-                markingType={"dot"}
-                theme={{
-                  backgroundColor: "#ffffff",
-                  calendarBackground: "#ffffff",
-                  textSectionTitleColor: theme.colors.text,
-                  selectedDayBackgroundColor: theme.colors.primary,
-                  selectedDayTextColor: "#ffffff",
-                  todayTextColor: theme.colors.primary,
-                  dayTextColor: theme.colors.text,
-                  textDisabledColor: "#d9e1e8",
-                  dotColor: theme.colors.primary,
-                  selectedDotColor: "#ffffff",
-                  arrowColor: theme.colors.primary,
-                  disabledArrowColor: "#d9e1e8",
-                  monthTextColor: theme.colors.text,
-                  indicatorColor: theme.colors.primary,
-                  textDayFontFamily: theme.fonts.regular,
-                  textMonthFontFamily: theme.fonts.bold,
-                  textDayHeaderFontFamily: theme.fonts.medium,
-                  textDayFontSize: 16,
-                  textMonthFontSize: 18,
-                  textDayHeaderFontSize: 14,
-                }}
-                style={styles.calendar}
+      {/* Fixed Calendar Section */}
+      <View style={styles.fixedCalendarSection}>
+        {/* Calendar Type Selector */}
+        <View style={styles.calendarTypeSelector}>
+          {/* <Text style={styles.calendarTitle}>School Calendar</Text> */}
+          <View style={styles.calendarHeaderRow}>
+            <View style={styles.calendarToggleContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.calendarToggleButton,
+                  calendarViewMode === "day" &&
+                    styles.activeCalendarToggleButton,
+                ]}
+                onPress={handleDayCalendarPress}
+              >
+                <Text
+                  style={[
+                    styles.calendarToggleText,
+                    calendarViewMode === "day" &&
+                      styles.activeCalendarToggleText,
+                  ]}
+                >
+                  Day Calendar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.calendarToggleButton,
+                  calendarViewMode === "month" &&
+                    styles.activeCalendarToggleButton,
+                ]}
+                onPress={handleMonthCalendarPress}
+              >
+                <Text
+                  style={[
+                    styles.calendarToggleText,
+                    calendarViewMode === "month" &&
+                      styles.activeCalendarToggleText,
+                  ]}
+                >
+                  Month Calendar
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Refresh Button */}
+            {/* <TouchableOpacity
+              style={styles.refreshButton}
+              onPress={handleRefresh}
+              disabled={loading}
+            >
+              <MaterialIcons
+                name="refresh"
+                size={24}
+                color={loading ? "#CCCCCC" : theme.colors.primary}
               />
-            ) : (
-              <Agenda
-                items={getAgendaItems()}
-                selected={selectedDate}
-                renderItem={renderAgendaItem}
-                renderEmptyDate={renderEmptyDate}
-                rowHasChanged={(r1, r2) => r1.name !== r2.name}
-                showClosingKnob={true}
-                pastScrollRange={50}
-                futureScrollRange={50}
-                onDayPress={handleDayPress}
-                refreshControl={null}
-                refreshing={false}
-                loadItemsForMonth={(month) => {
-                  console.log("Loading items for month:", month);
-                }}
-                renderKnob={() => (
-                  <View style={styles.agendaKnob}>
-                    <View style={styles.agendaKnobLine} />
-                  </View>
-                )}
-                theme={{
-                  backgroundColor: "#ffffff",
-                  calendarBackground: "#ffffff",
-                  textSectionTitleColor: theme.colors.text,
-                  selectedDayBackgroundColor: theme.colors.primary,
-                  selectedDayTextColor: "#ffffff",
-                  todayTextColor: theme.colors.primary,
-                  dayTextColor: theme.colors.text,
-                  textDisabledColor: "#d9e1e8",
-                  arrowColor: theme.colors.primary,
-                  disabledArrowColor: "#d9e1e8",
-                  monthTextColor: theme.colors.text,
-                  indicatorColor: theme.colors.primary,
-                  textDayFontFamily: theme.fonts.regular,
-                  textMonthFontFamily: theme.fonts.bold,
-                  textDayHeaderFontFamily: theme.fonts.medium,
-                  textDayFontSize: 16,
-                  textMonthFontSize: 18,
-                  textDayHeaderFontSize: 14,
-                  agendaDayTextColor: theme.colors.text,
-                  agendaDayNumColor: theme.colors.primary,
-                  agendaTodayColor: theme.colors.primary,
-                  agendaKnobColor: theme.colors.primary,
-                  reservationsBackgroundColor: "#F8F9FA",
-                  dotColor: theme.colors.primary,
-                  selectedDotColor: "#ffffff",
-                }}
-                style={styles.agenda}
-              />
-            )}
+            </TouchableOpacity> */}
           </View>
+
+          {/* Year Selector for Month View - Below Header Row */}
+          {calendarViewMode === "month" && (
+            <View style={styles.yearSelectorContainer}>
+              <TouchableOpacity
+                style={styles.yearNavigationButton}
+                onPress={() => setSelectedYear(selectedYear - 1)}
+              >
+                <MaterialIcons
+                  name="chevron-left"
+                  size={16}
+                  color={theme.colors.primary}
+                />
+              </TouchableOpacity>
+              <Text style={styles.yearSelectorText}>{selectedYear}</Text>
+              <TouchableOpacity
+                style={styles.yearNavigationButton}
+                onPress={() => setSelectedYear(selectedYear + 1)}
+              >
+                <MaterialIcons
+                  name="chevron-right"
+                  size={16}
+                  color={theme.colors.primary}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
+        {/* Day Calendar View - Compact Calendar */}
+        {calendarViewMode === "day" && (
+          <View style={styles.calendarWrapper}>
+            <Calendar
+              current={selectedDate}
+              onDayPress={handleDayPress}
+              markedDates={getSchoolEventsMarkedDates()}
+              markingType={"custom"}
+              theme={{
+                backgroundColor: "#ffffff",
+                calendarBackground: "#ffffff",
+                textSectionTitleColor: theme.colors.text,
+                selectedDayBackgroundColor: theme.colors.primary,
+                selectedDayTextColor: "#ffffff",
+                todayTextColor: theme.colors.primary,
+                dayTextColor: theme.colors.text,
+                textDisabledColor: "#d9e1e8",
+                dotColor: theme.colors.primary,
+                selectedDotColor: "#ffffff",
+                arrowColor: theme.colors.primary,
+                disabledArrowColor: "#d9e1e8",
+                monthTextColor: theme.colors.text,
+                indicatorColor: theme.colors.primary,
+                textDayFontFamily: theme.fonts.regular,
+                textMonthFontFamily: theme.fonts.bold,
+                textDayHeaderFontFamily: theme.fonts.medium,
+                textDayFontSize: 14, // Reduced font size
+                textMonthFontSize: 16, // Reduced font size
+                textDayHeaderFontSize: 12, // Reduced font size
+              }}
+              style={styles.calendar}
+            />
+          </View>
+        )}
+
+        {/* Month Calendar View - Show all months */}
+        {calendarViewMode === "month" && (
+          <View style={styles.yearViewContainer}>
+            <ScrollView
+              contentContainerStyle={styles.monthsGrid}
+              showsVerticalScrollIndicator={false}
+            >
+              {Array.from({ length: 12 }, (_, index) => {
+                const monthEvents = getEventsForMonth(index, selectedYear);
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.monthCard,
+                      selectedMonth === index && styles.selectedMonthCard,
+                    ]}
+                    onPress={() => handleMonthPress(index)}
+                  >
+                    <Text
+                      style={[
+                        styles.monthCardTitle,
+                        selectedMonth === index &&
+                          styles.selectedMonthCardTitle,
+                      ]}
+                    >
+                      {getMonthName(index)}
+                    </Text>
+                    <Text style={styles.monthCardEvents}>
+                      {monthEvents.length} events
+                    </Text>
+                    {monthEvents.length > 0 && (
+                      <View style={styles.monthEventIndicators}>
+                        {monthEvents.slice(0, 3).map((event, eventIndex) => (
+                          <View
+                            key={eventIndex}
+                            style={[
+                              styles.monthEventDot,
+                              {
+                                backgroundColor: getEventTypeColor(event.type),
+                              },
+                            ]}
+                          />
+                        ))}
+                        {monthEvents.length > 3 && (
+                          <Text style={styles.moreEventsText}>
+                            +{monthEvents.length - 3}
+                          </Text>
+                        )}
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
+      </View>
+
+      {/* Scrollable Content Section */}
+      <ScrollView
+        style={styles.scrollableContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Selected Date Info */}
         {selectedDate && (
           <View style={styles.selectedDateContainer}>
@@ -1024,73 +1058,68 @@ const CalendarMain = () => {
               })}
             </Text>
 
-            {/* School Events for selected date - Agenda Style */}
+            {/* School Events for selected date - Compact Display */}
             {getSchoolEventsForDate(selectedDate).length > 0 ? (
               <View style={styles.selectedDateEvents}>
                 <Text style={styles.selectedDateEventsTitle}>
-                  📅 Events for this day:
+                  📅 Events Today
                 </Text>
                 <View style={styles.selectedDateAgendaList}>
                   {getSchoolEventsForDate(selectedDate).map((event) => (
                     <TouchableOpacity
                       key={event.id}
                       style={[
-                        styles.selectedDateAgendaItem,
+                        styles.compactEventCard,
                         { borderLeftColor: getEventTypeColor(event.type) },
                       ]}
                       onPress={() => handleEventPress(event)}
+                      activeOpacity={0.8}
                     >
-                      <View style={styles.agendaItemHeader}>
-                        <View style={styles.agendaItemTitleRow}>
-                          <Text style={styles.selectedDateEventTitle}>
+                      <View style={styles.compactEventHeader}>
+                        <View style={styles.compactEventTitleRow}>
+                          <Text
+                            style={styles.compactEventTitle}
+                            numberOfLines={1}
+                          >
                             {event.title}
                           </Text>
                           <View
                             style={[
-                              styles.selectedDateEventTypeBadge,
+                              styles.compactEventTypeBadge,
                               {
-                                backgroundColor:
-                                  getEventTypeColor(event.type) + "20",
+                                backgroundColor: getEventTypeColor(event.type),
                               },
                             ]}
                           >
-                            <Text
-                              style={[
-                                styles.selectedDateEventTypeText,
-                                { color: getEventTypeColor(event.type) },
-                              ]}
-                            >
-                              {event.type.toUpperCase()}
-                            </Text>
+                            <MaterialIcons
+                              name={getEventTypeIcon(event.type)}
+                              size={10}
+                              color="#FFFFFF"
+                            />
                           </View>
                         </View>
-                        <Text style={styles.selectedDateEventTime}>
-                          {event.time}
-                        </Text>
-                      </View>
 
-                      <View style={styles.selectedDateEventDetails}>
-                        <View style={styles.selectedDateEventDetailRow}>
-                          <MaterialIcons name="person" size={14} color="#666" />
-                          <Text style={styles.selectedDateEventDetailText}>
-                            {event.teacher}
-                          </Text>
-                        </View>
-                        <View style={styles.selectedDateEventDetailRow}>
-                          <MaterialIcons
-                            name="location-on"
-                            size={14}
-                            color="#666"
-                          />
-                          <Text style={styles.selectedDateEventDetailText}>
-                            {event.location}
-                          </Text>
-                        </View>
-                        <View style={styles.selectedDateEventDetailRow}>
-                          <MaterialIcons name="school" size={14} color="#666" />
-                          <Text style={styles.selectedDateEventDetailText}>
-                            {event.grade}
-                          </Text>
+                        <View style={styles.compactEventInfo}>
+                          <View style={styles.compactEventInfoItem}>
+                            <MaterialIcons
+                              name="access-time"
+                              size={12}
+                              color="#666"
+                            />
+                            <Text style={styles.compactEventInfoText}>
+                              {event.time}
+                            </Text>
+                          </View>
+                          <View style={styles.compactEventInfoItem}>
+                            <MaterialIcons
+                              name="location-on"
+                              size={12}
+                              color="#666"
+                            />
+                            <Text style={styles.compactEventInfoText}>
+                              {event.location}
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -1100,326 +1129,224 @@ const CalendarMain = () => {
             ) : (
               <View style={styles.selectedDateEvents}>
                 <Text style={styles.selectedDateEventsTitle}>
-                  📅 Events for this day:
+                  📅 Events Today
                 </Text>
                 <View style={styles.noEventsContainer}>
-                  <MaterialIcons name="event-busy" size={48} color="#E0E0E0" />
-                  <Text style={styles.noEventsText}>No events scheduled</Text>
-                  <Text style={styles.noEventsSubtext}>
-                    This day is free from school events
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            {/* Upcoming School Events */}
-
-            {/* Attendance for selected date */}
-            {getAttendanceForDate(selectedDate) && (
-              <View style={styles.selectedDateAttendance}>
-                <Text style={styles.selectedDateAttendanceTitle}>
-                  📊 Attendance Status:
-                </Text>
-                <View style={styles.selectedDateAttendanceStatus}>
-                  <View
-                    style={[
-                      styles.attendanceStatusDot,
-                      {
-                        backgroundColor:
-                          getAttendanceForDate(selectedDate).status ===
-                          "present"
-                            ? "#4CAF50"
-                            : getAttendanceForDate(selectedDate).status ===
-                                "absent"
-                              ? "#FF5722"
-                              : getAttendanceForDate(selectedDate).status ===
-                                  "holiday"
-                                ? "#FF9800"
-                                : getAttendanceForDate(selectedDate).status ===
-                                    "weekend"
-                                  ? "#9E9E9E"
-                                  : "#666",
-                      },
-                    ]}
+                  <MaterialIcons
+                    name="event-available"
+                    size={32}
+                    color="#E0E0E0"
                   />
-                  <View style={styles.attendanceStatusInfo}>
-                    <Text style={styles.selectedDateAttendanceText}>
-                      {getAttendanceForDate(selectedDate)
-                        .status.charAt(0)
-                        .toUpperCase() +
-                        getAttendanceForDate(selectedDate).status.slice(1)}
-                    </Text>
-                    {getAttendanceForDate(selectedDate).checkIn && (
-                      <Text style={styles.attendanceTimeText}>
-                        Check-in: {getAttendanceForDate(selectedDate).checkIn}
-                      </Text>
-                    )}
-                    {getAttendanceForDate(selectedDate).reason && (
-                      <Text style={styles.attendanceReasonText}>
-                        Reason: {getAttendanceForDate(selectedDate).reason}
-                      </Text>
-                    )}
-                  </View>
+                  <Text style={styles.noEventsText}>No events scheduled</Text>
+                  <Text style={styles.noEventsSubtext}>Free day</Text>
                 </View>
               </View>
             )}
           </View>
         )}
 
-        {/* Student Attendance Calendar */}
-        <View style={styles.calendarSection}>
-          <View style={styles.calendarSectionHeaderSimple}>
-            <Text style={styles.calendarSectionTitle}>
-              📊 Student Attendance Calendar
-            </Text>
-            <Text style={styles.calendarSectionSubtitle}>
-              Track daily attendance with color-coded status indicators
-            </Text>
-          </View>
-
-          {/* Attendance Type Tabs */}
-          <View style={styles.attendanceTabsContainer}>
-            <View style={styles.attendanceTabs}>
-              <TouchableOpacity
-                style={[
-                  styles.attendanceTab,
-                  activeAttendanceTab === "academic" &&
-                    styles.activeAttendanceTab,
-                ]}
-                onPress={() => setActiveAttendanceTab("academic")}
-              >
-                <Text
-                  style={[
-                    styles.attendanceTabText,
-                    activeAttendanceTab === "academic" &&
-                      styles.activeAttendanceTabText,
-                  ]}
-                >
-                  Academic
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.attendanceTab,
-                  activeAttendanceTab === "sport" && styles.activeAttendanceTab,
-                ]}
-                onPress={() => setActiveAttendanceTab("sport")}
-              >
-                <Text
-                  style={[
-                    styles.attendanceTabText,
-                    activeAttendanceTab === "sport" &&
-                      styles.activeAttendanceTabText,
-                  ]}
-                >
-                  Sport
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.attendanceTab,
-                  activeAttendanceTab === "event" && styles.activeAttendanceTab,
-                ]}
-                onPress={() => setActiveAttendanceTab("event")}
-              >
-                <Text
-                  style={[
-                    styles.attendanceTabText,
-                    activeAttendanceTab === "event" &&
-                      styles.activeAttendanceTabText,
-                  ]}
-                >
-                  Event
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Attendance Legend */}
-          <View style={styles.attendanceLegend}>
-            <View style={styles.legendItem}>
-              <View
-                style={[styles.legendDot, { backgroundColor: "#4CAF50" }]}
-              />
-              <Text style={styles.legendText}>Present</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View
-                style={[styles.legendDot, { backgroundColor: "#FF5722" }]}
-              />
-              <Text style={styles.legendText}>Absent</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View
-                style={[styles.legendDot, { backgroundColor: "#FF9800" }]}
-              />
-              <Text style={styles.legendText}>Holiday</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View
-                style={[styles.legendDot, { backgroundColor: "#9E9E9E" }]}
-              />
-              <Text style={styles.legendText}>Weekend</Text>
-            </View>
-          </View>
-
-          <View style={styles.calendarContainer}>
-            <Calendar
-              current={selectedDate}
-              onDayPress={handleDayPress}
-              markedDates={getAttendanceMarkedDates()}
-              markingType={"custom"}
-              theme={{
-                backgroundColor: "#ffffff",
-                calendarBackground: "#ffffff",
-                textSectionTitleColor: theme.colors.text,
-                selectedDayBackgroundColor: theme.colors.primary,
-                selectedDayTextColor: "#ffffff",
-                todayTextColor: theme.colors.primary,
-                dayTextColor: theme.colors.text,
-                textDisabledColor: "#d9e1e8",
-                arrowColor: theme.colors.primary,
-                disabledArrowColor: "#d9e1e8",
-                monthTextColor: theme.colors.text,
-                indicatorColor: theme.colors.primary,
-                textDayFontFamily: theme.fonts.regular,
-                textMonthFontFamily: theme.fonts.bold,
-                textDayHeaderFontFamily: theme.fonts.medium,
-                textDayFontSize: 16,
-                textMonthFontSize: 18,
-                textDayHeaderFontSize: 14,
-              }}
-              style={styles.calendar}
-            />
-          </View>
-        </View>
-
-        {/* Attendance Summary */}
-        <View style={styles.attendanceContainer}>
-          <View style={styles.attendanceHeader}>
+        {/* Events Section - Show month events when in month view */}
+        {calendarViewMode === "month" && (
+          <View style={styles.monthEventsSection}>
             <Text style={styles.sectionTitle}>
-              {activeAttendanceTab.charAt(0).toUpperCase() +
-                activeAttendanceTab.slice(1)}{" "}
-              Attendance Summary
+              Events in {getMonthName(selectedMonth)} {selectedYear}
             </Text>
-            <TouchableOpacity
-              style={styles.viewDetailsButton}
-              onPress={handleAttendancePress}
-            >
-              <Text style={styles.viewDetailsText}>View Details</Text>
-              <MaterialIcons
-                name="arrow-forward"
-                size={16}
-                color={theme.colors.primary}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.attendanceCard}>
-            <View style={styles.attendanceStats}>
-              <View style={styles.attendanceStat}>
-                <Text style={styles.attendanceNumber}>
-                  {getCurrentAttendanceData().presentDays}
-                </Text>
-                <Text style={styles.attendanceLabel}>Present</Text>
-                <View
-                  style={[
-                    styles.attendanceIndicator,
-                    { backgroundColor: "#4CAF50" },
-                  ]}
-                />
-              </View>
-
-              <View style={styles.attendanceStat}>
-                <Text style={styles.attendanceNumber}>
-                  {getCurrentAttendanceData().absentDays}
-                </Text>
-                <Text style={styles.attendanceLabel}>Absent</Text>
-                <View
-                  style={[
-                    styles.attendanceIndicator,
-                    { backgroundColor: "#FF5722" },
-                  ]}
-                />
-              </View>
-
-              <View style={styles.attendanceStat}>
-                <Text style={styles.attendanceNumber}>
-                  {getCurrentAttendanceData().attendancePercentage}%
-                </Text>
-                <Text style={styles.attendanceLabel}>Rate</Text>
-                <View
-                  style={[
-                    styles.attendanceIndicator,
-                    { backgroundColor: theme.colors.primary },
-                  ]}
-                />
-              </View>
-            </View>
-
-            <View style={styles.recentAttendanceContainer}>
-              <Text style={styles.recentAttendanceTitle}>
-                Recent{" "}
-                {activeAttendanceTab.charAt(0).toUpperCase() +
-                  activeAttendanceTab.slice(1)}{" "}
-                Attendance
-              </Text>
-              <View style={styles.recentAttendanceList}>
-                {getCurrentAttendanceData().recentAttendance.map(
-                  (record, index) => (
-                    <View key={index} style={styles.attendanceRecord}>
-                      <View style={styles.attendanceRecordInfo}>
-                        <Text style={styles.attendanceDate}>
-                          {formatDate(record.date)}
+            <View style={styles.selectedMonthEventsList}>
+              {getEventsForMonth(selectedMonth, selectedYear).length > 0 ? (
+                getEventsForMonth(selectedMonth, selectedYear)
+                  .sort((a, b) => new Date(a.date) - new Date(b.date))
+                  .map((event) => (
+                    <TouchableOpacity
+                      key={event.id}
+                      style={[
+                        styles.selectedMonthEventCard,
+                        { borderLeftColor: getEventTypeColor(event.type) },
+                      ]}
+                      onPress={() => handleEventPress(event)}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.selectedMonthEventHeader}>
+                        <Text
+                          style={styles.selectedMonthEventTitle}
+                          numberOfLines={1}
+                        >
+                          {event.title}
                         </Text>
-                        {/* Show activity/event info for sport/event attendance */}
-                        {(record.activity || record.event) && (
-                          <Text style={styles.attendanceActivity}>
-                            {record.activity || record.event}
+                        <View
+                          style={[
+                            styles.selectedMonthEventTypeBadge,
+                            {
+                              backgroundColor:
+                                getEventTypeColor(event.type) + "20",
+                            },
+                          ]}
+                        >
+                          <MaterialIcons
+                            name={getEventTypeIcon(event.type)}
+                            size={10}
+                            color={getEventTypeColor(event.type)}
+                          />
+                        </View>
+                      </View>
+
+                      <View style={styles.selectedMonthEventInfo}>
+                        <Text style={styles.selectedMonthEventDate}>
+                          {formatDate(event.date)}
+                        </Text>
+                        {event.time && (
+                          <Text style={styles.selectedMonthEventTime}>
+                            {event.time}
                           </Text>
                         )}
                       </View>
-                      <View
-                        style={[
-                          styles.attendanceStatus,
-                          {
-                            backgroundColor:
-                              record.status === "present"
-                                ? "#4CAF50"
-                                : record.status === "absent"
-                                  ? "#FF5722"
-                                  : record.status === "holiday"
-                                    ? "#FF9800"
-                                    : "#9E9E9E",
-                          },
-                        ]}
-                      >
-                        <MaterialIcons
-                          name={
-                            record.status === "present"
-                              ? "check"
-                              : record.status === "absent"
-                                ? "close"
-                                : record.status === "holiday"
-                                  ? "beach-access"
-                                  : "help"
-                          }
-                          size={12}
-                          color="#FFFFFF"
-                        />
-                      </View>
-                    </View>
-                  )
-                )}
-              </View>
+                    </TouchableOpacity>
+                  ))
+              ) : (
+                <View style={styles.noMonthEventsContainer}>
+                  <MaterialIcons
+                    name="event-available"
+                    size={48}
+                    color="#E0E0E0"
+                  />
+                  <Text style={styles.noMonthEventsText}>
+                    No events in {getMonthName(selectedMonth)}
+                  </Text>
+                  <Text style={styles.noMonthEventsSubtext}>
+                    This month is free from school events
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
-        </View>
+        )}
 
-        {/* Quick Actions */}
-        <View style={styles.quickActionsContainer}>
+        {/* Selected Day Events Section - Show when in day view */}
+        {calendarViewMode === "day" && (
+          <View style={styles.selectedDayEventsSection}>
+            <Text style={styles.sectionTitle}>📅 Today's Schedule</Text>
+            <View style={styles.selectedDayEventsList}>
+              {getSchoolEventsForDate(selectedDate).length > 0 ? (
+                getSchoolEventsForDate(selectedDate)
+                  .sort((a, b) =>
+                    (a.start_time || "").localeCompare(b.start_time || "")
+                  )
+                  .map((event) => (
+                    <TouchableOpacity
+                      key={event.id}
+                      style={[
+                        styles.selectedDayEventCard,
+                        {
+                          borderLeftColor: getEventTypeColor(
+                            event.event_category || event.type
+                          ),
+                        },
+                      ]}
+                      onPress={() => handleEventPress(event)}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.selectedDayEventHeader}>
+                        <Text
+                          style={styles.selectedDayEventTitle}
+                          numberOfLines={2}
+                        >
+                          {event.title}
+                        </Text>
+                        <View
+                          style={[
+                            styles.selectedDayEventTypeBadge,
+                            {
+                              backgroundColor:
+                                getEventTypeColor(
+                                  event.event_category || event.type
+                                ) + "20",
+                            },
+                          ]}
+                        >
+                          <MaterialIcons
+                            name={getEventTypeIcon(
+                              event.event_category || event.type
+                            )}
+                            size={10}
+                            color={getEventTypeColor(
+                              event.event_category || event.type
+                            )}
+                          />
+                        </View>
+                      </View>
+
+                      {/* Show description if available */}
+                      {event.description && (
+                        <Text
+                          style={styles.selectedDayEventDescription}
+                          numberOfLines={2}
+                        >
+                          {event.description}
+                        </Text>
+                      )}
+
+                      <View style={styles.selectedDayEventInfo}>
+                        <View style={styles.selectedDayEventInfoItem}>
+                          <MaterialIcons
+                            name="access-time"
+                            size={12}
+                            color="#666"
+                          />
+                          <Text style={styles.selectedDayEventInfoText}>
+                            {event.start_time && event.end_time
+                              ? `${event.start_time} - ${event.end_time}`
+                              : event.start_time || event.time || "All day"}
+                          </Text>
+                        </View>
+
+                        {/* Show multi-day indicator */}
+                        {event.isMultiDay && (
+                          <View style={styles.selectedDayEventInfoItem}>
+                            <MaterialIcons
+                              name="date-range"
+                              size={12}
+                              color="#666"
+                            />
+                            <Text style={styles.selectedDayEventInfoText}>
+                              {event.start_date} to {event.end_date}
+                            </Text>
+                          </View>
+                        )}
+
+                        {/* Show event category */}
+                        {event.event_category && (
+                          <View style={styles.selectedDayEventInfoItem}>
+                            <MaterialIcons
+                              name="category"
+                              size={12}
+                              color="#666"
+                            />
+                            <Text style={styles.selectedDayEventInfoText}>
+                              {event.event_category}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  ))
+              ) : (
+                <View style={styles.noEventsContainer}>
+                  <MaterialIcons
+                    name="event-available"
+                    size={32}
+                    color="#E0E0E0"
+                  />
+                  <Text style={styles.noEventsText}>No events scheduled</Text>
+                  <Text style={styles.noEventsSubtext}>
+                    This day is free from school events
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* Quick Actions - Hidden */}
+        {/* <View style={styles.quickActionsContainer}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.quickActionsGrid}>
             <TouchableOpacity
@@ -1448,18 +1375,6 @@ const CalendarMain = () => {
 
             <TouchableOpacity
               style={styles.quickActionCard}
-              onPress={() => console.log("Attendance Report")}
-            >
-              <MaterialIcons
-                name="assessment"
-                size={32}
-                color={theme.colors.primary}
-              />
-              <Text style={styles.quickActionText}>Attendance Report</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.quickActionCard}
               onPress={() => console.log("Event Reminders")}
             >
               <MaterialIcons
@@ -1470,7 +1385,7 @@ const CalendarMain = () => {
               <Text style={styles.quickActionText}>Reminders</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
@@ -1481,26 +1396,300 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  content: {
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: theme.spacing.lg,
+  },
+  loadingText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 16,
+    color: theme.colors.text,
+    marginTop: theme.spacing.md,
+    textAlign: "center",
+  },
+  lastFetchedText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    marginTop: theme.spacing.sm,
+    textAlign: "center",
+  },
+  fixedHeader: {
+    padding: theme.spacing.sm,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  fixedCalendarSection: {
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    maxHeight: 380, // Increased to show full calendar
+  },
+  calendarTypeSelector: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: 2, // Reduced padding
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  calendarTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    color: theme.colors.text,
+    textAlign: "center",
+    marginBottom: theme.spacing.sm,
+  },
+  calendarHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: theme.spacing.md,
+  },
+  calendarToggleContainer: {
+    flexDirection: "row",
+    backgroundColor: "#F5F5F5",
+    borderRadius: 6,
+    padding: 2,
+    flex: 1,
+  },
+  refreshButton: {
+    padding: theme.spacing.sm,
+    borderRadius: 6,
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  calendarToggleButton: {
+    flex: 1,
+    paddingVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activeCalendarToggleButton: {
+    backgroundColor: theme.colors.primary,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  calendarToggleText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 12,
+    color: "#666666",
+  },
+  activeCalendarToggleText: {
+    color: "#FFFFFF",
+    fontFamily: theme.fonts.bold,
+  },
+  yearSelectorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#F8F9FA",
+    borderRadius: 6,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+    marginHorizontal: theme.spacing.md,
+    marginTop: theme.spacing.xs,
+  },
+  yearNavigationButton: {
+    padding: 6,
+    borderRadius: 4,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    minWidth: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  yearSelectorText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    color: theme.colors.text,
+    minWidth: 45,
+    textAlign: "center",
+    flex: 1,
+  },
+  yearViewContainer: {
+    maxHeight: 220, // Reduced height for month view
+    paddingHorizontal: theme.spacing.sm,
+  },
+  monthsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingVertical: theme.spacing.sm,
+    gap: theme.spacing.xs,
+  },
+  monthCard: {
+    width: "31%",
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    padding: theme.spacing.xs, // Reduced padding
+    marginBottom: theme.spacing.xs,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    minHeight: 50, // Set minimum height for consistency
+  },
+  selectedMonthCard: {
+    backgroundColor: theme.colors.primary + "10",
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+  },
+  monthCardTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 12, // Reduced font size
+    color: theme.colors.text,
+    marginBottom: 1,
+  },
+  selectedMonthCardTitle: {
+    color: theme.colors.primary,
+  },
+  monthCardEvents: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 9, // Reduced font size
+    color: "#666666",
+    marginBottom: 1,
+  },
+  monthEventIndicators: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  monthEventDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 3,
+    marginBottom: 1,
+  },
+  moreEventsText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 10,
+    color: "#666666",
+    marginLeft: 4,
+  },
+  monthEventsSection: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: theme.spacing.md, // Reduced margin
+    marginBottom: theme.spacing.md, // Reduced margin
+    borderRadius: 12,
+    padding: theme.spacing.sm, // Reduced padding
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  monthEventsList: {
+    gap: theme.spacing.sm,
+  },
+  monthEventCard: {
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    padding: theme.spacing.md,
+    borderLeftWidth: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  monthEventHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: theme.spacing.sm,
+  },
+  monthEventTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 16,
+    color: theme.colors.text,
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
+  monthEventTypeBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  monthEventTypeText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 10,
+    marginLeft: 4,
+  },
+  monthEventInfo: {
+    flexDirection: "row",
+    gap: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
+  },
+  monthEventInfoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  monthEventInfoText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    marginLeft: 4,
+  },
+  monthEventDescription: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    lineHeight: 16,
+    marginTop: theme.spacing.xs,
+  },
+  noMonthEventsContainer: {
+    alignItems: "center",
+    paddingVertical: theme.spacing.xl,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    marginTop: theme.spacing.sm,
+  },
+  noMonthEventsText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 16,
+    color: "#999999",
+    marginTop: theme.spacing.sm,
+  },
+  noMonthEventsSubtext: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+    color: "#CCCCCC",
+    marginTop: 4,
+    textAlign: "center",
+  },
+  scrollableContent: {
     flex: 1,
     paddingBottom: 120,
-  },
-  headerSection: {
-    padding: theme.spacing.lg,
-    backgroundColor: "#FFFFFF",
-    marginBottom: theme.spacing.md,
+    backgroundColor: "#F8F9FA", // Light background for better contrast
   },
   headerTitle: {
     fontFamily: theme.fonts.bold,
-    fontSize: 28,
+    fontSize: 25,
     color: theme.colors.primary,
-    marginBottom: theme.spacing.sm,
-  },
-  headerSubtitle: {
-    fontFamily: theme.fonts.regular,
-    fontSize: 16,
-    color: theme.colors.text,
-    lineHeight: 22,
   },
   calendarSection: {
     marginBottom: theme.spacing.lg,
@@ -1585,8 +1774,8 @@ const styles = StyleSheet.create({
   },
   calendarContainer: {
     backgroundColor: "#FFFFFF",
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
+    marginHorizontal: 0,
+    marginBottom: 0,
     borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -1594,9 +1783,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  calendarWrapper: {
+    paddingHorizontal: 0,
+    paddingBottom: 0,
+    paddingTop: 0, // Removed top padding
+  },
   calendar: {
     borderRadius: 12,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: 0, // Removed bottom padding
+    paddingTop: 0, // Removed top padding
+    transform: [{ scale: 0.95 }], // Slightly larger scale to show full calendar
   },
   agenda: {
     borderRadius: 12,
@@ -1704,10 +1900,10 @@ const styles = StyleSheet.create({
   },
   selectedDateContainer: {
     backgroundColor: "#FFFFFF",
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
+    marginHorizontal: theme.spacing.md, // Reduced margin
+    marginBottom: theme.spacing.md, // Reduced margin
     borderRadius: 12,
-    padding: theme.spacing.md,
+    padding: theme.spacing.sm, // Reduced padding
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -1716,18 +1912,18 @@ const styles = StyleSheet.create({
   },
   selectedDateTitle: {
     fontFamily: theme.fonts.bold,
-    fontSize: 18,
+    fontSize: 16, // Reduced font size
     color: theme.colors.text,
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm, // Reduced margin
   },
   selectedDateEvents: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm, // Reduced margin
   },
   selectedDateEventsTitle: {
     fontFamily: theme.fonts.medium,
-    fontSize: 16,
+    fontSize: 14, // Reduced font size
     color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.xs, // Reduced margin
   },
   selectedDateAgendaList: {
     gap: theme.spacing.sm,
@@ -1781,23 +1977,146 @@ const styles = StyleSheet.create({
   },
   noEventsContainer: {
     alignItems: "center",
-    paddingVertical: theme.spacing.xl,
+    paddingVertical: theme.spacing.md, // Reduced padding
     backgroundColor: "#F8F9FA",
     borderRadius: 8,
     marginTop: theme.spacing.sm,
   },
   noEventsText: {
     fontFamily: theme.fonts.medium,
-    fontSize: 16,
+    fontSize: 14, // Reduced font size
     color: "#999999",
-    marginTop: theme.spacing.sm,
+    marginTop: theme.spacing.xs, // Reduced margin
   },
   noEventsSubtext: {
     fontFamily: theme.fonts.regular,
-    fontSize: 14,
+    fontSize: 12, // Reduced font size
     color: "#CCCCCC",
-    marginTop: 4,
+    marginTop: 2,
     textAlign: "center",
+  },
+  selectedDayEventsSection: {
+    marginTop: theme.spacing.sm, // Reduced margin
+    paddingHorizontal: theme.spacing.md,
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: theme.spacing.md,
+    borderRadius: 12,
+    padding: theme.spacing.sm,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  selectedDayEventsList: {
+    marginTop: theme.spacing.sm,
+  },
+  selectedDayEventCard: {
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    padding: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
+    borderLeftWidth: 3,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+  },
+  selectedDayEventHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: theme.spacing.xs,
+  },
+  selectedDayEventTitle: {
+    flex: 1,
+    fontFamily: theme.fonts.medium,
+    fontSize: 14,
+    color: theme.colors.text,
+    marginRight: theme.spacing.sm,
+  },
+  selectedDayEventDescription: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666",
+    marginBottom: theme.spacing.xs,
+    lineHeight: 16,
+  },
+  selectedDayEventTypeBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedDayEventInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  selectedDayEventInfoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: theme.spacing.md,
+  },
+  selectedDayEventInfoText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    marginLeft: 4,
+  },
+  selectedMonthEventsList: {
+    marginTop: theme.spacing.sm,
+  },
+  selectedMonthEventCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 6,
+    padding: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
+    borderLeftWidth: 3,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  selectedMonthEventHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: theme.spacing.xs,
+  },
+  selectedMonthEventTitle: {
+    flex: 1,
+    fontFamily: theme.fonts.medium,
+    fontSize: 14,
+    color: theme.colors.text,
+    marginRight: theme.spacing.sm,
+  },
+  selectedMonthEventTypeBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  selectedMonthEventInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  selectedMonthEventDate: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+  },
+  selectedMonthEventTime: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 12,
+    color: theme.colors.primary,
   },
   selectedDateEvent: {
     flexDirection: "row",
@@ -1876,9 +2195,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontFamily: theme.fonts.bold,
-    fontSize: 20,
+    fontSize: 16, // Reduced font size
     color: theme.colors.text,
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm, // Reduced margin
   },
   viewToggleButtons: {
     flexDirection: "row",
@@ -2293,6 +2612,196 @@ const styles = StyleSheet.create({
     color: "#888888",
     marginTop: 2,
     fontStyle: "italic",
+  },
+  // Enhanced Event Card Styles
+  enhancedEventCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: theme.spacing.sm, // Reduced padding
+    marginBottom: theme.spacing.xs, // Reduced margin
+    borderLeftWidth: 3, // Reduced border width
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  eventCardHeader: {
+    marginBottom: theme.spacing.sm,
+  },
+  eventTitleSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: theme.spacing.xs,
+  },
+  enhancedEventTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 15, // Reduced font size
+    color: theme.colors.text,
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
+  enhancedEventTypeBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  enhancedEventTypeText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 10,
+    marginLeft: 4,
+  },
+  eventTimeSection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  enhancedEventTime: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 14, // Reduced font size
+    color: theme.colors.primary,
+    marginLeft: 6,
+  },
+  enhancedEventDescription: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12, // Reduced font size
+    color: "#666666",
+    lineHeight: 16, // Reduced line height
+    marginBottom: theme.spacing.xs, // Reduced margin
+  },
+  eventDetailsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: theme.spacing.sm,
+  },
+  eventDetailItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: 8,
+    minWidth: "45%",
+  },
+  eventDetailText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    marginLeft: 6,
+    flex: 1,
+  },
+  // Upcoming Events Styles
+  upcomingEventsSection: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    borderRadius: 12,
+    padding: theme.spacing.md,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  upcomingEventsList: {
+    gap: theme.spacing.sm,
+  },
+  upcomingEventCard: {
+    backgroundColor: "#F8F9FA",
+    borderRadius: 8,
+    padding: theme.spacing.sm,
+    borderLeftWidth: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  upcomingEventHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: theme.spacing.xs,
+  },
+  upcomingEventTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    color: theme.colors.text,
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
+  upcomingEventTypeBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  upcomingEventInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  upcomingEventInfoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  upcomingEventInfoText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#666666",
+    marginLeft: 4,
+  },
+  // Compact Event Card Styles
+  compactEventCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
+    borderLeftWidth: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  compactEventHeader: {
+    gap: theme.spacing.xs,
+  },
+  compactEventTitleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  compactEventTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 14,
+    color: theme.colors.text,
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
+  compactEventTypeBadge: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  compactEventInfo: {
+    flexDirection: "row",
+    gap: theme.spacing.md,
+  },
+  compactEventInfoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  compactEventInfoText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 11,
+    color: "#666666",
+    marginLeft: 4,
   },
 });
 

@@ -1,9 +1,9 @@
-import { USER_CATEGORIES } from '../constants/userCategories';
+import { USER_CATEGORIES } from "../constants/userCategories";
 
 export interface NavigationTab {
   id: string;
   icon: string;
-  iconFamily: 'MaterialIcons' | 'MaterialCommunityIcons';
+  iconFamily: "MaterialIcons" | "MaterialCommunityIcons";
   title: string;
   route: string;
 }
@@ -17,263 +17,450 @@ export interface NavigationConfig {
 const PARENT_NAVIGATION: NavigationConfig = {
   tabs: [
     {
-      id: "schoolLife",
+      id: "activityFeed",
       icon: "home",
       iconFamily: "MaterialIcons",
-      title: "School Life",
-      route: "index"
+      title: "Activity Feed",
+      route: "index",
     },
     {
-      id: "feedback",
-      icon: "contacts",
-      iconFamily: "MaterialCommunityIcons",
-      title: "Educator Feedback",
-      route: "educator-feedback"
-    },
-    {
-      id: "calendar",
+      id: "schoolCalendar",
       icon: "calendar-today",
       iconFamily: "MaterialIcons",
-      title: "Calendar",
-      route: "calendar"
+      title: "School Calendar",
+      route: "school-calendar",
     },
     {
-      id: "academic",
-      icon: "school",
+      id: "studentGrowth",
+      icon: "trending-up",
       iconFamily: "MaterialIcons",
-      title: "Academic Performance",
-      route: "academic"
+      title: "Student Growth",
+      route: "student-growth",
     },
     {
-      id: "performance",
-      icon: "pie-chart",
+      id: "studentProfile",
+      icon: "person",
       iconFamily: "MaterialIcons",
-      title: "Student Performance",
-      route: "performance"
-    }
+      title: "Student Profile",
+      route: "student-profile",
+    },
+    {
+      id: "notifications",
+      icon: "notifications",
+      iconFamily: "MaterialIcons",
+      title: "Notifications & Messages",
+      route: "notifications-messages",
+    },
   ],
-  defaultTab: "schoolLife"
+  defaultTab: "activityFeed",
 };
 
 // Educator Navigation Configuration
 const EDUCATOR_NAVIGATION: NavigationConfig = {
   tabs: [
     {
+      id: "home",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Home",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+    {
+      id: "notifications",
+      icon: "notifications",
+      iconFamily: "MaterialIcons",
+      title: "Notifications",
+      route: "notifications",
+    },
+  ],
+  defaultTab: "home",
+};
+
+// Senior Management Navigation Configuration
+const SENIOR_MANAGEMENT_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "strategicPlanning",
+      icon: "trending-up",
+      iconFamily: "MaterialIcons",
+      title: "Strategic",
+      route: "strategic-planning",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Principal Navigation Configuration
+const PRINCIPAL_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "home",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Home",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
       id: "dashboard",
       icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "Dashboard",
-      route: "index"
+      route: "dashboard",
     },
     {
-      id: "students",
-      icon: "people",
+      id: "schoolAnalysis",
+      icon: "analytics",
       iconFamily: "MaterialIcons",
-      title: "Students",
-      route: "students"
+      title: "School Analysis",
+      route: "school-analysis",
     },
     {
-      id: "classes",
-      icon: "class",
+      id: "notifications",
+      icon: "notifications",
       iconFamily: "MaterialIcons",
-      title: "Classes",
-      route: "classes"
+      title: "Notifications & Messages",
+      route: "notifications",
     },
-    {
-      id: "assignments",
-      icon: "assignment",
-      iconFamily: "MaterialIcons",
-      title: "Assignments",
-      route: "assignments"
-    },
-    {
-      id: "reports",
-      icon: "assessment",
-      iconFamily: "MaterialIcons",
-      title: "Reports",
-      route: "reports"
-    }
   ],
-  defaultTab: "dashboard"
-};
-
-// Sport Coach Navigation Configuration
-const SPORT_COACH_NAVIGATION: NavigationConfig = {
-  tabs: [
-    {
-      id: "teams",
-      icon: "sports",
-      iconFamily: "MaterialIcons",
-      title: "Teams",
-      route: "index"
-    },
-    {
-      id: "training",
-      icon: "fitness-center",
-      iconFamily: "MaterialIcons",
-      title: "Training",
-      route: "training"
-    },
-    {
-      id: "matches",
-      icon: "event",
-      iconFamily: "MaterialIcons",
-      title: "Matches",
-      route: "matches"
-    },
-    {
-      id: "players",
-      icon: "people",
-      iconFamily: "MaterialIcons",
-      title: "Players",
-      route: "players"
-    }
-  ],
-  defaultTab: "teams"
-};
-
-// Counselor Navigation Configuration
-const COUNSELOR_NAVIGATION: NavigationConfig = {
-  tabs: [
-    {
-      id: "sessions",
-      icon: "psychology",
-      iconFamily: "MaterialIcons",
-      title: "Sessions",
-      route: "index"
-    },
-    {
-      id: "students",
-      icon: "people",
-      iconFamily: "MaterialIcons",
-      title: "Students",
-      route: "students"
-    },
-    {
-      id: "appointments",
-      icon: "schedule",
-      iconFamily: "MaterialIcons",
-      title: "Appointments",
-      route: "appointments"
-    },
-    {
-      id: "resources",
-      icon: "library-books",
-      iconFamily: "MaterialIcons",
-      title: "Resources",
-      route: "resources"
-    }
-  ],
-  defaultTab: "sessions"
-};
-
-// Admin Navigation Configuration
-const ADMIN_NAVIGATION: NavigationConfig = {
-  tabs: [
-    {
-      id: "overview",
-      icon: "admin-panel-settings",
-      iconFamily: "MaterialIcons",
-      title: "Overview",
-      route: "index"
-    },
-    {
-      id: "users",
-      icon: "people",
-      iconFamily: "MaterialIcons",
-      title: "Users",
-      route: "users"
-    },
-    {
-      id: "settings",
-      icon: "settings",
-      iconFamily: "MaterialIcons",
-      title: "Settings",
-      route: "settings"
-    },
-    {
-      id: "reports",
-      icon: "assessment",
-      iconFamily: "MaterialIcons",
-      title: "Reports",
-      route: "reports"
-    }
-  ],
-  defaultTab: "overview"
+  defaultTab: "home",
 };
 
 // Management Navigation Configuration
 const MANAGEMENT_NAVIGATION: NavigationConfig = {
   tabs: [
     {
-      id: "analytics",
-      icon: "analytics",
+      id: "activityFeed",
+      icon: "home",
       iconFamily: "MaterialIcons",
-      title: "Analytics",
-      route: "index"
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
     },
     {
       id: "departments",
       icon: "business",
       iconFamily: "MaterialIcons",
       title: "Departments",
-      route: "departments"
+      route: "departments",
     },
     {
-      id: "staff",
-      icon: "people",
+      id: "userActions",
+      icon: "settings",
       iconFamily: "MaterialIcons",
-      title: "Staff",
-      route: "staff"
+      title: "User Actions",
+      route: "user-actions",
     },
-    {
-      id: "finance",
-      icon: "account-balance",
-      iconFamily: "MaterialIcons",
-      title: "Finance",
-      route: "finance"
-    }
   ],
-  defaultTab: "analytics"
+  defaultTab: "activityFeed",
 };
 
-// Top Management Navigation Configuration
-const TOP_MANAGEMENT_NAVIGATION: NavigationConfig = {
+// Admin Navigation Configuration
+const ADMIN_NAVIGATION: NavigationConfig = {
   tabs: [
     {
-      id: "executive",
-      icon: "corporate-fare",
+      id: "activityFeed",
+      icon: "home",
       iconFamily: "MaterialIcons",
-      title: "Executive",
-      route: "index"
+      title: "Activity Feed",
+      route: "index",
     },
     {
-      id: "strategy",
-      icon: "trending-up",
+      id: "schoolCalendar",
+      icon: "calendar-today",
       iconFamily: "MaterialIcons",
-      title: "Strategy",
-      route: "strategy"
+      title: "School Calendar",
+      route: "school-calendar",
     },
     {
-      id: "governance",
-      icon: "gavel",
+      id: "users",
+      icon: "people",
       iconFamily: "MaterialIcons",
-      title: "Governance",
-      route: "governance"
-    }
+      title: "Users",
+      route: "users",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
   ],
-  defaultTab: "executive"
+  defaultTab: "activityFeed",
+};
+
+// Sport Coach Navigation Configuration
+const SPORT_COACH_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "training",
+      icon: "fitness-center",
+      iconFamily: "MaterialIcons",
+      title: "Training",
+      route: "training",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Counselor Navigation Configuration
+const COUNSELOR_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "appointments",
+      icon: "schedule",
+      iconFamily: "MaterialIcons",
+      title: "Appointments",
+      route: "appointments",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Student Navigation Configuration
+const STUDENT_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "assignments",
+      icon: "assignment",
+      iconFamily: "MaterialIcons",
+      title: "Assignments",
+      route: "assignments",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Toyar Team Navigation Configuration
+const TOYAR_TEAM_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "systemMonitoring",
+      icon: "computer",
+      iconFamily: "MaterialIcons",
+      title: "System",
+      route: "system-monitoring",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Security Navigation Configuration
+const SECURITY_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "incidentReports",
+      icon: "security",
+      iconFamily: "MaterialIcons",
+      title: "Incidents",
+      route: "incident-reports",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
+};
+
+// Canteen Navigation Configuration
+const CANTEEN_NAVIGATION: NavigationConfig = {
+  tabs: [
+    {
+      id: "activityFeed",
+      icon: "home",
+      iconFamily: "MaterialIcons",
+      title: "Activity Feed",
+      route: "index",
+    },
+    {
+      id: "schoolCalendar",
+      icon: "calendar-today",
+      iconFamily: "MaterialIcons",
+      title: "School Calendar",
+      route: "school-calendar",
+    },
+    {
+      id: "menuManagement",
+      icon: "restaurant",
+      iconFamily: "MaterialIcons",
+      title: "Menu",
+      route: "menu-management",
+    },
+    {
+      id: "userActions",
+      icon: "settings",
+      iconFamily: "MaterialIcons",
+      title: "User Actions",
+      route: "user-actions",
+    },
+  ],
+  defaultTab: "activityFeed",
 };
 
 // Navigation Configuration Map
 export const NAVIGATION_CONFIGS: Record<number, NavigationConfig> = {
   [USER_CATEGORIES.PARENT]: PARENT_NAVIGATION,
   [USER_CATEGORIES.EDUCATOR]: EDUCATOR_NAVIGATION,
+  [USER_CATEGORIES.SENIOR_MANAGEMENT]: SENIOR_MANAGEMENT_NAVIGATION,
+  [USER_CATEGORIES.PRINCIPAL]: PRINCIPAL_NAVIGATION,
+  [USER_CATEGORIES.MANAGEMENT]: MANAGEMENT_NAVIGATION,
+  [USER_CATEGORIES.ADMIN]: ADMIN_NAVIGATION,
   [USER_CATEGORIES.SPORT_COACH]: SPORT_COACH_NAVIGATION,
   [USER_CATEGORIES.COUNSELOR]: COUNSELOR_NAVIGATION,
-  [USER_CATEGORIES.ADMIN]: ADMIN_NAVIGATION,
-  [USER_CATEGORIES.MANAGEMENT]: MANAGEMENT_NAVIGATION,
-  [USER_CATEGORIES.TOP_MANAGEMENT]: TOP_MANAGEMENT_NAVIGATION,
+  [USER_CATEGORIES.STUDENT]: STUDENT_NAVIGATION,
+  [USER_CATEGORIES.TOYAR_TEAM]: TOYAR_TEAM_NAVIGATION,
+  [USER_CATEGORIES.SECURITY]: SECURITY_NAVIGATION,
+  [USER_CATEGORIES.CANTEEN]: CANTEEN_NAVIGATION,
 };
 
 // Helper function to get navigation config for user category

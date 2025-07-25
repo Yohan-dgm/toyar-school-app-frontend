@@ -1,14 +1,22 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state-store/store";
+import DynamicUserLayout from "@/components/layouts/DynamicUserLayout";
+import { USER_CATEGORIES } from "@/constants/userCategories";
 
 export default function StudentLayout() {
+  const user = useSelector((state: RootState) => state.app.user);
+  const userCategory = user?.user_category || USER_CATEGORIES.STUDENT;
+
   return (
-    <>
-      <StatusBar style="dark" translucent={false} />
+    <DynamicUserLayout userCategory={userCategory}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="school-calendar" />
+        <Stack.Screen name="assignments" />
+        <Stack.Screen name="user-actions" />
       </Stack>
-    </>
+    </DynamicUserLayout>
   );
 }

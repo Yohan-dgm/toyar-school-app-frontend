@@ -8,3 +8,5 @@ export { Users } from "./Users";
 export { BookOpen } from "./BookOpen";
 export { MoonStar } from "./MoonStar";
 export { Sun } from "./Sun";
+export { Eye } from "./Eye";
+export { EyeOff } from "./EyeOff";

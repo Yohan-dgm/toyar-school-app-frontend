@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
@@ -11,22 +18,27 @@ import { z } from "zod";
 import { TButton } from "@/components/TButton";
 import { TInput } from "@/components/TInput";
 import { TOtpInput } from "@/components/TOtpInput";
+import { Eye } from "@/lib/icons/Eye";
+import { EyeOff } from "@/lib/icons/EyeOff";
 import { authApi } from "@/api/auth-api";
 import {
   setIsAuthenticated,
   setSessionData,
   setUser,
 } from "@/state-store/slices/app-slice";
+import { getUserCategoryName } from "@/constants/userCategories";
 
-// Form validation schema
+// PIN mapping configuration
+const PIN_MAPPING: Record<string, string> = {
+  NEXISY: "sms_v1",
+  SCHL01: "sms_v2",
+};
+
+// Form validation schema - only check for empty fields
 const loginSchema = z.object({
   username_or_email: z.string().min(1, "Username or email is required"),
   password: z.string().min(1, "Password is required"),
-  pin: z
-    .string()
-    .min(4, "School PIN must be at least 4 characters")
-    .max(6, "School PIN must be at most 6 characters"),
-  // .regex(/^[A-Z0-9]+$/, "PIN must contain only letters and numbers"),
+  pin: z.string().min(1, "School PIN is required"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -35,6 +47,7 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // RTK Query mutation using trigger pattern
   const [loginUserTrigger] = authApi.endpoints.loginUser.useMutation();
@@ -46,21 +59,38 @@ export default function LoginScreen() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    mode: "onBlur", // Validate when user leaves field
-    reValidateMode: "onChange", // Re-validate on change after first validation
+    mode: "onSubmit", // Only validate on submit
     defaultValues: {
       username_or_email: "",
       password: "",
-      pin: "sms_v1",
+      pin: "",
     },
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
+
+    // Map user-entered PIN to backend value
+    const mappedPin = PIN_MAPPING[data.pin.toUpperCase()];
+
+    // Check if PIN is valid - show toast for invalid PIN
+    if (!mappedPin) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Credentials ❌",
+        text2: "Please check your login details and try again",
+        position: "top",
+        visibilityTime: 4000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
     console.log("Submitting login data:", {
       username_or_email: data.username_or_email,
       password: "****",
       pin: data.pin,
+      mapped_pin: mappedPin,
       pin_length: data.pin.length,
     });
 
@@ -69,7 +99,7 @@ export default function LoginScreen() {
 
       // Use loginUserTrigger pattern as requested
       const response = await loginUserTrigger({
-        pin: data.pin,
+        pin: mappedPin,
         username_or_email: data.username_or_email,
         password: data.password,
       }).unwrap();
@@ -152,21 +182,8 @@ export default function LoginScreen() {
         userCategory
       );
 
-      // Map user category to route
-      const getUserCategoryRoute = (category) => {
-        const categoryMap = {
-          1: "parent",
-          2: "educator",
-          3: "sport_coach",
-          4: "counselor",
-          5: "admin",
-          6: "management",
-          7: "top_management",
-        };
-        return categoryMap[category] || "parent";
-      };
-
-      const targetRoute = getUserCategoryRoute(userCategory);
+      // Use the proper user category mapping from constants
+      const targetRoute = getUserCategoryName(userCategory);
       console.log(
         "🔄 Public Login - Target route:",
         `/authenticated/${targetRoute}`
@@ -176,23 +193,13 @@ export default function LoginScreen() {
         router.replace(`/authenticated/${targetRoute}`);
       }, 1000);
     } catch (error: any) {
-      console.log("Login error:", error);
+      // Silently handle login errors - don't log to console
 
-      // Show error toast with specific message
-      let errorMessage = "Login failed. Please check your credentials.";
-
-      if (error?.data?.message) {
-        errorMessage = error.data.message;
-      } else if (error?.message) {
-        errorMessage = error.message;
-      } else if (error?.data?.exception) {
-        errorMessage = "Server error. Please try again later.";
-      }
-
+      // Always show generic invalid credentials message for security
       Toast.show({
         type: "error",
-        text1: "Login Failed ❌",
-        text2: errorMessage,
+        text1: "Invalid Credentials ❌",
+        text2: "Please check your login details and try again",
         position: "top",
         visibilityTime: 4000,
       });
@@ -281,15 +288,27 @@ export default function LoginScreen() {
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
                 <View>
-                  <TInput
-                    placeholder="Enter your password"
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    secureTextEntry
-                    error={errors.password?.message}
-                    style={styles.input}
-                  />
+                  <View style={styles.passwordInputContainer}>
+                    <TInput
+                      placeholder="Enter your password"
+                      value={value}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      secureTextEntry={!showPassword}
+                      error={errors.password?.message}
+                      style={[styles.input, styles.passwordInput]}
+                    />
+                    <TouchableOpacity
+                      style={styles.eyeIcon}
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff size={20} color="#666666" />
+                      ) : (
+                        <Eye size={20} color="#666666" />
+                      )}
+                    </TouchableOpacity>
+                  </View>
                   {errors.password && (
                     <Text style={styles.errorText}>
                       {errors.password.message}
@@ -451,6 +470,21 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 0,
+  },
+  passwordInputContainer: {
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  passwordInput: {
+    flex: 1,
+    paddingRight: 50,
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 15,
+    padding: 5,
+    zIndex: 1,
   },
   pinInputContainer: {
     alignItems: "center",

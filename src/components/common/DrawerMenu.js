@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../../context/AuthContext";
 import { logout } from "../../state-store/slices/app-slice";
 import { theme } from "../../styles/theme";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   USER_CATEGORIES,
@@ -86,12 +87,29 @@ const DrawerMenu = ({ isVisible, onClose }) => {
     transform: [{ translateX: slideAnim.value }],
   }));
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     console.log("🔹 Drawer Menu: Logout pressed");
 
-    // Clear user data and authentication state using the proper logout action
-    setUser(null);
-    dispatch(logout()); // This clears all Redux state including sessionData
+    try {
+      // Clear persisted Redux data to force fresh session on next login
+      console.log("🧹 Clearing persisted Redux data...");
+      await AsyncStorage.removeItem("persist:root");
+
+      // Clear stored login credentials
+      console.log("🔑 Clearing stored login credentials...");
+      await AsyncStorage.removeItem("loginCredentials");
+
+      // Clear user data and authentication state using the proper logout action
+      setUser(null);
+      dispatch(logout()); // This clears all Redux state including sessionData
+
+      console.log("✅ Session data and credentials cleared successfully");
+    } catch (error) {
+      console.error("❌ Error clearing session data:", error);
+      // Still proceed with logout even if clearing fails
+      setUser(null);
+      dispatch(logout());
+    }
 
     // Close drawer first
     onClose();

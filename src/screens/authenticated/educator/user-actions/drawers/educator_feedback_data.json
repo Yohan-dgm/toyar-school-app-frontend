@@ -1,0 +1,906 @@
+[
+  {
+    "Admission Number": "NY24/036",
+    "Full Name With Title": "Master. Dasanayalka Mudiyanselage Sayon Thevsas",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Demonstrates strong understanding and confidence in Mathematics.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/036",
+    "Full Name With Title": "Master. Dasanayalka Mudiyanselage Sayon Thevsas",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Shows excellent attendance and punctuality.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/009",
+    "Full Name With Title": "Master. Athalage Don Ayaan Nimneth",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "Dress code and personal cleanliness are maintained well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/009",
+    "Full Name With Title": "Master. Athalage Don Ayaan Nimneth",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "He shows excellent observation and analytical skills for their age. Thinks carefully and notices details in learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/009",
+    "Full Name With Title": "Master. Athalage Don Ayaan Nimneth",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "Demonstrates remarkable talent and stage presence in dance performances.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/009",
+    "Full Name With Title": "Master. Athalage Don Ayaan Nimneth",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "He is an enrgetic dancer.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/009",
+    "Full Name With Title": "Master. Athalage Don Ayaan Nimneth",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He is identified excellent in dress code, individual behaviour, Personal cleanliness, Self awareness, Self reflection, Goal setting, Emotional regulation, Time Management.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts kindly with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "He displays great talent and enthusiasm in singing activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Participates enthusiastically in all PE activities and shows great team spirit.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Shows excellent command of spoken English and participates actively in discussions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Enjoys exploring mathematical concepts and applies them well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/014",
+    "Full Name With Title": "Master. Ayan Vindeew Hapugala",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/002",
+    "Full Name With Title": "Miss. Gamaathige Vihani Sehansa Wijerathne",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, individual behaviour, Personal cleanliness.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/002",
+    "Full Name With Title": "Miss. Gamaathige Vihani Sehansa Wijerathne",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "Her kindness and empathy shine in the classroom",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/002",
+    "Full Name With Title": "Miss. Gamaathige Vihani Sehansa Wijerathne",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "She shows great rhythm, expression, and a wonderful talent in singing and dancing activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/002",
+    "Full Name With Title": "Miss. Gamaathige Vihani Sehansa Wijerathne",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "A lively and motivated participant in Gymnastic sessions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/002",
+    "Full Name With Title": "Miss. Gamaathige Vihani Sehansa Wijerathne",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Enjoys exploring mathematical concepts and applies them well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/313",
+    "Full Name With Title": "Miss. Godakumbure Gedara Upeksha Sathsarani Bandara",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "She interacts well with peers and builds positive relationships.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/313",
+    "Full Name With Title": "Miss. Godakumbure Gedara Upeksha Sathsarani Bandara",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "She demonstrates good talent in both singing and dance performances.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/313",
+    "Full Name With Title": "Miss. Godakumbure Gedara Upeksha Sathsarani Bandara",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Displays energy, effort, and a positive attitude during PE sessions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/281",
+    "Full Name With Title": "Master. Dissanayaka Mudiyanselage Sehas Saswindu Bandara",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "He shows genuine care when someone is feeling down or needs help.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/022",
+    "Full Name With Title": "Miss. Mudannayake Appuhamilage Dihansa Randuli Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Shows excellent attendance and punctuality.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/365",
+    "Full Name With Title": "Master. Gammanchiralage Yumeth Yasodha Wijesiri",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Shows good attendance and punctuality.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/020",
+    "Full Name With Title": "Master. Heenkenda Mudiyanselage Yesandu Yesath Bandara Heenkenda",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He is identified excellent in dress code, individual behaviour, Personal cleanliness.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/020",
+    "Full Name With Title": "Master. Heenkenda Mudiyanselage Yesandu Yesath Bandara Heenkenda",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "He excels in singing and dancing, bringing creativity and enthusiasm to every performance.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/020",
+    "Full Name With Title": "Master. Heenkenda Mudiyanselage Yesandu Yesath Bandara Heenkenda",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Consistently performs well in Mathematics with keen attention to detail.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/020",
+    "Full Name With Title": "Master. Heenkenda Mudiyanselage Yesandu Yesath Bandara Heenkenda",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Shows good attendance and punctuality.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/005",
+    "Full Name With Title": "Master. Dahanayaka Ralalage Didula Damsara Rupasingha",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "He demonstrates a caring nature through helpful actions.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/005",
+    "Full Name With Title": "Master. Dahanayaka Ralalage Didula Damsara Rupasingha",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "A confident and graceful dancer who enjoys performing.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/005",
+    "Full Name With Title": "Master. Dahanayaka Ralalage Didula Damsara Rupasingha",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Enjoys exploring mathematical concepts and applies them well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/005",
+    "Full Name With Title": "Master. Dahanayaka Ralalage Didula Damsara Rupasingha",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/004",
+    "Full Name With Title": "Miss. Kanda Thalappulige Lumini Lisanga",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She maintains her dress code well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/004",
+    "Full Name With Title": "Miss. Kanda Thalappulige Lumini Lisanga",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/004",
+    "Full Name With Title": "Miss. Kanda Thalappulige Lumini Lisanga",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "She shows good rhythm, expression, and energy in singing and dancing activities.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/004",
+    "Full Name With Title": "Miss. Kanda Thalappulige Lumini Lisanga",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/338",
+    "Full Name With Title": "Miss. Thanumi Sasithma Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A helpful child who supports peers thoughtfully.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/338",
+    "Full Name With Title": "Miss. Thanumi Sasithma Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/085",
+    "Full Name With Title": "Master. Samankula Jothirathnage Thiyon Sayul",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He maintains his dress code and personal cleanliness well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/099",
+    "Full Name With Title": "Miss. Withan Kankanamlage Lagni Akelya Withana",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Actively engages in physical activities and enjoys staying active.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/099",
+    "Full Name With Title": "Miss. Withan Kankanamlage Lagni Akelya Withana",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/273",
+    "Full Name With Title": "Master. Liyanage Disas Damyuga Perara",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He maintains his dress code well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/273",
+    "Full Name With Title": "Master. Liyanage Disas Damyuga Perara",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "He shows excellent observation and analytical skills for their age. Thinks carefully and notices details in learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/273",
+    "Full Name With Title": "Master. Liyanage Disas Damyuga Perara",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Communicates effectively in English and uses vocabulary well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/273",
+    "Full Name With Title": "Master. Liyanage Disas Damyuga Perara",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/240",
+    "Full Name With Title": "Master. Zero Senaji",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Shows strong enthusiasm and cooperation during PE lessons.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/240",
+    "Full Name With Title": "Master. Zero Senaji",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Speaks English fluently with confidence and clarity.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/240",
+    "Full Name With Title": "Master. Zero Senaji",
+    "Grade": "Grade 1",
+    "Category": "Existential Intelligence",
+    "Description": "He is talented in created story telling.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/240",
+    "Full Name With Title": "Master. Zero Senaji",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/026",
+    "Full Name With Title": "Master. Dhanija Himansa Wanniarachchi",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, individual behaviour, Personal cleanliness, Self awareness, Self reflection, Goal setting, Emotional regulation and Time Management.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "Discipline - Interaction with others, helping acts, Empathy, Respecting individuals and opinions, Teamwork, Awareness, Observation and analytical skills",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "She shows great rhythm, expression, and energy in singing and dancing activities.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Expresses ideas clearly and confidently in English conversations.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Demonstrates strong understanding and confidence in Mathematics.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/034",
+    "Full Name With Title": "Miss. Wilabada Kankanamalage Tharushi Manulya",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/374",
+    "Full Name With Title": "Master. Kenuja Kemgitha Jayon Thilakawardhana",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He maintains the dress code well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/374",
+    "Full Name With Title": "Master. Kenuja Kemgitha Jayon Thilakawardhana",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/035",
+    "Full Name With Title": "Master. Kottage Dulina Thinal Dangalle",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He is identified excellent in dress code, individual behaviour, Personal cleanliness, Self awareness, Self reflection, Goal setting, Emotional regulation, Time Management.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/035",
+    "Full Name With Title": "Master. Kottage Dulina Thinal Dangalle",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/035",
+    "Full Name With Title": "Master. Kottage Dulina Thinal Dangalle",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Displays energy, effort, and a positive attitude during PE sessions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/035",
+    "Full Name With Title": "Master. Kottage Dulina Thinal Dangalle",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Enjoys exploring mathematical concepts and applies them well.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/035",
+    "Full Name With Title": "Master. Kottage Dulina Thinal Dangalle",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Demonstrates responsibility through regular and timely attendance.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/024",
+    "Full Name With Title": "Miss. Mudannayaka Appuhamilage Minudi Chenaya Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, Discipline - individual behaviour, Personal cleanliness, Self awareness, Self reflection",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/024",
+    "Full Name With Title": "Miss. Mudannayaka Appuhamilage Minudi Chenaya Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/024",
+    "Full Name With Title": "Miss. Mudannayaka Appuhamilage Minudi Chenaya Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "A talented performer who shines in both singing and dancing with confidence and joy.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/024",
+    "Full Name With Title": "Miss. Mudannayaka Appuhamilage Minudi Chenaya Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Expresses ideas clearly and confidently in English conversations.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/024",
+    "Full Name With Title": "Miss. Mudannayaka Appuhamilage Minudi Chenaya Mudannayaka",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/056",
+    "Full Name With Title": "Miss. Hewa Komanage Ehansa Harasarani",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A helpful child who supports peers thoughtfully.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/056",
+    "Full Name With Title": "Miss. Hewa Komanage Ehansa Harasarani",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "She demonstrates good talent and stage presence in both vocal and dance performances",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/056",
+    "Full Name With Title": "Miss. Hewa Komanage Ehansa Harasarani",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/059",
+    "Full Name With Title": "Miss. Rankothge Vihari Lavanya Rathnayaka",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "A talented performer who shines in both singing and dancing with confidence and joy.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/059",
+    "Full Name With Title": "Miss. Rankothge Vihari Lavanya Rathnayaka",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/057",
+    "Full Name With Title": "Master. Kuruppu Arachchige Yoshika Naveen Jaweera",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He is identified excellent in dress code, individual behaviour, Personal cleanliness",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/057",
+    "Full Name With Title": "Master. Kuruppu Arachchige Yoshika Naveen Jaweera",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/057",
+    "Full Name With Title": "Master. Kuruppu Arachchige Yoshika Naveen Jaweera",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Consistently performs well in Mathematics with keen attention to detail.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/057",
+    "Full Name With Title": "Master. Kuruppu Arachchige Yoshika Naveen Jaweera",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/354",
+    "Full Name With Title": "Master. Koongoda Situge Thinula Abinada",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He is identified excellent in dress code, individual behaviour, Personal cleanliness, Self awareness, Self reflection",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/354",
+    "Full Name With Title": "Master. Koongoda Situge Thinula Abinada",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/354",
+    "Full Name With Title": "Master. Koongoda Situge Thinula Abinada",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Communicates effectively in English and uses vocabulary well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/354",
+    "Full Name With Title": "Master. Koongoda Situge Thinula Abinada",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "Discipline - dress code, Discipline - individual behaviour, Personal cleanliness, Self awareness, Self reflection",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "Shows great rhythm, expression, and energy in singing and dancing activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Demonstrates great energy in dancing.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Shows excellent command of spoken English and participates actively in discussions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/090",
+    "Full Name With Title": "Master. Mawanana Hewage Terash Shehansha Jayasekara",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/082",
+    "Full Name With Title": "Master. Loku Gam Hewage Esindu Sharinya",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "He maintains his dress code and personal cleanliness well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/082",
+    "Full Name With Title": "Master. Loku Gam Hewage Esindu Sharinya",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/092",
+    "Full Name With Title": "Master. Kande Hevayalage Osindu Nethmina Jayarathna",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/013",
+    "Full Name With Title": "Miss. Vinudi Sehansa Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, individual behaviour, Personal cleanliness, Self awareness, Self reflection",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/013",
+    "Full Name With Title": "Miss. Vinudi Sehansa Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A well-disciplined and empathetic child who interacts well with others, respects opinions, and works well in teams. Shows great observation and analytical skills. A joy to have in class!",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/013",
+    "Full Name With Title": "Miss. Vinudi Sehansa Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "Excels in singing and dancing, bringing enthusiasm to every performance.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/013",
+    "Full Name With Title": "Miss. Vinudi Sehansa Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Mathematical / Logical Intelligence",
+    "Description": "Enjoys exploring mathematical concepts and applies them well.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/013",
+    "Full Name With Title": "Miss. Vinudi Sehansa Dissanayake",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Always present and actively participates in all learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/016",
+    "Full Name With Title": "Master. Chanuga Abiru Kariyawasam",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A helpful child who is willing to help others with a cheerful attitude.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/016",
+    "Full Name With Title": "Master. Chanuga Abiru Kariyawasam",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Actively engages in physical activities and enjoys staying active.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/016",
+    "Full Name With Title": "Master. Chanuga Abiru Kariyawasam",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/011",
+    "Full Name With Title": "Miss. Rathnayake Mudiyanselage Sayuni Hiyansa Rathnayake",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, individual behaviour, Personal cleanliness,",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/011",
+    "Full Name With Title": "Miss. Rathnayake Mudiyanselage Sayuni Hiyansa Rathnayake",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "She demonstrates a caring nature through helpful actions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/011",
+    "Full Name With Title": "Miss. Rathnayake Mudiyanselage Sayuni Hiyansa Rathnayake",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "A talented performer who shines in both singing and dancing with confidence and joy.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/011",
+    "Full Name With Title": "Miss. Rathnayake Mudiyanselage Sayuni Hiyansa Rathnayake",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/010",
+    "Full Name With Title": "Master. Pathiranalage Maharu Abineth Abeyrathna",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "He is a helpful child who thoughtfully appears when someone needs a help",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/006",
+    "Full Name With Title": "Miss. Kirambaliyana Kankanamge Vidni Tiyasha Jayasinghe",
+    "Grade": "Grade 1",
+    "Category": "Intrapersonal Intelligence",
+    "Description": "She is identified excellent in dress code, individual behaviour, Personal cleanliness,",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/006",
+    "Full Name With Title": "Miss. Kirambaliyana Kankanamge Vidni Tiyasha Jayasinghe",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "A kind and helpful child who supports peers thoughtfully.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/006",
+    "Full Name With Title": "Miss. Kirambaliyana Kankanamge Vidni Tiyasha Jayasinghe",
+    "Grade": "Grade 1",
+    "Category": "Music Intelligence",
+    "Description": "A talented performer who shines in both singing and dancing with confidence and joy.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/006",
+    "Full Name With Title": "Miss. Kirambaliyana Kankanamge Vidni Tiyasha Jayasinghe",
+    "Grade": "Grade 1",
+    "Category": "Linguistic Intelligence",
+    "Description": "Expresses ideas clearly and confidently in English presentations.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/006",
+    "Full Name With Title": "Miss. Kirambaliyana Kankanamge Vidni Tiyasha Jayasinghe",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/084",
+    "Full Name With Title": "Miss. Dissanayaka Appuhamilage Inuki Aradhya Dissanayaka",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "She shows excellent observation and analytical skills for het age. Thinks carefully and notices details in learning activities.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/261",
+    "Full Name With Title": "Master. Mirihagalla Kankanamlage Shiyon Menosha Mirihagalla",
+    "Grade": "Grade 1",
+    "Category": "Interpersonal Intelligence",
+    "Description": "Always willing to help others with a cheerful attitude.",
+    "Score": 4
+  },
+  {
+    "Admission Number": "NY24/261",
+    "Full Name With Title": "Master. Mirihagalla Kankanamlage Shiyon Menosha Mirihagalla",
+    "Grade": "Grade 1",
+    "Category": "Bodily Kinesthetic Intelligence",
+    "Description": "Displays energy, effort, and a positive attitude during PE sessions.",
+    "Score": 5
+  },
+  {
+    "Admission Number": "NY24/261",
+    "Full Name With Title": "Master. Mirihagalla Kankanamlage Shiyon Menosha Mirihagalla",
+    "Grade": "Grade 1",
+    "Category": "Attendance and Punctuality",
+    "Description": "Consistently present and ready to learn every day.",
+    "Score": 5
+  }
+]

@@ -31,6 +31,11 @@ export const ENV_CONFIG = {
   // Base URL for existing API
   BASE_URL_API_SERVER:
     process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1 || "http://192.168.1.14:9999",
+
+  // Base URL for student profile images (separate from main API)
+  BASE_URL_STUDENT_IMAGES:
+    process.env.EXPO_PUBLIC_BASE_URL_STUDENT_IMAGES ||
+    "https://nexis-college-sms-staging-b.solovosystems.com",
 };
 
 // Type definitions for better TypeScript support

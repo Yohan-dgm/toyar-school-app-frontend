@@ -16,6 +16,27 @@ import { theme } from "../../../../styles/theme";
 
 const { width, height } = Dimensions.get("window");
 
+// House color mapping and validation
+const getHouseInfo = (houseName) => {
+  if (!houseName || houseName === "Unknown House") {
+    return { isValid: false, color: "#999999" }; // Gray for no house
+  }
+
+  const lowerHouseName = houseName.toLowerCase();
+
+  if (lowerHouseName.includes("vulcan")) {
+    return { isValid: true, color: "#FF8C00" }; // Orange
+  } else if (lowerHouseName.includes("tellus")) {
+    return { isValid: true, color: "#FFD700" }; // Yellow
+  } else if (lowerHouseName.includes("eurus")) {
+    return { isValid: true, color: "#87CEEB" }; // Light blue
+  } else if (lowerHouseName.includes("calypso")) {
+    return { isValid: true, color: "#32CD32" }; // Green
+  }
+
+  return { isValid: false, color: "#999999" }; // Gray for unrecognized house
+};
+
 const StudentProfileModal = ({ visible, onClose, student }) => {
   if (!student) return null;
 
@@ -113,9 +134,33 @@ const StudentProfileModal = ({ visible, onClose, student }) => {
               </Text>
               <Text style={styles.campusName}>{student.campus}</Text>
 
-              <View style={styles.gpaChip}>
-                <Text style={styles.gpaText}>GPA {student.gpa}</Text>
-              </View>
+              {(() => {
+                const houseInfo = getHouseInfo(student.schoolHouse);
+
+                if (!houseInfo.isValid) {
+                  // Show small gray circle for no house or unrecognized house
+                  return (
+                    <View
+                      style={[
+                        styles.houseCircle,
+                        { backgroundColor: houseInfo.color },
+                      ]}
+                    />
+                  );
+                }
+
+                // Show house name with color
+                return (
+                  <View
+                    style={[
+                      styles.houseChip,
+                      { backgroundColor: houseInfo.color },
+                    ]}
+                  >
+                    <Text style={styles.houseText}>{student.schoolHouse}</Text>
+                  </View>
+                );
+              })()}
             </View>
           </View>
 
@@ -354,16 +399,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: "center",
   },
-  gpaChip: {
-    backgroundColor: "#920734",
+  houseChip: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
   },
-  gpaText: {
+  houseText: {
     fontSize: 14,
     fontWeight: "700",
     color: "#FFFFFF",
+  },
+  houseCircle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginTop: 4,
   },
   // Modern Stats Grid
   statsGrid: {

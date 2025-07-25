@@ -13,10 +13,27 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../../../../context/AuthContext";
 import { theme } from "../../../../styles/theme";
+import { useSelector } from "react-redux";
+import {
+  getStudentProfilePicture,
+  getDefaultStudentProfileImage,
+  getLocalFallbackProfileImage,
+} from "../../../../utils/studentProfileUtils";
 
 const ProfileSection = ({ onClose }) => {
   const { user, setUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
+
+  // Get global state for student profile picture
+  const { selectedStudent } = useSelector((state) => state.app);
+
+  // Get profile picture for the selected student
+  const profilePictureSource = selectedStudent
+    ? getStudentProfilePicture(selectedStudent)
+    : null;
+
+  // Fallback to default image if no profile picture
+  const profileImage = profilePictureSource || getDefaultStudentProfileImage();
   const [editedUser, setEditedUser] = useState({
     full_name: user?.full_name || "John Doe",
     email: user?.email || "john.doe@example.com",
@@ -45,14 +62,22 @@ const ProfileSection = ({ onClose }) => {
     setIsEditing(false);
   };
 
-  const ProfileField = ({ label, value, field, editable = true, multiline = false }) => (
+  const ProfileField = ({
+    label,
+    value,
+    field,
+    editable = true,
+    multiline = false,
+  }) => (
     <View style={styles.fieldContainer}>
       <Text style={styles.fieldLabel}>{label}</Text>
       {isEditing && editable ? (
         <TextInput
           style={[styles.fieldInput, multiline && styles.multilineInput]}
           value={value}
-          onChangeText={(text) => setEditedUser({ ...editedUser, [field]: text })}
+          onChangeText={(text) =>
+            setEditedUser({ ...editedUser, [field]: text })
+          }
           multiline={multiline}
           numberOfLines={multiline ? 3 : 1}
         />
@@ -92,10 +117,7 @@ const ProfileSection = ({ onClose }) => {
         {/* Profile Image Section */}
         <View style={styles.profileImageSection}>
           <View style={styles.profileImageContainer}>
-            <Image
-              source={require("../../../../assets/images/sample-profile.png")}
-              style={styles.profileImage}
-            />
+            <Image source={profileImage} style={styles.profileImage} />
             {isEditing && (
               <TouchableOpacity style={styles.changePhotoButton}>
                 <MaterialIcons name="camera-alt" size={20} color="#FFFFFF" />
@@ -109,25 +131,25 @@ const ProfileSection = ({ onClose }) => {
         {/* Profile Information */}
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Personal Information</Text>
-          
+
           <ProfileField
             label="Full Name"
             value={editedUser.full_name}
             field="full_name"
           />
-          
+
           <ProfileField
             label="Email Address"
             value={editedUser.email}
             field="email"
           />
-          
+
           <ProfileField
             label="Phone Number"
             value={editedUser.phone}
             field="phone"
           />
-          
+
           <ProfileField
             label="Address"
             value={editedUser.address}
@@ -139,14 +161,14 @@ const ProfileSection = ({ onClose }) => {
         {/* Academic Information */}
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Academic Information</Text>
-          
+
           <ProfileField
             label="Student ID"
             value={editedUser.student_id}
             field="student_id"
             editable={false}
           />
-          
+
           <ProfileField
             label="Grade"
             value={editedUser.grade}
@@ -158,7 +180,10 @@ const ProfileSection = ({ onClose }) => {
         {/* Action Buttons */}
         {isEditing && (
           <View style={styles.actionButtons}>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={handleCancel}
+            >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -170,17 +195,25 @@ const ProfileSection = ({ onClose }) => {
         {/* Additional Options */}
         <View style={styles.optionsSection}>
           <TouchableOpacity style={styles.optionItem}>
-            <MaterialIcons name="security" size={24} color={theme.colors.primary} />
+            <MaterialIcons
+              name="security"
+              size={24}
+              color={theme.colors.primary}
+            />
             <Text style={styles.optionText}>Change Password</Text>
             <MaterialIcons name="chevron-right" size={24} color="#CCCCCC" />
           </TouchableOpacity>
-          
+
           <TouchableOpacity style={styles.optionItem}>
-            <MaterialIcons name="notifications" size={24} color={theme.colors.primary} />
+            <MaterialIcons
+              name="notifications"
+              size={24}
+              color={theme.colors.primary}
+            />
             <Text style={styles.optionText}>Notification Settings</Text>
             <MaterialIcons name="chevron-right" size={24} color="#CCCCCC" />
           </TouchableOpacity>
-          
+
           <TouchableOpacity style={styles.optionItem}>
             <MaterialIcons name="help" size={24} color={theme.colors.primary} />
             <Text style={styles.optionText}>Help & Support</Text>

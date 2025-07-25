@@ -11,6 +11,12 @@ export const activityFeedApi = apiServer1
       // ===== SCHOOL POSTS API =====
       getSchoolPosts: build.query({
         query: ({ page = 1, limit = 10, filters = {} }) => {
+          console.log("🔍 API Slice - Received parameters:", {
+            page,
+            limit,
+            filters,
+          });
+
           // Map frontend filter names to backend expected names
           const body = {
             page,
@@ -18,8 +24,8 @@ export const activityFeedApi = apiServer1
             search_phrase: filters.search || "", // Backend expects 'search_phrase' not 'search'
             search_filter_list: [], // Backend expects this parameter
             category: filters.category || "",
-            date_from: filters.date_from || "",
-            date_to: filters.date_to || "",
+            date_from: filters.dateFrom || filters.date_from || "", // Support both dateFrom and date_from
+            date_to: filters.dateTo || filters.date_to || "", // Support both dateTo and date_to
             hashtags: filters.hashtags || [],
           };
 
@@ -42,7 +48,20 @@ export const activityFeedApi = apiServer1
               ]
             : [{ type: "SchoolPosts", id: "LIST" }],
         transformResponse: (response: any) => {
-          console.log("🏫 School Posts API Response:", response);
+          // console.log("🏫 School Posts API Response:", response);
+
+          // Check if response is HTML (error page)
+          if (
+            typeof response === "string" &&
+            response.includes("<!DOCTYPE html>")
+          ) {
+            console.error(
+              "❌ School Posts API returned HTML instead of JSON:",
+              response.substring(0, 200)
+            );
+            throw new Error("Server returned HTML error page instead of JSON");
+          }
+
           // Transform the response to match expected structure
           if (response.status === "successful" && response.data) {
             return {
@@ -65,8 +84,8 @@ export const activityFeedApi = apiServer1
             search_phrase: filters.search || "", // Backend expects 'search_phrase'
             search_filter_list: [], // Backend expects this parameter
             category: filters.category || "",
-            date_from: filters.date_from || "",
-            date_to: filters.date_to || "",
+            date_from: filters.dateFrom || filters.date_from || "", // Support both dateFrom and date_from
+            date_to: filters.dateTo || filters.date_to || "", // Support both dateTo and date_to
             hashtags: filters.hashtags || [],
           };
 
@@ -112,8 +131,8 @@ export const activityFeedApi = apiServer1
             search_phrase: filters.search || "", // Backend expects 'search_phrase'
             search_filter_list: [], // Backend expects this parameter
             category: filters.category || "",
-            date_from: filters.date_from || "",
-            date_to: filters.date_to || "",
+            date_from: filters.dateFrom || filters.date_from || "", // Support both dateFrom and date_from
+            date_to: filters.dateTo || filters.date_to || "", // Support both dateTo and date_to
             hashtags: filters.hashtags || [],
           };
 
@@ -152,7 +171,7 @@ export const activityFeedApi = apiServer1
       // ===== LIKE POST API =====
       likePost: build.mutation({
         query: ({ post_id, action }) => ({
-          url: "api/activity-feed/post/like",
+          url: "/api/activity-feed-management/school-posts/toggle-like",
           method: "POST",
           body: {
             post_id,

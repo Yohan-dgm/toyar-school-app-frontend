@@ -32,15 +32,22 @@ const DynamicBottomNavigation: React.FC<DynamicBottomNavigationProps> = ({
   onTabPress,
 }) => {
   const animatedValue = useSharedValue(0);
+  const scaleValue = useSharedValue(1);
   const insets = useSafeAreaInsets();
 
   const currentActiveTab = activeTab || navigationConfig.defaultTab;
 
   const handleTabPress = (tabId: string) => {
-    // Animate tab press with scale effect
+    // Animate tab press with scale effect using reanimated
     animatedValue.value = withSequence(
       withTiming(1, { duration: 150 }),
       withTiming(0, { duration: 150 })
+    );
+
+    // Scale animation for pressed tab
+    scaleValue.value = withSequence(
+      withTiming(0.95, { duration: 100 }),
+      withTiming(1, { duration: 100 })
     );
 
     onTabPress?.(tabId);
@@ -48,10 +55,36 @@ const DynamicBottomNavigation: React.FC<DynamicBottomNavigationProps> = ({
 
   const renderTab = (tab: NavigationTab, index: number) => {
     const isActive = currentActiveTab === tab.id;
-    const IconComponent =
-      tab.iconFamily === "MaterialCommunityIcons"
-        ? MaterialCommunityIcons
-        : MaterialIcons;
+
+    // Get the appropriate icon component based on iconFamily
+    let IconComponent;
+    let iconProps = {
+      size: 24,
+      color: isActive ? "#FFFFFF" : "black",
+    };
+
+    if (tab.iconFamily === "MaterialCommunityIcons") {
+      IconComponent = MaterialCommunityIcons;
+      iconProps = {
+        name: tab.icon as any,
+        size: 24,
+        color: isActive ? "#FFFFFF" : "black",
+      };
+    } else {
+      // Default to MaterialIcons
+      IconComponent = MaterialIcons;
+      iconProps = {
+        name: tab.icon as any,
+        size: 24,
+        color: isActive ? "#FFFFFF" : "black",
+      };
+    }
+
+    // Create animated styles using reanimated
+    const animatedTabStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: isActive ? 1.08 : 1 }],
+      backgroundColor: isActive ? theme.colors.primary : "white",
+    }));
 
     return (
       <TouchableOpacity
@@ -60,20 +93,8 @@ const DynamicBottomNavigation: React.FC<DynamicBottomNavigationProps> = ({
         onPress={() => handleTabPress(tab.id)}
         activeOpacity={0.7}
       >
-        <Animated.View
-          style={[
-            styles.tabItem,
-            {
-              transform: [{ scale: isActive ? 1.08 : 1 }],
-              backgroundColor: isActive ? "black" : "gray",
-            },
-          ]}
-        >
-          <IconComponent
-            name={tab.icon as any}
-            size={24}
-            color={isActive ? "#FFFFFF" : "white"}
-          />
+        <Animated.View style={[styles.tabItem, animatedTabStyle]}>
+          <IconComponent {...iconProps} />
         </Animated.View>
       </TouchableOpacity>
     );
@@ -93,10 +114,10 @@ const DynamicBottomNavigation: React.FC<DynamicBottomNavigationProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 0,
+    bottom: -12,
     left: 0,
     right: 0,
-    paddingHorizontal: theme.spacing.sm,
+    paddingHorizontal: 30,
   },
   navigationBar: {
     borderRadius: 40,
@@ -118,8 +139,8 @@ const styles = StyleSheet.create({
   },
   navigationContent: {
     flexDirection: "row",
-    paddingVertical: 9,
-    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -136,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

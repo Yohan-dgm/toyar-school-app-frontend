@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   View,
   Text,
@@ -11,11 +11,12 @@ import {
   StatusBar,
   Platform,
   Animated,
+  AppState,
 } from "react-native";
 
 import { useAuth } from "../../context/AuthContext";
 import { useDrawer } from "../../context/DrawerContext";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/theme";
 import DrawerMenu from "./DrawerMenu";
@@ -24,13 +25,23 @@ import {
   USER_CATEGORIES,
   getUserCategoryDisplayName,
 } from "../../constants/userCategories";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { transformStudentWithProfilePicture } from "../../utils/studentProfileUtils";
+import {
+  logout,
+  setSessionData,
+  setSelectedStudent,
+} from "../../state-store/slices/app-slice";
+import { useLoginUserMutation } from "../../api/auth-api";
 
 const { width } = Dimensions.get("window");
 
 const Header = () => {
   const { user } = useAuth();
   const { isDrawerOpen, openDrawer, closeDrawer } = useDrawer();
-  const { user: reduxUser, sessionData } = useSelector((state) => state.app);
+  const { sessionData, selectedStudent } = useSelector((state) => state.app);
+  const dispatch = useDispatch();
+  const [loginUserTrigger] = useLoginUserMutation();
 
   // Get user category from session data
   const userCategory =
@@ -38,81 +49,270 @@ const Header = () => {
   const isParent = userCategory === USER_CATEGORIES.PARENT;
   const userDisplayName = getUserCategoryDisplayName(userCategory);
 
-  // Debug logging
-  console.log("🏠 Header - Redux user:", JSON.stringify(reduxUser, null, 2));
-  console.log("🏠 Header - Auth context user:", JSON.stringify(user, null, 2));
+  // Debug logging - Focus on sessionData which contains real backend data
+  console.log(
+    "🏠 Header - Session data:",
+    JSON.stringify(sessionData, null, 2)
+  );
+  console.log(
+    "🏠 Header - Backend user data:",
+    JSON.stringify(sessionData?.data, null, 2)
+  );
   console.log(
     "🏠 Header - User category:",
     userCategory,
     "Is parent:",
     isParent
   );
+  console.log(
+    "🏠 Header - Student list:",
+    JSON.stringify(sessionData?.data?.student_list, null, 2)
+  );
+
+  // Debug user name resolution
+  const userName =
+    sessionData?.data?.full_name ||
+    sessionData?.data?.username ||
+    sessionData?.full_name ||
+    sessionData?.username ||
+    sessionData?.data?.user?.full_name ||
+    sessionData?.data?.user?.username ||
+    "Loading...";
+
+  console.log("🏠 Header - Resolved user name:", userName);
+  console.log("🏠 Header - Available name fields:", {
+    "sessionData?.data?.full_name": sessionData?.data?.full_name,
+    "sessionData?.data?.username": sessionData?.data?.username,
+    "sessionData?.full_name": sessionData?.full_name,
+    "sessionData?.username": sessionData?.username,
+    "sessionData?.data?.user?.full_name": sessionData?.data?.user?.full_name,
+    "sessionData?.data?.user?.username": sessionData?.data?.user?.username,
+  });
   const [showStudentSelector, setShowStudentSelector] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showStudentProfile, setShowStudentProfile] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Animation for profile picture border (temporarily disabled)
-  // const borderColorAnimation = useRef(new Animated.Value(0)).current;
-  // const shadowOpacityAnimation = useRef(new Animated.Value(0)).current;
-  // const scaleAnimation = useRef(new Animated.Value(1)).current;
+  // Function to refresh student data using real login API
+  const refreshStudentData = async (showAlerts = true) => {
+    if (isRefreshing) return; // Prevent multiple simultaneous refreshes
 
-  // useEffect(() => {
-  //   // Create pulsing border animation
-  //   const pulseAnimation = Animated.loop(
-  //     Animated.sequence([
-  //       Animated.timing(borderColorAnimation, {
-  //         toValue: 1,
-  //         duration: 2000,
-  //         useNativeDriver: false, // Keep false for color/shadow animations
-  //       }),
-  //       Animated.timing(borderColorAnimation, {
-  //         toValue: 0,
-  //         duration: 2000,
-  //         useNativeDriver: false, // Keep false for color/shadow animations
-  //       }),
-  //     ])
-  //   );
+    try {
+      setIsRefreshing(true);
+      console.log("🔄 Refreshing student data...");
 
-  //   // Create shadow animation
-  //   const shadowAnimation = Animated.loop(
-  //     Animated.sequence([
-  //       Animated.timing(shadowOpacityAnimation, {
-  //         toValue: 1,
-  //         duration: 2000,
-  //         useNativeDriver: false, // Keep false for shadow animations
-  //       }),
-  //       Animated.timing(shadowOpacityAnimation, {
-  //         toValue: 0,
-  //         duration: 2000,
-  //         useNativeDriver: false, // Keep false for shadow animations
-  //       }),
-  //     ])
-  //   );
+      // Get stored login credentials from AsyncStorage
+      const storedCredentials = await AsyncStorage.getItem("loginCredentials");
 
-  //   pulseAnimation.start();
-  //   shadowAnimation.start();
+      if (!storedCredentials) {
+        console.log("⚠️ No stored credentials found, skipping refresh...");
+        // Don't clear session data if we just don't have stored credentials
+        // The user might have valid session data that doesn't need refreshing
 
-  //   return () => {
-  //     pulseAnimation.stop();
-  //     shadowAnimation.stop();
-  //   };
-  // }, []);
+        if (showAlerts) {
+          alert("Please log in again to refresh student data.");
+        }
+        return;
+      }
+
+      const credentials = JSON.parse(storedCredentials);
+      console.log("🔑 Using stored credentials for refresh:", {
+        username_or_email: credentials.username_or_email,
+        pin: credentials.pin ? "****" : "missing",
+      });
+
+      // Call the real login API to get fresh data
+      const response = await loginUserTrigger({
+        username_or_email: credentials.username_or_email,
+        password: credentials.password,
+        pin: credentials.pin,
+      }).unwrap();
+
+      console.log(
+        "🔄 Fresh login response:",
+        JSON.stringify(response, null, 2)
+      );
+
+      if (response?.success && response?.data) {
+        // Create enhanced session data (same structure as login)
+        const enhancedSessionData = {
+          ...response,
+          user_category: response.data.user_category,
+          user_role: response.data.user_role,
+          data: {
+            ...response.data,
+          },
+        };
+
+        dispatch(setSessionData(enhancedSessionData));
+        console.log(
+          "✅ Student data refreshed successfully with real API data!"
+        );
+
+        if (showAlerts) {
+          alert(
+            `Student data refreshed! Found ${response.data.student_list?.length || 0} students.`
+          );
+        }
+      } else {
+        console.log(
+          "⚠️ Login API returned invalid response, falling back to cache clear..."
+        );
+        await AsyncStorage.removeItem("persist:root");
+        dispatch(logout());
+
+        if (showAlerts) {
+          alert("Please log in again to refresh student data.");
+        }
+      }
+    } catch (error) {
+      console.error("❌ Error refreshing student data:", error);
+      console.log("⚠️ API refresh failed, falling back to cache clear...");
+
+      // Fallback to clearing cache if API call fails
+      try {
+        await AsyncStorage.removeItem("persist:root");
+        dispatch(logout());
+
+        if (showAlerts) {
+          alert("Please log in again to see updated student data.");
+        }
+      } catch (cacheError) {
+        console.error("❌ Error clearing cache:", cacheError);
+
+        if (showAlerts) {
+          alert(
+            "Error refreshing student data. Please try logging out and back in manually."
+          );
+        }
+      }
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Auto-refresh student data when component mounts and app comes to foreground
+  useEffect(() => {
+    // Refresh on component mount (when app starts)
+    if (
+      sessionData?.data?.student_list &&
+      sessionData.data.student_list.length > 0
+    ) {
+      console.log("🔄 Auto-refreshing student data on component mount...");
+      refreshStudentData(false); // Silent refresh (no alerts)
+    }
+
+    // Listen for app state changes (foreground/background)
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "active" && sessionData?.data?.student_list) {
+        console.log(
+          "🔄 App came to foreground, auto-refreshing student data..."
+        );
+        refreshStudentData(false); // Silent refresh (no alerts)
+      }
+    };
+
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    // Set up periodic refresh every 5 minutes
+    const refreshInterval = setInterval(
+      () => {
+        if (sessionData?.data?.student_list) {
+          console.log("🔄 Periodic auto-refresh of student data...");
+          refreshStudentData(false); // Silent refresh (no alerts)
+        }
+      },
+      5 * 60 * 1000
+    ); // 5 minutes
+
+    // Cleanup subscription and interval on unmount
+    return () => {
+      subscription?.remove();
+      clearInterval(refreshInterval);
+    };
+  }, [sessionData?.data?.student_list?.length]); // Re-run when student list length changes
+
+  // Animation for profile picture border - Creative animated effects
+  const borderColorAnimation = useRef(new Animated.Value(0)).current;
+  const shadowOpacityAnimation = useRef(new Animated.Value(0)).current;
+  const scaleAnimation = useRef(new Animated.Value(1)).current;
+  const rotateAnimation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Create pulsing border animation with color transition
+    const pulseAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(borderColorAnimation, {
+          toValue: 1,
+          duration: 3000,
+          useNativeDriver: false, // Keep false for color/shadow animations
+        }),
+        Animated.timing(borderColorAnimation, {
+          toValue: 0,
+          duration: 3000,
+          useNativeDriver: false, // Keep false for color/shadow animations
+        }),
+      ])
+    );
+
+    // Create shadow animation with glow effect
+    const shadowAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(shadowOpacityAnimation, {
+          toValue: 0.8,
+          duration: 2500,
+          useNativeDriver: false, // Keep false for shadow animations
+        }),
+        Animated.timing(shadowOpacityAnimation, {
+          toValue: 0.2,
+          duration: 2500,
+          useNativeDriver: false, // Keep false for shadow animations
+        }),
+      ])
+    );
+
+    // Create subtle rotation animation
+    const rotateAnimationLoop = Animated.loop(
+      Animated.timing(rotateAnimation, {
+        toValue: 1,
+        duration: 8000,
+        useNativeDriver: false, // Changed to false to avoid mixing native/JS drivers
+      })
+    );
+
+    pulseAnimation.start();
+    shadowAnimation.start();
+    rotateAnimationLoop.start();
+
+    return () => {
+      pulseAnimation.stop();
+      shadowAnimation.stop();
+      rotateAnimationLoop.stop();
+    };
+  }, []);
 
   const handleProfilePress = () => {
-    // Scale animation on press (temporarily disabled)
-    // Animated.sequence([
-    //   Animated.timing(scaleAnimation, {
-    //     toValue: 0.95,
-    //     duration: 100,
-    //     useNativeDriver: true,
-    //   }),
-    //   Animated.timing(scaleAnimation, {
-    //     toValue: 1,
-    //     duration: 100,
-    //     useNativeDriver: true,
-    //   }),
-    // ]).start();
+    // Scale animation on press with enhanced feedback
+    Animated.sequence([
+      Animated.timing(scaleAnimation, {
+        toValue: 0.92,
+        duration: 150,
+        useNativeDriver: false, // Changed to false to avoid mixing native/JS drivers
+      }),
+      Animated.timing(scaleAnimation, {
+        toValue: 1.05,
+        duration: 150,
+        useNativeDriver: false, // Changed to false to avoid mixing native/JS drivers
+      }),
+      Animated.timing(scaleAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: false, // Changed to false to avoid mixing native/JS drivers
+      }),
+    ]).start();
 
     // Show student profile modal instead of selector
     setShowStudentProfile(true);
@@ -123,164 +323,172 @@ const Header = () => {
     setShowStudentSelector(true);
   };
 
-  // Mock notification data - replace with real data from API
-  const notifications = [
-    {
-      id: 1,
-      title: "Assignment Due Tomorrow",
-      message: "Math homework for Emma Johnson is due tomorrow at 9:00 AM",
-      time: "2 hours ago",
-      read: false,
-      type: "assignment",
-    },
-    {
-      id: 2,
-      title: "Parent-Teacher Meeting",
-      message: "Scheduled meeting with Ms. Smith on Friday at 3:00 PM",
-      time: "1 day ago",
-      read: false,
-      type: "meeting",
-    },
-    {
-      id: 3,
-      title: "School Event",
-      message: "Annual sports day registration is now open",
-      time: "2 days ago",
-      read: true,
-      type: "event",
-    },
-    {
-      id: 4,
-      title: "Fee Payment Reminder",
-      message: "Monthly fee payment is due by the end of this week",
-      time: "3 days ago",
-      read: false,
-      type: "payment",
-    },
-  ];
+  // TODO: Replace with real notification data from API
+  const notifications = [];
 
-  // Mock student data - replace with real data from API
-  const students = [
-    {
-      id: 1,
-      name: "Senu Perera",
-      profileImage: require("../../assets/images/sample-profile.png"),
-      studentId: "NX001",
-      campus: "Yakkala College",
-      grade: "Grade 12",
-      gpa: "3.85",
-      timeline: [
-        {
-          year: "2024",
-          grade: "Grade 12",
-          gpa: "3.85",
-          badges: ["Prefect", "Science Captain", "Honor Roll"],
-          achievements: [
-            "National Science Olympiad - Gold Medal",
-            "Inter-school Debate Championship Winner",
-            "Academic Excellence Award",
-            "Leadership Excellence Certificate",
-          ],
-        },
-        {
-          year: "2023",
-          grade: "Grade 11",
-          gpa: "3.78",
-          badges: ["Class Monitor", "Science Club President"],
-          achievements: [
-            "Regional Mathematics Competition - Silver Medal",
-            "School Science Fair - First Place",
-            "Outstanding Student Award",
-            "Community Service Recognition",
-          ],
-        },
-        {
-          year: "2022",
-          grade: "Grade 10",
-          gpa: "3.65",
-          badges: ["Library Assistant", "Environmental Club Member"],
-          achievements: [
-            "Perfect Attendance Award",
-            "English Essay Competition - Second Place",
-            "School Sports Day - Track & Field Bronze",
-            "Volunteer of the Month - March 2022",
-          ],
-        },
-        {
-          year: "2021",
-          grade: "Grade 9",
-          gpa: "3.45",
-          badges: ["New Student", "Art Club Member"],
-          achievements: [
-            "Welcome Week Best Newcomer",
-            "Art Exhibition Participant",
-            "School Choir Member",
-            "Academic Improvement Award",
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Hasith Perera",
-      profileImage: require("../../assets/images/sample-profile.png"),
-      studentId: "NX002",
-      campus: "Yakkala College",
-      grade: "Grade 10",
-      gpa: "3.92",
-      timeline: [
-        {
-          year: "2024",
-          grade: "Grade 10",
-          gpa: "3.92",
-          badges: ["Sports Captain", "Mathematics Olympiad Team"],
-          achievements: [
-            "Provincial Swimming Championship - Gold Medal",
-            "Mathematics Olympiad - National Qualifier",
-            "Student Council Vice President",
-            "Academic Excellence Award",
-          ],
-        },
-        {
-          year: "2023",
-          grade: "Grade 9",
-          gpa: "3.88",
-          badges: ["Swimming Team Captain", "Honor Student"],
-          achievements: [
-            "Inter-school Swimming Meet - 3 Gold Medals",
-            "Mathematics Competition - District Winner",
-            "Perfect Attendance Award",
-            "Leadership Skills Certificate",
-          ],
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Niki Perera",
-      profileImage: require("../../assets/images/sample-profile.png"),
-      studentId: "NX003",
-      campus: "Yakkala College",
-      grade: "Grade 8",
-      gpa: "3.75",
-      timeline: [
-        {
-          year: "2024",
-          grade: "Grade 8",
-          gpa: "3.75",
-          badges: ["Drama Club President", "Creative Writing Award"],
-          achievements: [
-            "School Drama Festival - Best Actor",
-            "Creative Writing Competition - First Place",
-            "Student Newspaper Editor",
-            "Community Service Award",
-          ],
-        },
-      ],
-    },
-  ];
+  // Get student data from backend API response
+  const backendStudentList = sessionData?.data?.student_list || [];
 
-  const currentStudent = selectedStudent || students[0];
+  // Debug: Log the current session data and student list
+  // console.log(
+  //   "🔍 Header - Current sessionData:",
+  //   JSON.stringify(sessionData, null, 2)
+  // );
+  // console.log(
+  //   "🔍 Header - backendStudentList length:",
+  //   backendStudentList.length
+  // );
+  // console.log(
+  //   "🔍 Header - backendStudentList:",
+  //   JSON.stringify(backendStudentList, null, 2)
+  // );
+
+  // Transform backend student data to match UI requirements
+  const students = backendStudentList.map((student) => {
+    // Transform student data using utility function
+    const transformedStudent = transformStudentWithProfilePicture(
+      student,
+      sessionData
+    );
+
+    console.log(
+      `🎓 Header - Using API calling name: "${transformedStudent.student_calling_name}" for student "${transformedStudent.name}"`
+    );
+    console.log(`🎓 Header - Student grade_level_class data:`, {
+      student_id: transformedStudent.id,
+      grade: transformedStudent.grade,
+      class_id: transformedStudent.class_id,
+    });
+    console.log(
+      `🖼️ Header - Profile picture for student ${transformedStudent.id}:`,
+      {
+        attachments: student.attachments,
+        profileImage: transformedStudent.profileImage,
+      }
+    );
+
+    return transformedStudent;
+  });
+
+  // console.log(
+  //   "🎓 Header - Backend student list:",
+  //   JSON.stringify(backendStudentList, null, 2)
+  // );
+  // console.log(
+  //   "🎓 Header - Transformed students:",
+  //   JSON.stringify(students, null, 2)
+  // );
+
+  // Fallback student data when no students are available
+  const fallbackStudent = {
+    id: 0,
+    name: "No Student",
+    student_calling_name: "No Student",
+    profileImage: require("../../assets/images/sample-profile.png"),
+    studentId: "N/A",
+    admissionNumber: "N/A",
+    campus: "No Campus",
+    grade: "No Grade",
+    timeline: [],
+  };
+
+  // Transform backend student data to match global state requirements
+  const transformedStudents = useMemo(() => {
+    const transformed = students.map((student) => {
+      const transformedStudent = {
+        id: student.id,
+        student_id: student.id,
+        user_id: sessionData?.data?.id || sessionData?.id,
+        name: student.name, // Use the already transformed name
+        student_calling_name: student.student_calling_name,
+        profileImage: student.profileImage, // Use the already processed profile image
+        studentId: student.studentId, // Use the already transformed studentId
+        admissionNumber: student.admissionNumber, // Use the already transformed admissionNumber
+        campus: student.campus, // Use the already transformed campus
+        grade: student.grade, // Use the already transformed grade
+        class_id: student.class_id || null,
+        gender: student.gender,
+        dateOfBirth: student.dateOfBirth,
+        schoolHouse: student.schoolHouse, // Use the already transformed schoolHouse
+        guardianInfo: student.guardianInfo,
+        timeline: student.timeline, // Use the already created timeline
+      };
+
+      console.log(`🎓 Header - Transformed student for global state:`, {
+        student_calling_name: transformedStudent.student_calling_name,
+        student_id: transformedStudent.student_id,
+        grade: transformedStudent.grade,
+        class_id: transformedStudent.class_id,
+        campus: transformedStudent.campus,
+      });
+
+      return transformedStudent;
+    });
+
+    return transformed;
+  }, [students, sessionData?.data?.id, sessionData?.id]);
+
+  // Enhanced student selection logic for multiple students
+  const currentStudent =
+    selectedStudent || transformedStudents[0] || fallbackStudent;
+  const hasStudents = transformedStudents.length > 0;
+  const hasMultipleStudents = transformedStudents.length > 1;
+
+  // Log student selection info
+  console.log(`🎓 Header - Total students: ${transformedStudents.length}`);
+  console.log(`🎓 Header - Has multiple students: ${hasMultipleStudents}`);
+  console.log(
+    `🎓 Header - Current student: ${currentStudent?.student_calling_name}`
+  );
+  console.log(
+    `🎓 Header - Selected student ID: ${selectedStudent?.id || "none"}`
+  );
+
+  // Enhanced auto-select first student logic with proper dependency management
+  useEffect(() => {
+    // Only auto-select if we have students, no current selection, and transformed students are ready
+    if (hasStudents && !selectedStudent && transformedStudents.length > 0) {
+      const firstStudent = transformedStudents[0];
+      console.log(
+        `🎓 Header - Auto-selecting first student: ${firstStudent?.student_calling_name} (ID: ${firstStudent?.student_id})`
+      );
+      console.log(`🎓 Header - Auto-selected student class info:`, {
+        student_calling_name: firstStudent?.student_calling_name,
+        student_id: firstStudent?.student_id,
+        grade: firstStudent?.grade,
+        class_id: firstStudent?.class_id,
+        campus: firstStudent?.campus,
+      });
+      dispatch(setSelectedStudent(firstStudent));
+    }
+    // If we have a selected student but it's not in the current list (e.g., after data refresh)
+    else if (selectedStudent && transformedStudents.length > 0) {
+      const studentExists = transformedStudents.find(
+        (student) => student.student_id === selectedStudent.student_id
+      );
+      if (!studentExists) {
+        console.log(
+          `🎓 Header - Selected student no longer exists, auto-selecting first available: ${transformedStudents[0]?.student_calling_name}`
+        );
+        dispatch(setSelectedStudent(transformedStudents[0]));
+      }
+    }
+  }, [hasStudents, selectedStudent, transformedStudents, dispatch]);
+
+  // Monitor student selection changes and log for debugging
+  useEffect(() => {
+    if (selectedStudent) {
+      console.log(
+        `🎓 Header - Student selection changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`
+      );
+      console.log(
+        `🎓 Header - Selected student details:`,
+        JSON.stringify(selectedStudent, null, 2)
+      );
+    } else {
+      console.log(`🎓 Header - No student currently selected`);
+    }
+  }, [selectedStudent]);
 
   // Calculate unread notifications count
   const unreadCount = notifications.filter(
@@ -307,27 +515,70 @@ const Header = () => {
   };
 
   const handleStudentSelect = (student) => {
-    setSelectedStudent(student);
+    // console.log(
+    //   `🎓 Header - Student selected: ${student.student_calling_name} (ID: ${student.id})`
+    // );
+    // console.log(`🎓 Header - Selected student class info:`, {
+    //   student_calling_name: student?.student_calling_name,
+    //   student_id: student?.student_id,
+    //   grade: student?.grade,
+    //   class_id: student?.class_id,
+    //   campus: student?.campus,
+    // });
+    dispatch(setSelectedStudent(student));
     setShowStudentSelector(false);
+
+    // Close student profile modal if it's open to refresh with new student data
+    if (showStudentProfile) {
+      setShowStudentProfile(false);
+      // Reopen after a brief delay to show updated profile
+      setTimeout(() => {
+        setShowStudentProfile(true);
+      }, 100);
+    }
   };
 
-  const renderStudentItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.studentItem}
-      onPress={() => handleStudentSelect(item)}
-    >
-      <Image source={item.profileImage} style={styles.studentItemImage} />
-      <View style={styles.studentItemInfo}>
-        <Text style={styles.studentItemName}>{item.name}</Text>
-        <Text style={styles.studentItemId}>
-          {item.studentId} - {item.campus}
-        </Text>
-      </View>
-      {selectedStudent?.id === item.id && (
-        <MaterialIcons name="check" size={24} color={theme.colors.primary} />
-      )}
-    </TouchableOpacity>
-  );
+  const renderStudentItem = ({ item }) => {
+    const isSelected = selectedStudent?.id === item.id;
+
+    // Debug log to check item data
+    console.log(`🎓 Header - Rendering student item:`, {
+      name: item.student_calling_name || item.name,
+      admissionNumber: item.admissionNumber,
+      grade: item.grade,
+      campus: item.campus,
+    });
+
+    return (
+      <TouchableOpacity
+        style={[styles.studentItem, isSelected && styles.studentItemSelected]}
+        onPress={() => handleStudentSelect(item)}
+        activeOpacity={0.7}
+      >
+        <Image source={item.profileImage} style={styles.studentItemImage} />
+        <View style={styles.studentItemInfo}>
+          <Text style={styles.studentItemName}>
+            {item.student_calling_name || item.name}
+          </Text>
+          <Text style={styles.studentItemId}>
+            {item.admissionNumber} - {item.grade}
+          </Text>
+          {item.campus && (
+            <Text style={styles.studentItemCampus}> {item.campus}</Text>
+          )}
+        </View>
+        {isSelected && (
+          <View style={styles.selectedIndicator}>
+            <MaterialIcons
+              name="check-circle"
+              size={24}
+              color={theme.colors.primary}
+            />
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={[styles.container, { paddingTop: 0 }]}>
@@ -366,6 +617,20 @@ const Header = () => {
             </View>
           )}
         </TouchableOpacity>
+
+        {/* Refresh student data button */}
+        {/* <TouchableOpacity
+          onPress={() => refreshStudentData(true)} // Show alerts for manual refresh
+          style={[styles.notificationButton, { marginLeft: 8 }]}
+          disabled={isRefreshing}
+        >
+          <MaterialIcons
+            name="refresh"
+            size={24}
+            color={isRefreshing ? "#ccc" : "#920734"}
+            style={isRefreshing ? { transform: [{ rotate: "45deg" }] } : {}}
+          />
+        </TouchableOpacity> */}
       </View>
 
       {/* Bottom Section - User Profile and Student Selector */}
@@ -377,15 +642,13 @@ const Header = () => {
             style={styles.userProfileImage}
           />
           <View style={styles.userInfoContainer}>
-            <Text style={styles.userName}>
-              {reduxUser?.username || user?.full_name || "Sarah Perera"}
-            </Text>
+            <Text style={styles.userName}>{userName}</Text>
             <Text style={styles.userRole}>{userDisplayName} Account</Text>
           </View>
         </View>
 
-        {/* Right Side - Enhanced Student Selector (Only for Parents) */}
-        {isParent && (
+        {/* Right Side - Enhanced Student Selector (Only for Parents with Students) */}
+        {isParent && hasStudents && (
           <View style={styles.studentSelector}>
             {/* Animated Profile Picture */}
             <TouchableOpacity
@@ -393,15 +656,56 @@ const Header = () => {
               onPress={handleProfilePress}
               activeOpacity={0.8}
             >
-              {/* Static view (animations temporarily disabled) */}
-              <View style={styles.animatedBorderContainer}>
-                <View>
+              {/* Animated border container with creative effects */}
+              <Animated.View
+                style={[
+                  styles.animatedBorderContainer,
+                  {
+                    borderColor: borderColorAnimation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [
+                        "rgba(146, 7, 52, 0.3)",
+                        "rgba(146, 7, 52, 0.8)",
+                      ],
+                    }),
+                    shadowOpacity: shadowOpacityAnimation,
+                    shadowRadius: shadowOpacityAnimation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [4, 12],
+                    }),
+                    transform: [
+                      { scale: scaleAnimation },
+                      {
+                        rotate: rotateAnimation.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["0deg", "360deg"],
+                        }),
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <Animated.View
+                  style={{
+                    transform: [
+                      {
+                        rotate: rotateAnimation.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: ["0deg", "-360deg"], // Counter-rotate the image
+                        }),
+                      },
+                    ],
+                  }}
+                >
                   <Image
-                    source={currentStudent.profileImage}
+                    source={
+                      currentStudent?.profileImage ||
+                      require("../../assets/images/sample-profile.png")
+                    }
                     style={styles.selectedStudentImage}
                   />
-                </View>
-              </View>
+                </Animated.View>
+              </Animated.View>
             </TouchableOpacity>
 
             {/* Student Info */}
@@ -410,11 +714,23 @@ const Header = () => {
               onPress={handleDropdownPress}
               activeOpacity={0.7}
             >
-              <Text style={styles.selectedStudentName}>
-                {currentStudent.name}
-              </Text>
+              <View style={styles.studentNameContainer}>
+                <Text style={styles.selectedStudentName}>
+                  {currentStudent?.student_calling_name ||
+                    currentStudent?.name ||
+                    "Select Student"}
+                </Text>
+                {hasMultipleStudents && (
+                  <View style={styles.multipleStudentsBadge}>
+                    <Text style={styles.multipleStudentsText}>
+                      {transformedStudents.length}
+                    </Text>
+                  </View>
+                )}
+              </View>
               <Text style={styles.selectedStudentId}>
-                {currentStudent.studentId}
+                {currentStudent?.admissionNumber} {currentStudent?.grade}
+                {/* {hasMultipleStudents && " • Tap to switch"} */}
               </Text>
             </TouchableOpacity>
 
@@ -447,13 +763,27 @@ const Header = () => {
             onPress={() => setShowStudentSelector(false)}
           >
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Select Student</Text>
-              <FlatList
-                data={students}
-                renderItem={renderStudentItem}
-                keyExtractor={(item) => item.id.toString()}
-                style={styles.studentList}
-              />
+              <Text style={styles.modalTitle}>
+                {hasMultipleStudents
+                  ? `Select Student (${transformedStudents.length} available)`
+                  : "Select Student"}
+              </Text>
+              {hasStudents ? (
+                <FlatList
+                  data={transformedStudents}
+                  renderItem={renderStudentItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  style={styles.studentList}
+                />
+              ) : (
+                <View style={styles.noStudentsContainer}>
+                  <MaterialIcons name="school" size={48} color="#ccc" />
+                  <Text style={styles.noStudentsText}>No students found</Text>
+                  <Text style={styles.noStudentsSubtext}>
+                    Please contact the school administration
+                  </Text>
+                </View>
+              )}
             </View>
           </TouchableOpacity>
         </Modal>
@@ -527,8 +857,8 @@ const Header = () => {
         </TouchableOpacity>
       </Modal>
 
-      {/* Student Profile Modal (Only for Parents) */}
-      {isParent && (
+      {/* Student Profile Modal (Only for Parents with Students) */}
+      {isParent && hasStudents && (
         <StudentProfileModal
           visible={showStudentProfile}
           onClose={() => setShowStudentProfile(false)}
@@ -610,11 +940,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#F0F0F0",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#F5F5F5",
   },
   userSection: {
     flexDirection: "row",
@@ -622,8 +952,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userProfileImage: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     borderRadius: 20,
     marginRight: theme.spacing.sm,
   },
@@ -645,7 +975,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.95)",
     paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: 2,
     borderRadius: 25,
     minWidth: 180,
     shadowColor: "#000",
@@ -658,7 +988,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   profileContainer: {
-    marginRight: theme.spacing.sm,
+    marginRight: 2,
+    position: "relative",
+    left: -6,
   },
   animatedBorderContainer: {
     width: 56,
@@ -679,10 +1011,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   selectedStudentImage: {
-    width: 44,
-    height: 44,
+    width: 46,
+    height: 46,
     borderRadius: 22,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#FFFFFF",
   },
   dropdownArrow: {
@@ -696,13 +1028,13 @@ const styles = StyleSheet.create({
     marginRight: theme.spacing.xs,
   },
   selectedStudentName: {
-    fontFamily: theme.fonts.medium,
+    fontFamily: theme.fonts.bold,
     fontSize: 12,
     color: "#000000",
   },
   selectedStudentId: {
     fontFamily: theme.fonts.regular,
-    fontSize: 10,
+    fontSize: 9,
     color: "#666666",
   },
   modalOverlay: {
@@ -766,6 +1098,63 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.regular,
     fontSize: 12,
     color: "#64748B",
+  },
+  studentItemCampus: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 11,
+    color: "#94A3B8",
+    marginTop: 2,
+  },
+  studentItemSelected: {
+    backgroundColor: "#EEF2FF",
+    borderWidth: 1,
+    borderColor: "lightgray",
+  },
+  selectedIndicator: {
+    marginLeft: theme.spacing.sm,
+  },
+  studentNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  multipleStudentsBadge: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: theme.spacing.xs,
+    left: 12,
+    bottom: 4,
+    opacity: 0.9,
+    display: "none",
+  },
+  multipleStudentsText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 11,
+    color: "#FFFFFF",
+  },
+  noStudentsContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  noStudentsText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 16,
+    color: "#666666",
+    marginTop: theme.spacing.sm,
+    textAlign: "center",
+  },
+  noStudentsSubtext: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 12,
+    color: "#999999",
+    marginTop: theme.spacing.xs,
+    textAlign: "center",
   },
   notificationModalContent: {
     backgroundColor: "#FFFFFF",

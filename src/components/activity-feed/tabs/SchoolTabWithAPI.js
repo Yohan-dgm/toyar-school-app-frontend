@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,7 @@ import {
   StyleSheet,
   RefreshControl,
   Alert,
-  Dimensions,
   FlatList,
-  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -27,19 +25,22 @@ import {
   setLoading,
   setRefreshing,
   setPosts,
+  setAllPosts as setAllPostsAction,
   setError,
   setFilters,
   clearFilters,
   toggleLike,
+  revertLike,
+  getUserLikeState,
 } from "../../../state-store/slices/school-life/school-posts-slice";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+// Import filter transformation utility
+import { transformFiltersForAPI } from "../FilterBar";
 
 // Get API base URL from environment
 const API_BASE_URL =
   Constants.expoConfig?.extra?.EXPO_PUBLIC_BASE_URL_API_SERVER_1 ||
-  process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1 ||
-  "http://192.168.1.9:9999";
+  process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1;
 
 // Helper function to transform media data from backend API
 const transformMediaData = (mediaArray) => {
@@ -96,41 +97,31 @@ const transformMediaData = (mediaArray) => {
     .filter(Boolean); // Remove null values
 };
 
-// Helper function to extract unique categories from posts
-const extractCategories = (posts) => {
-  if (!posts || !Array.isArray(posts)) return [];
-
-  const categories = posts
-    .map((post) => post.category)
-    .filter(Boolean) // Remove null/undefined categories
-    .filter((category, index, arr) => arr.indexOf(category) === index); // Remove duplicates
-
-  return categories.sort(); // Sort alphabetically
-};
-
-const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
+const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
   const dispatch = useDispatch();
 
-  // Redux state
+  // Debug filters being passed to component
+  useEffect(() => {
+    console.log("🎯 SchoolTabWithAPI - Filters received:", filters);
+  }, [filters]);
+
+  // Redux state with safe defaults
+  const schoolPostsState = useSelector((state) => state.schoolPosts || {});
   const {
-    posts,
-    loading,
-    refreshing,
-    pagination,
-    error,
-    likedPosts,
-    filters: storeFilters,
-  } = useSelector((state) => state.schoolPosts);
+    posts = [],
+    loading = false,
+    refreshing = false,
+    error = null,
+    likedPosts = {},
+  } = schoolPostsState;
 
   // API hooks
-  const [getSchoolPosts, { isLoading: apiLoading }] =
-    useLazyGetSchoolPostsQuery();
+  const [getSchoolPosts] = useLazyGetSchoolPostsQuery();
   const [likePost] = useLikePostMutation();
 
-  // Local state
-  const [page, setPage] = useState(1);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [availableCategories, setAvailableCategories] = useState([]);
+  // Local state for frontend filtering
+  const [allPostsLocal, setAllPostsLocal] = useState([]);
+  const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false);
 
   // Fetch posts function
   const fetchPosts = useCallback(
@@ -145,28 +136,34 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
           setIsLoadingMore(true);
         }
 
+        // Transform filters to API format
+        const apiFilters = transformFiltersForAPI(currentFilters);
+
+        console.log("🔍 Applying filters:", {
+          original: currentFilters,
+          transformed: apiFilters,
+        });
+
         const response = await getSchoolPosts({
           page: pageNum,
           limit: 10,
           filters: {
-            ...currentFilters,
+            search: apiFilters.search,
+            category: apiFilters.category,
+            date_from: apiFilters.dateFrom,
+            date_to: apiFilters.dateTo,
+            hashtags: apiFilters.hashtags,
           },
         }).unwrap();
 
-        if (response.success) {
+        if (response.status === "successful") {
           dispatch(
             setPosts({
-              posts: response.data,
-              pagination: response.pagination,
+              posts: response.data.posts,
+              pagination: response.data.pagination,
               append: pageNum > 1 && !isRefresh,
             })
           );
-
-          // Extract and update available categories from the posts
-          if (response.data && Array.isArray(response.data)) {
-            const categories = extractCategories(response.data);
-            setAvailableCategories(categories);
-          }
 
           if (pageNum > 1) {
             setPage(pageNum);
@@ -195,36 +192,245 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
     [getSchoolPosts, dispatch]
   );
 
-  // Initial load
-  useEffect(() => {
-    fetchPosts(1, false);
-  }, [getSchoolPosts, dispatch]);
+  // Load all posts initially (without filters)
+  const loadAllPosts = useCallback(async () => {
+    try {
+      dispatch(setLoading(true));
+      console.log("🔄 Loading all posts initially... [VERSION 2.0 WITH DEBUG]");
 
-  // Handle filter changes
-  useEffect(() => {
-    if (filters) {
-      dispatch(setFilters(filters));
-      fetchPosts(1, false, filters);
+      // Load all posts without any filters
+      const response = await getSchoolPosts({
+        page: 1,
+        limit: 100, // Load more posts initially
+        filters: {
+          search: "",
+          category: "",
+          date_from: "",
+          date_to: "",
+          hashtags: [],
+        },
+      }).unwrap();
+
+      if (response.status === "successful") {
+        // console.log("🏫 All Posts Loaded:", response.data);
+
+        // Fix: response.data is the posts array directly, not response.data.posts
+        const allPostsData = Array.isArray(response.data)
+          ? response.data
+          : response.data.posts || [];
+        console.log(
+          "✅ Successfully extracted",
+          allPostsData.length,
+          "posts for frontend filtering"
+        );
+
+        // Store all posts in local state for frontend filtering
+        setAllPostsLocal(allPostsData);
+        setHasLoadedInitialData(true);
+
+        // Store all posts in Redux for filter options (unfiltered)
+        dispatch(setAllPostsAction(allPostsData));
+
+        // Also update Redux state with filtered posts
+        dispatch(
+          setPosts({
+            posts: allPostsData,
+            pagination: response.data.pagination || null,
+          })
+        );
+
+        dispatch(setError(null));
+      } else {
+        dispatch(setError(response.message || "Failed to load posts"));
+      }
+    } catch (error) {
+      console.error("Error in loadAllPosts:", error);
+      dispatch(setError(error.message || "An unexpected error occurred"));
+    } finally {
+      dispatch(setLoading(false));
     }
-  }, [filters, dispatch]);
+  }, [dispatch, getSchoolPosts, setAllPostsLocal, setHasLoadedInitialData]);
 
-  // Handle refresh
+  // Frontend filtering function
+  const filterPostsLocally = useCallback((postsToFilter, currentFilters) => {
+    if (!postsToFilter || postsToFilter.length === 0) return [];
+
+    console.log("🔍 Frontend filtering with:", currentFilters);
+
+    return postsToFilter.filter((post) => {
+      // SCHOOL TAB SPECIFIC FILTERING:
+      // Only show posts where school_id = 1 (school-wide posts)
+      // AND both class_id and student_id are null
+      if (!post.school_id || post.school_id !== 1) {
+        console.log(
+          `🏫 Filtering out post ${post.id}: school_id is not 1 (current: ${post.school_id})`
+        );
+        return false;
+      }
+
+      if (post.class_id !== null && post.class_id !== undefined) {
+        console.log(
+          `🏫 Filtering out post ${post.id}: has class_id (${post.class_id}) - not school-wide`
+        );
+        return false;
+      }
+
+      if (post.student_id !== null && post.student_id !== undefined) {
+        console.log(
+          `🏫 Filtering out post ${post.id}: has student_id (${post.student_id}) - not school-wide`
+        );
+        return false;
+      }
+
+      console.log(
+        `🏫 Including school post ${post.id}: school_id=${post.school_id}, class_id=${post.class_id}, student_id=${post.student_id}`
+      );
+
+      // Search term filter
+      if (
+        currentFilters.searchTerm &&
+        currentFilters.searchTerm.trim() &&
+        currentFilters.searchTerm !== ""
+      ) {
+        const searchTerm = currentFilters.searchTerm.toLowerCase();
+        const titleMatch = post.title?.toLowerCase().includes(searchTerm);
+        const contentMatch = post.content?.toLowerCase().includes(searchTerm);
+        if (!titleMatch && !contentMatch) return false;
+      }
+
+      // Category filter - only filter if category is specified and not "all"
+      if (
+        currentFilters.category &&
+        currentFilters.category !== "all" &&
+        currentFilters.category !== ""
+      ) {
+        if (
+          post.category?.toLowerCase() !== currentFilters.category.toLowerCase()
+        ) {
+          return false;
+        }
+      }
+
+      // Hashtags filter - only filter if hashtags are specified
+      if (currentFilters.hashtags && currentFilters.hashtags.length > 0) {
+        const postHashtags = post.hashtags || [];
+        const hasMatchingHashtag = currentFilters.hashtags.some((filterTag) =>
+          postHashtags.some((postTag) =>
+            postTag.toLowerCase().includes(filterTag.toLowerCase())
+          )
+        );
+        if (!hasMatchingHashtag) return false;
+      }
+
+      // Date range filter - only filter if dates are actually set
+      if (currentFilters.dateRange?.start || currentFilters.dateRange?.end) {
+        const postDate = new Date(post.created_at);
+
+        if (currentFilters.dateRange.start) {
+          const startDate = new Date(currentFilters.dateRange.start);
+          if (postDate < startDate) return false;
+        }
+
+        if (currentFilters.dateRange.end) {
+          const endDate = new Date(currentFilters.dateRange.end);
+          if (postDate > endDate) return false;
+        }
+      }
+
+      return true;
+    });
+  }, []);
+
+  // Clear any existing filters when component mounts
+  useEffect(() => {
+    console.log("🧹 Clearing any existing filters on component mount");
+    dispatch(clearFilters());
+  }, [dispatch]);
+
+  // Load all posts initially (only once)
+  useEffect(() => {
+    if (!hasLoadedInitialData) {
+      loadAllPosts();
+    }
+  }, [hasLoadedInitialData, loadAllPosts]);
+
+  // Debug allPostsLocal changes
+  useEffect(() => {
+    console.log("🔄 allPostsLocal changed:", allPostsLocal?.length || 0);
+  }, [allPostsLocal]);
+
+  console.log("🔧 About to define filteredPosts useMemo");
+
+  // Frontend filtering - filter allPostsLocal based on current filters
+  const filteredPosts = useMemo(() => {
+    console.log("🚀 useMemo filteredPosts is executing!");
+    if (!allPostsLocal || allPostsLocal.length === 0) {
+      console.log("❌ No allPostsLocal available:", allPostsLocal?.length || 0);
+      return [];
+    }
+
+    // Check if filters are effectively empty (no real filtering needed)
+    const hasActiveFilters =
+      filters &&
+      ((filters.searchTerm && filters.searchTerm.trim() !== "") ||
+        (filters.category &&
+          filters.category !== "all" &&
+          filters.category !== "") ||
+        (filters.hashtags && filters.hashtags.length > 0) ||
+        (filters.dateRange &&
+          (filters.dateRange.start || filters.dateRange.end)));
+
+    console.log("🔍 Filtering Debug:", {
+      allPostsCount: allPostsLocal.length,
+      filters,
+      hasActiveFilters,
+    });
+
+    // ALWAYS apply school-specific filtering, regardless of other filters
+    const filtered = filterPostsLocally(allPostsLocal, filters);
+    console.log(
+      "🔍 School filtering complete - filtered posts:",
+      filtered.length
+    );
+    return filtered;
+  }, [allPostsLocal, filters, filterPostsLocally]);
+
+  // Update Redux state when filtered posts change
+  useEffect(() => {
+    if (hasLoadedInitialData && filteredPosts) {
+      console.log(
+        `🔍 Frontend filtering complete: ${filteredPosts.length} posts match filters`
+      );
+      dispatch(
+        setPosts({
+          posts: filteredPosts,
+          pagination: {
+            current_page: 1,
+            total: filteredPosts.length,
+            has_more: false,
+          },
+        })
+      );
+    }
+  }, [filteredPosts, hasLoadedInitialData, dispatch]);
+
+  // Handle refresh - reload all posts
   const handleRefresh = useCallback(() => {
-    fetchPosts(1, true);
-  }, [fetchPosts]);
+    setHasLoadedInitialData(false); // This will trigger loadAllPosts again
+    setAllPostsLocal([]); // Clear current posts
+  }, []);
 
-  // Handle load more
+  // Handle load more - not needed since we load all posts initially
   const handleLoadMore = useCallback(() => {
-    if (pagination?.has_more && !isLoadingMore && !loading && !refreshing) {
-      const nextPage = page + 1;
-      fetchPosts(nextPage, false);
-    }
-  }, [pagination, isLoadingMore, loading, refreshing, page, fetchPosts]);
+    // No pagination needed since we load all posts initially
+    console.log("📄 Load more not needed - all posts loaded initially");
+  }, []);
 
   // Handle like/unlike
   const handleLike = useCallback(
     async (post) => {
-      const isCurrentlyLiked = likedPosts[post.id] || post.is_liked_by_user;
+      const isCurrentlyLiked =
+        getUserLikeState(schoolPostsState, post.id) || post.is_liked_by_user;
       const action = isCurrentlyLiked ? "unlike" : "like";
       const newLikesCount = isCurrentlyLiked
         ? post.likes_count - 1
@@ -245,7 +451,7 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
           action,
         }).unwrap();
 
-        if (response.success) {
+        if (response.status === "successful") {
           // Update with actual server response
           dispatch(
             toggleLike({
@@ -257,9 +463,9 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
         }
       } catch (error) {
         console.error("Error liking post:", error);
-        // Revert optimistic update on error
+        // Revert optimistic update on error using dedicated revertLike action
         dispatch(
-          toggleLike({
+          revertLike({
             postId: post.id,
             isLiked: isCurrentlyLiked,
             likesCount: post.likes_count,
@@ -269,7 +475,7 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
         if (__DEV__) {
           Alert.alert(
             "API Error",
-            "Like functionality requires backend implementation"
+            "Like functionality requires backend implementation. Please check the backend API endpoints."
           );
         }
       }
@@ -279,25 +485,24 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
 
   // Render post item
   const renderPost = ({ item: post }) => {
+    // Use user-specific like state helper function
     const isLiked =
-      likedPosts[post.id] !== undefined
-        ? likedPosts[post.id]
-        : post.is_liked_by_user;
+      getUserLikeState(schoolPostsState, post.id) || post.is_liked_by_user;
 
     return (
       <View style={styles.postContainer}>
         {/* Post Header */}
         <View style={styles.postHeader}>
-          <Image
+          {/* <Image
             source={
               post.author_image
                 ? { uri: post.author_image }
                 : require("../../../assets/images/sample-profile.png")
             }
             style={styles.authorImage}
-          />
+          /> */}
           <View style={styles.authorInfo}>
-            <Text style={styles.authorName}>{post.author_name}</Text>
+            <Text style={styles.authorName}>{post.title}</Text>
             <Text style={styles.timestamp}>
               {new Date(post.created_at).toLocaleDateString()} • {post.category}
             </Text>
@@ -341,28 +546,19 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
               {post.likes_count}
             </Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton}>
-            <Icon name="comment" size={20} color="#666" />
-            <Text style={styles.actionText}>{post.comments_count}</Text>
-          </TouchableOpacity>
         </View>
       </View>
     );
   };
 
-  // Render loading footer
+  // Render loading footer - not needed since we load all posts initially
   const renderFooter = () => {
-    if (!isLoadingMore) return null;
-    return (
-      <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color={theme.colors.primary} />
-      </View>
-    );
+    // No loading footer needed since we load all posts initially
+    return null;
   };
 
   // Show loading skeleton on initial load
-  if (loading && posts.length === 0) {
+  if (loading && (!posts || posts.length === 0)) {
     return (
       <View style={styles.container}>
         <CustomSkeleton />
@@ -371,7 +567,7 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
   }
 
   // Show error state
-  if (error && posts.length === 0) {
+  if (error && (!posts || posts.length === 0)) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>{error}</Text>
@@ -385,66 +581,10 @@ const SchoolTabWithAPI = ({ userCategory, isConnected, filters }) => {
     );
   }
 
-  // Render category filter
-  const renderCategoryFilter = () => {
-    if (availableCategories.length === 0) return null;
-
-    return (
-      <View style={styles.filterContainer}>
-        <Text style={styles.filterTitle}>Categories:</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.categoryScrollView}
-        >
-          {/* All Categories Option */}
-          <TouchableOpacity
-            style={[
-              styles.categoryTag,
-              !filters.category && styles.categoryTagActive,
-            ]}
-            onPress={() => dispatch(setFilters({ ...filters, category: null }))}
-          >
-            <Text
-              style={[
-                styles.categoryTagText,
-                !filters.category && styles.categoryTagTextActive,
-              ]}
-            >
-              All
-            </Text>
-          </TouchableOpacity>
-
-          {/* Individual Category Options */}
-          {availableCategories.map((category) => (
-            <TouchableOpacity
-              key={category}
-              style={[
-                styles.categoryTag,
-                filters.category === category && styles.categoryTagActive,
-              ]}
-              onPress={() => dispatch(setFilters({ ...filters, category }))}
-            >
-              <Text
-                style={[
-                  styles.categoryTagText,
-                  filters.category === category && styles.categoryTagTextActive,
-                ]}
-              >
-                {category}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      {renderCategoryFilter()}
       <FlatList
-        data={posts}
+        data={posts || []}
         renderItem={renderPost}
         keyExtractor={(item) => item.id.toString()}
         refreshControl={
@@ -579,45 +719,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "600",
-  },
-
-  // Category filter styles
-  filterContainer: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E5EA",
-  },
-  filterTitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 8,
-  },
-  categoryScrollView: {
-    flexDirection: "row",
-  },
-  categoryTag: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 8,
-    borderRadius: 20,
-    backgroundColor: "#F0F2F5",
-    borderWidth: 1,
-    borderColor: "#E5E5EA",
-  },
-  categoryTagActive: {
-    backgroundColor: "#3b5998",
-    borderColor: "#3b5998",
-  },
-  categoryTagText: {
-    fontSize: 14,
-    color: "#666",
-    fontWeight: "500",
-  },
-  categoryTagTextActive: {
-    color: "#FFFFFF",
   },
 });
 

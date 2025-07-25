@@ -93,6 +93,7 @@ export const authApi = apiServer1
                 username: data.data.username,
                 email: data.data.email,
                 user_type_list: data.data.user_type_list,
+                user_category: data.data.user_category, // Add user_category field
               };
               dispatch(setUser(userData));
               console.log(
@@ -101,7 +102,7 @@ export const authApi = apiServer1
               );
             }
           } catch (error) {
-            console.error("❌ Auth API - Login error:", error);
+            // Silently handle auth errors - let the component show toast notifications
           }
         },
       }),
@@ -138,7 +139,7 @@ export const authApi = apiServer1
             console.log(data);
             // dispatch(setToken(data.accessToken)); // Store the token in Redux
           } catch (error) {
-            console.error("Login error:", error);
+            // Silently handle auth errors - let the component show toast notifications
           }
         },
       }),

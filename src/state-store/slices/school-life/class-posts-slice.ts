@@ -50,7 +50,8 @@ interface ClassPostsState {
     hashtags: string[];
   };
   refreshing: boolean;
-  likedPosts: { [key: number]: boolean };
+  likedPosts: { [userPostKey: string]: boolean }; // Track liked posts per user (format: "userId_postId")
+  currentUserId: number | null; // Store current user ID for user-specific like states
 }
 
 const initialState: ClassPostsState = {
@@ -68,6 +69,7 @@ const initialState: ClassPostsState = {
   },
   refreshing: false,
   likedPosts: {},
+  currentUserId: null,
 };
 
 const classPostsSlice = createSlice({
@@ -93,19 +95,26 @@ const classPostsSlice = createSlice({
     },
 
     // Set posts data
-    setPosts: (state, action: PayloadAction<{ posts: Post[]; pagination: Pagination; append?: boolean }>) => {
+    setPosts: (
+      state,
+      action: PayloadAction<{
+        posts: Post[];
+        pagination: Pagination;
+        append?: boolean;
+      }>
+    ) => {
       const { posts, pagination, append = false } = action.payload;
-      
+
       if (append) {
         // Append new posts for pagination
-        const existingIds = new Set(state.posts.map(post => post.id));
-        const newPosts = posts.filter(post => !existingIds.has(post.id));
+        const existingIds = new Set(state.posts.map((post) => post.id));
+        const newPosts = posts.filter((post) => !existingIds.has(post.id));
         state.posts = [...state.posts, ...newPosts];
       } else {
         // Replace posts for refresh or initial load
         state.posts = posts;
       }
-      
+
       state.pagination = pagination;
       state.error = null;
     },
@@ -118,7 +127,10 @@ const classPostsSlice = createSlice({
     },
 
     // Update filters
-    setFilters: (state, action: PayloadAction<Partial<ClassPostsState['filters']>>) => {
+    setFilters: (
+      state,
+      action: PayloadAction<Partial<ClassPostsState["filters"]>>
+    ) => {
       state.filters = { ...state.filters, ...action.payload };
     },
 
@@ -133,15 +145,37 @@ const classPostsSlice = createSlice({
       };
     },
 
+    // Set current user ID for user-specific like tracking
+    setCurrentUserId: (state, action: PayloadAction<number | null>) => {
+      const newUserId = action.payload;
+
+      // If user changed, clear like states for the previous user
+      if (state.currentUserId !== newUserId) {
+        state.likedPosts = {};
+      }
+
+      state.currentUserId = newUserId;
+    },
+
     // Toggle like status for a post
-    toggleLike: (state, action: PayloadAction<{ postId: number; isLiked: boolean; likesCount: number }>) => {
+    toggleLike: (
+      state,
+      action: PayloadAction<{
+        postId: number;
+        isLiked: boolean;
+        likesCount: number;
+      }>
+    ) => {
       const { postId, isLiked, likesCount } = action.payload;
-      
-      // Update liked posts tracking
-      state.likedPosts[postId] = isLiked;
-      
+
+      // Create user-specific key for like tracking (userId_postId)
+      if (state.currentUserId) {
+        const userPostKey = `${state.currentUserId}_${postId}`;
+        state.likedPosts[userPostKey] = isLiked;
+      }
+
       // Update the post in the posts array
-      const postIndex = state.posts.findIndex(post => post.id === postId);
+      const postIndex = state.posts.findIndex((post) => post.id === postId);
       if (postIndex !== -1) {
         state.posts[postIndex].is_liked_by_user = isLiked;
         state.posts[postIndex].likes_count = likesCount;
@@ -154,6 +188,7 @@ const classPostsSlice = createSlice({
       state.pagination = null;
       state.error = null;
       state.likedPosts = {};
+      state.currentUserId = null;
       state.filters = initialState.filters;
       state.currentClassId = null;
     },
@@ -168,11 +203,22 @@ export const {
   setError,
   setFilters,
   clearFilters,
+  setCurrentUserId,
   toggleLike,
   clearData,
 } = classPostsSlice.actions;
 
 export default classPostsSlice.reducer;
+
+// Helper function to get user-specific like state
+export const getUserLikeState = (
+  state: ClassPostsState,
+  postId: number
+): boolean => {
+  if (!state.currentUserId) return false;
+  const userPostKey = `${state.currentUserId}_${postId}`;
+  return state.likedPosts[userPostKey] || false;
+};
 
 /*
 === BACKEND DATA REQUIREMENTS FOR CLASS POSTS ===

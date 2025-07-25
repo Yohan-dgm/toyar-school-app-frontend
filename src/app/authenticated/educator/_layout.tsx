@@ -8,6 +8,11 @@ export default function EducatorLayout() {
     <DynamicUserLayout userCategory={USER_CATEGORIES.EDUCATOR}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="school-calendar" />
+        <Stack.Screen name="user-actions" />
+        <Stack.Screen name="notifications" />
+
+        {/* Legacy routes for backward compatibility */}
         <Stack.Screen name="students" />
         <Stack.Screen name="classes" />
         <Stack.Screen name="assignments" />

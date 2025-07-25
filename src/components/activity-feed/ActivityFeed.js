@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useSelector } from "react-redux";
 import { theme } from "../../styles/theme";
 import { USER_CATEGORIES } from "../../constants/userCategories";
 
 // Import tab components
 import SchoolTabWithAPI from "./tabs/SchoolTabWithAPI";
-import ClassTab from "./tabs/ClassTab";
-import StudentTab from "./tabs/StudentTab";
+import ClassTabWithAPI from "./tabs/ClassTabWithAPI";
+import StudentTabWithAPI from "./tabs/StudentTabWithAPI";
 import FilterBar from "./FilterBar";
 
 const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
@@ -21,8 +22,51 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
     hashtags: [],
   });
 
+  // Get posts data from Redux for dynamic filtering
+  const { posts: schoolPosts, allPosts: schoolAllPosts } = useSelector(
+    (state) => state.schoolPosts
+  );
+  const { posts: classPosts } = useSelector((state) => state.classPosts);
+  const { posts: studentPosts } = useSelector((state) => state.studentPosts);
+
   // Use filters directly without memoization to test
   const filters = filtersState;
+
+  // Debug filter changes
+  useEffect(() => {
+    console.log("🎯 ActivityFeed: Filters updated:", filters);
+  }, [filters]);
+
+  // Get current tab's posts data for dynamic filtering
+  const getCurrentTabPosts = () => {
+    switch (activeTab) {
+      case "School":
+        return schoolPosts || [];
+      case "Class":
+        return classPosts || [];
+      case "Student":
+        return studentPosts || [];
+      default:
+        return [];
+    }
+  };
+
+  // Get all posts (unfiltered) for filter options
+  const getAllPostsForFilters = () => {
+    switch (activeTab) {
+      case "School":
+        return schoolAllPosts || [];
+      case "Class":
+        return classPosts || []; // TODO: Add allPosts for class and student tabs
+      case "Student":
+        return studentPosts || [];
+      default:
+        return [];
+    }
+  };
+
+  const currentTabPosts = getCurrentTabPosts();
+  const allPostsForFilters = getAllPostsForFilters();
 
   // Check internet connectivity
   useEffect(() => {
@@ -51,8 +95,8 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
       },
       {
         name: "Class",
-        component: ClassTab,
-        icon: "class",
+        component: ClassTabWithAPI,
+        icon: "category",
         label: "Class",
       },
     ];
@@ -61,8 +105,8 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
     if (userCategory === USER_CATEGORIES.PARENT) {
       tabs.push({
         name: "Student",
-        component: StudentTab,
-        icon: "person",
+        component: StudentTabWithAPI,
+        icon: "face",
         label: "Student",
       });
     }
@@ -74,6 +118,7 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
 
   // Handle filter changes
   const handleFilterChange = (newFilters) => {
+    console.log("🔄 ActivityFeed: Filter change requested:", newFilters);
     setFiltersState(newFilters);
   };
 
@@ -124,6 +169,7 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
         filters={filters}
         onFilterChange={handleFilterChange}
         onClearFilters={clearFilters}
+        postsData={allPostsForFilters}
       />
 
       {/* Tab Content */}
@@ -136,14 +182,14 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
           />
         )}
         {activeTab === "Class" && (
-          <ClassTab
+          <ClassTabWithAPI
             userCategory={userCategory}
             isConnected={isConnected}
             filters={filters}
           />
         )}
         {activeTab === "Student" && userCategory === USER_CATEGORIES.PARENT && (
-          <StudentTab
+          <StudentTabWithAPI
             userCategory={userCategory}
             isConnected={isConnected}
             filters={filters}

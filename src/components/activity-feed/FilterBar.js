@@ -9,16 +9,165 @@ import {
   Modal,
   Animated,
   Platform,
-  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { theme } from "../../styles/theme";
 
-const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
-  // Date picker states
-  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
-  const [showToDatePicker, setShowToDatePicker] = useState(false);
+// Filter transformation utilities
+const transformFiltersForAPI = (filters) => {
+  return {
+    search: filters.searchTerm || "",
+    dateFrom: filters.dateRange?.start
+      ? filters.dateRange.start.toISOString().split("T")[0]
+      : "",
+    dateTo: filters.dateRange?.end
+      ? filters.dateRange.end.toISOString().split("T")[0]
+      : "",
+    category: filters.category === "all" ? "" : filters.category || "",
+    hashtags: filters.hashtags || [],
+    searchFilterList: [], // Backend expects this parameter
+  };
+};
+
+// Extract unique categories from posts data
+const extractCategoriesFromPosts = (posts) => {
+  if (!posts || !Array.isArray(posts)) return [];
+
+  const categories = new Set();
+  posts.forEach((post) => {
+    if (post.category && post.category.trim()) {
+      categories.add(post.category.toLowerCase());
+    }
+  });
+
+  return Array.from(categories).map((category) => ({
+    value: category,
+    label: category.charAt(0).toUpperCase() + category.slice(1),
+    icon: getCategoryIcon(category),
+    color: getCategoryColor(category),
+  }));
+};
+
+// Extract unique hashtags from posts data
+const extractHashtagsFromPosts = (posts) => {
+  if (!posts || !Array.isArray(posts)) return [];
+
+  const hashtags = new Set();
+  posts.forEach((post) => {
+    if (post.hashtags && Array.isArray(post.hashtags)) {
+      post.hashtags.forEach((tag) => {
+        if (tag && tag.trim()) {
+          hashtags.add(tag.toLowerCase());
+        }
+      });
+    }
+  });
+
+  return Array.from(hashtags).map((hashtag) => ({
+    value: hashtag,
+    label: `#${hashtag}`,
+    icon: getHashtagIcon(hashtag),
+    color: getHashtagColor(hashtag),
+  }));
+};
+
+// Helper function to get category icon
+const getCategoryIcon = (category) => {
+  const iconMap = {
+    announcement: "campaign",
+    event: "event",
+    sports: "sports-soccer",
+    academic: "school",
+    news: "article",
+    achievement: "emoji-events",
+    default: "view-list",
+  };
+  return iconMap[category.toLowerCase()] || iconMap.default;
+};
+
+// Helper function to get category color
+const getCategoryColor = (category) => {
+  const colorMap = {
+    announcement: "#FF9500",
+    event: "#007AFF",
+    sports: "#34C759",
+    academic: "#5856D6",
+    news: "#FF3B30",
+    achievement: "#FFD60A",
+    default: "#8E8E93",
+  };
+  return colorMap[category.toLowerCase()] || colorMap.default;
+};
+
+// Helper function to get hashtag icon
+const getHashtagIcon = (hashtag) => {
+  const iconMap = {
+    science: "science",
+    achievement: "emoji-events",
+    football: "sports-soccer",
+    victory: "military-tech",
+    team: "groups",
+    math: "calculate",
+    grade: "school",
+    exam: "quiz",
+    drama: "theater-comedy",
+    theater: "local-movies",
+    performance: "star",
+    basketball: "sports-basketball",
+    tryouts: "how-to-reg",
+    art: "palette",
+    creativity: "lightbulb",
+    default: "tag",
+  };
+
+  // Find matching icon based on hashtag content
+  for (const [key, icon] of Object.entries(iconMap)) {
+    if (hashtag.toLowerCase().includes(key)) {
+      return icon;
+    }
+  }
+  return iconMap.default;
+};
+
+// Helper function to get hashtag color
+const getHashtagColor = (hashtag) => {
+  const colorMap = {
+    science: "#5856D6",
+    achievement: "#FFD60A",
+    football: "#34C759",
+    victory: "#FF9500",
+    team: "#007AFF",
+    math: "#5856D6",
+    grade: "#8E8E93",
+    exam: "#FF3B30",
+    drama: "#AF52DE",
+    theater: "#AF52DE",
+    performance: "#FFD60A",
+    basketball: "#FF9500",
+    tryouts: "#34C759",
+    art: "#FF2D92",
+    creativity: "#FFD60A",
+    default: "#3b5998",
+  };
+
+  // Find matching color based on hashtag content
+  for (const [key, color] of Object.entries(colorMap)) {
+    if (hashtag.toLowerCase().includes(key)) {
+      return color;
+    }
+  }
+  return colorMap.default;
+};
+
+const FilterBar = ({
+  filters,
+  onFilterChange,
+  onClearFilters,
+  postsData = [],
+}) => {
+  // Simplified date picker states
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [datePickerMode, setDatePickerMode] = useState(null); // 'from' or 'to'
   const [showDateSection, setShowDateSection] = useState(false); // Toggle for date section visibility
 
@@ -30,119 +179,122 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [animatedHeight] = useState(new Animated.Value(80)); // Increased for better layout
 
+  // Generate dynamic categories and hashtags from posts data
+  const dynamicCategories = extractCategoriesFromPosts(postsData);
+  const dynamicHashtags = extractHashtagsFromPosts(postsData);
+
+  // Debug log for categories
+  console.log(
+    "🏷️ FilterBar - Dynamic categories extracted:",
+    dynamicCategories
+  );
+  console.log("🏷️ FilterBar - Posts data count:", postsData?.length || 0);
+
+  // Combine default "All" category with dynamic categories
   const categories = [
     { value: "all", label: "All Posts", icon: "view-list", color: "#8E8E93" },
-    {
-      value: "announcement",
-      label: "Announcements",
-      icon: "campaign",
-      color: "#FF9500",
-    },
-    { value: "event", label: "Events", icon: "event", color: "#007AFF" },
-    {
-      value: "sports",
-      label: "Sports",
-      icon: "sports-soccer",
-      color: "#34C759",
-    },
-    { value: "academic", label: "Academic", icon: "school", color: "#5856D6" },
-    { value: "news", label: "News", icon: "article", color: "#FF3B30" },
-    {
-      value: "achievement",
-      label: "Achievements",
-      icon: "emoji-events",
-      color: "#FFD60A",
-    },
+    ...dynamicCategories,
   ];
 
-  const availableHashtags = [
-    {
-      value: "ScienceFair",
-      label: "#ScienceFair",
-      icon: "science",
-      color: "#5856D6",
-    },
-    {
-      value: "Achievement",
-      label: "#Achievement",
-      icon: "emoji-events",
-      color: "#FFD60A",
-    },
-    {
-      value: "Football",
-      label: "#Football",
-      icon: "sports-soccer",
-      color: "#34C759",
-    },
-    {
-      value: "Victory",
-      label: "#Victory",
-      icon: "military-tech",
-      color: "#FF9500",
-    },
-    {
-      value: "TeamSpirit",
-      label: "#TeamSpirit",
-      icon: "groups",
-      color: "#007AFF",
-    },
-    {
-      value: "MathTest",
-      label: "#MathTest",
-      icon: "calculate",
-      color: "#5856D6",
-    },
-    { value: "Grade9", label: "#Grade9", icon: "school", color: "#8E8E93" },
-    { value: "Exam", label: "#Exam", icon: "quiz", color: "#FF3B30" },
-    {
-      value: "Drama",
-      label: "#Drama",
-      icon: "theater-comedy",
-      color: "#AF52DE",
-    },
-    {
-      value: "Theater",
-      label: "#Theater",
-      icon: "local-movies",
-      color: "#AF52DE",
-    },
-    {
-      value: "Performance",
-      label: "#Performance",
-      icon: "star",
-      color: "#FFD60A",
-    },
-    {
-      value: "Basketball",
-      label: "#Basketball",
-      icon: "sports-basketball",
-      color: "#FF9500",
-    },
-    {
-      value: "Tryouts",
-      label: "#Tryouts",
-      icon: "how-to-reg",
-      color: "#34C759",
-    },
-    {
-      value: "ArtExhibition",
-      label: "#ArtExhibition",
-      icon: "palette",
-      color: "#FF2D92",
-    },
-    {
-      value: "StudentArt",
-      label: "#StudentArt",
-      icon: "brush",
-      color: "#FF2D92",
-    },
-    {
-      value: "Creativity",
-      label: "#Creativity",
-      icon: "lightbulb",
-      color: "#FFD60A",
-    },
-  ];
+  console.log("🏷️ FilterBar - Final categories for modal:", categories);
+
+  // Use dynamic hashtags, fallback to default if no data
+  const availableHashtags =
+    dynamicHashtags.length > 0
+      ? dynamicHashtags
+      : [
+          {
+            value: "ScienceFair",
+            label: "#ScienceFair",
+            icon: "science",
+            color: "#5856D6",
+          },
+          {
+            value: "Achievement",
+            label: "#Achievement",
+            icon: "emoji-events",
+            color: "#FFD60A",
+          },
+          {
+            value: "Football",
+            label: "#Football",
+            icon: "sports-soccer",
+            color: "#34C759",
+          },
+          {
+            value: "Victory",
+            label: "#Victory",
+            icon: "military-tech",
+            color: "#FF9500",
+          },
+          {
+            value: "TeamSpirit",
+            label: "#TeamSpirit",
+            icon: "groups",
+            color: "#007AFF",
+          },
+          {
+            value: "MathTest",
+            label: "#MathTest",
+            icon: "calculate",
+            color: "#5856D6",
+          },
+          {
+            value: "Grade9",
+            label: "#Grade9",
+            icon: "school",
+            color: "#8E8E93",
+          },
+          { value: "Exam", label: "#Exam", icon: "quiz", color: "#FF3B30" },
+          {
+            value: "Drama",
+            label: "#Drama",
+            icon: "theater-comedy",
+            color: "#AF52DE",
+          },
+          {
+            value: "Theater",
+            label: "#Theater",
+            icon: "local-movies",
+            color: "#AF52DE",
+          },
+          {
+            value: "Performance",
+            label: "#Performance",
+            icon: "star",
+            color: "#FFD60A",
+          },
+          {
+            value: "Basketball",
+            label: "#Basketball",
+            icon: "sports-basketball",
+            color: "#FF9500",
+          },
+          {
+            value: "Tryouts",
+            label: "#Tryouts",
+            icon: "how-to-reg",
+            color: "#34C759",
+          },
+          {
+            value: "ArtExhibition",
+            label: "#ArtExhibition",
+            icon: "palette",
+            color: "#FF2D92",
+          },
+          {
+            value: "StudentArt",
+            label: "#StudentArt",
+            icon: "brush",
+            color: "#FF2D92",
+          },
+          {
+            value: "Creativity",
+            label: "#Creativity",
+            icon: "lightbulb",
+            color: "#FFD60A",
+          },
+        ];
 
   // Calculate dynamic height based on active filters
   const calculateHeight = () => {
@@ -195,25 +347,20 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
     onFilterChange({ ...filters, searchTerm: text });
   };
 
-  // Date picker handlers
-  const handleFromDateChange = (_, selectedDate) => {
-    setShowFromDatePicker(false);
-    setDatePickerMode(null);
-    if (selectedDate) {
+  // Simplified date picker handler
+  const handleDateChange = (_, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate && datePickerMode) {
       const newDateRange = { ...filters.dateRange };
-      newDateRange.start = selectedDate;
+      // Convert Date to ISO string to avoid Redux serialization issues
+      if (datePickerMode === "from") {
+        newDateRange.start = selectedDate.toISOString();
+      } else if (datePickerMode === "to") {
+        newDateRange.end = selectedDate.toISOString();
+      }
       onFilterChange({ ...filters, dateRange: newDateRange });
     }
-  };
-
-  const handleToDateChange = (_, selectedDate) => {
-    setShowToDatePicker(false);
     setDatePickerMode(null);
-    if (selectedDate) {
-      const newDateRange = { ...filters.dateRange };
-      newDateRange.end = selectedDate;
-      onFilterChange({ ...filters, dateRange: newDateRange });
-    }
   };
 
   // Remove individual date
@@ -268,7 +415,9 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
 
   const formatDate = (date) => {
     if (!date) return "Select";
-    return date.toLocaleDateString();
+    // Handle both Date objects and ISO strings
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    return dateObj.toLocaleDateString();
   };
 
   const hasActiveFilters = () => {
@@ -420,6 +569,7 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
                 Select Date Range
               </Text>
 
+              {/* Date Pickers Row */}
               <View style={styles.datePickersRow}>
                 {/* From Date */}
                 <View style={styles.datePickerContainer}>
@@ -431,7 +581,7 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
                     ]}
                     onPress={() => {
                       setDatePickerMode("from");
-                      setShowFromDatePicker(true);
+                      setShowDatePicker(true);
                     }}
                   >
                     <Icon
@@ -471,7 +621,7 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
                     ]}
                     onPress={() => {
                       setDatePickerMode("to");
-                      setShowToDatePicker(true);
+                      setShowDatePicker(true);
                     }}
                   >
                     <Icon
@@ -644,14 +794,13 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
       )}
 
       {/* Date Picker Modal */}
-      {(showFromDatePicker || showToDatePicker) && (
+      {showDatePicker && (
         <Modal
-          visible={showFromDatePicker || showToDatePicker}
+          visible={showDatePicker}
           transparent={true}
           animationType="fade"
           onRequestClose={() => {
-            setShowFromDatePicker(false);
-            setShowToDatePicker(false);
+            setShowDatePicker(false);
             setDatePickerMode(null);
           }}
         >
@@ -659,8 +808,7 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
             style={styles.datePickerModalOverlay}
             activeOpacity={1}
             onPress={() => {
-              setShowFromDatePicker(false);
-              setShowToDatePicker(false);
+              setShowDatePicker(false);
               setDatePickerMode(null);
             }}
           >
@@ -668,16 +816,16 @@ const FilterBar = ({ filters, onFilterChange, onClearFilters }) => {
               <DateTimePicker
                 value={
                   datePickerMode === "from"
-                    ? filters.dateRange.start || new Date()
-                    : filters.dateRange.end || new Date()
+                    ? filters.dateRange.start
+                      ? new Date(filters.dateRange.start)
+                      : new Date()
+                    : filters.dateRange.end
+                      ? new Date(filters.dateRange.end)
+                      : new Date()
                 }
                 mode="date"
                 display={Platform.OS === "ios" ? "compact" : "default"}
-                onChange={
-                  datePickerMode === "from"
-                    ? handleFromDateChange
-                    : handleToDateChange
-                }
+                onChange={handleDateChange}
                 style={styles.datePickerStyle}
               />
             </View>
@@ -1092,6 +1240,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
   },
+
   datePickersRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -1188,3 +1337,10 @@ const styles = StyleSheet.create({
 });
 
 export default FilterBar;
+
+// Export utility functions for use in other components
+export {
+  transformFiltersForAPI,
+  extractCategoriesFromPosts,
+  extractHashtagsFromPosts,
+};

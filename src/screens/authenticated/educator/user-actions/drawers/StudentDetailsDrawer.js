@@ -88,15 +88,21 @@ const StudentDetailsDrawer = () => {
 
   // Filter students based on search and filter
   const filteredStudents = classStudents.filter((student) => {
-    const matchesSearch = student.student_calling_name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase()) ||
-      student.admission_number.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      student.student_calling_name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      student.admission_number
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
-    const matchesFilter = selectedFilter === "all" ||
-      (selectedFilter === "excellent" && student.academic_performance === "Excellent") ||
+    const matchesFilter =
+      selectedFilter === "all" ||
+      (selectedFilter === "excellent" &&
+        student.academic_performance === "Excellent") ||
       (selectedFilter === "good" && student.academic_performance === "Good") ||
-      (selectedFilter === "needs_attention" && student.academic_performance === "Average");
+      (selectedFilter === "needs_attention" &&
+        student.academic_performance === "Average");
 
     return matchesSearch && matchesFilter;
   });
@@ -107,7 +113,11 @@ const StudentDetailsDrawer = () => {
   };
 
   const renderFilterChips = () => (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersContainer}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.filtersContainer}
+    >
       {filterOptions.map((filter) => (
         <TouchableOpacity
           key={filter.id}
@@ -139,9 +149,16 @@ const StudentDetailsDrawer = () => {
       <View style={styles.studentCardHeader}>
         <View style={styles.studentAvatar}>
           {student.profile_picture ? (
-            <Image source={{ uri: student.profile_picture }} style={styles.avatarImage} />
+            <Image
+              source={{ uri: student.profile_picture }}
+              style={styles.avatarImage}
+            />
           ) : (
-            <MaterialIcons name="person" size={32} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="person"
+              size={32}
+              color={theme.colors.textSecondary}
+            />
           )}
         </View>
         <View style={styles.studentInfo}>
@@ -149,20 +166,33 @@ const StudentDetailsDrawer = () => {
           <Text style={styles.studentMeta}>
             {student.admission_number} • {student.grade}
           </Text>
-          <Text style={styles.guardianInfo}>Guardian: {student.guardian_name}</Text>
+          <Text style={styles.guardianInfo}>
+            Guardian: {student.guardian_name}
+          </Text>
         </View>
-        <MaterialIcons name="chevron-right" size={24} color={theme.colors.textSecondary} />
+        <MaterialIcons
+          name="chevron-right"
+          size={24}
+          color={theme.colors.textSecondary}
+        />
       </View>
-      
+
       <View style={styles.studentCardFooter}>
         <View style={styles.performanceTag}>
-          <MaterialIcons 
-            name="school" 
-            size={16} 
-            color={student.academic_performance === "Excellent" ? "#4CAF50" : 
-                   student.academic_performance === "Good" ? "#FF9800" : "#F44336"} 
+          <MaterialIcons
+            name="school"
+            size={16}
+            color={
+              student.academic_performance === "Excellent"
+                ? "#4CAF50"
+                : student.academic_performance === "Good"
+                  ? "#FF9800"
+                  : "#F44336"
+            }
           />
-          <Text style={styles.performanceText}>{student.academic_performance}</Text>
+          <Text style={styles.performanceText}>
+            {student.academic_performance}
+          </Text>
         </View>
         <TouchableOpacity style={styles.contactButton}>
           <MaterialIcons name="phone" size={16} color={theme.colors.primary} />
@@ -176,16 +206,28 @@ const StudentDetailsDrawer = () => {
     if (!selectedStudent) return null;
 
     return (
-      <ScrollView style={styles.profileContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.profileContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.profileHeader}>
           <View style={styles.profileAvatar}>
             {selectedStudent.profile_picture ? (
-              <Image source={{ uri: selectedStudent.profile_picture }} style={styles.profileAvatarImage} />
+              <Image
+                source={{ uri: selectedStudent.profile_picture }}
+                style={styles.profileAvatarImage}
+              />
             ) : (
-              <MaterialIcons name="person" size={48} color={theme.colors.textSecondary} />
+              <MaterialIcons
+                name="person"
+                size={48}
+                color={theme.colors.textSecondary}
+              />
             )}
           </View>
-          <Text style={styles.profileName}>{selectedStudent.student_calling_name}</Text>
+          <Text style={styles.profileName}>
+            {selectedStudent.student_calling_name}
+          </Text>
           <Text style={styles.profileMeta}>
             {selectedStudent.admission_number} • {selectedStudent.grade}
           </Text>
@@ -194,17 +236,33 @@ const StudentDetailsDrawer = () => {
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Contact Information</Text>
           <View style={styles.infoRow}>
-            <MaterialIcons name="person" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="person"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Guardian:</Text>
-            <Text style={styles.infoValue}>{selectedStudent.guardian_name}</Text>
+            <Text style={styles.infoValue}>
+              {selectedStudent.guardian_name}
+            </Text>
           </View>
           <View style={styles.infoRow}>
-            <MaterialIcons name="phone" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Phone:</Text>
-            <Text style={styles.infoValue}>{selectedStudent.guardian_contact}</Text>
+            <Text style={styles.infoValue}>
+              {selectedStudent.guardian_contact}
+            </Text>
           </View>
           <View style={styles.infoRow}>
-            <MaterialIcons name="email" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="email"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Email:</Text>
             <Text style={styles.infoValue}>{selectedStudent.email}</Text>
           </View>
@@ -213,31 +271,57 @@ const StudentDetailsDrawer = () => {
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Academic Information</Text>
           <View style={styles.infoRow}>
-            <MaterialIcons name="school" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="school"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Performance:</Text>
-            <Text style={styles.infoValue}>{selectedStudent.academic_performance}</Text>
+            <Text style={styles.infoValue}>
+              {selectedStudent.academic_performance}
+            </Text>
           </View>
           <View style={styles.infoRow}>
-            <MaterialIcons name="star" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="star"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Behavior Rating:</Text>
-            <Text style={styles.infoValue}>{selectedStudent.behavior_rating}/5.0</Text>
+            <Text style={styles.infoValue}>
+              {selectedStudent.behavior_rating}/5.0
+            </Text>
           </View>
         </View>
 
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Personal Information</Text>
           <View style={styles.infoRow}>
-            <MaterialIcons name="cake" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="cake"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Date of Birth:</Text>
-            <Text style={styles.infoValue}>{selectedStudent.date_of_birth}</Text>
+            <Text style={styles.infoValue}>
+              {selectedStudent.date_of_birth}
+            </Text>
           </View>
           <View style={styles.infoRow}>
-            <MaterialIcons name="home" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="home"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Address:</Text>
             <Text style={styles.infoValue}>{selectedStudent.address}</Text>
           </View>
           <View style={styles.infoRow}>
-            <MaterialIcons name="medical-services" size={20} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="medical-services"
+              size={20}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.infoLabel}>Medical Info:</Text>
             <Text style={styles.infoValue}>{selectedStudent.medical_info}</Text>
           </View>
@@ -255,7 +339,11 @@ const StudentDetailsDrawer = () => {
 
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <MaterialIcons name="search" size={20} color={theme.colors.textSecondary} />
+          <MaterialIcons
+            name="search"
+            size={20}
+            color={theme.colors.textSecondary}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search students..."
@@ -267,9 +355,13 @@ const StudentDetailsDrawer = () => {
 
       {renderFilterChips()}
 
-      <ScrollView style={styles.studentsList} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.studentsList}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.resultsText}>
-          {filteredStudents.length} student{filteredStudents.length !== 1 ? 's' : ''} found
+          {filteredStudents.length} student
+          {filteredStudents.length !== 1 ? "s" : ""} found
         </Text>
         {filteredStudents.map(renderStudentCard)}
       </ScrollView>

@@ -1,11 +1,11 @@
 /**
  * Calendar Integration Test
- * 
+ *
  * This test verifies that the calendar Redux slice and component integration
  * works correctly with the 5 backend API endpoints.
  */
 
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 import calendarSlice, {
   fetchAllCalendarData,
   fetchGeneralEvents,
@@ -16,18 +16,18 @@ import calendarSlice, {
   selectAllEvents,
   selectCalendarLoading,
   selectCalendarError,
-} from '../state-store/slices/calendar/calendarSlice';
+} from "../state-store/slices/calendar/calendarSlice";
+import axios from "axios";
 
 // Mock axios for testing
-jest.mock('axios');
-import axios from 'axios';
+jest.mock("axios");
 const mockedAxios = axios;
 
 // Mock app slice state
 const mockAppState = {
   app: {
     user: { id: 123, user_id: 123 },
-    token: 'mock-bearer-token',
+    token: "mock-bearer-token",
   },
 };
 
@@ -41,7 +41,7 @@ const createTestStore = () => {
   });
 };
 
-describe('Calendar Integration Tests', () => {
+describe("Calendar Integration Tests", () => {
   let store;
 
   beforeEach(() => {
@@ -49,15 +49,15 @@ describe('Calendar Integration Tests', () => {
     jest.clearAllMocks();
   });
 
-  describe('Calendar Slice', () => {
-    test('should have correct initial state', () => {
+  describe("Calendar Slice", () => {
+    test("should have correct initial state", () => {
       const state = store.getState();
       expect(state.calendar.events).toEqual([]);
       expect(state.calendar.loading).toBe(false);
       expect(state.calendar.error).toBe(null);
     });
 
-    test('should handle loading state correctly', () => {
+    test("should handle loading state correctly", () => {
       store.dispatch(fetchAllCalendarData.pending());
       const state = store.getState();
       expect(state.calendar.loading).toBe(true);
@@ -65,17 +65,17 @@ describe('Calendar Integration Tests', () => {
     });
   });
 
-  describe('API Integration', () => {
-    test('should fetch general events successfully', async () => {
+  describe("API Integration", () => {
+    test("should fetch general events successfully", async () => {
       const mockResponse = {
         data: {
           data: [
             {
               id: 1,
-              title: 'Test Event',
-              date: '2025-07-15',
-              time: '09:00 AM',
-              visibility_type: 'public',
+              title: "Test Event",
+              date: "2025-07-15",
+              time: "09:00 AM",
+              visibility_type: "public",
             },
           ],
         },
@@ -84,30 +84,30 @@ describe('Calendar Integration Tests', () => {
       mockedAxios.get.mockResolvedValueOnce(mockResponse);
 
       const result = await store.dispatch(fetchGeneralEvents());
-      expect(result.type).toBe('calendar/fetchGeneralEvents/fulfilled');
+      expect(result.type).toBe("calendar/fetchGeneralEvents/fulfilled");
       expect(result.payload).toHaveLength(1);
-      expect(result.payload[0].source).toBe('general_events');
+      expect(result.payload[0].source).toBe("general_events");
     });
 
-    test('should filter private events correctly', async () => {
+    test("should filter private events correctly", async () => {
       const mockResponse = {
         data: {
           data: [
             {
               id: 1,
-              title: 'Public Event',
-              visibility_type: 'public',
+              title: "Public Event",
+              visibility_type: "public",
             },
             {
               id: 2,
-              title: 'Private Event - Mine',
-              visibility_type: 'private',
+              title: "Private Event - Mine",
+              visibility_type: "private",
               created_by: 123, // Same as mock user ID
             },
             {
               id: 3,
-              title: 'Private Event - Others',
-              visibility_type: 'private',
+              title: "Private Event - Others",
+              visibility_type: "private",
               created_by: 456, // Different user ID
             },
           ],
@@ -118,33 +118,57 @@ describe('Calendar Integration Tests', () => {
 
       const result = await store.dispatch(fetchGeneralEvents());
       expect(result.payload).toHaveLength(2); // Should exclude the other user's private event
-      expect(result.payload.find(e => e.title === 'Private Event - Others')).toBeUndefined();
+      expect(
+        result.payload.find((e) => e.title === "Private Event - Others"),
+      ).toBeUndefined();
     });
 
-    test('should handle API errors gracefully', async () => {
+    test("should handle API errors gracefully", async () => {
       const mockError = {
         response: {
-          data: { message: 'API Error' },
+          data: { message: "API Error" },
         },
       };
 
       mockedAxios.get.mockRejectedValueOnce(mockError);
 
       const result = await store.dispatch(fetchGeneralEvents());
-      expect(result.type).toBe('calendar/fetchGeneralEvents/rejected');
-      expect(result.payload).toBe('API Error');
+      expect(result.type).toBe("calendar/fetchGeneralEvents/rejected");
+      expect(result.payload).toBe("API Error");
     });
   });
 
-  describe('Data Normalization', () => {
-    test('should normalize events from all sources', async () => {
+  describe("Data Normalization", () => {
+    test("should normalize events from all sources", async () => {
       // Mock responses for all 5 endpoints
       const mockResponses = [
-        { data: { data: [{ id: 1, title: 'General Event', date: '2025-07-15' }] } },
-        { data: { data: [{ id: 2, class_name: 'Special Class', date: '2025-07-16' }] } },
-        { data: { data: [{ id: 3, exam_name: 'Math Exam', date: '2025-07-17' }] } },
-        { data: { data: [{ id: 4, feedback_title: 'Feedback', date: '2025-07-18' }] } },
-        { data: { data: [{ id: 5, meeting_title: 'Parent Meeting', date: '2025-07-19' }] } },
+        {
+          data: {
+            data: [{ id: 1, title: "General Event", date: "2025-07-15" }],
+          },
+        },
+        {
+          data: {
+            data: [{ id: 2, class_name: "Special Class", date: "2025-07-16" }],
+          },
+        },
+        {
+          data: {
+            data: [{ id: 3, exam_name: "Math Exam", date: "2025-07-17" }],
+          },
+        },
+        {
+          data: {
+            data: [{ id: 4, feedback_title: "Feedback", date: "2025-07-18" }],
+          },
+        },
+        {
+          data: {
+            data: [
+              { id: 5, meeting_title: "Parent Meeting", date: "2025-07-19" },
+            ],
+          },
+        },
       ];
 
       mockedAxios.get
@@ -155,36 +179,38 @@ describe('Calendar Integration Tests', () => {
         .mockResolvedValueOnce(mockResponses[4]);
 
       const result = await store.dispatch(fetchAllCalendarData());
-      expect(result.type).toBe('calendar/fetchAllCalendarData/fulfilled');
-      
+      expect(result.type).toBe("calendar/fetchAllCalendarData/fulfilled");
+
       const { events } = result.payload;
       expect(events).toHaveLength(5);
-      
+
       // Check that all events have normalized structure
-      events.forEach(event => {
-        expect(event).toHaveProperty('source');
-        expect(event).toHaveProperty('type');
-        expect(event).toHaveProperty('title');
+      events.forEach((event) => {
+        expect(event).toHaveProperty("source");
+        expect(event).toHaveProperty("type");
+        expect(event).toHaveProperty("title");
       });
-      
+
       // Check specific source types
-      expect(events.find(e => e.source === 'general_events')).toBeDefined();
-      expect(events.find(e => e.source === 'special_classes')).toBeDefined();
-      expect(events.find(e => e.source === 'exam_schedules')).toBeDefined();
-      expect(events.find(e => e.source === 'educator_feedback')).toBeDefined();
-      expect(events.find(e => e.source === 'parent_meetings')).toBeDefined();
+      expect(events.find((e) => e.source === "general_events")).toBeDefined();
+      expect(events.find((e) => e.source === "special_classes")).toBeDefined();
+      expect(events.find((e) => e.source === "exam_schedules")).toBeDefined();
+      expect(
+        events.find((e) => e.source === "educator_feedback"),
+      ).toBeDefined();
+      expect(events.find((e) => e.source === "parent_meetings")).toBeDefined();
     });
   });
 
-  describe('Selectors', () => {
-    test('should select all events correctly', () => {
+  describe("Selectors", () => {
+    test("should select all events correctly", () => {
       const mockEvents = [
-        { id: 1, title: 'Event 1', date: '2025-07-15' },
-        { id: 2, title: 'Event 2', date: '2025-07-16' },
+        { id: 1, title: "Event 1", date: "2025-07-15" },
+        { id: 2, title: "Event 2", date: "2025-07-16" },
       ];
 
       store.dispatch({
-        type: 'calendar/fetchAllCalendarData/fulfilled',
+        type: "calendar/fetchAllCalendarData/fulfilled",
         payload: { events: mockEvents, errors: null },
       });
 
@@ -193,19 +219,19 @@ describe('Calendar Integration Tests', () => {
       expect(events).toEqual(mockEvents);
     });
 
-    test('should select loading state correctly', () => {
+    test("should select loading state correctly", () => {
       store.dispatch(fetchAllCalendarData.pending());
       const state = store.getState();
       expect(selectCalendarLoading(state)).toBe(true);
     });
 
-    test('should select error state correctly', () => {
-      store.dispatch(fetchAllCalendarData.rejected({ payload: 'Test error' }));
+    test("should select error state correctly", () => {
+      store.dispatch(fetchAllCalendarData.rejected({ payload: "Test error" }));
       const state = store.getState();
-      expect(selectCalendarError(state)).toBe('Test error');
+      expect(selectCalendarError(state)).toBe("Test error");
     });
   });
 });
 
-console.log('📅 Calendar Integration Test Suite Created');
-console.log('Run with: yarn test src/tests/calendar-integration.test.js');
+console.log("📅 Calendar Integration Test Suite Created");
+console.log("Run with: yarn test src/tests/calendar-integration.test.js");

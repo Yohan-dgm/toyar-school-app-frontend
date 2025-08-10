@@ -41,6 +41,7 @@ const CalendarMain = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [activeAttendanceTab, setActiveAttendanceTab] = useState("academic"); // "academic", "sport", "event"
   const [compactMode, setCompactMode] = useState(true); // New compact mode state
+  const [isCalendarExpanded, setIsCalendarExpanded] = useState(true); // Toggle between horizontal and grid calendar
 
   // Fetch calendar data on component mount
   useEffect(() => {
@@ -93,6 +94,8 @@ const CalendarMain = () => {
 
   const handleDayPress = (day) => {
     setSelectedDate(day.dateString);
+    // Switch to horizontal calendar view when a date is selected
+    setIsCalendarExpanded(false);
   };
 
   const handleMonthPress = (monthIndex) => {
@@ -108,6 +111,10 @@ const CalendarMain = () => {
 
   const handleMonthCalendarPress = () => {
     setCalendarViewMode("month");
+  };
+
+  const handleCalendarExpandToggle = () => {
+    setIsCalendarExpanded(!isCalendarExpanded);
   };
 
   const getMonthName = (monthIndex) => {
@@ -717,6 +724,37 @@ const CalendarMain = () => {
     });
   };
 
+  // Generate dates for horizontal calendar view (7 days with selected date in middle)
+  const getHorizontalCalendarDates = () => {
+    const dates = [];
+    const selectedDateObj = new Date(selectedDate);
+    const todayString = new Date().toISOString().split("T")[0];
+
+    // Start from 3 days before selected date to 3 days after (total 7 days)
+    for (let i = -3; i <= 3; i++) {
+      const date = new Date(selectedDateObj);
+      date.setDate(selectedDateObj.getDate() + i);
+      const dateString = date.toISOString().split("T")[0];
+
+      dates.push({
+        date: dateString,
+        dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
+        dayNumber: date.getDate(),
+        monthName: date.toLocaleDateString("en-US", { month: "short" }),
+        isToday: dateString === todayString,
+        isSelected: dateString === selectedDate,
+        events: getSchoolEventsForDate(dateString),
+      });
+    }
+
+    return dates;
+  };
+
+  // Handle date selection in horizontal view (without changing view)
+  const handleHorizontalDatePress = (dateString) => {
+    setSelectedDate(dateString);
+  };
+
   // Convert school events to agenda format
   const getAgendaItems = () => {
     const agendaItems = {};
@@ -906,18 +944,17 @@ const CalendarMain = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Refresh Button */}
-            {/* <TouchableOpacity
-              style={styles.refreshButton}
-              onPress={handleRefresh}
-              disabled={loading}
+            {/* Calendar Expand/Collapse Button */}
+            <TouchableOpacity
+              style={styles.expandToggleButton}
+              onPress={handleCalendarExpandToggle}
             >
               <MaterialIcons
-                name="refresh"
-                size={24}
-                color={loading ? "#CCCCCC" : theme.colors.primary}
+                name={isCalendarExpanded ? "more-horiz" : "grid-view"}
+                size={20}
+                color={theme.colors.primary}
               />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
 
           {/* Year Selector for Month View - Below Header Row */}
@@ -948,39 +985,133 @@ const CalendarMain = () => {
           )}
         </View>
 
-        {/* Day Calendar View - Compact Calendar */}
+        {/* Calendar View - Show horizontal or grid based on expand state */}
         {calendarViewMode === "day" && (
-          <View style={styles.calendarWrapper}>
-            <Calendar
-              current={selectedDate}
-              onDayPress={handleDayPress}
-              markedDates={getSchoolEventsMarkedDates()}
-              markingType={"custom"}
-              theme={{
-                backgroundColor: "#ffffff",
-                calendarBackground: "#ffffff",
-                textSectionTitleColor: theme.colors.text,
-                selectedDayBackgroundColor: theme.colors.primary,
-                selectedDayTextColor: "#ffffff",
-                todayTextColor: theme.colors.primary,
-                dayTextColor: theme.colors.text,
-                textDisabledColor: "#d9e1e8",
-                dotColor: theme.colors.primary,
-                selectedDotColor: "#ffffff",
-                arrowColor: theme.colors.primary,
-                disabledArrowColor: "#d9e1e8",
-                monthTextColor: theme.colors.text,
-                indicatorColor: theme.colors.primary,
-                textDayFontFamily: theme.fonts.regular,
-                textMonthFontFamily: theme.fonts.bold,
-                textDayHeaderFontFamily: theme.fonts.medium,
-                textDayFontSize: 14, // Reduced font size
-                textMonthFontSize: 16, // Reduced font size
-                textDayHeaderFontSize: 12, // Reduced font size
-              }}
-              style={styles.calendar}
-            />
-          </View>
+          <>
+            {!isCalendarExpanded ? (
+              // Horizontal Scroll Calendar
+              <View style={styles.horizontalCalendarWrapper}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.horizontalCalendarContent}
+                  snapToInterval={70} // Snap to each date card
+                  decelerationRate="fast"
+                >
+                  {getHorizontalCalendarDates().map((dateItem, index) => (
+                    <TouchableOpacity
+                      key={dateItem.date}
+                      style={[
+                        styles.horizontalDateCard,
+                        dateItem.isSelected &&
+                          styles.selectedHorizontalDateCard,
+                        dateItem.isToday &&
+                          !dateItem.isSelected &&
+                          styles.todayHorizontalDateCard,
+                      ]}
+                      onPress={() => handleHorizontalDatePress(dateItem.date)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.horizontalDateDayName,
+                          dateItem.isSelected &&
+                            styles.selectedHorizontalDateText,
+                          dateItem.isToday &&
+                            !dateItem.isSelected &&
+                            styles.todayHorizontalDateText,
+                        ]}
+                      >
+                        {dateItem.dayName}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.horizontalDateNumber,
+                          dateItem.isSelected &&
+                            styles.selectedHorizontalDateText,
+                          dateItem.isToday &&
+                            !dateItem.isSelected &&
+                            styles.todayHorizontalDateText,
+                        ]}
+                      >
+                        {dateItem.dayNumber}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.horizontalDateMonth,
+                          dateItem.isSelected &&
+                            styles.selectedHorizontalDateText,
+                          dateItem.isToday &&
+                            !dateItem.isSelected &&
+                            styles.todayHorizontalDateText,
+                        ]}
+                      >
+                        {dateItem.monthName}
+                      </Text>
+                      {/* Event indicators */}
+                      {dateItem.events.length > 0 && (
+                        <View style={styles.horizontalEventIndicators}>
+                          {dateItem.events
+                            .slice(0, 3)
+                            .map((event, eventIndex) => (
+                              <View
+                                key={eventIndex}
+                                style={[
+                                  styles.horizontalEventDot,
+                                  {
+                                    backgroundColor: getEventTypeColor(
+                                      event.type
+                                    ),
+                                  },
+                                ]}
+                              />
+                            ))}
+                          {dateItem.events.length > 3 && (
+                            <Text style={styles.horizontalMoreEventsText}>
+                              +{dateItem.events.length - 3}
+                            </Text>
+                          )}
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            ) : (
+              // Grid Calendar (existing)
+              <View style={styles.calendarWrapper}>
+                <Calendar
+                  current={selectedDate}
+                  onDayPress={handleDayPress}
+                  markedDates={getSchoolEventsMarkedDates()}
+                  markingType={"custom"}
+                  theme={{
+                    backgroundColor: "#ffffff",
+                    calendarBackground: "#ffffff",
+                    textSectionTitleColor: theme.colors.text,
+                    selectedDayBackgroundColor: theme.colors.primary,
+                    selectedDayTextColor: "#ffffff",
+                    todayTextColor: theme.colors.primary,
+                    dayTextColor: theme.colors.text,
+                    textDisabledColor: "#d9e1e8",
+                    dotColor: theme.colors.primary,
+                    selectedDotColor: "#ffffff",
+                    arrowColor: theme.colors.primary,
+                    disabledArrowColor: "#d9e1e8",
+                    monthTextColor: theme.colors.text,
+                    indicatorColor: theme.colors.primary,
+                    textDayFontFamily: theme.fonts.regular,
+                    textMonthFontFamily: theme.fonts.bold,
+                    textDayHeaderFontFamily: theme.fonts.medium,
+                    textDayFontSize: 14, // Reduced font size
+                    textMonthFontSize: 16, // Reduced font size
+                    textDayHeaderFontSize: 12, // Reduced font size
+                  }}
+                  style={styles.calendar}
+                />
+              </View>
+            )}
+          </>
         )}
 
         {/* Month Calendar View - Show all months */}
@@ -1470,6 +1601,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "center",
+  },
+  expandToggleButton: {
+    padding: 10,
+    borderRadius: 30,
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 40,
   },
   calendarToggleButton: {
     flex: 1,
@@ -2802,6 +2941,93 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#666666",
     marginLeft: 4,
+  },
+
+  // Horizontal Calendar Styles
+  horizontalCalendarWrapper: {
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: 0,
+    backgroundColor: "#FFFFFF",
+  },
+  horizontalCalendarContent: {
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  horizontalDateCard: {
+    backgroundColor: "#F8F9FA",
+    borderRadius: 12,
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.sm,
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 65,
+    minHeight: 85,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  selectedHorizontalDateCard: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    shadowColor: theme.colors.primary,
+    shadowOpacity: 0.3,
+    elevation: 3,
+  },
+  todayHorizontalDateCard: {
+    backgroundColor: theme.colors.primary + "10",
+    borderColor: theme.colors.primary,
+    borderWidth: 1.5,
+  },
+  horizontalDateDayName: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 12,
+    color: "#666666",
+    marginBottom: 2,
+  },
+  horizontalDateNumber: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 18,
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  horizontalDateMonth: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 10,
+    color: "#888888",
+    marginBottom: 4,
+  },
+  selectedHorizontalDateText: {
+    color: "#FFFFFF",
+  },
+  todayHorizontalDateText: {
+    color: theme.colors.primary,
+    fontWeight: "bold",
+  },
+  horizontalEventIndicators: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    marginTop: 2,
+    minHeight: 12,
+  },
+  horizontalEventDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    marginHorizontal: 1,
+    marginVertical: 1,
+  },
+  horizontalMoreEventsText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 8,
+    color: "#666666",
+    marginLeft: 2,
   },
 });
 

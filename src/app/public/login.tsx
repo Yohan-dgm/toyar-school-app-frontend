@@ -6,6 +6,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -30,7 +32,8 @@ import { getUserCategoryName } from "@/constants/userCategories";
 
 // PIN mapping configuration
 const PIN_MAPPING: Record<string, string> = {
-  NEXISY: "sms_v1",
+  NEXISY: "nexis_college_sms_staging",
+  // NEXISY: "sms_v1",
   SCHL01: "sms_v2",
 };
 
@@ -106,7 +109,7 @@ export default function LoginScreen() {
 
       console.log(
         "🎉 Public Login - Login successful:",
-        JSON.stringify(response, null, 2)
+        JSON.stringify(response, null, 2),
       );
 
       // Extract user data from response
@@ -121,7 +124,7 @@ export default function LoginScreen() {
         dispatch(setUser(userData));
         console.log(
           "👤 Public Login - User data stored in Redux:",
-          JSON.stringify(userData, null, 2)
+          JSON.stringify(userData, null, 2),
         );
       } else {
         console.log("⚠️ Public Login - No user data found in response");
@@ -134,7 +137,7 @@ export default function LoginScreen() {
       if (!userCategory) {
         const dataKeys = Object.keys(response?.data || {});
         const userCategoryKey = dataKeys.find((key) =>
-          key.trim().toLowerCase().includes("user_category")
+          key.trim().toLowerCase().includes("user_category"),
         );
         if (userCategoryKey) {
           userCategory = response.data[userCategoryKey];
@@ -142,7 +145,7 @@ export default function LoginScreen() {
             "🔄 Public Login - Found malformed user_category field:",
             userCategoryKey,
             "with value:",
-            userCategory
+            userCategory,
           );
         }
       }
@@ -161,32 +164,32 @@ export default function LoginScreen() {
 
       console.log(
         "🔄 Public Login - Enhanced session data stored:",
-        enhancedSessionData
+        enhancedSessionData,
       );
       console.log(
         "🔄 Public Login - user_category:",
-        enhancedSessionData.user_category
+        enhancedSessionData.user_category,
       );
 
       // Show success toast
       Toast.show({
         type: "success",
         text1: "Login Successful! 🎉",
-        text2: "Welcome back to SchoolSnap",
+        text2: "Welcome back to School App",
         position: "top",
         visibilityTime: 3000,
       });
 
       console.log(
         "🔄 Public Login - Redirecting based on user_category:",
-        userCategory
+        userCategory,
       );
 
       // Use the proper user category mapping from constants
       const targetRoute = getUserCategoryName(userCategory);
       console.log(
         "🔄 Public Login - Target route:",
-        `/authenticated/${targetRoute}`
+        `/authenticated/${targetRoute}`,
       );
 
       setTimeout(() => {
@@ -219,154 +222,165 @@ export default function LoginScreen() {
         <View style={styles.patternOverlay} />
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View
-          style={[styles.header, { paddingVertical: 25, marginVertical: 0 }]}
-        >
-          <Image
-            source={require("@/assets/SchooSnap_logo.png")}
-            style={[styles.logo, { marginBottom: 8 }]}
-            resizeMode="contain"
-          />
-          <Text
-            style={[
-              styles.title,
-              {
-                color: "#9b0737",
-                fontSize: 45,
-                fontWeight: "800",
-                letterSpacing: 2,
-                marginTop: 0,
-                marginBottom: 4,
-                padding: 0,
-              },
-            ]}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+      >
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View
+            style={[styles.header, { paddingVertical: 25, marginVertical: 0 }]}
           >
-            Welcome
-          </Text>
-          <Text style={[styles.subtitle, { marginTop: 0, marginBottom: 0 }]}>
-            Sign in to your account
-          </Text>
-        </View>
-
-        {/* Login Form */}
-        <View
-          style={[styles.formContainer, { paddingVertical: 15, marginTop: 10 }]}
-        >
-          <View style={[styles.inputContainer, { marginBottom: 12 }]}>
-            <Text style={[styles.label, { marginBottom: 4 }]}>
-              Username or Email
-            </Text>
-            <Controller
-              control={control}
-              name="username_or_email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <View>
-                  <TInput
-                    placeholder="Enter your username or email"
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    error={errors.username_or_email?.message}
-                    style={styles.input}
-                  />
-                  {errors.username_or_email && (
-                    <Text style={styles.errorText}>
-                      {errors.username_or_email.message}
-                    </Text>
-                  )}
-                </View>
-              )}
+            <Image
+              source={require("@/assets/SchooSnap_logo.png")}
+              style={[styles.logo, { marginBottom: 8 }]}
+              resizeMode="contain"
             />
+            <Text
+              style={[
+                styles.title,
+                {
+                  color: "#9b0737",
+                  fontSize: 45,
+                  fontWeight: "800",
+                  letterSpacing: 2,
+                  marginTop: 0,
+                  marginBottom: 4,
+                  padding: 0,
+                },
+              ]}
+            >
+              Welcome
+            </Text>
+            <Text style={[styles.subtitle, { marginTop: 0, marginBottom: 0 }]}>
+              Sign in to your account
+            </Text>
           </View>
 
-          <View style={[styles.inputContainer, { marginBottom: 12 }]}>
-            <Text style={[styles.label, { marginBottom: 4 }]}>Password</Text>
-            <Controller
-              control={control}
-              name="password"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <View>
-                  <View style={styles.passwordInputContainer}>
+          {/* Login Form */}
+          <View
+            style={[
+              styles.formContainer,
+              { paddingVertical: 15, marginTop: 10 },
+            ]}
+          >
+            <View style={[styles.inputContainer, { marginBottom: 12 }]}>
+              <Text style={[styles.label, { marginBottom: 4 }]}>
+                Username or Email
+              </Text>
+              <Controller
+                control={control}
+                name="username_or_email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View>
                     <TInput
-                      placeholder="Enter your password"
+                      placeholder="Enter your username or email"
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
-                      secureTextEntry={!showPassword}
-                      error={errors.password?.message}
-                      style={[styles.input, styles.passwordInput]}
+                      error={errors.username_or_email?.message}
+                      style={styles.input}
                     />
-                    <TouchableOpacity
-                      style={styles.eyeIcon}
-                      onPress={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? (
-                        <EyeOff size={20} color="#666666" />
-                      ) : (
-                        <Eye size={20} color="#666666" />
-                      )}
-                    </TouchableOpacity>
+                    {errors.username_or_email && (
+                      <Text style={styles.errorText}>
+                        {errors.username_or_email.message}
+                      </Text>
+                    )}
                   </View>
-                  {errors.password && (
-                    <Text style={styles.errorText}>
-                      {errors.password.message}
-                    </Text>
-                  )}
-                </View>
-              )}
+                )}
+              />
+            </View>
+
+            <View style={[styles.inputContainer, { marginBottom: 12 }]}>
+              <Text style={[styles.label, { marginBottom: 4 }]}>Password</Text>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <View>
+                    <View style={styles.passwordInputContainer}>
+                      <TInput
+                        placeholder="Enter your password"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        secureTextEntry={!showPassword}
+                        error={errors.password?.message}
+                        style={[styles.input, styles.passwordInput]}
+                      />
+                      <TouchableOpacity
+                        style={styles.eyeIcon}
+                        onPress={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} color="#666666" />
+                        ) : (
+                          <Eye size={20} color="#666666" />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                    {errors.password && (
+                      <Text style={styles.errorText}>
+                        {errors.password.message}
+                      </Text>
+                    )}
+                  </View>
+                )}
+              />
+            </View>
+
+            <View style={[styles.inputContainer, { marginBottom: 12 }]}>
+              <Text style={[styles.label, { marginBottom: 4 }]}>
+                School PIN
+              </Text>
+              <Controller
+                control={control}
+                name="pin"
+                render={({ field: { onChange, value } }) => (
+                  <View style={styles.pinInputContainer}>
+                    <TOtpInput
+                      value={value}
+                      onChange={(newValue) => {
+                        // Allow alphanumeric input (letters and numbers)
+                        const alphanumericValue = newValue
+                          .replace(/[^a-zA-Z0-9]/g, "")
+                          .toUpperCase();
+                        onChange(alphanumericValue);
+                      }}
+                      length={6}
+                      style={styles.otpInput}
+                    />
+                    {errors.pin && (
+                      <Text style={styles.errorText}>{errors.pin.message}</Text>
+                    )}
+                  </View>
+                )}
+              />
+              <Text style={styles.pinHint}>
+                💡 PIN can contain letters and numbers (4-6 characters)
+              </Text>
+            </View>
+
+            <TButton
+              title={isLoading ? "Signing In..." : "Login"}
+              variant="primary"
+              onPress={handleSubmit(onSubmit)}
+              loading={isLoading}
+              disabled={isLoading}
+              style={[styles.loginButton, { marginTop: 15, marginBottom: 10 }]}
+              textStyle={styles.loginButtonText}
             />
           </View>
 
-          <View style={[styles.inputContainer, { marginBottom: 12 }]}>
-            <Text style={[styles.label, { marginBottom: 4 }]}>School PIN</Text>
-            <Controller
-              control={control}
-              name="pin"
-              render={({ field: { onChange, value } }) => (
-                <View style={styles.pinInputContainer}>
-                  <TOtpInput
-                    value={value}
-                    onChange={(newValue) => {
-                      // Allow alphanumeric input (letters and numbers)
-                      const alphanumericValue = newValue
-                        .replace(/[^a-zA-Z0-9]/g, "")
-                        .toUpperCase();
-                      onChange(alphanumericValue);
-                    }}
-                    length={6}
-                    style={styles.otpInput}
-                  />
-                  {errors.pin && (
-                    <Text style={styles.errorText}>{errors.pin.message}</Text>
-                  )}
-                </View>
-              )}
-            />
-            <Text style={styles.pinHint}>
-              💡 PIN can contain letters and numbers (4-6 characters)
+          {/* Footer */}
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
+              Don&apos;t have an account? Contact your school administrator.
             </Text>
           </View>
-
-          <TButton
-            title={isLoading ? "Signing In..." : "Login"}
-            variant="primary"
-            onPress={handleSubmit(onSubmit)}
-            loading={isLoading}
-            disabled={isLoading}
-            style={[styles.loginButton, { marginTop: 15, marginBottom: 10 }]}
-            textStyle={styles.loginButtonText}
-          />
-        </View>
-
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Don't have an account? Contact your school administrator.
-          </Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

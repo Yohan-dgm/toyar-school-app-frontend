@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import UnderDevelopmentOverlay from "../../../components/development/UnderDevelopmentOverlay";
 
 interface Notification {
   id: string;
@@ -30,14 +31,17 @@ interface MessageThread {
 }
 
 export default function PrincipalNotifications() {
-  const [activeTab, setActiveTab] = useState<"notifications" | "messages">("notifications");
+  const [activeTab, setActiveTab] = useState<"notifications" | "messages">(
+    "notifications",
+  );
 
   const notifications: Notification[] = [
     {
       id: "1",
       type: "urgent",
       title: "Emergency Protocol Activated",
-      description: "Fire drill scheduled for 2:00 PM today. All staff must participate.",
+      description:
+        "Fire drill scheduled for 2:00 PM today. All staff must participate.",
       sender: "Safety Department",
       timestamp: "10 minutes ago",
       isRead: false,
@@ -46,7 +50,8 @@ export default function PrincipalNotifications() {
       id: "2",
       type: "announcement",
       title: "Parent-Teacher Conference Schedule",
-      description: "Schedule for next week's parent-teacher conferences is now available.",
+      description:
+        "Schedule for next week's parent-teacher conferences is now available.",
       sender: "Academic Office",
       timestamp: "1 hour ago",
       isRead: false,
@@ -55,7 +60,8 @@ export default function PrincipalNotifications() {
       id: "3",
       type: "alert",
       title: "Budget Review Meeting",
-      description: "Monthly budget review meeting scheduled for tomorrow at 9:00 AM.",
+      description:
+        "Monthly budget review meeting scheduled for tomorrow at 9:00 AM.",
       sender: "Finance Department",
       timestamp: "2 hours ago",
       isRead: true,
@@ -64,7 +70,8 @@ export default function PrincipalNotifications() {
       id: "4",
       type: "message",
       title: "Staff Meeting Minutes",
-      description: "Meeting minutes from yesterday's staff meeting are ready for review.",
+      description:
+        "Meeting minutes from yesterday's staff meeting are ready for review.",
       sender: "Secretary Office",
       timestamp: "1 day ago",
       isRead: true,
@@ -119,7 +126,7 @@ export default function PrincipalNotifications() {
 
   const renderNotification = (notification: Notification) => {
     const iconInfo = getNotificationIcon(notification.type);
-    
+
     return (
       <TouchableOpacity
         key={notification.id}
@@ -129,13 +136,27 @@ export default function PrincipalNotifications() {
         ]}
         activeOpacity={0.7}
       >
-        <View style={[styles.iconContainer, { backgroundColor: iconInfo.color + "15" }]}>
-          <MaterialIcons name={iconInfo.icon} size={24} color={iconInfo.color} />
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: iconInfo.color + "15" },
+          ]}
+        >
+          <MaterialIcons
+            name={iconInfo.icon}
+            size={24}
+            color={iconInfo.color}
+          />
         </View>
-        
+
         <View style={styles.notificationContent}>
           <View style={styles.notificationHeader}>
-            <Text style={[styles.notificationTitle, !notification.isRead && styles.unreadTitle]}>
+            <Text
+              style={[
+                styles.notificationTitle,
+                !notification.isRead && styles.unreadTitle,
+              ]}
+            >
               {notification.title}
             </Text>
             <Text style={styles.timestamp}>{notification.timestamp}</Text>
@@ -145,7 +166,7 @@ export default function PrincipalNotifications() {
           </Text>
           <Text style={styles.sender}>From: {notification.sender}</Text>
         </View>
-        
+
         {!notification.isRead && <View style={styles.unreadIndicator} />}
       </TouchableOpacity>
     );
@@ -160,10 +181,15 @@ export default function PrincipalNotifications() {
       <View style={styles.avatarContainer}>
         <MaterialIcons name="person" size={24} color="#666" />
       </View>
-      
+
       <View style={styles.messageContent}>
         <View style={styles.messageHeader}>
-          <Text style={[styles.participantName, thread.unreadCount > 0 && styles.unreadTitle]}>
+          <Text
+            style={[
+              styles.participantName,
+              thread.unreadCount > 0 && styles.unreadTitle,
+            ]}
+          >
             {thread.participant}
           </Text>
           <View style={styles.messageInfo}>
@@ -183,49 +209,66 @@ export default function PrincipalNotifications() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Notifications & Messages</Text>
-        
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === "notifications" && styles.activeTab]}
-            onPress={() => setActiveTab("notifications")}
-          >
-            <Text style={[styles.tabText, activeTab === "notifications" && styles.activeTabText]}>
-              Notifications
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === "messages" && styles.activeTab]}
-            onPress={() => setActiveTab("messages")}
-          >
-            <Text style={[styles.tabText, activeTab === "messages" && styles.activeTabText]}>
-              Messages
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <UnderDevelopmentOverlay featureName="Notifications & Messages">
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Notifications & Messages</Text>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {activeTab === "notifications" ? (
-          <View style={styles.notificationsContainer}>
-            {notifications.map((notification) => renderNotification(notification))}
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === "notifications" && styles.activeTab,
+              ]}
+              onPress={() => setActiveTab("notifications")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "notifications" && styles.activeTabText,
+                ]}
+              >
+                Notifications
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === "messages" && styles.activeTab]}
+              onPress={() => setActiveTab("messages")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "messages" && styles.activeTabText,
+                ]}
+              >
+                Messages
+              </Text>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <View style={styles.messagesContainer}>
-            <View style={styles.composeContainer}>
-              <TouchableOpacity style={styles.composeButton}>
-                <MaterialIcons name="edit" size={20} color="white" />
-                <Text style={styles.composeButtonText}>Compose Message</Text>
-              </TouchableOpacity>
+        </View>
+
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {activeTab === "notifications" ? (
+            <View style={styles.notificationsContainer}>
+              {notifications.map((notification) =>
+                renderNotification(notification),
+              )}
             </View>
-            
-            {messageThreads.map((thread) => renderMessageThread(thread))}
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          ) : (
+            <View style={styles.messagesContainer}>
+              <View style={styles.composeContainer}>
+                <TouchableOpacity style={styles.composeButton}>
+                  <MaterialIcons name="edit" size={20} color="white" />
+                  <Text style={styles.composeButtonText}>Compose Message</Text>
+                </TouchableOpacity>
+              </View>
+
+              {messageThreads.map((thread) => renderMessageThread(thread))}
+            </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </UnderDevelopmentOverlay>
   );
 }
 

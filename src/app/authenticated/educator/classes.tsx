@@ -6,9 +6,7 @@ export default function ClassesPage() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.content}>
         <Text style={styles.title}>📚 Classes</Text>
-        <Text style={styles.subtitle}>
-          Manage your classes and curriculum
-        </Text>
+        <Text style={styles.subtitle}>Manage your classes and curriculum</Text>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Class Schedule</Text>

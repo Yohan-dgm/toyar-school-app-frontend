@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Markdown from 'react-native-markdown-package';
-import { ChatMessage } from '../../types/chat';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import Markdown from "react-native-markdown-package";
+import { ChatMessage } from "../../types/chat";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -24,37 +24,33 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   onRetry,
   onCopy,
 }) => {
-  const isUser = message.role === 'user';
+  const isUser = message.role === "user";
   const isError = !!message.error;
 
   const handleLongPress = () => {
     if (onCopy) {
-      Alert.alert(
-        'Message Options',
-        'What would you like to do?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Copy Text',
-            onPress: () => onCopy(message.content),
-          },
-          ...(isError && onRetry
-            ? [
-                {
-                  text: 'Retry',
-                  onPress: () => onRetry(message.id),
-                },
-              ]
-            : []),
-        ]
-      );
+      Alert.alert("Message Options", "What would you like to do?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Copy Text",
+          onPress: () => onCopy(message.content),
+        },
+        ...(isError && onRetry
+          ? [
+              {
+                text: "Retry",
+                onPress: () => onRetry(message.id),
+              },
+            ]
+          : []),
+      ]);
     }
   };
 
   const formatTime = (timestamp: Date): string => {
     return timestamp.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -127,7 +123,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         ]}
       >
         {renderContent()}
-        
+
         <View style={styles.messageFooter}>
           <Text
             style={[
@@ -137,7 +133,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           >
             {formatTime(message.timestamp)}
           </Text>
-          
+
           {message.isStreaming && (
             <View style={styles.streamingIndicator}>
               <View style={[styles.dot, styles.dot1]} />
@@ -157,73 +153,73 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   userContainer: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   assistantContainer: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   bubble: {
     maxWidth: width * 0.8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
   },
   userBubble: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     borderBottomRightRadius: 4,
   },
   assistantBubble: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: "#F2F2F7",
     borderBottomLeftRadius: 4,
   },
   errorBubble: {
-    backgroundColor: '#FFE5E5',
-    borderColor: '#FF3B30',
+    backgroundColor: "#FFE5E5",
+    borderColor: "#FF3B30",
     borderWidth: 1,
   },
   streamingBubble: {
-    borderColor: '#007AFF',
+    borderColor: "#007AFF",
     borderWidth: 1,
   },
   userText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
     lineHeight: 22,
   },
   errorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   errorText: {
-    color: '#FF3B30',
+    color: "#FF3B30",
     fontSize: 14,
     marginLeft: 6,
     flex: 1,
   },
   retryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginLeft: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
-    backgroundColor: '#E3F2FD',
+    backgroundColor: "#E3F2FD",
     borderRadius: 12,
   },
   retryText: {
-    color: '#007AFF',
+    color: "#007AFF",
     fontSize: 12,
     marginLeft: 4,
   },
   messageFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 6,
   },
   timestamp: {
@@ -231,20 +227,20 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   userTimestamp: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   assistantTimestamp: {
-    color: '#666666',
+    color: "#666666",
   },
   streamingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   dot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     marginHorizontal: 1,
   },
   dot1: {
@@ -261,39 +257,39 @@ const styles = StyleSheet.create({
 // Markdown styles for assistant messages
 const markdownStyles = {
   paragraph: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
     lineHeight: 22,
     marginBottom: 8,
   },
   strong: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   em: {
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   code_inline: {
-    backgroundColor: '#E8E8E8',
-    color: '#D73A49',
+    backgroundColor: "#E8E8E8",
+    color: "#D73A49",
     paddingHorizontal: 4,
     paddingVertical: 2,
     borderRadius: 4,
     fontSize: 14,
-    fontFamily: 'Courier',
+    fontFamily: "Courier",
   },
   code_block: {
-    backgroundColor: '#F6F8FA',
+    backgroundColor: "#F6F8FA",
     borderRadius: 8,
     padding: 12,
     marginVertical: 8,
   },
   code_block_text: {
-    fontFamily: 'Courier',
+    fontFamily: "Courier",
     fontSize: 14,
-    color: '#24292E',
+    color: "#24292E",
   },
   list_item: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
     lineHeight: 22,
   },
@@ -305,26 +301,26 @@ const markdownStyles = {
   },
   heading1: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000000',
+    fontWeight: "bold",
+    color: "#000000",
     marginBottom: 8,
   },
   heading2: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000000',
+    fontWeight: "bold",
+    color: "#000000",
     marginBottom: 6,
   },
   heading3: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000000',
+    fontWeight: "bold",
+    color: "#000000",
     marginBottom: 4,
   },
   blockquote: {
-    backgroundColor: '#F6F8FA',
+    backgroundColor: "#F6F8FA",
     borderLeftWidth: 4,
-    borderLeftColor: '#DFE2E5',
+    borderLeftColor: "#DFE2E5",
     paddingLeft: 12,
     paddingVertical: 8,
     marginVertical: 8,

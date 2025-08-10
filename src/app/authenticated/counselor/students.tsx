@@ -13,7 +13,8 @@ export default function CounselorStudentsPage() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Student Directory</Text>
           <Text style={styles.cardDescription}>
-            Access complete student directory with contact information and academic details.
+            Access complete student directory with contact information and
+            academic details.
           </Text>
         </View>
 

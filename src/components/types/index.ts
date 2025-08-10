@@ -42,7 +42,13 @@ export interface TProgressBarProps extends BaseComponentProps {
 
 export interface TCardProps extends BaseComponentProps {
   children: React.ReactNode;
-  variant?: "elevated" | "outlined" | "glassmorphism";
+  variant?:
+    | "elevated"
+    | "outlined"
+    | "glassmorphism"
+    | "gradient"
+    | "modernCard"
+    | "floatingCard";
 }
 
 export interface TAvatarProps extends BaseComponentProps {

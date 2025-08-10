@@ -22,7 +22,7 @@ const EducatorCalendarMain = () => {
     "📅 EducatorCalendarMain - User category:",
     userCategory,
     "Is educator:",
-    isEducator
+    isEducator,
   );
 
   return (

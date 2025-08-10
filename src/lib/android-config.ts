@@ -17,10 +17,10 @@ export class AndroidConfig {
     try {
       // Set up navigation bar
       await this.setupNavigationBar();
-      
+
       // Set up status bar
       await this.setupStatusBar();
-      
+
       console.log("Android configuration initialized successfully");
     } catch (error) {
       console.error("Failed to initialize Android configuration:", error);
@@ -35,16 +35,20 @@ export class AndroidConfig {
 
     try {
       // Set navigation bar style
-      await NavigationBar.setButtonStyleAsync(theme === "dark" ? "light" : "dark");
-      
+      await NavigationBar.setButtonStyleAsync(
+        theme === "dark" ? "light" : "dark",
+      );
+
       // Set navigation bar background color
       await NavigationBar.setBackgroundColorAsync(
-        theme === "dark" ? NAV_THEME.dark.background : NAV_THEME.light.background
+        theme === "dark"
+          ? NAV_THEME.dark.background
+          : NAV_THEME.light.background,
       );
 
       // Set navigation bar visibility
       await NavigationBar.setVisibilityAsync("visible");
-      
+
       console.log(`Android navigation bar configured for ${theme} theme`);
     } catch (error) {
       console.error("Failed to setup Android navigation bar:", error);
@@ -73,7 +77,7 @@ export class AndroidConfig {
     if (Platform.OS !== "android") return;
 
     const { BackHandler } = require("react-native");
-    
+
     const backAction = () => {
       if (callback) {
         return callback();
@@ -81,8 +85,11 @@ export class AndroidConfig {
       return false; // Let default behavior handle it
     };
 
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
-    
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction,
+    );
+
     return () => backHandler.remove();
   }
 
@@ -105,7 +112,7 @@ export class AndroidConfig {
    */
   static supportsEdgeToEdge(): boolean {
     if (Platform.OS !== "android") return false;
-    
+
     // Check Android API level (requires API 21+)
     const { Platform: RNPlatform } = require("react-native");
     return RNPlatform.Version >= 21;
@@ -222,11 +229,13 @@ export const AndroidUtils = {
   /**
    * Check if device supports specific Android features
    */
-  supportsFeature: (feature: "edge-to-edge" | "navigation-bar" | "status-bar") => {
+  supportsFeature: (
+    feature: "edge-to-edge" | "navigation-bar" | "status-bar",
+  ) => {
     if (Platform.OS !== "android") return false;
-    
+
     const apiLevel = AndroidUtils.getApiLevel();
-    
+
     switch (feature) {
       case "edge-to-edge":
         return apiLevel >= 21;
@@ -247,7 +256,7 @@ export const AndroidUtils = {
 
     const { Dimensions } = require("react-native");
     const { width, height } = Dimensions.get("window");
-    
+
     return {
       isTablet: width > 768,
       screenWidth: width,

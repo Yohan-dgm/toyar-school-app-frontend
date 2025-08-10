@@ -20,7 +20,8 @@ export default function StrategyPage() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Performance Metrics</Text>
           <Text style={styles.cardDescription}>
-            Monitor key performance indicators and institutional success metrics.
+            Monitor key performance indicators and institutional success
+            metrics.
           </Text>
         </View>
 

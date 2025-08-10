@@ -1,0 +1,9 @@
+env: load .env
+env: export EXPO_PUBLIC_BASE_URL_API_SERVER_1 EXPO_PUBLIC_BASE_URL_STUDENT_IMAGES EXPO_PUBLIC_OPENROUTER_API_KEY EXPO_PUBLIC_OPENROUTER_BASE_URL EXPO_PUBLIC_DEEPSEEK_MODEL EXPO_PUBLIC_SITE_URL EXPO_PUBLIC_SITE_NAME EXPO_PUBLIC_APP_SECRET EXPO_PUBLIC_RATE_LIMIT_REQUESTS EXPO_PUBLIC_RATE_LIMIT_WINDOW
+Starting project at /Users/macbookair/Documents/Repositories/Nexis College/toyar-school-app-frontend
+› Port 8081 is running this app in another window
+  /Users/macbookair/Documents/Repositories/Nexis College/toyar-school-app-frontend (pid 23780)
+Input is required, but 'npx expo' is in non-interactive mode.
+Required input:
+> Use port 8083 instead?
+› Skipping dev server

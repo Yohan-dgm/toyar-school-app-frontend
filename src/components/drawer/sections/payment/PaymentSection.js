@@ -231,7 +231,7 @@ const PaymentSection = ({ onClose, onNavigateToSubSection }) => {
             </View>
             <Text style={styles.progressText}>
               {Math.round(
-                (currentData.paidAmount / currentData.totalFees) * 100
+                (currentData.paidAmount / currentData.totalFees) * 100,
               )}
               % Completed
             </Text>

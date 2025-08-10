@@ -16,6 +16,14 @@ import StarRating from "react-native-star-rating-widget";
 import { theme } from "../../../../../styles/theme";
 import AddCategoryPopup from "../../../../../components/educator-feedback/AddCategoryPopup";
 import { USER_CATEGORIES } from "../../../../../constants/userCategories";
+import {
+  fetchEducatorFeedbacks,
+  submitEducatorFeedback,
+} from "../../../../../state-store/slices/educator/educatorFeedbackSlice";
+import {
+  useGetStudentListDataQuery,
+  useGetStudentsByGradeQuery,
+} from "../../../../../api/educator-feedback-api";
 
 // Import FRONTEND_GRADES constant
 const FRONTEND_GRADES = [
@@ -35,14 +43,6 @@ const FRONTEND_GRADES = [
   { id: 14, name: "EY2", active: true },
   { id: 15, name: "EY3", active: true },
 ];
-import {
-  fetchEducatorFeedbacks,
-  submitEducatorFeedback,
-} from "../../../../../state-store/slices/educator/educatorFeedbackSlice";
-import {
-  useGetStudentListDataQuery,
-  useGetStudentsByGradeQuery,
-} from "../../../../../api/educator-feedback-api";
 // import { groupFeedbackByStudent } from "../../../../../data/educatorFeedbackData";
 
 // Import fallback profile image
@@ -111,7 +111,12 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   }, [studentListData, studentListError]);
 
   useEffect(() => {
-    console.log("👥 Students Data for grade", selectedGrade?.name, ":", studentsData);
+    console.log(
+      "👥 Students Data for grade",
+      selectedGrade?.name,
+      ":",
+      studentsData
+    );
     if (studentsError) {
       console.error("❌ Students Error:", studentsError);
     }
@@ -121,10 +126,13 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   useEffect(() => {
     console.log("🎯 Selected Grade Changed:", selectedGrade);
     console.log("📊 Available static students:", classStudents.length);
-    console.log("📊 Students by grade:", classStudents.reduce((acc, student) => {
-      acc[student.grade_level_id] = (acc[student.grade_level_id] || 0) + 1;
-      return acc;
-    }, {}));
+    console.log(
+      "📊 Students by grade:",
+      classStudents.reduce((acc, student) => {
+        acc[student.grade_level_id] = (acc[student.grade_level_id] || 0) + 1;
+        return acc;
+      }, {})
+    );
   }, [selectedGrade]);
 
   // Student data with different grade levels for testing
@@ -370,7 +378,10 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
       selectedCategories.length === 0 ||
       !comment.trim()
     ) {
-      Alert.alert("Error", "Please fill in all required fields including grade level");
+      Alert.alert(
+        "Error",
+        "Please fill in all required fields including grade level"
+      );
       return;
     }
 
@@ -404,7 +415,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   const handleAddCategory = (categoryData) => {
     console.log("New category added:", categoryData);
     Alert.alert(
-      "Category Added", 
+      "Category Added",
       `Category "${categoryData.title}" with ${categoryData.questions.length} questions has been added successfully!`
     );
     // Here you would typically save the category to your backend/state
@@ -413,10 +424,11 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
 
   const renderGradeSelector = () => {
     // Use API grades if available, otherwise use FRONTEND_GRADES
-    const grades = studentListData?.data?.grades?.length > 0 
-      ? studentListData.data.grades 
-      : FRONTEND_GRADES;
-    
+    const grades =
+      studentListData?.data?.grades?.length > 0
+        ? studentListData.data.grades
+        : FRONTEND_GRADES;
+
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Select Grade Level</Text>
@@ -427,7 +439,9 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
           </View>
         )}
         {studentListError && (
-          <Text style={styles.errorText}>Failed to load grades. Check console for details.</Text>
+          <Text style={styles.errorText}>
+            Failed to load grades. Check console for details.
+          </Text>
         )}
         <ScrollView
           horizontal
@@ -453,7 +467,8 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
             >
               <Text style={styles.gradeName}>{grade.name}</Text>
               <Text style={styles.gradeStudentCount}>
-                {grade.student_list_count || grade.students_count || 'N/A'} students
+                {grade.student_list_count || grade.students_count || "N/A"}{" "}
+                students
               </Text>
             </TouchableOpacity>
           ))}
@@ -465,26 +480,31 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   const renderStudentSelector = () => {
     // Filter students by selected grade level ID
     let studentsToShow = [];
-    
+
     console.log("🔍 Selected Grade:", selectedGrade);
     console.log("📊 API Students Data:", studentsData?.data?.students);
     console.log("📚 Static Students Data:", classStudents);
-    
+
     if (selectedGrade) {
       // Use API data if available and not empty
-      if (studentsData?.data?.students && studentsData.data.students.length > 0) {
+      if (
+        studentsData?.data?.students &&
+        studentsData.data.students.length > 0
+      ) {
         // Filter API students by grade_level_id matching FRONTEND_GRADES.id
-        studentsToShow = studentsData.data.students.filter(
-          student => {
-            console.log(`🎓 Checking student ${student.name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`);
-            return student.grade_level_id === selectedGrade.id;
-          }
-        );
+        studentsToShow = studentsData.data.students.filter((student) => {
+          console.log(
+            `🎓 Checking student ${student.name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`
+          );
+          return student.grade_level_id === selectedGrade.id;
+        });
         console.log("✅ Filtered API Students:", studentsToShow);
       } else {
         // Fallback to static data - filter by grade_level_id
-        studentsToShow = classStudents.filter(student => {
-          console.log(`🎓 Checking static student ${student.student_calling_name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`);
+        studentsToShow = classStudents.filter((student) => {
+          console.log(
+            `🎓 Checking static student ${student.student_calling_name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`
+          );
           return student.grade_level_id === selectedGrade.id;
         });
         console.log("✅ Filtered Static Students:", studentsToShow);
@@ -503,7 +523,8 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
-          Select Student from {selectedGrade?.name} ({studentsToShow.length} students)
+          Select Student from {selectedGrade?.name} ({studentsToShow.length}{" "}
+          students)
         </Text>
         {studentsLoading && (
           <View style={styles.loadingContainer}>
@@ -512,10 +533,14 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
           </View>
         )}
         {studentsError && (
-          <Text style={styles.errorText}>Failed to load students. Check console for details.</Text>
+          <Text style={styles.errorText}>
+            Failed to load students. Check console for details.
+          </Text>
         )}
         {studentsToShow.length === 0 && !studentsLoading && (
-          <Text style={styles.noGradeText}>No students found for {selectedGrade?.name}</Text>
+          <Text style={styles.noGradeText}>
+            No students found for {selectedGrade?.name}
+          </Text>
         )}
         <ScrollView
           horizontal
@@ -527,7 +552,8 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
               key={student.id}
               style={[
                 styles.studentCard,
-                selectedStudent?.id === student.id && styles.selectedStudentCard,
+                selectedStudent?.id === student.id &&
+                  styles.selectedStudentCard,
               ]}
               onPress={() => setSelectedStudent(student)}
             >
@@ -548,7 +574,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
               </Text>
               <Text style={styles.studentInfo}>{student.admission_number}</Text>
               <Text style={styles.studentInfo}>
-                {student.grade || `Grade ${student.grade_level_id || 'N/A'}`}
+                {student.grade || `Grade ${student.grade_level_id || "N/A"}`}
               </Text>
             </TouchableOpacity>
           ))}
@@ -680,7 +706,8 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
             color={theme.colors.primary}
           />
           <Text style={styles.title}>
-            Educator Feedbacks {selectedGrade ? selectedGrade.name : 'All Grades'}
+            Educator Feedbacks{" "}
+            {selectedGrade ? selectedGrade.name : "All Grades"}
           </Text>
         </View>
         <TouchableOpacity

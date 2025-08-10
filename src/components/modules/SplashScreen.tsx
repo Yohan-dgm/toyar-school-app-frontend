@@ -134,7 +134,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
           {/* Title */}
           <Animated.View style={[styles.titleContainer, titleStyle]}>
-            <Text style={styles.title}>SchoolSnap</Text>
+            <Text style={styles.title}>School App</Text>
             <View style={styles.titleUnderline} />
           </Animated.View>
 

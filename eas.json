@@ -17,6 +17,19 @@
       }
     },
     "production": {
+      "distribution": "store",
+      "ios": {
+        "simulator": false
+      },
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "testFlight": {
+      "distribution": "store",
+      "ios": {
+        "simulator": false
+      },
       "env": {
         "NODE_ENV": "production"
       }

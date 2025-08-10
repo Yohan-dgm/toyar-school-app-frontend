@@ -11,16 +11,17 @@ export default function TrainingPage() {
         </Text>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Today's Training</Text>
+          <Text style={styles.cardTitle}>Today&apos;s Training</Text>
           <Text style={styles.cardDescription}>
-            View today's training schedule, attendance, and session notes.
+            View today&apos;s training schedule, attendance, and session notes.
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Training Plans</Text>
           <Text style={styles.cardDescription}>
-            Create and manage training plans for different skill levels and positions.
+            Create and manage training plans for different skill levels and
+            positions.
           </Text>
         </View>
 

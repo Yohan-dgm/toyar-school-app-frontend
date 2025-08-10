@@ -247,7 +247,7 @@ const AcademicMain = () => {
   const calculateOverallGPA = () => {
     const totalPercentage = subjects.reduce(
       (sum, subject) => sum + subject.percentage,
-      0
+      0,
     );
     return ((totalPercentage / subjects.length / 100) * 4).toFixed(1);
   };

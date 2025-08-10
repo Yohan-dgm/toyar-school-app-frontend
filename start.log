@@ -1,0 +1,2176 @@
+env: load .env
+env: export EXPO_PUBLIC_BASE_URL_API_SERVER_1 EXPO_PUBLIC_BASE_URL_STUDENT_IMAGES EXPO_PUBLIC_OPENROUTER_API_KEY EXPO_PUBLIC_OPENROUTER_BASE_URL EXPO_PUBLIC_DEEPSEEK_MODEL EXPO_PUBLIC_SITE_URL EXPO_PUBLIC_SITE_NAME EXPO_PUBLIC_APP_SECRET EXPO_PUBLIC_RATE_LIMIT_REQUESTS EXPO_PUBLIC_RATE_LIMIT_WINDOW
+Starting project at /Users/macbookair/Documents/Repositories/Nexis College/toyar-school-app-frontend
+Using src/app as the root directory for Expo Router.
+Starting Metro Bundler
+Networking has been disabled
+Unable to reach well-known versions endpoint. Using local dependency map expo/bundledNativeModules.json for version validation
+Dependency validation is unreliable in offline-mode
+The following packages should be updated for best compatibility with the installed expo version:
+  expo-screen-capture@7.2.0 - expected version: ~7.1.5
+Your project may not work correctly until you install the expected versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+iOS node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+iOS Bundled 1704ms node_modules/expo-router/entry.js (3956 modules)
+iOS src/utils/testActivityFeedAPI.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+iOS src/utils/testCalendarAPI.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+ LOG  🖼️ Profile Picture Server URLs: {"BASE_URL_API_SERVER": "http://172.20.10.3:9999", "BASE_URL_STUDENT_IMAGES": "https://nexis-college-sms-staging-b.solovosystems.com", "PROFILE_PICTURE_SERVER_URL": "https://nexis-college-sms-staging-b.solovosystems.com/get-student-attachment-data"}
+ LOG  🌐 Main API Server Test: {"ok": false, "status": 404, "statusText": "", "url": "http://172.20.10.3:9999/api/test"}
+ WARN  ⚠️ Main API Server returning HTML instead of JSON
+iOS Bundled 620ms src/utils/testCalendarAPI.js (514 modules)
+iOS Bundled 661ms src/utils/testActivityFeedAPI.js (871 modules)
+ LOG  🧪 Calendar API Test Utils Loaded!
+ LOG  💡 Run testCalendarAPI() to test the calendar API
+ LOG  🌐 Global test functions available:
+ LOG    - window.testActivityFeed.basic()
+ LOG    - window.testActivityFeed.filtered()
+ LOG    - window.testActivityFeed.state()
+ LOG    - window.testActivityFeed.clear()
+ LOG  🚀 Activity Feed API Test Utils Loaded!
+ LOG  📡 Ready to test: api/activity-feed-management/school-posts/list
+ LOG  💡 Run testActivityFeedAPI() to start testing immediately
+ LOG  SnapBot visibility changed: false
+ LOG  Animating SnapBot out...
+ LOG  Submitting login data: {"mapped_pin": "sms_v1", "password": "****", "pin": "NEXISY", "pin_length": 6, "username_or_email": "yohan"}
+ LOG  🔄 Public Login - Starting login request...
+ LOG  🚀 Auth API - onQueryStarted called
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "loginUser", "isAuthenticated": false, "method": "mutation", "tokenExists": false, "tokenLength": 0, "tokenPreview": "No token"}
+ WARN  ⚠️ API Server 1 - No authentication token found, request may fail
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "None", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔥 Auth API - Raw response received: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  ✅ Auth API - Query fulfilled with data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  🔑 Auth API - Token stored: 217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27
+ LOG  👤 Auth API - User data stored: {
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "user_category": 4
+}
+ LOG  🎉 Public Login - Login successful: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  👤 Public Login - User data stored in Redux: {
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ]
+}
+ LOG  🔄 Public Login - Enhanced session data stored: {"data": {"email": "yohan@nexiscollege.lk", "full_name": "Yohan ", "id": 43, "student_list": [], "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27", "user_category": 4, "user_type_list": [[Object], [Object]], "username": "yohan"}, "message": "", "metadata": {"is_system_update_pending": true}, "status": "successful", "user_category": 4, "user_role": undefined}
+ LOG  🔄 Public Login - user_category: 4
+ LOG  🔄 Public Login - Redirecting based on user_category: 4
+ LOG  🔄 Public Login - Target route: /authenticated/principal
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  ❌ No allPostsLocal available: 0
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎓 Header - No student currently selected
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎯 SchoolTabWithAPI - Filters received: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🧹 Clearing any existing filters on component mount
+ LOG  🔄 Loading all posts initially... [VERSION 2.0 WITH DEBUG]
+ LOG  🔍 API Slice - Received parameters: {"filters": {"category": "", "date_from": "", "date_to": "", "hashtags": [], "search": ""}, "limit": 100, "page": 1}
+ LOG  📤 School Posts API Request Body: {"category": "", "date_from": "", "date_to": "", "hashtags": [], "page": 1, "page_size": 100, "search_filter_list": [], "search_phrase": ""}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getSchoolPosts", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "217|x14TQgwjuNe..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔄 allPostsLocal changed: 0
+ LOG  🎯 UniversalActivityFeed: Filters updated: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  ✅ Successfully extracted 10 posts for frontend filtering
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  🔍 Filtering Debug: {"allPostsCount": 10, "filters": {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}, "hasActiveFilters": null}
+ LOG  🔍 Frontend filtering with: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏫 Including school post 8: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Filtering out post 6: school_id is not 1 (current: null)
+ LOG  🏫 Including school post 7: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 9: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 5: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 4: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 10: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 3: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 1: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 2: school_id=1, class_id=null, student_id=null
+ LOG  🔍 School filtering complete - filtered posts: 9
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player status changed: idle
+ LOG  🔄 allPostsLocal changed: 10
+ LOG  🔍 Frontend filtering complete: 9 posts match filters
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 NAVIGATING: principalLayout -> dashboard (userCategory: 4)
+ LOG  🔄 Base route determined: /authenticated/principal
+ LOG  ✅ Navigate to Dashboard
+ LOG  🔄 Calling router.push('/authenticated/principal/dashboard')
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🔍 Processing categories - Raw categoriesData: undefined
+ LOG  🔍 Legacy categoriesData: undefined
+ WARN  ⚠️ No categories found in any expected structure
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  🧪 DETAILED CATEGORY API REQUEST: {"fullUrl": "http://172.20.10.3:9999/api/educator-feedback-management/category/list", "headers": {"Accept": "application/json", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}, "method": "POST", "requestBody": {"page": 1, "page_size": 10, "search_filter_list": [], "search_phrase": ""}, "timestamp": "2025-07-31T16:12:50.546Z"}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getCategoryList", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "217|x14TQgwjuNe..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  📤 Feedback Categories Request
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getFeedbackCategoriesWithQuestions", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "217|x14TQgwjuNe..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  📤 DETAILED getEducatorFeedbacks Request: {"endpoint": "api/educator-feedback-management/feedback/list", "method": "POST", "parametersMatch": {"page": true, "page_size": true, "search_filter_list": true, "search_phrase": true}, "rawParams": {"filters": {"search": "", "search_filter_list": [Array]}, "page": 1, "page_size": 10}, "requestBody": {"page": 1, "page_size": 10, "search_filter_list": [], "search_phrase": ""}}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getEducatorFeedbacks", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "217|x14TQgwjuNe..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  📋 Categories Response: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ ERROR  ❌ Unexpected categories API response: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ ERROR  An unhandled error occurred processing a request for the endpoint "getFeedbackCategoriesWithQuestions".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: Failed to load feedback categories. Please try again.]
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  🧪 DETAILED CATEGORY API RESPONSE: {"httpHeaders": {"map": {"cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Thu, 31 Jul 2025 16:12:50 GMT", "host": "172.20.10.3:9999", "set-cookie": "t_session=eyJpdiI6IjRuTk9XNGpDcGZOVzdPWVFUOGVDTXc9PSIsInZhbHVlIjoiZ01MUTZ5MnhkcVBOUEJ6UGxOSmhEQT09IiwibWFjIjoiNDJhNzhjMDQzMTIxMmEzM2I2Y2E5MmQxY2QzODhmZDUzNTU3ZjZiYTc0YjIwNzk5NTI4ZDU1NmYxY2E4NjllNiIsInRhZyI6IiJ9; expires=Thu, 23 Aug 6108 18:19:50 GMT; Max-Age=128849018820; path=/; domain=172.20.10.3; httponly; samesite=lax", "vary": "Origin", "x-powered-by": "PHP/8.3.12"}}, "httpStatus": 200, "httpStatusText": "", "rawResponse": {"data": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "message": "Category list retrieved successfully", "success": true}, "requestMethod": "POST", "requestTimestamp": undefined, "requestUrl": "http://172.20.10.3:9999/api/educator-feedback-management/category/list", "responseData": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "responseDataKeys": ["0", "1", "2", "3", "4", "5", "6", "7"], "responseDataType": "object", "responseKeys": ["success", "data", "message"], "responseSize": 13178, "responseStatus": undefined, "responseSuccess": true, "responseTime": "Not available", "responseType": "object", "timestamp": "2025-07-31T16:12:50.789Z"}
+ LOG  🧪 RAW RESPONSE OBJECT: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ LOG  🧪 RESPONSE FORMAT ANALYSIS: {"confidence": 0.9, "extractedData": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "formatType": "boolean_success", "isValid": true, "suggestions": ["Boolean success format: {success: true, data: [...]}"]}
+ LOG  ✅ Processing backend response format: {success: true, data: [...]}
+ LOG  📋 Categories data extracted: 8 items
+ LOG  ✅ Transformed categories successfully: 8 categories
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🔍 Processing categories - Raw categoriesData: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔍 Legacy categoriesData: undefined
+ LOG  ✅ Using new category list API
+ LOG  ✅ Filtered categories: [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [[Object], [Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  📝 DETAILED Feedbacks Response: {"dataKeys": ["current_page", "data", "first_page_url", "from", "last_page", "last_page_url", "links", "next_page_url", "path", "per_page", "prev_page_url", "to", "total"], "dataType": "object", "hasData": {"current_page": 1, "data": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "first_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=1", "from": 1, "last_page": 2, "last_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "links": [[Object], [Object], [Object], [Object]], "next_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "path": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list", "per_page": 10, "prev_page_url": null, "to": 10, "total": 11}, "hasSuccess": true, "meta": {"request": {"_bodyInit": "{\"page_size\":10,\"page\":1,\"search_phrase\":\"\",\"search_filter_list\":[]}", "_bodyText": "{\"page_size\":10,\"page\":1,\"search_phrase\":\"\",\"search_filter_list\":[]}", "bodyUsed": false, "credentials": "same-origin", "headers": [Headers], "method": "POST", "mode": null, "referrer": null, "signal": [AbortSignal], "url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list"}, "response": {"headers": [Headers], "status": 200, "statusText": ""}}, "rawDataArray": 10, "response": {"data": {"current_page": 1, "data": [Array], "first_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=1", "from": 1, "last_page": 2, "last_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "links": [Array], "next_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "path": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list", "per_page": 10, "prev_page_url": null, "to": 10, "total": 11}, "message": "Educator feedback list retrieved successfully", "success": true}, "responseType": "object"}
+ LOG  ✅ Processing feedback response with success format
+ LOG  📋 Found 10 feedback items
+ LOG  🎯 FINAL TRANSFORMED RESPONSE: {"feedbacksCount": 10, "finalResponse": {"data": {"data": [Array], "feedbacks": [Array], "pagination": [Object]}, "message": "Educator feedback list retrieved successfully", "success": true}, "firstFeedback": {"category": {"id": 7, "name": "Contribution to Society"}, "comments": [[Object]], "created_at": "2025-07-31T08:18:12.000000Z", "created_by": {"call_name_with_title": "Mr. Yohan Perera", "id": 43}, "created_by_designation": " ", "decline_reason": null, "edu_fb_category_id": 7, "evaluations": [[Object]], "grade_level": {"id": 4, "name": "Grade 4"}, "grade_level_class": {"id": 4, "name": "Grade 4 - Class 1"}, "grade_level_class_id": 4, "grade_level_id": 4, "id": 11, "rating": "3.00", "status": 1, "student": {"admission_number": "NY24/335", "full_name": "Kerewgodage Felan Mishel Perera", "grade_level_id": 4, "id": 335, "student_calling_name": "Felan"}, "student_id": 335, "subcategories": [[Object]], "updated_at": "2025-07-31T08:18:12.000000Z"}, "pagination": {"current_page": 1, "has_next": true, "has_previous": false, "page_size": 10, "total_count": 11, "total_pages": 2}}
+ LOG  🏷️ API TRANSFORM - Subcategories Analysis (getEducatorFeedbacks): {"feedbacksWithSubcategories": 10, "subcategoriesBreakdown": [{"feedbackId": 11, "originalSubcategories": [Array], "studentName": "Kerewgodage Felan Mishel Perera", "subcategoriesCount": 1, "transformedSubcategories": [Array]}, {"feedbackId": 10, "originalSubcategories": [Array], "studentName": "Jayasuriya Arachchige Thamuditha Shanuka Jayasuriya", "subcategoriesCount": 2, "transformedSubcategories": [Array]}, {"feedbackId": 9, "originalSubcategories": [Array], "studentName": "Jayasuriya Arachchige Thamuditha Shanuka Jayasuriya", "subcategoriesCount": 1, "transformedSubcategories": [Array]}], "totalFeedbacks": 10}
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  ✅ Rendering main modal interface with data: {"categoriesLoading": false, "hasError": false, "staticGradesCount": 15}
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  ✅ Rendering main modal interface with data: {"categoriesLoading": false, "hasError": false, "staticGradesCount": 15}
+ LOG  🔐 StudentSelectionWithPagination - Auth Status: {"filteringByGrade": false, "hasToken": true, "isAuthenticated": true, "selectedGradeId": null, "tokenLength": 52, "userExists": true, "userRole": "Unknown"}
+ LOG  📤 Paginated Students Request Body: {"grade_level_id": undefined, "page": 1, "page_size": 10000, "search_filter_list": [], "search_phrase": ""}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getStudentsByGradeWithPagination", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "217|x14TQgwjuNe..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔄 Resetting pagination due to grade change: No grade selected
+ LOG  👥 Paginated Students Response Full Details: {"meta": {"request": {"body": undefined, "method": "POST", "url": "http://172.20.10.3:9999/api/student-management/student/get-student-list-data"}, "response": {"status": 200, "statusText": ""}}, "response": {"data": {"data": [Array], "dropped_out_student_count": 23, "grade_level_student_count": [Array], "incomplete_address_student_count": 0, "incomplete_photo_student_count": 22, "incomplete_student_count": 0, "school_house_student_count": [Array], "school_leaver_student_count": 10, "student_count": 337, "total": 370}, "message": "", "metadata": {"is_system_update_pending": true}, "status": "successful"}, "responseData": {"data": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "dropped_out_student_count": 23, "grade_level_student_count": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "incomplete_address_student_count": 0, "incomplete_photo_student_count": 22, "incomplete_student_count": 0, "school_house_student_count": [[Object], [Object], [Object], [Object]], "school_leaver_student_count": 10, "student_count": 337, "total": 370}, "responseStatus": "successful", "responseType": "object"}
+ LOG  ✅ Processing successful API response
+ LOG  📚 Found 370 students in response
+ LOG  ✅ Transformed API response: {"data": {"current_page": 1, "has_next_page": false, "has_previous_page": false, "page_size": 10, "students": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "total_count": 370, "total_pages": 37}, "status": "successful"}
+ LOG  🖼️ Student 358 processed: 1 images, primary: 356-1743133158.515.jpg
+ LOG  🖼️ Student 357 processed: 1 images, primary: 355-1743138923.7301.jpg
+ LOG  🖼️ Student 355 processed: 1 images, primary: 353-1743132251.6774.jpg
+ LOG  🖼️ Student 354 processed: 1 images, primary: 352-1742968450.554.jpg
+ LOG  🖼️ Student 352 processed: 1 images, primary: 350-1743130367.0647.jpg
+ LOG  🖼️ Student 351 processed: 1 images, primary: 349-1743138888.7084.jpg
+ LOG  🖼️ Student 350 processed: 1 images, primary: 348-1741664015.4668.jpg
+ LOG  🖼️ Student 349 processed: 1 images, primary: 347-1742968501.2846.jpg
+ LOG  🖼️ Student 348 processed: 1 images, primary: 346-1743130309.998.jpg
+ LOG  🖼️ Student 346 processed: 1 images, primary: 344-1740115681.0521.jpg
+ LOG  🖼️ Student 345 processed: 1 images, primary: 343-1739773584.4216.jpg
+ LOG  🖼️ Student 344 processed: 1 images, primary: 342-1739513234.4863.jpg
+ LOG  🖼️ Student 343 processed: 1 images, primary: 341-1739169836.276.jpg
+ LOG  🖼️ Student 342 processed: 1 images, primary: 340-1739169768.1906.jpg
+ LOG  🖼️ Student 341 processed: 1 images, primary: 339-1738822844.0288.jpg
+ LOG  🖼️ Student 338 processed: 1 images, primary: 338-1738736368.8897.jpg
+ LOG  🖼️ Student 337 processed: 1 images, primary: 337-1738736395.4293.jpg
+ LOG  🖼️ Student 336 processed: 1 images, primary: 336-1738736428.3595.jpg
+ LOG  🖼️ Student 335 processed: 1 images, primary: 335-1738736450.7946.jpg
+ LOG  🖼️ Student 334 processed: 1 images, primary: 334-1738737875.8371.jpg
+ LOG  🖼️ Student 332 processed: 1 images, primary: 332-1738822896.2205.jpg
+ LOG  🖼️ Student 329 processed: 1 images, primary: 329-1738146053.4478.jpg
+ LOG  🖼️ Student 328 processed: 1 images, primary: 328-1738730990.6801.jpg
+ LOG  🖼️ Student 326 processed: 1 images, primary: 326-1738736929.8404.jpg
+ LOG  🖼️ Student 325 processed: 1 images, primary: 325-1738736904.1588.jpg
+ LOG  🖼️ Student 320 processed: 1 images, primary: 324-1738146944.952.jpg
+ LOG  🖼️ Student 319 processed: 1 images, primary: 323-1738731051.338.jpg
+ LOG  🖼️ Student 318 processed: 1 images, primary: 322-1737482540.3703.jpg
+ LOG  🖼️ Student 317 processed: 1 images, primary: 321-1737480014.4581.jpg
+ LOG  🖼️ Student 316 processed: 1 images, primary: 320-1738731100.2626.jpg
+ LOG  🖼️ Student 315 processed: 1 images, primary: 319-1738146432.1306.jpg
+ LOG  🖼️ Student 314 processed: 1 images, primary: 318-1739773029.9968.jpg
+ LOG  🖼️ Student 313 processed: 1 images, primary: 317-1738737213.7499.jpg
+ LOG  🖼️ Student 312 processed: 1 images, primary: 316-1738822933.3807.jpg
+ LOG  🖼️ Student 311 processed: 1 images, primary: 315-1738823540.9694.jpg
+ LOG  🖼️ Student 310 processed: 1 images, primary: 314-1738736880.8106.jpg
+ LOG  🖼️ Student 309 processed: 1 images, primary: 313-1738143305.3742.jpg
+ LOG  🖼️ Student 308 processed: 1 images, primary: 312-1738145204.01.jpg
+ LOG  🖼️ Student 307 processed: 1 images, primary: 311-1738145528.3866.jpg
+ LOG  🖼️ Student 306 processed: 1 images, primary: 310-1737479585.3892.jpg
+ LOG  🖼️ Student 305 processed: 1 images, primary: 309-1738146128.5888.jpg
+ LOG  🖼️ Student 304 processed: 1 images, primary: 308-1738145569.1585.jpg
+ LOG  🖼️ Student 303 processed: 1 images, primary: 307-1737486198.6341.jpg
+ LOG  🖼️ Student 302 processed: 1 images, primary: 306-1737480618.1003.jpg
+ LOG  🖼️ Student 301 processed: 1 images, primary: 305-1737486239.1967.jpg
+ LOG  🖼️ Student 300 processed: 1 images, primary: 304-1737478573.7725.jpg
+ LOG  🖼️ Student 299 processed: 1 images, primary: 303-1738138020.5784.jpg
+ LOG  🖼️ Student 298 processed: 1 images, primary: 302-1738139516.0372.jpg
+ LOG  🖼️ Student 297 processed: 1 images, primary: 301-1738144704.5683.jpg
+ LOG  🖼️ Student 296 processed: 1 images, primary: 300-1738142606.8298.jpg
+ LOG  🖼️ Student 295 processed: 1 images, primary: 299-1737479510.2111.jpg
+ LOG  🖼️ Student 294 processed: 1 images, primary: 298-1737485858.5701.jpg
+ LOG  🖼️ Student 293 processed: 1 images, primary: 297-1737483740.2403.jpg
+ LOG  🖼️ Student 292 processed: 1 images, primary: 296-1738146854.4553.jpg
+ LOG  🖼️ Student 291 processed: 1 images, primary: 295-1738823127.3835.jpg
+ LOG  🖼️ Student 289 processed: 1 images, primary: 293-1737480779.6281.jpg
+ LOG  🖼️ Student 288 processed: 1 images, primary: 292-1738823389.7608.jpg
+ LOG  🖼️ Student 287 processed: 1 images, primary: 291-1738823759.0577.jpg
+ LOG  🖼️ Student 274 processed: 1 images, primary: 290-1738139673.8204.jpg
+ LOG  🖼️ Student 273 processed: 1 images, primary: 289-1737485933.5362.jpg
+ LOG  🖼️ Student 272 processed: 1 images, primary: 288-1738140890.0354.jpg
+ LOG  🖼️ Student 271 processed: 1 images, primary: 287-1737486391.5334.jpg
+ LOG  🖼️ Student 270 processed: 1 images, primary: 286-1737486898.2842.jpg
+ LOG  🖼️ Student 269 processed: 1 images, primary: 285-1738219223.35.jpg
+ LOG  🖼️ Student 268 processed: 1 images, primary: 284-1737480816.9494.jpg
+ LOG  🖼️ Student 267 processed: 1 images, primary: 283-1737478558.5275.jpg
+ LOG  🖼️ Student 266 processed: 1 images, primary: 282-1737478542.7823.jpg
+ LOG  🖼️ Student 265 processed: 1 images, primary: 281-1738143327.9062.jpg
+ LOG  🖼️ Student 264 processed: 1 images, primary: 280-1739244721.3746.jpg
+ LOG  🖼️ Student 263 processed: 1 images, primary: 279-1738141261.2822.jpg
+ LOG  🖼️ Student 262 processed: 1 images, primary: 278-1738145589.1229.jpg
+ LOG  🖼️ Student 261 processed: 1 images, primary: 277-1737486370.5681.jpg
+ LOG  🖼️ Student 260 processed: 1 images, primary: 276-1738145089.0631.jpg
+ LOG  🖼️ Student 259 processed: 1 images, primary: 275-1737486613.8074.jpg
+ LOG  🖼️ Student 258 processed: 1 images, primary: 274-1738141279.6721.jpg
+ LOG  🖼️ Student 257 processed: 1 images, primary: 273-1738143345.4267.jpg
+ LOG  🖼️ Student 256 processed: 1 images, primary: 272-1738145603.4176.jpg
+ LOG  🖼️ Student 255 processed: 1 images, primary: 271-1738145256.0837.jpg
+ LOG  🖼️ Student 254 processed: 1 images, primary: 269-1738823489.339.jpg
+ LOG  🖼️ Student 253 processed: 1 images, primary: 268-1738145691.6566.jpg
+ LOG  🖼️ Student 251 processed: 1 images, primary: 266-1738139932.0261.jpg
+ LOG  🖼️ Student 250 processed: 1 images, primary: 265-1737482782.5389.jpg
+ LOG  🖼️ Student 249 processed: 1 images, primary: 264-1737486580.695.jpg
+ LOG  🖼️ Student 248 processed: 1 images, primary: 263-1737486073.4955.jpg
+ LOG  🖼️ Student 247 processed: 1 images, primary: 262-1737486629.1831.jpg
+ LOG  🖼️ Student 246 processed: 1 images, primary: 261-1738143384.3554.jpg
+ LOG  🖼️ Student 245 processed: 1 images, primary: 260-1737483000.8701.jpg
+ LOG  🖼️ Student 244 processed: 1 images, primary: 259-1737483510.2328.jpg
+ LOG  🖼️ Student 243 processed: 1 images, primary: 258-1739244648.1552.jpg
+ LOG  🖼️ Student 242 processed: 1 images, primary: 257-1738141341.5042.jpg
+ LOG  🖼️ Student 241 processed: 1 images, primary: 256-1738823441.2962.jpg
+ LOG  🖼️ Student 240 processed: 1 images, primary: 255-1738144717.457.jpg
+ LOG  🖼️ Student 239 processed: 1 images, primary: 254-1738141355.8564.jpg
+ LOG  🖼️ Student 238 processed: 1 images, primary: 253-1738589555.8205.jpg
+ LOG  🖼️ Student 237 processed: 1 images, primary: 252-1737482858.2607.jpg
+ LOG  🖼️ Student 236 processed: 1 images, primary: 251-1737485946.2707.jpg
+ LOG  🖼️ Student 235 processed: 1 images, primary: 250-1737486286.6901.jpg
+ LOG  🖼️ Student 234 processed: 1 images, primary: 249-1738141402.7019.jpg
+ LOG  🖼️ Student 233 processed: 1 images, primary: 248-1738140122.1739.jpg
+ LOG  🖼️ Student 232 processed: 1 images, primary: 247-1737479094.0006.jpg
+ LOG  🖼️ Student 231 processed: 1 images, primary: 246-1737486495.4077.jpg
+ LOG  🖼️ Student 230 processed: 1 images, primary: 245-1737486606.765.jpg
+ LOG  🖼️ Student 229 processed: 1 images, primary: 244-1738143402.3209.jpg
+ LOG  🖼️ Student 228 processed: 1 images, primary: 243-1738145268.9246.jpg
+ LOG  🖼️ Student 227 processed: 1 images, primary: 242-1737479473.0551.jpg
+ LOG  🖼️ Student 226 processed: 1 images, primary: 241-1737484409.0196.jpg
+ LOG  🖼️ Student 225 processed: 1 images, primary: 240-1738143434.1202.jpg
+ LOG  🖼️ Student 224 processed: 1 images, primary: 239-1738141419.4149.jpg
+ LOG  🖼️ Student 223 processed: 1 images, primary: 238-1738141468.2883.jpg
+ LOG  🖼️ Student 222 processed: 1 images, primary: 237-1738140145.1911.jpg
+ LOG  🖼️ Student 220 processed: 1 images, primary: 235-1737485850.5157.jpg
+ LOG  🖼️ Student 219 processed: 1 images, primary: 234-1738141503.3023.jpg
+ LOG  🖼️ Student 218 processed: 1 images, primary: 233-1738142708.7686.jpg
+ LOG  🖼️ Student 217 processed: 1 images, primary: 232-1738144733.0454.jpg
+ LOG  🖼️ Student 216 processed: 1 images, primary: 231-1737485433.8353.jpg
+ LOG  🖼️ Student 215 processed: 1 images, primary: 230-1737486711.7921.jpg
+ LOG  🖼️ Student 214 processed: 1 images, primary: 229-1737485890.3632.jpg
+ LOG  🖼️ Student 212 processed: 1 images, primary: 227-1737486380.9983.jpg
+ LOG  🖼️ Student 211 processed: 1 images, primary: 226-1737485961.4694.jpg
+ LOG  🖼️ Student 210 processed: 1 images, primary: 225-1737486009.1095.jpg
+ LOG  🖼️ Student 209 processed: 1 images, primary: 224-1738823208.5556.jpg
+ LOG  🖼️ Student 208 processed: 1 images, primary: 223-1737486113.1486.jpg
+ LOG  🖼️ Student 207 processed: 1 images, primary: 222-1738416202.5322.jpg
+ LOG  🖼️ Student 206 processed: 1 images, primary: 221-1737486751.7143.jpg
+ LOG  🖼️ Student 205 processed: 1 images, primary: 220-1737485828.8553.jpg
+ LOG  🖼️ Student 204 processed: 1 images, primary: 219-1738141523.264.jpg
+ LOG  🖼️ Student 203 processed: 1 images, primary: 218-1738143448.8235.jpg
+ LOG  🖼️ Student 202 processed: 1 images, primary: 217-1737486882.2395.jpg
+ LOG  🖼️ Student 201 processed: 1 images, primary: 216-1738145749.5384.jpg
+ LOG  🖼️ Student 200 processed: 1 images, primary: 215-1737486865.2411.jpg
+ LOG  🖼️ Student 199 processed: 1 images, primary: 214-1738738457.025.jpg
+ LOG  🖼️ Student 198 processed: 1 images, primary: 213-1737479565.1147.jpg
+ LOG  🖼️ Student 197 processed: 1 images, primary: 212-1738141664.6473.jpg
+ LOG  🖼️ Student 196 processed: 1 images, primary: 211-1738144803.5765.jpg
+ LOG  🖼️ Student 195 processed: 1 images, primary: 210-1738140249.4409.jpg
+ LOG  🖼️ Student 194 processed: 1 images, primary: 209-1737482598.2743.jpg
+ LOG  🖼️ Student 193 processed: 1 images, primary: 208-1737483048.0818.jpg
+ LOG  🖼️ Student 192 processed: 1 images, primary: 207-1738146175.3358.jpg
+ LOG  🖼️ Student 190 processed: 1 images, primary: 205-1737484808.6269.jpg
+ LOG  🖼️ Student 189 processed: 1 images, primary: 203-1737486222.5185.jpg
+ LOG  🖼️ Student 188 processed: 1 images, primary: 202-1738383123.9732.jpg
+ LOG  🖼️ Student 186 processed: 1 images, primary: 200-1737482959.4763.jpg
+ LOG  🖼️ Student 185 processed: 1 images, primary: 199-1737480748.0088.jpg
+ LOG  🖼️ Student 184 processed: 1 images, primary: 198-1737482928.4614.jpg
+ LOG  🖼️ Student 183 processed: 1 images, primary: 195-1737484726.6463.jpg
+ LOG  🖼️ Student 182 processed: 1 images, primary: 194-1737486995.1973.jpg
+ LOG  🖼️ Student 181 processed: 1 images, primary: 193-1737484751.1.jpg
+ LOG  🖼️ Student 180 processed: 1 images, primary: 192-1737479060.8707.jpg
+ LOG  🖼️ Student 179 processed: 1 images, primary: 191-1737479074.7966.jpg
+ LOG  🖼️ Student 178 processed: 1 images, primary: 190-1737486688.2291.jpg
+ LOG  🖼️ Student 177 processed: 1 images, primary: 189-1737481215.4872.jpg
+ LOG  🖼️ Student 176 processed: 1 images, primary: 188-1738731778.3494.jpg
+ LOG  🖼️ Student 175 processed: 1 images, primary: 187-1737486478.5485.jpg
+ LOG  🖼️ Student 174 processed: 1 images, primary: 186-1738145764.8569.jpg
+ LOG  🖼️ Student 173 processed: 1 images, primary: 185-1737486463.7715.jpg
+ LOG  🖼️ Student 172 processed: 1 images, primary: 184-1737483963.0896.jpg
+ LOG  🖼️ Student 171 processed: 1 images, primary: 183-1737486955.4546.jpg
+ LOG  🖼️ Student 170 processed: 1 images, primary: 182-1737486773.6065.jpg
+ LOG  🖼️ Student 169 processed: 1 images, primary: 181-1737483483.1876.jpg
+ LOG  🖼️ Student 168 processed: 1 images, primary: 180-1737485572.1147.jpg
+ LOG  🖼️ Student 167 processed: 1 images, primary: 179-1737483447.9606.jpg
+ LOG  🖼️ Student 166 processed: 1 images, primary: 178-1737486786.5705.jpg
+ LOG  🖼️ Student 165 processed: 1 images, primary: 177-1737485982.2445.jpg
+ LOG  🖼️ Student 164 processed: 1 images, primary: 176-1737482505.8381.jpg
+ LOG  🖼️ Student 163 processed: 1 images, primary: 175-1737485877.6291.jpg
+ LOG  🖼️ Student 162 processed: 1 images, primary: 174-1738144832.1488.jpg
+ LOG  🖼️ Student 161 processed: 1 images, primary: 173-1738146592.8701.jpg
+ LOG  🖼️ Student 160 processed: 1 images, primary: 172-1737484550.5133.jpg
+ LOG  🖼️ Student 159 processed: 1 images, primary: 171-1738140277.1693.jpg
+ LOG  🖼️ Student 158 processed: 1 images, primary: 170-1737486925.0986.jpg
+ LOG  🖼️ Student 157 processed: 1 images, primary: 169-1738146325.0749.jpg
+ LOG  🖼️ Student 156 processed: 1 images, primary: 168-1737486527.7127.jpg
+ LOG  🖼️ Student 155 processed: 1 images, primary: 167-1737482557.0133.jpg
+ LOG  🖼️ Student 154 processed: 1 images, primary: 166-1737483199.9706.jpg
+ LOG  🖼️ Student 153 processed: 1 images, primary: 165-1738305737.4342.jpg
+ LOG  🖼️ Student 151 processed: 1 images, primary: 163-1737486006.4278.jpg
+ LOG  🖼️ Student 150 processed: 1 images, primary: 162-1738145278.462.jpg
+ LOG  🖼️ Student 149 processed: 1 images, primary: 161-1737485887.4377.jpg
+ LOG  🖼️ Student 148 processed: 1 images, primary: 160-1737474757.9704.jpg
+ LOG  🖼️ Student 147 processed: 1 images, primary: 159-1738146753.835.jpg
+ LOG  🖼️ Student 146 processed: 1 images, primary: 158-1738147044.1444.jpg
+ LOG  🖼️ Student 145 processed: 1 images, primary: 157-1738145323.1879.jpg
+ LOG  🖼️ Student 144 processed: 1 images, primary: 156-1737483316.2133.jpg
+ LOG  🖼️ Student 143 processed: 1 images, primary: 155-1737484369.5277.jpg
+ LOG  🖼️ Student 142 processed: 1 images, primary: 154-1737482585.1108.jpg
+ LOG  🖼️ Student 141 processed: 1 images, primary: 153-1738219203.0878.jpg
+ LOG  🖼️ Student 139 processed: 1 images, primary: 149-1738145334.3063.jpg
+ LOG  🖼️ Student 138 processed: 1 images, primary: 148-1737486406.992.jpg
+ LOG  🖼️ Student 137 processed: 1 images, primary: 147-1737486983.6454.jpg
+ LOG  🖼️ Student 136 processed: 1 images, primary: 146-1737487015.6739.jpg
+ LOG  🖼️ Student 135 processed: 1 images, primary: 145-1737486968.3735.jpg
+ LOG  🖼️ Student 134 processed: 1 images, primary: 144-1737483673.3481.jpg
+ LOG  🖼️ Student 133 processed: 1 images, primary: 143-1738136760.7049.jpg
+ LOG  🖼️ Student 132 processed: 1 images, primary: 140-1738141687.1309.jpg
+ LOG  🖼️ Student 131 processed: 1 images, primary: 139-1737482076.2664.jpg
+ LOG  🖼️ Student 130 processed: 1 images, primary: 138-1737485868.4341.jpg
+ LOG  🖼️ Student 129 processed: 1 images, primary: 137-1737486305.9712.jpg
+ LOG  🖼️ Student 128 processed: 1 images, primary: 136-1737483395.3641.jpg
+ LOG  🖼️ Student 127 processed: 1 images, primary: 135-1737486140.4382.jpg
+ LOG  🖼️ Student 126 processed: 1 images, primary: 134-1738140298.5644.jpg
+ LOG  🖼️ Student 125 processed: 1 images, primary: 133-1737485516.0963.jpg
+ LOG  🖼️ Student 124 processed: 1 images, primary: 132-1737485471.1468.jpg
+ LOG  🖼️ Student 123 processed: 1 images, primary: 131-1737485995.1672.jpg
+ LOG  🖼️ Student 122 processed: 1 images, primary: 130-1737486549.4333.jpg
+ LOG  🖼️ Student 121 processed: 1 images, primary: 129-1737480600.5932.jpg
+ LOG  🖼️ Student 120 processed: 1 images, primary: 128-1737486937.6339.jpg
+ LOG  🖼️ Student 119 processed: 1 images, primary: 127-1738144864.4488.jpg
+ LOG  🖼️ Student 118 processed: 1 images, primary: 126-1738144874.6914.jpg
+ LOG  🖼️ Student 117 processed: 1 images, primary: 125-1738145348.2907.jpg
+ LOG  🖼️ Student 116 processed: 1 images, primary: 124-1737482615.9576.jpg
+ LOG  🖼️ Student 115 processed: 1 images, primary: 123-1737482572.1046.jpg
+ LOG  🖼️ Student 114 processed: 1 images, primary: 122-1738823157.4012.jpg
+ LOG  🖼️ Student 113 processed: 1 images, primary: 121-1737485900.7372.jpg
+ LOG  🖼️ Student 112 processed: 1 images, primary: 120-1737483302.0943.jpg
+ LOG  🖼️ Student 111 processed: 1 images, primary: 119-1737480901.8134.jpg
+ LOG  🖼️ Student 110 processed: 1 images, primary: 118-1737485114.126.jpg
+ LOG  🖼️ Student 109 processed: 1 images, primary: 117-1737486730.4434.jpg
+ LOG  🖼️ Student 108 processed: 1 images, primary: 116-1737484982.8536.jpg
+ LOG  🖼️ Student 107 processed: 1 images, primary: 115-1737482704.2742.jpg
+ LOG  🖼️ Student 106 processed: 1 images, primary: 114-1737483413.7474.jpg
+ LOG  🖼️ Student 105 processed: 1 images, primary: 113-1737483020.5496.jpg
+ LOG  🖼️ Student 104 processed: 1 images, primary: 112-1737484392.8459.jpg
+ LOG  🖼️ Student 103 processed: 1 images, primary: 111-1738736329.8952.jpg
+ LOG  🖼️ Student 102 processed: 1 images, primary: 110-1737486807.6841.jpg
+ LOG  🖼️ Student 101 processed: 1 images, primary: 109-1738145101.1471.jpg
+ LOG  🖼️ Student 100 processed: 1 images, primary: 108-1737479965.2023.jpg
+ LOG  🖼️ Student 99 processed: 1 images, primary: 107-1738742232.3487.jpg
+ LOG  🖼️ Student 98 processed: 1 images, primary: 106-1737486733.3749.jpg
+ LOG  🖼️ Student 97 processed: 1 images, primary: 105-1737484770.6292.jpg
+ LOG  🖼️ Student 96 processed: 1 images, primary: 104-1737486494.9841.jpg
+ LOG  🖼️ Student 95 processed: 1 images, primary: 103-1738147125.9708.jpg
+ LOG  🖼️ Student 94 processed: 1 images, primary: 102-1737481911.5533.jpg
+ LOG  🖼️ Student 93 processed: 1 images, primary: 101-1737483468.3507.jpg
+ LOG  🖼️ Student 92 processed: 1 images, primary: 100-1737484089.1629.jpg
+ LOG  🖼️ Student 91 processed: 1 images, primary: 99-1738143801.7753.jpg
+ LOG  🖼️ Student 90 processed: 1 images, primary: 96-1737485978.4942.jpg
+ LOG  🖼️ Student 89 processed: 1 images, primary: 95-1737487071.0397.jpg
+ LOG  🖼️ Student 88 processed: 1 images, primary: 94-1737480693.6435.jpg
+ LOG  🖼️ Student 87 processed: 1 images, primary: 93-1737486050.9877.jpg
+ LOG  🖼️ Student 86 processed: 1 images, primary: 92-1738143818.5978.jpg
+ LOG  🖼️ Student 85 processed: 1 images, primary: 91-1737479553.5076.jpg
+ LOG  🖼️ Student 84 processed: 1 images, primary: 90-1738143839.0592.jpg
+ LOG  🖼️ Student 83 processed: 1 images, primary: 89-1738144889.3786.jpg
+ LOG  🖼️ Student 82 processed: 1 images, primary: 88-1738141833.2586.jpg
+ LOG  🖼️ Student 81 processed: 1 images, primary: 87-1737485402.0918.jpg
+ LOG  🖼️ Student 80 processed: 1 images, primary: 86-1737483580.9077.jpg
+ LOG  🖼️ Student 79 processed: 1 images, primary: 85-1738143861.1135.jpg
+ LOG  🖼️ Student 78 processed: 1 images, primary: 84-1738143891.0183.jpg
+ LOG  🖼️ Student 77 processed: 1 images, primary: 83-1738140491.3189.jpg
+ LOG  🖼️ Student 76 processed: 1 images, primary: 82-1738143922.9104.jpg
+ LOG  🖼️ Student 75 processed: 1 images, primary: 81-1738142723.9632.jpg
+ LOG  🖼️ Student 74 processed: 1 images, primary: 80-1738742298.5343.jpg
+ LOG  🖼️ Student 73 processed: 1 images, primary: 79-1737486175.8163.jpg
+ LOG  🖼️ Student 72 processed: 1 images, primary: 78-1737478516.4236.jpg
+ LOG  🖼️ Student 71 processed: 1 images, primary: 77-1737480879.5516.jpg
+ LOG  🖼️ Student 70 processed: 1 images, primary: 75-1738742330.9522.jpg
+ LOG  🖼️ Student 69 processed: 1 images, primary: 74-1738142761.2746.jpg
+ LOG  🖼️ Student 68 processed: 1 images, primary: 72-1738142774.2811.jpg
+ LOG  🖼️ Student 67 processed: 1 images, primary: 71-1738142819.3388.jpg
+ LOG  🖼️ Student 66 processed: 1 images, primary: 69-1738142837.635.jpg
+ LOG  🖼️ Student 65 processed: 1 images, primary: 68-1738142854.25.jpg
+ LOG  🖼️ Student 64 processed: 1 images, primary: 67-1737480838.7418.jpg
+ LOG  🖼️ Student 63 processed: 1 images, primary: 66-1738141989.5225.jpg
+ LOG  🖼️ Student 62 processed: 1 images, primary: 64-1738142021.9104.jpg
+ LOG  🖼️ Student 61 processed: 1 images, primary: 63-1738142876.9043.jpg
+ LOG  🖼️ Student 60 processed: 1 images, primary: 62-1738142892.7552.jpg
+ LOG  🖼️ Student 59 processed: 1 images, primary: 61-1738142073.9786.jpg
+ LOG  🖼️ Student 58 processed: 1 images, primary: 60-1737487041.7434.jpg
+ LOG  🖼️ Student 57 processed: 1 images, primary: 59-1738143952.1341.jpg
+ LOG  🖼️ Student 56 processed: 1 images, primary: 58-1737485584.7341.jpg
+ LOG  🖼️ Student 55 processed: 1 images, primary: 57-1738143987.9181.jpg
+ LOG  🖼️ Student 54 processed: 1 images, primary: 56-1738144005.2023.jpg
+ LOG  🖼️ Student 53 processed: 1 images, primary: 55-1737486141.5178.jpg
+ LOG  🖼️ Student 52 processed: 1 images, primary: 54-1737485916.8154.jpg
+ LOG  🖼️ Student 51 processed: 1 images, primary: 53-1737485866.6835.jpg
+ LOG  🖼️ Student 50 processed: 1 images, primary: 52-1737485912.8065.jpg
+ LOG  🖼️ Student 49 processed: 1 images, primary: 51-1737485724.0932.jpg
+ LOG  🖼️ Student 48 processed: 1 images, primary: 50-1737486532.1387.jpg
+ LOG  🖼️ Student 47 processed: 1 images, primary: 49-1737486562.2707.jpg
+ LOG  🖼️ Student 46 processed: 1 images, primary: 48-1737486348.7008.jpg
+ LOG  🖼️ Student 45 processed: 1 images, primary: 47-1738140513.3745.jpg
+ LOG  🖼️ Student 44 processed: 1 images, primary: 46-1737485937.3209.jpg
+ LOG  🖼️ Student 43 processed: 1 images, primary: 45-1738140534.5772.jpg
+ LOG  🖼️ Student 42 processed: 1 images, primary: 44-1737486659.9594.jpg
+ LOG  🖼️ Student 41 processed: 1 images, primary: 43-1738145801.0855.jpg
+ LOG  🖼️ Student 40 processed: 1 images, primary: 42-1738140551.111.jpg
+ LOG  🖼️ Student 39 processed: 1 images, primary: 41-1737485958.5528.jpg
+ LOG  🖼️ Student 38 processed: 1 images, primary: 40-1738142910.9535.jpg
+ LOG  🖼️ Student 37 processed: 1 images, primary: 39-1738140574.7645.jpg
+ LOG  🖼️ Student 36 processed: 1 images, primary: 38-1738145135.6284.jpg
+ LOG  🖼️ Student 35 processed: 1 images, primary: 37-1738144933.4199.jpg
+ LOG  🖼️ Student 34 processed: 1 images, primary: 36-1738144023.4823.jpg
+ LOG  🖼️ Student 33 processed: 1 images, primary: 35-1738144041.0167.jpg
+ LOG  🖼️ Student 32 processed: 1 images, primary: 34-1738144071.8783.jpg
+ LOG  🖼️ Student 31 processed: 1 images, primary: 33-1738142129.1518.jpg
+ LOG  🖼️ Student 30 processed: 1 images, primary: 32-1738140640.3059.jpg
+ LOG  🖼️ Student 29 processed: 1 images, primary: 31-1738822802.832.jpg
+ LOG  🖼️ Student 28 processed: 1 images, primary: 30-1738145362.3906.jpg
+ LOG  🖼️ Student 27 processed: 1 images, primary: 29-1738140658.771.jpg
+ LOG  🖼️ Student 26 processed: 1 images, primary: 28-1738145828.8956.jpg
+ LOG  🖼️ Student 25 processed: 1 images, primary: 27-1738145145.2379.jpg
+ LOG  🖼️ Student 24 processed: 1 images, primary: 26-1738144089.0271.jpg
+ LOG  🖼️ Student 23 processed: 1 images, primary: 25-1738142159.4974.jpg
+ LOG  🖼️ Student 22 processed: 1 images, primary: 24-1738144111.9055.jpg
+ LOG  🖼️ Student 21 processed: 1 images, primary: 23-1738144954.9838.jpg
+ LOG  🖼️ Student 20 processed: 1 images, primary: 22-1738144158.166.jpg
+ LOG  🖼️ Student 19 processed: 1 images, primary: 21-1738143029.9602.jpg
+ LOG  🖼️ Student 18 processed: 1 images, primary: 20-1738144194.0119.jpg
+ LOG  🖼️ Student 17 processed: 1 images, primary: 19-1738742386.0681.jpg
+ LOG  🖼️ Student 16 processed: 1 images, primary: 16-1738144305.2234.jpg
+ LOG  🖼️ Student 15 processed: 1 images, primary: 15-1738143050.5714.jpg
+ LOG  🖼️ Student 14 processed: 1 images, primary: 14-1738144326.1976.jpg
+ LOG  🖼️ Student 13 processed: 1 images, primary: 13-1738144347.8799.jpg
+ LOG  🖼️ Student 12 processed: 1 images, primary: 12-1738143082.23.jpg
+ LOG  🖼️ Student 11 processed: 1 images, primary: 11-1738144378.1726.jpg
+ LOG  🖼️ Student 10 processed: 1 images, primary: 10-1738144403.5534.jpg
+ LOG  🖼️ Student 9 processed: 1 images, primary: 9-1738736851.7794.jpg
+ LOG  🖼️ Student 8 processed: 1 images, primary: 8-1738143110.6815.jpg
+ LOG  🖼️ Student 7 processed: 1 images, primary: 7-1738145155.6215.jpg
+ LOG  🖼️ Student 6 processed: 1 images, primary: 6-1738144476.415.jpg
+ LOG  🖼️ Student 5 processed: 1 images, primary: 5-1738144542.5137.jpg
+ LOG  🖼️ Student 4 processed: 1 images, primary: 4-1738144577.6032.jpg
+ LOG  🖼️ Student 3 processed: 1 images, primary: 3-1738142181.323.jpg
+ LOG  🖼️ Student 2 processed: 1 images, primary: 2-1738144593.8447.jpg
+ LOG  🖼️ Student 1 processed: 1 images, primary: 1-1738145846.1145.jpg
+ LOG  📊 First page loaded: 370 students
+ LOG  📊 Total expected: 370 students
+ LOG  📊 Has more pages: false
+ LOG  🎉 Final result: 370 total students fetched from API
+ LOG  📤 Making API request to fetch ALL students with body: {"note": "Fetching all students, will filter by grade on frontend", "page": 1, "page_size": 10000, "search_filter_list": [], "search_phrase": ""}
+ LOG  🔍 Frontend filtering state: {"activeSearchTerm": "", "debouncedSearchTerm": "", "enableSearch": true, "isSearching": false, "searchTerm": "", "selectedGradeId": null}
+ LOG  ✅ Processing 370 total students from API
+ LOG  🔄 Periodic auto-refresh of student data...
+ LOG  🔄 Refreshing student data...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  ⚠️ No stored credentials found, skipping refresh...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  🔄 App came to foreground, auto-refreshing student data...
+ LOG  🔄 Refreshing student data...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  ⚠️ No stored credentials found, skipping refresh...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  ✅ Rendering main modal interface with data: {"categoriesLoading": false, "hasError": false, "staticGradesCount": 15}
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  ✅ Rendering main modal interface with data: {"categoriesLoading": false, "hasError": false, "staticGradesCount": 15}
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "217|x14TQgwjuNeZvt1e5T5AG3Ck0fPQiHMgdAlIgu4ec66bab27",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  🔹 Drawer Menu: Logout pressed
+ LOG  🧹 Clearing persisted Redux data...
+ LOG  🔑 Clearing stored login credentials...
+ LOG  ✅ Session data and credentials cleared successfully
+ LOG  🏠 Header - Session data: null
+ LOG  🏠 Header - Backend user data: undefined
+ LOG  🏠 Header - User category: undefined Is parent: false
+ LOG  🏠 Header - Student list: undefined
+ LOG  🏠 Header - Resolved user name: Loading...
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": undefined, "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": undefined, "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: undefined Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  SnapBot visibility changed: false
+ LOG  Animating SnapBot out...
+ LOG  Submitting login data: {"mapped_pin": "sms_v1", "password": "****", "pin": "NEXISY", "pin_length": 6, "username_or_email": "yohan"}
+ LOG  🔄 Public Login - Starting login request...
+ LOG  🚀 Auth API - onQueryStarted called
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "loginUser", "isAuthenticated": false, "method": "mutation", "tokenExists": false, "tokenLength": 0, "tokenPreview": "No token"}
+ WARN  ⚠️ API Server 1 - No authentication token found, request may fail
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "None", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  Submitting login data: {"mapped_pin": "sms_v1", "password": "****", "pin": "NEXISY", "pin_length": 6, "username_or_email": "yohan"}
+ LOG  🔄 Public Login - Starting login request...
+ LOG  🚀 Auth API - onQueryStarted called
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "loginUser", "isAuthenticated": false, "method": "mutation", "tokenExists": false, "tokenLength": 0, "tokenPreview": "No token"}
+ WARN  ⚠️ API Server 1 - No authentication token found, request may fail
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "None", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔥 Auth API - Raw response received: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  ✅ Auth API - Query fulfilled with data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  🔑 Auth API - Token stored: 218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22
+ LOG  👤 Auth API - User data stored: {
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "user_category": 4
+}
+ LOG  🎉 Public Login - Login successful: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  }
+}
+ LOG  👤 Public Login - User data stored in Redux: {
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ]
+}
+ LOG  🔄 Public Login - Enhanced session data stored: {"data": {"email": "yohan@nexiscollege.lk", "full_name": "Yohan ", "id": 43, "student_list": [], "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22", "user_category": 4, "user_type_list": [[Object], [Object]], "username": "yohan"}, "message": "", "metadata": {"is_system_update_pending": true}, "status": "successful", "user_category": 4, "user_role": undefined}
+ LOG  🔄 Public Login - user_category: 4
+ LOG  🔄 Public Login - Redirecting based on user_category: 4
+ LOG  🔄 Public Login - Target route: /authenticated/principal
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  ❌ No allPostsLocal available: 0
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎓 Header - No student currently selected
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎯 SchoolTabWithAPI - Filters received: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🧹 Clearing any existing filters on component mount
+ WARN  ImmutableStateInvariantMiddleware took 36ms, which is more than the warning threshold of 32ms. 
+If your state or actions are very large, you may want to disable the middleware as it might cause too much of a slowdown in development mode. See https://redux-toolkit.js.org/api/getDefaultMiddleware for instructions.
+It is disabled in production builds, so you don't need to worry about that.
+ LOG  🔄 Loading all posts initially... [VERSION 2.0 WITH DEBUG]
+ LOG  🔍 API Slice - Received parameters: {"filters": {"category": "", "date_from": "", "date_to": "", "hashtags": [], "search": ""}, "limit": 100, "page": 1}
+ LOG  📤 School Posts API Request Body: {"category": "", "date_from": "", "date_to": "", "hashtags": [], "page": 1, "page_size": 100, "search_filter_list": [], "search_phrase": ""}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getSchoolPosts", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "218|bTAFG6sp1iN..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔄 allPostsLocal changed: 0
+ LOG  🎯 UniversalActivityFeed: Filters updated: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  ✅ Successfully extracted 10 posts for frontend filtering
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  🔍 Filtering Debug: {"allPostsCount": 10, "filters": {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}, "hasActiveFilters": null}
+ LOG  🔍 Frontend filtering with: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏫 Including school post 8: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Filtering out post 6: school_id is not 1 (current: null)
+ LOG  🏫 Including school post 7: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 9: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 5: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 4: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 10: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 3: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 1: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 2: school_id=1, class_id=null, student_id=null
+ LOG  🔍 School filtering complete - filtered posts: 9
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player status changed: idle
+ LOG  🔄 allPostsLocal changed: 10
+ LOG  🔍 Frontend filtering complete: 9 posts match filters
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 NAVIGATING: principalLayout -> dashboard (userCategory: 4)
+ LOG  🔄 Base route determined: /authenticated/principal
+ LOG  ✅ Navigate to Dashboard
+ LOG  🔄 Calling router.push('/authenticated/principal/dashboard')
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🔍 Processing categories - Raw categoriesData: undefined
+ LOG  🔍 Legacy categoriesData: undefined
+ WARN  ⚠️ No categories found in any expected structure
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  🧪 DETAILED CATEGORY API REQUEST: {"fullUrl": "http://172.20.10.3:9999/api/educator-feedback-management/category/list", "headers": {"Accept": "application/json", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}, "method": "POST", "requestBody": {"page": 1, "page_size": 10, "search_filter_list": [], "search_phrase": ""}, "timestamp": "2025-07-31T16:22:30.083Z"}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getCategoryList", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "218|bTAFG6sp1iN..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  📤 Feedback Categories Request
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getFeedbackCategoriesWithQuestions", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "218|bTAFG6sp1iN..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  📤 DETAILED getEducatorFeedbacks Request: {"endpoint": "api/educator-feedback-management/feedback/list", "method": "POST", "parametersMatch": {"page": true, "page_size": true, "search_filter_list": true, "search_phrase": true}, "rawParams": {"filters": {"search": "", "search_filter_list": [Array]}, "page": 1, "page_size": 10}, "requestBody": {"page": 1, "page_size": 10, "search_filter_list": [], "search_phrase": ""}}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getEducatorFeedbacks", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "218|bTAFG6sp1iN..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  📋 Categories Response: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ ERROR  ❌ Unexpected categories API response: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ ERROR  An unhandled error occurred processing a request for the endpoint "getFeedbackCategoriesWithQuestions".
+In the case of an unhandled error, no tags will be "provided" or "invalidated". [Error: Failed to load feedback categories. Please try again.]
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 0
+ LOG  📤 Categories Data: undefined
+ LOG  🔄 Categories Loading: true
+ LOG  ❌ Categories Error: undefined
+ LOG  🧪 DETAILED CATEGORY API RESPONSE: {"httpHeaders": {"map": {"cache-control": "no-cache, private", "connection": "close", "content-type": "application/json", "date": "Thu, 31 Jul 2025 16:22:29 GMT", "host": "172.20.10.3:9999", "set-cookie": "t_session=eyJpdiI6InJBYkYxYVJvSElWZGlCWGViSVk3TFE9PSIsInZhbHVlIjoiU1lleFBCTHU4Undqa1NxWUJ3Si9HQT09IiwibWFjIjoiNTE0MWM2YWY0NzZkMWVkNTExMmFmNjNjNjJjOWNiZGU1ODY5NzYyZmE5NDY0NTAwNmMyNTQyNGJhYmZmZjAzMSIsInRhZyI6IiJ9; expires=Thu, 23 Aug 6108 18:29:29 GMT; Max-Age=128849018820; path=/; domain=172.20.10.3; httponly; samesite=lax", "vary": "Origin", "x-powered-by": "PHP/8.3.12"}}, "httpStatus": 200, "httpStatusText": "", "rawResponse": {"data": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "message": "Category list retrieved successfully", "success": true}, "requestMethod": "POST", "requestTimestamp": undefined, "requestUrl": "http://172.20.10.3:9999/api/educator-feedback-management/category/list", "responseData": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "responseDataKeys": ["0", "1", "2", "3", "4", "5", "6", "7"], "responseDataType": "object", "responseKeys": ["success", "data", "message"], "responseSize": 13178, "responseStatus": undefined, "responseSuccess": true, "responseTime": "Not available", "responseType": "object", "timestamp": "2025-07-31T16:22:30.291Z"}
+ LOG  🧪 RAW RESPONSE OBJECT: {"data": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "message": "Category list retrieved successfully", "success": true}
+ LOG  🧪 RESPONSE FORMAT ANALYSIS: {"confidence": 0.9, "extractedData": [{"created_at": null, "created_by": null, "id": 8, "is_active": true, "name": " Life Skills Development", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 2, "is_active": true, "name": "Bodily Kinesthetic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 7, "is_active": true, "name": "Contribution to Society", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 6, "is_active": true, "name": "Contribution to school Community", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 3, "is_active": true, "name": "Existential intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 1, "is_active": true, "name": "Music Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 5, "is_active": true, "name": "Naturalistic Intelligence", "predefined_questions": [Array], "updated_at": null}, {"created_at": null, "created_by": null, "id": 4, "is_active": true, "name": "Spatial Intelligence", "predefined_questions": [Array], "updated_at": null}], "formatType": "boolean_success", "isValid": true, "suggestions": ["Boolean success format: {success: true, data: [...]}"]}
+ LOG  ✅ Processing backend response format: {success: true, data: [...]}
+ LOG  📋 Categories data extracted: 8 items
+ LOG  ✅ Transformed categories successfully: 8 categories
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🔍 Processing categories - Raw categoriesData: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔍 Legacy categoriesData: undefined
+ LOG  ✅ Using new category list API
+ LOG  ✅ Filtered categories: [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [[Object], [Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [[Object], [Object], [Object], [Object], [Object]], "subcategories": [], "updated_at": null}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  📝 DETAILED Feedbacks Response: {"dataKeys": ["current_page", "data", "first_page_url", "from", "last_page", "last_page_url", "links", "next_page_url", "path", "per_page", "prev_page_url", "to", "total"], "dataType": "object", "hasData": {"current_page": 1, "data": [[Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "first_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=1", "from": 1, "last_page": 2, "last_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "links": [[Object], [Object], [Object], [Object]], "next_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "path": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list", "per_page": 10, "prev_page_url": null, "to": 10, "total": 11}, "hasSuccess": true, "meta": {"request": {"_bodyInit": "{\"page_size\":10,\"page\":1,\"search_phrase\":\"\",\"search_filter_list\":[]}", "_bodyText": "{\"page_size\":10,\"page\":1,\"search_phrase\":\"\",\"search_filter_list\":[]}", "bodyUsed": false, "credentials": "same-origin", "headers": [Headers], "method": "POST", "mode": null, "referrer": null, "signal": [AbortSignal], "url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list"}, "response": {"headers": [Headers], "status": 200, "statusText": ""}}, "rawDataArray": 10, "response": {"data": {"current_page": 1, "data": [Array], "first_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=1", "from": 1, "last_page": 2, "last_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "links": [Array], "next_page_url": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list?page=2", "path": "http://172.20.10.3:9999/api/educator-feedback-management/feedback/list", "per_page": 10, "prev_page_url": null, "to": 10, "total": 11}, "message": "Educator feedback list retrieved successfully", "success": true}, "responseType": "object"}
+ LOG  ✅ Processing feedback response with success format
+ LOG  📋 Found 10 feedback items
+ LOG  🎯 FINAL TRANSFORMED RESPONSE: {"feedbacksCount": 10, "finalResponse": {"data": {"data": [Array], "feedbacks": [Array], "pagination": [Object]}, "message": "Educator feedback list retrieved successfully", "success": true}, "firstFeedback": {"category": {"id": 7, "name": "Contribution to Society"}, "comments": [[Object]], "created_at": "2025-07-31T08:18:12.000000Z", "created_by": {"call_name_with_title": "Mr. Yohan Perera", "id": 43}, "created_by_designation": " ", "decline_reason": null, "edu_fb_category_id": 7, "evaluations": [[Object]], "grade_level": {"id": 4, "name": "Grade 4"}, "grade_level_class": {"id": 4, "name": "Grade 4 - Class 1"}, "grade_level_class_id": 4, "grade_level_id": 4, "id": 11, "rating": "3.00", "status": 1, "student": {"admission_number": "NY24/335", "full_name": "Kerewgodage Felan Mishel Perera", "grade_level_id": 4, "id": 335, "student_calling_name": "Felan"}, "student_id": 335, "subcategories": [[Object]], "updated_at": "2025-07-31T08:18:12.000000Z"}, "pagination": {"current_page": 1, "has_next": true, "has_previous": false, "page_size": 10, "total_count": 11, "total_pages": 2}}
+ LOG  🏷️ API TRANSFORM - Subcategories Analysis (getEducatorFeedbacks): {"feedbacksWithSubcategories": 10, "subcategoriesBreakdown": [{"feedbackId": 11, "originalSubcategories": [Array], "studentName": "Kerewgodage Felan Mishel Perera", "subcategoriesCount": 1, "transformedSubcategories": [Array]}, {"feedbackId": 10, "originalSubcategories": [Array], "studentName": "Jayasuriya Arachchige Thamuditha Shanuka Jayasuriya", "subcategoriesCount": 2, "transformedSubcategories": [Array]}, {"feedbackId": 9, "originalSubcategories": [Array], "studentName": "Jayasuriya Arachchige Thamuditha Shanuka Jayasuriya", "subcategoriesCount": 1, "transformedSubcategories": [Array]}], "totalFeedbacks": 10}
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  🎓 Using static grades: [{"category": "early_years", "display_name": "Early Years 1", "id": 1, "name": "EY1", "order": 1}, {"category": "early_years", "display_name": "Early Years 2", "id": 2, "name": "EY2", "order": 2}, {"category": "early_years", "display_name": "Early Years 3", "id": 3, "name": "EY3", "order": 3}, {"category": "primary", "display_name": "Grade 1", "id": 4, "name": "Grade 1", "order": 4}, {"category": "primary", "display_name": "Grade 2", "id": 5, "name": "Grade 2", "order": 5}, {"category": "primary", "display_name": "Grade 3", "id": 6, "name": "Grade 3", "order": 6}, {"category": "primary", "display_name": "Grade 4", "id": 7, "name": "Grade 4", "order": 7}, {"category": "primary", "display_name": "Grade 5", "id": 8, "name": "Grade 5", "order": 8}, {"category": "primary", "display_name": "Grade 6", "id": 9, "name": "Grade 6", "order": 9}, {"category": "secondary", "display_name": "Grade 7", "id": 10, "name": "Grade 7", "order": 10}, {"category": "secondary", "display_name": "Grade 8", "id": 11, "name": "Grade 8", "order": 11}, {"category": "secondary", "display_name": "Grade 9", "id": 12, "name": "Grade 9", "order": 12}, {"category": "secondary", "display_name": "Grade 10", "id": 13, "name": "Grade 10", "order": 13}, {"category": "secondary", "display_name": "Grade 11", "id": 14, "name": "Grade 11", "order": 14}, {"category": "secondary", "display_name": "Grade 12", "id": 15, "name": "Grade 12", "order": 15}]
+ LOG  🎓 Available Grades (static): 15
+ LOG  🎯 Selected Grade ID: null
+ LOG  🎯 Selected Grade Name: null
+ LOG  📋 Main Categories (length): 8
+ LOG  📤 Categories Data: {"data": [{"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 8, "name": " Life Skills Development", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 2, "name": "Bodily Kinesthetic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 7, "name": "Contribution to Society", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 6, "name": "Contribution to school Community", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 3, "name": "Existential intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 1, "name": "Music Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 5, "name": "Naturalistic Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}, {"active": true, "created_at": null, "created_by": null, "description": "Created by Unknown", "id": 4, "name": "Spatial Intelligence", "questions": [Array], "subcategories": [Array], "updated_at": null}], "status": "successful"}
+ LOG  🔄 Categories Loading: false
+ LOG  ❌ Categories Error: undefined
+ LOG  ✅ Rendering main modal interface with data: {"categoriesLoading": false, "hasError": false, "staticGradesCount": 15}
+ LOG  🔄 App came to foreground, auto-refreshing student data...
+ LOG  🔄 Refreshing student data...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ LOG  ⚠️ No stored credentials found, skipping refresh...
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+iOS Bundled 205ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 89ms src/utils/testActivityFeedAPI.js (1 module)
+ LOG  🖼️ Profile Picture Server URLs: {"BASE_URL_API_SERVER": "http://172.20.10.3:9999", "BASE_URL_STUDENT_IMAGES": "https://nexis-college-sms-staging-b.solovosystems.com", "PROFILE_PICTURE_SERVER_URL": "https://nexis-college-sms-staging-b.solovosystems.com/get-student-attachment-data"}
+iOS Bundled 76ms src/utils/testCalendarAPI.js (1 module)
+ LOG  🧪 Calendar API Test Utils Loaded!
+ LOG  💡 Run testCalendarAPI() to test the calendar API
+ LOG  🌐 Global test functions available:
+ LOG    - window.testActivityFeed.basic()
+ LOG    - window.testActivityFeed.filtered()
+ LOG    - window.testActivityFeed.state()
+ LOG    - window.testActivityFeed.clear()
+ LOG  🚀 Activity Feed API Test Utils Loaded!
+ LOG  📡 Ready to test: api/activity-feed-management/school-posts/list
+ LOG  💡 Run testActivityFeedAPI() to start testing immediately
+ LOG  🌐 Main API Server Test: {"ok": false, "status": 404, "statusText": "", "url": "http://172.20.10.3:9999/api/test"}
+ WARN  ⚠️ Main API Server returning HTML instead of JSON
+ LOG  🏠 IndexScreen - Re-rendering with sessionData: {"data": {"email": "yohan@nexiscollege.lk", "full_name": "Yohan ", "id": 43, "student_list": [], "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22", "user_category": 4, "user_type_list": [[Object], [Object]], "username": "yohan"}, "message": "", "metadata": {"is_system_update_pending": true}, "status": "successful", "user_category": 4}
+ LOG  🏠 IndexScreen - isAuthenticated: true
+ LOG  🏠 IndexScreen - userCategory: 4
+ LOG  🏠 IndexScreen - userRole: undefined
+ LOG  🏠 IndexScreen - Raw sessionData structure: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  IndexScreen - Redirecting to: /authenticated/principal
+ LOG  🏠 Header - Session data: {
+  "status": "successful",
+  "message": "",
+  "data": {
+    "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+    "id": 43,
+    "full_name": "Yohan ",
+    "username": "yohan",
+    "email": "yohan@nexiscollege.lk",
+    "user_category": 4,
+    "user_type_list": [
+      {
+        "name": "Educator",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 3
+        }
+      },
+      {
+        "name": "Management",
+        "pivot": {
+          "user_id": 43,
+          "user_type_id": 6
+        }
+      }
+    ],
+    "student_list": []
+  },
+  "metadata": {
+    "is_system_update_pending": true
+  },
+  "user_category": 4
+}
+ LOG  🏠 Header - Backend user data: {
+  "token": "218|bTAFG6sp1iNAh8WlklmNCyQK9ZBXGiERz96qTZ9u7a07fc22",
+  "id": 43,
+  "full_name": "Yohan ",
+  "username": "yohan",
+  "email": "yohan@nexiscollege.lk",
+  "user_category": 4,
+  "user_type_list": [
+    {
+      "name": "Educator",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 3
+      }
+    },
+    {
+      "name": "Management",
+      "pivot": {
+        "user_id": 43,
+        "user_type_id": 6
+      }
+    }
+  ],
+  "student_list": []
+}
+ LOG  🏠 Header - User category: 4 Is parent: false
+ LOG  🏠 Header - Student list: []
+ LOG  🏠 Header - Resolved user name: Yohan
+ LOG  🏠 Header - Available name fields: {"sessionData?.data?.full_name": "Yohan ", "sessionData?.data?.user?.full_name": undefined, "sessionData?.data?.user?.username": undefined, "sessionData?.data?.username": "yohan", "sessionData?.full_name": undefined, "sessionData?.username": undefined}
+ LOG  🎓 Header - Total students: 0
+ LOG  🎓 Header - Has multiple students: false
+ LOG  🎓 Header - Current student: No Student
+ LOG  🎓 Header - Selected student ID: none
+ LOG  🏠 DrawerMenu - User category: 4 Is parent: false
+ LOG  🔍 DrawerMenu - Rendering section: null
+ LOG  🔄 Rendering default ProfileSection
+ WARN  [Layout children]: No route named "academic-oversight" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "student-affairs" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "staff-management" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ WARN  [Layout children]: No route named "school-operations" exists in nested children: ["dashboard", "educator-feedback-management", "index", "notifications", "school-analysis", "school-calendar", "test-feedback-api", "user-actions"]
+ LOG  🎓 Principal Home - User category: 4
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  ❌ No allPostsLocal available: 0
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player created successfully
+ LOG  🎓 Header - No student currently selected
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎬 Video player status changed: idle
+ LOG  🎯 SchoolTabWithAPI - Filters received: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🧹 Clearing any existing filters on component mount
+ LOG  🔄 Loading all posts initially... [VERSION 2.0 WITH DEBUG]
+ LOG  🔍 API Slice - Received parameters: {"filters": {"category": "", "date_from": "", "date_to": "", "hashtags": [], "search": ""}, "limit": 100, "page": 1}
+ LOG  📤 School Posts API Request Body: {"category": "", "date_from": "", "date_to": "", "hashtags": [], "page": 1, "page_size": 100, "search_filter_list": [], "search_phrase": ""}
+ LOG  🔐 API Server 1 - Authentication check: {"endpoint": "getSchoolPosts", "isAuthenticated": true, "method": "query", "tokenExists": true, "tokenLength": 52, "tokenPreview": "218|bTAFG6sp1iN..."}
+ LOG  ✅ API Server 1 - Authorization header set successfully
+ LOG  📤 API Server 1 - Final headers: {"Accept": "application/json", "Authorization": "Bearer [REDACTED]", "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest", "credentials": "include"}
+ LOG  🔄 allPostsLocal changed: 0
+ LOG  🎯 UniversalActivityFeed: Filters updated: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  ✅ Successfully extracted 10 posts for frontend filtering
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo
+ LOG  🚀 useMemo filteredPosts is executing!
+ LOG  🔍 Filtering Debug: {"allPostsCount": 10, "filters": {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}, "hasActiveFilters": null}
+ LOG  🔍 Frontend filtering with: {"category": "all", "dateRange": {"end": null, "start": null}, "hashtags": [], "searchTerm": ""}
+ LOG  🏫 Including school post 8: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Filtering out post 6: school_id is not 1 (current: null)
+ LOG  🏫 Including school post 7: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 9: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 5: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 4: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 10: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 3: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 1: school_id=1, class_id=null, student_id=null
+ LOG  🏫 Including school post 2: school_id=1, class_id=null, student_id=null
+ LOG  🔍 School filtering complete - filtered posts: 9
+ LOG  🎬 Video player created successfully
+ LOG  🎬 Video player status changed: idle
+ LOG  🔄 allPostsLocal changed: 10
+ LOG  🔍 Frontend filtering complete: 9 posts match filters
+ LOG  🏷️ FilterBar - Dynamic categories extracted: [{"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🏷️ FilterBar - Posts data count: 10
+ LOG  🏷️ FilterBar - Final categories for modal: [{"color": "#8E8E93", "icon": "view-list", "label": "All Posts", "value": "all"}, {"color": "#8E8E93", "icon": "view-list", "label": "Health", "value": "health"}, {"color": "#5856D6", "icon": "school", "label": "Academic", "value": "academic"}, {"color": "#8E8E93", "icon": "view-list", "label": "General", "value": "general"}, {"color": "#34C759", "icon": "sports-soccer", "label": "Sports", "value": "sports"}]
+ LOG  🔧 About to define filteredPosts useMemo

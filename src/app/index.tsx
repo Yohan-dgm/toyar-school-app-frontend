@@ -5,7 +5,7 @@ import { getUserCategoryName } from "@/constants/userCategories";
 
 export default function IndexScreen() {
   const { isAuthenticated, sessionData } = useSelector(
-    (state: RootState) => state.app
+    (state: RootState) => state.app,
   );
 
   // If authenticated, redirect to appropriate role-based screen
@@ -28,7 +28,7 @@ export default function IndexScreen() {
     console.log("🏠 IndexScreen - userRole:", userRole);
     console.log(
       "🏠 IndexScreen - Raw sessionData structure:",
-      JSON.stringify(sessionData, null, 2)
+      JSON.stringify(sessionData, null, 2),
     );
 
     if (userCategory) {
@@ -36,7 +36,7 @@ export default function IndexScreen() {
       const categoryName = getUserCategoryName(userCategory);
       console.log(
         "IndexScreen - Redirecting to:",
-        `/authenticated/${categoryName}`
+        `/authenticated/${categoryName}`,
       );
       return <Redirect href={`/authenticated/${categoryName}`} />;
     } else if (userRole) {

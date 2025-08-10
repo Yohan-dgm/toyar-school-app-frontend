@@ -1,7 +1,7 @@
 // Chat Message Types
 export interface ChatMessage {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   isStreaming?: boolean;
@@ -10,7 +10,7 @@ export interface ChatMessage {
 
 // DeepSeek API Types
 export interface DeepSeekMessage {
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
@@ -29,7 +29,7 @@ export interface DeepSeekRequest {
 export interface DeepSeekChoice {
   index: number;
   message: DeepSeekMessage;
-  finish_reason: 'stop' | 'length' | 'content_filter' | null;
+  finish_reason: "stop" | "length" | "content_filter" | null;
 }
 
 export interface DeepSeekStreamChoice {
@@ -38,12 +38,12 @@ export interface DeepSeekStreamChoice {
     role?: string;
     content?: string;
   };
-  finish_reason: 'stop' | 'length' | 'content_filter' | null;
+  finish_reason: "stop" | "length" | "content_filter" | null;
 }
 
 export interface DeepSeekResponse {
   id: string;
-  object: 'chat.completion';
+  object: "chat.completion";
   created: number;
   model: string;
   choices: DeepSeekChoice[];
@@ -56,7 +56,7 @@ export interface DeepSeekResponse {
 
 export interface DeepSeekStreamResponse {
   id: string;
-  object: 'chat.completion.chunk';
+  object: "chat.completion.chunk";
   created: number;
   model: string;
   choices: DeepSeekStreamChoice[];
@@ -65,7 +65,7 @@ export interface DeepSeekStreamResponse {
 // Error Types
 export interface ApiError {
   message: string;
-  type: 'network' | 'api' | 'rate_limit' | 'auth' | 'unknown';
+  type: "network" | "api" | "rate_limit" | "auth" | "unknown";
   code?: string;
   status?: number;
 }

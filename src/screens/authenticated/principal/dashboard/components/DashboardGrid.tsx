@@ -37,15 +37,11 @@ interface DashboardGridProps {
   onFullScreenPress?: (itemId: string) => void;
 }
 
-const DashboardCard: React.FC<{ 
-  item: DashboardItem; 
-  index: number; 
+const DashboardCard: React.FC<{
+  item: DashboardItem;
+  index: number;
   onFullScreenPress?: (itemId: string) => void;
-}> = ({
-  item,
-  index,
-  onFullScreenPress,
-}) => {
+}> = ({ item, index, onFullScreenPress }) => {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(0);
 
@@ -128,14 +124,17 @@ const DashboardCard: React.FC<{
   );
 };
 
-const DashboardGrid: React.FC<DashboardGridProps> = ({ items, onFullScreenPress }) => {
+const DashboardGrid: React.FC<DashboardGridProps> = ({
+  items,
+  onFullScreenPress,
+}) => {
   return (
     <View style={styles.container}>
       {items.map((item, index) => (
-        <DashboardCard 
-          key={item.id} 
-          item={item} 
-          index={index} 
+        <DashboardCard
+          key={item.id}
+          item={item}
+          index={index}
           onFullScreenPress={onFullScreenPress}
         />
       ))}

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import UnderDevelopmentOverlay from "../../../components/development/UnderDevelopmentOverlay";
 
 interface AnalysisCard {
   id: string;
@@ -119,7 +120,7 @@ export default function PrincipalSchoolAnalysis() {
 
   const renderAnalysisCard = (card: AnalysisCard) => {
     const trendInfo = getTrendIcon(card.trend);
-    
+
     return (
       <TouchableOpacity
         key={card.id}
@@ -127,10 +128,12 @@ export default function PrincipalSchoolAnalysis() {
         onPress={card.onPress}
         activeOpacity={0.7}
       >
-        <View style={[styles.iconContainer, { backgroundColor: card.color + "15" }]}>
+        <View
+          style={[styles.iconContainer, { backgroundColor: card.color + "15" }]}
+        >
           <MaterialIcons name={card.icon} size={28} color={card.color} />
         </View>
-        
+
         <View style={styles.cardContent}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>{card.title}</Text>
@@ -139,10 +142,10 @@ export default function PrincipalSchoolAnalysis() {
                 <Text style={[styles.cardValue, { color: card.color }]}>
                   {card.value}
                 </Text>
-                <MaterialIcons 
-                  name={trendInfo.icon} 
-                  size={16} 
-                  color={trendInfo.color} 
+                <MaterialIcons
+                  name={trendInfo.icon}
+                  size={16}
+                  color={trendInfo.color}
                   style={styles.trendIcon}
                 />
               </View>
@@ -150,27 +153,39 @@ export default function PrincipalSchoolAnalysis() {
           </View>
           <Text style={styles.cardSubtitle}>{card.subtitle}</Text>
         </View>
-        
+
         <MaterialIcons name="chevron-right" size={24} color="#ccc" />
       </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>School Analysis</Text>
-          <Text style={styles.headerSubtitle}>
-            Comprehensive analytics and performance insights
-          </Text>
-        </View>
+    <UnderDevelopmentOverlay
+      featureName="School Analysis"
+      comingSoonFeatures={[
+        "Academic performance analytics",
+        "Attendance tracking & insights",
+        "Teacher performance metrics",
+        "Budget analysis & forecasting",
+        "Resource utilization reports",
+        "Student behavior analytics",
+      ]}
+    >
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>School Analysis</Text>
+            <Text style={styles.headerSubtitle}>
+              Comprehensive analytics and performance insights
+            </Text>
+          </View>
 
-        <View style={styles.analysisContainer}>
-          {analysisCards.map((card) => renderAnalysisCard(card))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <View style={styles.analysisContainer}>
+            {analysisCards.map((card) => renderAnalysisCard(card))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </UnderDevelopmentOverlay>
   );
 }
 

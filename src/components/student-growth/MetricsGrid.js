@@ -71,7 +71,7 @@ const StarRating = ({
           size={size}
           color={color}
           delay={i}
-        />
+        />,
       );
     } else {
       const iconName = filled
@@ -81,7 +81,7 @@ const StarRating = ({
           : "star-border";
       const iconColor = filled || halfFilled ? color : "#E0E0E0";
       stars.push(
-        <MaterialIcons key={i} name={iconName} size={size} color={iconColor} />
+        <MaterialIcons key={i} name={iconName} size={size} color={iconColor} />,
       );
     }
   }
@@ -103,13 +103,13 @@ const MetricCard = ({ metric, isSelected, onPress, index }) => {
     // Bounce animation
     scale.value = withSequence(
       withTiming(0.95, { duration: 100 }),
-      withSpring(1, { damping: 8, stiffness: 200 })
+      withSpring(1, { damping: 8, stiffness: 200 }),
     );
 
     // Flash animation for selection
     opacity.value = withSequence(
       withTiming(0.7, { duration: 100 }),
-      withTiming(1, { duration: 100 })
+      withTiming(1, { duration: 100 }),
     );
 
     onPress(metric);

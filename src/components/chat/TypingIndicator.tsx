@@ -34,28 +34,28 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({
       dot1.value = withRepeat(
         withSequence(
           withTiming(1, { duration: 600 }),
-          withTiming(0.3, { duration: 600 })
+          withTiming(0.3, { duration: 600 }),
         ),
         -1,
-        false
+        false,
       );
 
       dot2.value = withRepeat(
         withSequence(
           withDelay(200, withTiming(1, { duration: 600 })),
-          withTiming(0.3, { duration: 600 })
+          withTiming(0.3, { duration: 600 }),
         ),
         -1,
-        false
+        false,
       );
 
       dot3.value = withRepeat(
         withSequence(
           withDelay(400, withTiming(1, { duration: 600 })),
-          withTiming(0.3, { duration: 600 })
+          withTiming(0.3, { duration: 600 }),
         ),
         -1,
-        false
+        false,
       );
     } else {
       // Fade out the indicator

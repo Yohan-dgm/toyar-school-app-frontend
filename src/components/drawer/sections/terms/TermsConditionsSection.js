@@ -14,9 +14,9 @@ const TermsConditionsSection = ({ onClose }) => {
   const [expandedSections, setExpandedSections] = useState({});
 
   const toggleSection = (index) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [index]: !prev[index]
+      [index]: !prev[index],
     }));
   };
 
@@ -138,36 +138,38 @@ Upon termination:
         <View style={styles.introSection}>
           <Text style={styles.introTitle}>Terms of Service</Text>
           <Text style={styles.introText}>
-            Welcome to the Nexis College International mobile application. These Terms and Conditions govern your use of our educational platform and services.
+            Welcome to the Nexis College International mobile application. These
+            Terms and Conditions govern your use of our educational platform and
+            services.
           </Text>
           <Text style={styles.lastUpdated}>
-            Effective Date: January 15, 2025
+            Effective Date: January 1, 2025
           </Text>
         </View>
 
         {/* Terms Sections */}
         {termsSections.map((section, index) => (
           <View key={index} style={styles.section}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.sectionHeader}
               onPress={() => toggleSection(index)}
             >
               <View style={styles.sectionTitleContainer}>
-                <MaterialIcons 
-                  name="gavel" 
-                  size={24} 
-                  color={theme.colors.primary} 
+                <MaterialIcons
+                  name="gavel"
+                  size={24}
+                  color={theme.colors.primary}
                   style={styles.sectionIcon}
                 />
                 <Text style={styles.sectionTitle}>{section.title}</Text>
               </View>
-              <MaterialIcons 
-                name={expandedSections[index] ? "expand-less" : "expand-more"} 
-                size={24} 
-                color="#666666" 
+              <MaterialIcons
+                name={expandedSections[index] ? "expand-less" : "expand-more"}
+                size={24}
+                color="#666666"
               />
             </TouchableOpacity>
-            
+
             {expandedSections[index] && (
               <View style={styles.sectionContentContainer}>
                 <Text style={styles.sectionContent}>{section.content}</Text>
@@ -183,7 +185,9 @@ Upon termination:
             <Text style={styles.agreementTitle}>Agreement Acknowledgment</Text>
           </View>
           <Text style={styles.agreementText}>
-            By continuing to use the Nexis College International app, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+            By continuing to use the Nexis College International app, you
+            acknowledge that you have read, understood, and agree to be bound by
+            these Terms and Conditions.
           </Text>
         </View>
 
@@ -191,24 +195,37 @@ Upon termination:
         <View style={styles.contactSection}>
           <Text style={styles.contactTitle}>Questions About These Terms?</Text>
           <Text style={styles.contactText}>
-            If you have any questions about these Terms and Conditions, please contact us:
+            If you have any questions about these Terms and Conditions, please
+            contact us:
           </Text>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="email" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="email"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>legal@nexiscollege.edu</Text>
           </View>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="phone" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>+94 11 234 5678</Text>
           </View>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="business" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="business"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>
-              Legal Department{'\n'}
-              Nexis College International{'\n'}
+              Legal Department{"\n"}
+              Nexis College International{"\n"}
               Yakkala, Sri Lanka
             </Text>
           </View>
@@ -216,23 +233,30 @@ Upon termination:
 
         {/* Action Buttons */}
         <View style={styles.actionSection}>
-          <TouchableOpacity style={styles.actionButton}>
+          {/* <TouchableOpacity style={styles.actionButton}>
             <MaterialIcons name="print" size={20} color="#FFFFFF" />
             <Text style={styles.actionButtonText}>Print Terms</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={[styles.actionButton, styles.secondaryButton]}>
-            <MaterialIcons name="bookmark" size={20} color={theme.colors.primary} />
+          </TouchableOpacity> */}
+
+          {/* <TouchableOpacity
+            style={[styles.actionButton, styles.secondaryButton]}
+          >
+            <MaterialIcons
+              name="bookmark"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={[styles.actionButtonText, styles.secondaryButtonText]}>
               Save for Later
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            These terms are subject to change. Users will be notified of any updates.
+            These terms are subject to change. Users will be notified of any
+            updates.
           </Text>
           <Text style={styles.footerText}>
             © 2025 Nexis College International. All rights reserved.

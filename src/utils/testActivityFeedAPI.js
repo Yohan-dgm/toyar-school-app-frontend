@@ -29,7 +29,7 @@ export const testActivityFeedAPI = async () => {
         page: 1,
         limit: 10,
         filters: {},
-      })
+      }),
     );
 
     console.log("📥 Raw API Response:", result);
@@ -45,7 +45,7 @@ export const testActivityFeedAPI = async () => {
             posts: result.data.data || [],
             pagination: result.data.pagination || null,
             append: false,
-          })
+          }),
         );
 
         console.log("🔄 Redux state updated");
@@ -60,7 +60,7 @@ export const testActivityFeedAPI = async () => {
         console.log("⚠️ API returned success: false");
         console.log("📝 Message:", result.data.message);
         dispatch(
-          setError(result.data.message || "API returned unsuccessful response")
+          setError(result.data.message || "API returned unsuccessful response"),
         );
       }
     } else if (result.error) {
@@ -113,7 +113,7 @@ export const testActivityFeedAPIWithFilters = async () => {
         page: 1,
         limit: 5,
         filters: testFilters,
-      })
+      }),
     );
 
     console.log("📥 Filtered API Response:", result);
@@ -124,12 +124,12 @@ export const testActivityFeedAPIWithFilters = async () => {
           posts: result.data.data || [],
           pagination: result.data.pagination || null,
           append: false,
-        })
+        }),
       );
       dispatch(setFilters(testFilters));
 
       console.log(
-        `✅ Filtered results: ${result.data.data?.length || 0} posts`
+        `✅ Filtered results: ${result.data.data?.length || 0} posts`,
       );
     }
   } catch (error) {

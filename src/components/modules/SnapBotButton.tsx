@@ -31,20 +31,20 @@ export const SnapBotButton: React.FC<SnapBotButtonProps> = ({ onPress }) => {
     pulseScale.value = withRepeat(
       withSequence(
         withTiming(1.1, { duration: 1000 }),
-        withTiming(1, { duration: 1000 })
+        withTiming(1, { duration: 1000 }),
       ),
       -1,
-      false
+      false,
     );
 
     // Glow animation
     glowOpacity.value = withRepeat(
       withSequence(
         withTiming(1, { duration: 2000 }),
-        withTiming(0, { duration: 2000 })
+        withTiming(0, { duration: 2000 }),
       ),
       -1,
-      false
+      false,
     );
   }, []);
 

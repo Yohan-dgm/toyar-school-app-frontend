@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { theme } from "../../../../styles/theme";
 import { USER_CATEGORIES } from "../../../../constants/userCategories";
 import { setSelectedStudent } from "../../../../state-store/slices/app-slice";
@@ -59,7 +58,7 @@ const StudentProfileMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `👤 StudentProfileMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
+        `👤 StudentProfileMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -70,12 +69,12 @@ const StudentProfileMain = () => {
     "👤 StudentProfileMain - User category:",
     userCategory,
     "Is parent:",
-    isParent
+    isParent,
   );
   console.log("👤 StudentProfileMain - Students count:", students.length);
   console.log(
     "👤 StudentProfileMain - Selected student:",
-    selectedStudent?.student_calling_name
+    selectedStudent?.student_calling_name,
   );
 
   if (!selectedStudent) {
@@ -216,7 +215,7 @@ const StudentProfileMain = () => {
             <Text style={styles.statNumber}>
               {selectedStudent.timeline.reduce(
                 (sum, item) => sum + item.achievements.length,
-                0
+                0,
               )}
             </Text>
             <Text style={styles.statTitle}>Awards</Text>
@@ -287,7 +286,7 @@ const StudentProfileMain = () => {
 
           <View style={styles.timelineContainer}>
             {selectedStudent.timeline.map((item, index) =>
-              renderTimelineItem(item, index)
+              renderTimelineItem(item, index),
             )}
           </View>
         </View>

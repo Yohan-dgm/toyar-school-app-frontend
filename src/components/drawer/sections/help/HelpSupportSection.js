@@ -26,17 +26,20 @@ const HelpSupportSection = ({ onClose }) => {
       title: "Account & Login",
       icon: "account-circle",
       items: [
-        {
-          question: "How do I reset my password?",
-          answer: "Go to the login screen and tap 'Forgot Password'. Enter your email address and follow the instructions sent to your email.",
-        },
-        {
-          question: "How do I update my profile information?",
-          answer: "Navigate to Profile section from the drawer menu. Tap 'Edit Profile' and update your information.",
-        },
+        // {
+        //   question: "How do I reset my password?",
+        //   answer:
+        //     "Go to the login screen and tap 'Forgot Password'. Enter your email address and follow the instructions sent to your email.",
+        // },
+        // {
+        //   question: "How do I update my profile information?",
+        //   answer:
+        //     "Navigate to Profile section from the drawer menu. Tap 'Edit Profile' and update your information.",
+        // },
         {
           question: "Why can't I log in?",
-          answer: "Ensure you're using the correct username/email and password. Check your internet connection. If issues persist, contact support.",
+          answer:
+            "Ensure you're using the correct username/email and password. Check your internet connection. If issues persist, contact support.",
         },
       ],
     },
@@ -45,17 +48,20 @@ const HelpSupportSection = ({ onClose }) => {
       title: "Payments & Fees",
       icon: "payment",
       items: [
-        {
-          question: "How do I make a payment?",
-          answer: "Go to Payment Center from the drawer menu. Select 'Make Payment', choose the fee type, and follow the payment process.",
-        },
-        {
-          question: "What payment methods are accepted?",
-          answer: "We accept credit/debit cards, bank transfers, and mobile payments. All transactions are secure and encrypted.",
-        },
+        // {
+        //   question: "How do I make a payment?",
+        //   answer:
+        //     "Go to Payment Center from the drawer menu. Select 'Make Payment', choose the fee type, and follow the payment process.",
+        // },
+        // {
+        //   question: "What payment methods are accepted?",
+        //   answer:
+        //     "We accept credit/debit cards, bank transfers, and mobile payments. All transactions are secure and encrypted.",
+        // },
         {
           question: "How can I view my payment history?",
-          answer: "In Payment Center, select 'Payment History' to view all your past transactions and download receipts.",
+          answer:
+            "In Payment Center, select 'Payment History' to view all your past transactions and download receipts.",
         },
       ],
     },
@@ -66,15 +72,18 @@ const HelpSupportSection = ({ onClose }) => {
       items: [
         {
           question: "How do I check my child's attendance?",
-          answer: "Navigate to Calendar section and select the 'Student Attendance' tab to view attendance records.",
+          answer:
+            "Navigate to Calendar section and select the 'Student Attendance' tab to view attendance records.",
         },
         {
           question: "Where can I see academic performance?",
-          answer: "Go to Academic Performance section to view grades, progress reports, and performance analytics.",
+          answer:
+            "Go to Academic Performance section to view grades, progress reports, and performance analytics.",
         },
         {
           question: "How do I contact teachers?",
-          answer: "Use the Educator Feedback section to send messages directly to your child's teachers.",
+          answer:
+            "Use the Messaging section to send messages directly to your child's teachers.",
         },
       ],
     },
@@ -85,15 +94,18 @@ const HelpSupportSection = ({ onClose }) => {
       items: [
         {
           question: "The app is running slowly",
-          answer: "Try closing and reopening the app. Ensure you have a stable internet connection. Clear app cache if needed.",
+          answer:
+            "Try closing and reopening the app. Ensure you have a stable internet connection. Clear app cache if needed.",
         },
         {
           question: "I'm not receiving notifications",
-          answer: "Check your device notification settings and ensure SchoolSnap has permission to send notifications.",
+          answer:
+            "Check your device notification settings and ensure School App has permission to send notifications.",
         },
         {
           question: "App crashes frequently",
-          answer: "Update to the latest version of the app. Restart your device. If issues persist, contact technical support.",
+          answer:
+            "Update to the latest version of the app. Restart your device. If issues persist, contact technical support.",
         },
       ],
     },
@@ -103,28 +115,32 @@ const HelpSupportSection = ({ onClose }) => {
     {
       id: "phone",
       title: "Call Support",
-      subtitle: "+94 11 234 5678",
+      subtitle: "+94 332 321 227",
       icon: "phone",
-      action: () => Linking.openURL("tel:+94112345678"),
+      action: () => Linking.openURL("tel:+94332321227"),
     },
     {
       id: "email",
       title: "Email Support",
-      subtitle: "support@nexiscollege.lk",
+      subtitle: "info@nexiscollege.lk",
       icon: "email",
-      action: () => Linking.openURL("mailto:support@nexiscollege.lk"),
+      action: () => Linking.openURL("mailto:info@nexiscollege.lk"),
     },
     {
       id: "whatsapp",
       title: "WhatsApp Support",
-      subtitle: "+94 77 123 4567",
+      subtitle: "+94 707 178 474",
       icon: "chat",
-      action: () => Linking.openURL("https://wa.me/94771234567"),
+      action: () => Linking.openURL("https://wa.me/94707178474"),
     },
   ];
 
   const handleSubmitTicket = () => {
-    if (!supportTicket.subject || !supportTicket.message || !supportTicket.category) {
+    if (
+      !supportTicket.subject ||
+      !supportTicket.message ||
+      !supportTicket.category
+    ) {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
@@ -141,7 +157,7 @@ const HelpSupportSection = ({ onClose }) => {
             setSelectedCategory(null);
           },
         },
-      ]
+      ],
     );
   };
 
@@ -172,7 +188,11 @@ const HelpSupportSection = ({ onClose }) => {
         style={styles.backButton}
         onPress={() => setSelectedCategory(null)}
       >
-        <MaterialIcons name="arrow-back" size={24} color={theme.colors.primary} />
+        <MaterialIcons
+          name="arrow-back"
+          size={24}
+          color={theme.colors.primary}
+        />
         <Text style={styles.backButtonText}>Back to Categories</Text>
       </TouchableOpacity>
 
@@ -212,61 +232,72 @@ const HelpSupportSection = ({ onClose }) => {
 
   const renderSupportTicketSection = () => (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Submit Support Ticket</Text>
-      
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Category</Text>
-        <View style={styles.categorySelector}>
-          {helpCategories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[
-                styles.categoryChip,
-                supportTicket.category === category.id && styles.categoryChipSelected,
-              ]}
-              onPress={() => setSupportTicket({ ...supportTicket, category: category.id })}
-            >
-              <Text
-                style={[
-                  styles.categoryChipText,
-                  supportTicket.category === category.id && styles.categoryChipTextSelected,
-                ]}
-              >
-                {category.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+      {/* //<Text style={styles.sectionTitle}>Submit Support Ticket</Text> 
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Subject</Text>
-        <TextInput
-          style={styles.textInput}
-          value={supportTicket.subject}
-          onChangeText={(text) => setSupportTicket({ ...supportTicket, subject: text })}
-          placeholder="Brief description of your issue"
-          placeholderTextColor="#94A3B8"
-        />
-      </View>
+    //   <View style={styles.inputGroup}>
+    //     <Text style={styles.inputLabel}>Category</Text>
+    //     <View style={styles.categorySelector}>
+    //       {helpCategories.map((category) => (
+    //         <TouchableOpacity
+    //           key={category.id}
+    //           style={[
+    //             styles.categoryChip,
+    //             supportTicket.category === category.id &&
+    //               styles.categoryChipSelected,
+    //           ]}
+    //           onPress={() =>
+    //             setSupportTicket({ ...supportTicket, category: category.id })
+    //           }
+    //         >
+    //           <Text
+    //             style={[
+    //               styles.categoryChipText,
+    //               supportTicket.category === category.id &&
+    //                 styles.categoryChipTextSelected,
+    //             ]}
+    //           >
+    //             {category.title}
+    //           </Text>
+    //         </TouchableOpacity>
+    //       ))}
+    //     </View>
+    //   </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.inputLabel}>Message</Text>
-        <TextInput
-          style={[styles.textInput, styles.textArea]}
-          value={supportTicket.message}
-          onChangeText={(text) => setSupportTicket({ ...supportTicket, message: text })}
-          placeholder="Describe your issue in detail..."
-          placeholderTextColor="#94A3B8"
-          multiline
-          numberOfLines={6}
-          textAlignVertical="top"
-        />
-      </View>
+    //   <View style={styles.inputGroup}>
+    //     <Text style={styles.inputLabel}>Subject</Text>
+    //     <TextInput
+    //       style={styles.textInput}
+    //       value={supportTicket.subject}
+    //       onChangeText={(text) =>
+    //         setSupportTicket({ ...supportTicket, subject: text })
+    //       }
+    //       placeholder="Brief description of your issue"
+    //       placeholderTextColor="#94A3B8"
+    //     />
+    //   </View>
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmitTicket}>
-        <Text style={styles.submitButtonText}>Submit Ticket</Text>
-      </TouchableOpacity>
+    //   <View style={styles.inputGroup}>
+    //     <Text style={styles.inputLabel}>Message</Text>
+    //     <TextInput
+    //       style={[styles.textInput, styles.textArea]}
+    //       value={supportTicket.message}
+    //       onChangeText={(text) =>
+    //         setSupportTicket({ ...supportTicket, message: text })
+    //       }
+    //       placeholder="Describe your issue in detail..."
+    //       placeholderTextColor="#94A3B8"
+    //       multiline
+    //       numberOfLines={6}
+    //       textAlignVertical="top"
+    //     />
+    //   </View>
+
+    //   <TouchableOpacity
+    //     style={styles.submitButton}
+    //     onPress={handleSubmitTicket}
+    //   >
+    //     <Text style={styles.submitButtonText}>Submit Ticket</Text>
+    //   </TouchableOpacity>*/}
     </View>
   );
 

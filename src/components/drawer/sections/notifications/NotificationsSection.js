@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Alert,
 } from "react-native";
+import { BlurView } from "expo-blur";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../../../styles/theme";
 
@@ -39,7 +40,8 @@ const NotificationsSection = ({ onClose }) => {
     {
       id: 3,
       title: "Payment Confirmation",
-      message: "Your payment of $250.00 for Term 2 fees has been processed successfully",
+      message:
+        "Your payment of $250.00 for Term 2 fees has been processed successfully",
       type: "payments",
       timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
       read: true,
@@ -48,7 +50,8 @@ const NotificationsSection = ({ onClose }) => {
     {
       id: 4,
       title: "School Event: Science Fair",
-      message: "Annual Science Fair will be held on March 15th. Students can register now.",
+      message:
+        "Annual Science Fair will be held on March 15th. Students can register now.",
       type: "events",
       timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       read: true,
@@ -75,7 +78,8 @@ const NotificationsSection = ({ onClose }) => {
     {
       id: 7,
       title: "Fee Reminder",
-      message: "Term 3 fees are due by March 20th. Please make payment to avoid late charges.",
+      message:
+        "Term 3 fees are due by March 20th. Please make payment to avoid late charges.",
       type: "payments",
       timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
       read: true,
@@ -84,7 +88,8 @@ const NotificationsSection = ({ onClose }) => {
     {
       id: 8,
       title: "Attendance Alert",
-      message: "Emma's attendance is below 85%. Please ensure regular attendance.",
+      message:
+        "Emma's attendance is below 85%. Please ensure regular attendance.",
       type: "academic",
       timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
       read: true,
@@ -110,18 +115,18 @@ const NotificationsSection = ({ onClose }) => {
   };
 
   const markAsRead = (notificationId) => {
-    setNotifications(prev =>
-      prev.map(notification =>
+    setNotifications((prev) =>
+      prev.map((notification) =>
         notification.id === notificationId
           ? { ...notification, read: true }
-          : notification
-      )
+          : notification,
+      ),
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(notification => ({ ...notification, read: true }))
+    setNotifications((prev) =>
+      prev.map((notification) => ({ ...notification, read: true })),
     );
   };
 
@@ -135,12 +140,12 @@ const NotificationsSection = ({ onClose }) => {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            setNotifications(prev =>
-              prev.filter(notification => notification.id !== notificationId)
+            setNotifications((prev) =>
+              prev.filter((notification) => notification.id !== notificationId),
             );
           },
         },
-      ]
+      ],
     );
   };
 
@@ -149,22 +154,24 @@ const NotificationsSection = ({ onClose }) => {
 
     switch (filter) {
       case "unread":
-        filtered = notifications.filter(n => !n.read);
+        filtered = notifications.filter((n) => !n.read);
         break;
       case "academic":
-        filtered = notifications.filter(n => n.type === "academic");
+        filtered = notifications.filter((n) => n.type === "academic");
         break;
       case "events":
-        filtered = notifications.filter(n => n.type === "events");
+        filtered = notifications.filter((n) => n.type === "events");
         break;
       case "payments":
-        filtered = notifications.filter(n => n.type === "payments");
+        filtered = notifications.filter((n) => n.type === "payments");
         break;
       default:
         filtered = notifications;
     }
 
-    return filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    return filtered.sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
+    );
   };
 
   const getTypeIcon = (type) => {
@@ -224,13 +231,29 @@ const NotificationsSection = ({ onClose }) => {
 
   const filterOptions = [
     { key: "all", label: "All", count: notifications.length },
-    { key: "unread", label: "Unread", count: notifications.filter(n => !n.read).length },
-    { key: "academic", label: "Academic", count: notifications.filter(n => n.type === "academic").length },
-    { key: "events", label: "Events", count: notifications.filter(n => n.type === "events").length },
-    { key: "payments", label: "Payments", count: notifications.filter(n => n.type === "payments").length },
+    {
+      key: "unread",
+      label: "Unread",
+      count: notifications.filter((n) => !n.read).length,
+    },
+    {
+      key: "academic",
+      label: "Academic",
+      count: notifications.filter((n) => n.type === "academic").length,
+    },
+    {
+      key: "events",
+      label: "Events",
+      count: notifications.filter((n) => n.type === "events").length,
+    },
+    {
+      key: "payments",
+      label: "Payments",
+      count: notifications.filter((n) => n.type === "payments").length,
+    },
   ];
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <View style={styles.container}>
@@ -241,7 +264,10 @@ const NotificationsSection = ({ onClose }) => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Notifications</Text>
         {unreadCount > 0 && (
-          <TouchableOpacity style={styles.markAllButton} onPress={markAllAsRead}>
+          <TouchableOpacity
+            style={styles.markAllButton}
+            onPress={markAllAsRead}
+          >
             <Text style={styles.markAllButtonText}>Mark All Read</Text>
           </TouchableOpacity>
         )}
@@ -268,14 +294,18 @@ const NotificationsSection = ({ onClose }) => {
                 {option.label}
               </Text>
               {option.count > 0 && (
-                <View style={[
-                  styles.filterBadge,
-                  filter === option.key && styles.filterBadgeActive,
-                ]}>
-                  <Text style={[
-                    styles.filterBadgeText,
-                    filter === option.key && styles.filterBadgeTextActive,
-                  ]}>
+                <View
+                  style={[
+                    styles.filterBadge,
+                    filter === option.key && styles.filterBadgeActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.filterBadgeText,
+                      filter === option.key && styles.filterBadgeTextActive,
+                    ]}
+                  >
                     {option.count}
                   </Text>
                 </View>
@@ -295,10 +325,14 @@ const NotificationsSection = ({ onClose }) => {
       >
         {getFilteredNotifications().length === 0 ? (
           <View style={styles.emptyState}>
-            <MaterialIcons name="notifications-none" size={64} color="#94A3B8" />
+            <MaterialIcons
+              name="notifications-none"
+              size={64}
+              color="#94A3B8"
+            />
             <Text style={styles.emptyStateTitle}>No Notifications</Text>
             <Text style={styles.emptyStateMessage}>
-              {filter === "unread" 
+              {filter === "unread"
                 ? "You're all caught up! No unread notifications."
                 : "No notifications found for this category."}
             </Text>
@@ -322,10 +356,16 @@ const NotificationsSection = ({ onClose }) => {
                   />
                 </View>
                 <View style={styles.notificationMeta}>
-                  <View style={[
-                    styles.priorityIndicator,
-                    { backgroundColor: getPriorityColor(notification.priority) }
-                  ]} />
+                  <View
+                    style={[
+                      styles.priorityIndicator,
+                      {
+                        backgroundColor: getPriorityColor(
+                          notification.priority,
+                        ),
+                      },
+                    ]}
+                  />
                   <Text style={styles.notificationTime}>
                     {formatTimestamp(notification.timestamp)}
                   </Text>
@@ -337,14 +377,16 @@ const NotificationsSection = ({ onClose }) => {
                   <MaterialIcons name="close" size={18} color="#94A3B8" />
                 </TouchableOpacity>
               </View>
-              
-              <Text style={[
-                styles.notificationTitle,
-                !notification.read && styles.notificationTitleUnread,
-              ]}>
+
+              <Text
+                style={[
+                  styles.notificationTitle,
+                  !notification.read && styles.notificationTitleUnread,
+                ]}
+              >
                 {notification.title}
               </Text>
-              
+
               <Text style={styles.notificationMessage}>
                 {notification.message}
               </Text>
@@ -354,6 +396,16 @@ const NotificationsSection = ({ onClose }) => {
           ))
         )}
       </ScrollView>
+
+      {/* Under Development Overlay - Covers entire content area */}
+      <View style={styles.developmentOverlay}>
+        <BlurView intensity={80} style={styles.blurContainer}>
+          <View style={styles.developmentBanner}>
+            <MaterialIcons name="construction" size={24} color="#F59E0B" />
+            <Text style={styles.developmentText}>Under Development</Text>
+          </View>
+        </BlurView>
+      </View>
     </View>
   );
 };
@@ -533,6 +585,38 @@ const styles = StyleSheet.create({
     color: "#64748B",
     textAlign: "center",
     paddingHorizontal: theme.spacing.xl,
+  },
+  developmentOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+    marginTop: 60 + theme.spacing.lg + theme.spacing.md + 16, // header height + filter container height
+  },
+  blurContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: theme.spacing.sm,
+  },
+  developmentBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(245, 158, 11, 0.1)",
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: "rgba(245, 158, 11, 0.3)",
+  },
+  developmentText: {
+    fontSize: 16,
+    fontFamily: theme.fonts.bold,
+    color: "#F59E0B",
+    marginLeft: theme.spacing.sm,
   },
 });
 

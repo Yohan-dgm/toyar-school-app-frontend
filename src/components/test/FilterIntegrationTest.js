@@ -10,10 +10,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 // Import filter utilities
-import { 
-  transformFiltersForAPI, 
-  extractCategoriesFromPosts, 
-  extractHashtagsFromPosts 
+import {
+  transformFiltersForAPI,
+  extractCategoriesFromPosts,
+  extractHashtagsFromPosts,
 } from "../activity-feed/FilterBar";
 
 const FilterIntegrationTest = () => {
@@ -26,9 +26,9 @@ const FilterIntegrationTest = () => {
   // Test data
   const sampleFilterBarFilters = {
     searchTerm: "science fair",
-    dateRange: { 
-      start: new Date("2024-01-01"), 
-      end: new Date("2024-12-31") 
+    dateRange: {
+      start: new Date("2024-01-01"),
+      end: new Date("2024-12-31"),
     },
     category: "academic",
     hashtags: ["ScienceFair", "Achievement"],
@@ -66,34 +66,35 @@ const FilterIntegrationTest = () => {
       details,
       timestamp: new Date().toLocaleTimeString(),
     };
-    setTestResults(prev => [newResult, ...prev]);
+    setTestResults((prev) => [newResult, ...prev]);
   };
 
   // Test 1: Filter Transformation
   const testFilterTransformation = () => {
     try {
       const transformed = transformFiltersForAPI(sampleFilterBarFilters);
-      
+
       const expected = {
         search: "science fair",
         dateFrom: "2024-01-01",
         dateTo: "2024-12-31",
         category: "academic",
         hashtags: ["ScienceFair", "Achievement"],
-        searchFilterList: []
+        searchFilterList: [],
       };
 
-      const isCorrect = 
+      const isCorrect =
         transformed.search === expected.search &&
         transformed.dateFrom === expected.dateFrom &&
         transformed.dateTo === expected.dateTo &&
         transformed.category === expected.category &&
-        JSON.stringify(transformed.hashtags) === JSON.stringify(expected.hashtags);
+        JSON.stringify(transformed.hashtags) ===
+          JSON.stringify(expected.hashtags);
 
       addTestResult(
         "Filter Transformation",
         isCorrect ? "✅ PASS" : "❌ FAIL",
-        `Expected: ${JSON.stringify(expected, null, 2)}\nActual: ${JSON.stringify(transformed, null, 2)}`
+        `Expected: ${JSON.stringify(expected, null, 2)}\nActual: ${JSON.stringify(transformed, null, 2)}`,
       );
     } catch (error) {
       addTestResult("Filter Transformation", "❌ ERROR", error.message);
@@ -104,16 +105,18 @@ const FilterIntegrationTest = () => {
   const testCategoryExtraction = () => {
     try {
       const categories = extractCategoriesFromPosts(samplePostsData);
-      
+
       const expectedCategories = ["academic", "sports", "announcement"];
-      const extractedValues = categories.map(cat => cat.value);
-      
-      const isCorrect = expectedCategories.every(cat => extractedValues.includes(cat));
+      const extractedValues = categories.map((cat) => cat.value);
+
+      const isCorrect = expectedCategories.every((cat) =>
+        extractedValues.includes(cat),
+      );
 
       addTestResult(
         "Category Extraction",
         isCorrect ? "✅ PASS" : "❌ FAIL",
-        `Expected categories: ${expectedCategories.join(", ")}\nExtracted: ${extractedValues.join(", ")}`
+        `Expected categories: ${expectedCategories.join(", ")}\nExtracted: ${extractedValues.join(", ")}`,
       );
     } catch (error) {
       addTestResult("Category Extraction", "❌ ERROR", error.message);
@@ -124,16 +127,27 @@ const FilterIntegrationTest = () => {
   const testHashtagExtraction = () => {
     try {
       const hashtags = extractHashtagsFromPosts(samplePostsData);
-      
-      const expectedHashtags = ["sciencefair", "achievement", "grade9", "football", "victory", "teamspirit", "exam", "mathtest"];
-      const extractedValues = hashtags.map(tag => tag.value);
-      
-      const isCorrect = expectedHashtags.every(tag => extractedValues.includes(tag));
+
+      const expectedHashtags = [
+        "sciencefair",
+        "achievement",
+        "grade9",
+        "football",
+        "victory",
+        "teamspirit",
+        "exam",
+        "mathtest",
+      ];
+      const extractedValues = hashtags.map((tag) => tag.value);
+
+      const isCorrect = expectedHashtags.every((tag) =>
+        extractedValues.includes(tag),
+      );
 
       addTestResult(
         "Hashtag Extraction",
         isCorrect ? "✅ PASS" : "❌ FAIL",
-        `Expected hashtags: ${expectedHashtags.join(", ")}\nExtracted: ${extractedValues.join(", ")}`
+        `Expected hashtags: ${expectedHashtags.join(", ")}\nExtracted: ${extractedValues.join(", ")}`,
       );
     } catch (error) {
       addTestResult("Hashtag Extraction", "❌ ERROR", error.message);
@@ -146,21 +160,25 @@ const FilterIntegrationTest = () => {
       // Test with "all" category
       const allCategoryFilter = { ...sampleFilterBarFilters, category: "all" };
       const transformed = transformFiltersForAPI(allCategoryFilter);
-      
+
       const isAllCategoryCorrect = transformed.category === "";
 
       // Test with empty date range
-      const emptyDateFilter = { ...sampleFilterBarFilters, dateRange: { start: null, end: null } };
+      const emptyDateFilter = {
+        ...sampleFilterBarFilters,
+        dateRange: { start: null, end: null },
+      };
       const transformedEmpty = transformFiltersForAPI(emptyDateFilter);
-      
-      const isEmptyDateCorrect = transformedEmpty.dateFrom === "" && transformedEmpty.dateTo === "";
+
+      const isEmptyDateCorrect =
+        transformedEmpty.dateFrom === "" && transformedEmpty.dateTo === "";
 
       const overallResult = isAllCategoryCorrect && isEmptyDateCorrect;
 
       addTestResult(
         "Edge Cases",
         overallResult ? "✅ PASS" : "❌ FAIL",
-        `All category -> empty string: ${isAllCategoryCorrect}\nEmpty dates -> empty strings: ${isEmptyDateCorrect}`
+        `All category -> empty string: ${isAllCategoryCorrect}\nEmpty dates -> empty strings: ${isEmptyDateCorrect}`,
       );
     } catch (error) {
       addTestResult("Edge Cases", "❌ ERROR", error.message);
@@ -173,17 +191,17 @@ const FilterIntegrationTest = () => {
       if (schoolPosts && schoolPosts.length > 0) {
         const categories = extractCategoriesFromPosts(schoolPosts);
         const hashtags = extractHashtagsFromPosts(schoolPosts);
-        
+
         addTestResult(
           "Real Redux Data",
           "✅ PASS",
-          `Found ${categories.length} categories and ${hashtags.length} hashtags from ${schoolPosts.length} posts`
+          `Found ${categories.length} categories and ${hashtags.length} hashtags from ${schoolPosts.length} posts`,
         );
       } else {
         addTestResult(
           "Real Redux Data",
           "⚠️ NO DATA",
-          "No posts found in Redux state. Load some posts first."
+          "No posts found in Redux state. Load some posts first.",
         );
       }
     } catch (error) {
@@ -207,12 +225,12 @@ const FilterIntegrationTest = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>🧪 Filter Integration Test</Text>
-      
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.runButton} onPress={runAllTests}>
           <Text style={styles.buttonText}>Run All Tests</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.clearButton} onPress={clearResults}>
           <Text style={styles.buttonText}>Clear Results</Text>
         </TouchableOpacity>

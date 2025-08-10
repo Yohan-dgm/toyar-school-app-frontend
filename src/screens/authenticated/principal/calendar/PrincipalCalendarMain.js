@@ -22,7 +22,7 @@ const PrincipalCalendarMain = () => {
     "📅 PrincipalCalendarMain - User category:",
     userCategory,
     "Is principal:",
-    isPrincipal
+    isPrincipal,
   );
 
   return (

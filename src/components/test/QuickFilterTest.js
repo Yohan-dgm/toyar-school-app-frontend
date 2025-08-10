@@ -7,9 +7,9 @@ const QuickFilterTest = () => {
     // Test case 1: Basic filter transformation
     const testFilter1 = {
       searchTerm: "science",
-      dateRange: { 
-        start: new Date("2024-01-01"), 
-        end: new Date("2024-12-31") 
+      dateRange: {
+        start: new Date("2024-01-01"),
+        end: new Date("2024-12-31"),
       },
       category: "academic",
       hashtags: ["ScienceFair", "Achievement"],
@@ -41,7 +41,7 @@ const QuickFilterTest = () => {
     console.log("🧪 Test 3 - Null values:", result3);
 
     // Verify results
-    const test1Pass = 
+    const test1Pass =
       result1.search === "science" &&
       result1.dateFrom === "2024-01-01" &&
       result1.dateTo === "2024-12-31" &&
@@ -49,7 +49,7 @@ const QuickFilterTest = () => {
       Array.isArray(result1.hashtags) &&
       result1.hashtags.length === 2;
 
-    const test2Pass = 
+    const test2Pass =
       result2.search === "" &&
       result2.dateFrom === "" &&
       result2.dateTo === "" &&
@@ -57,7 +57,7 @@ const QuickFilterTest = () => {
       Array.isArray(result2.hashtags) &&
       result2.hashtags.length === 0;
 
-    const test3Pass = 
+    const test3Pass =
       result3.search === "" &&
       result3.dateFrom === "" &&
       result3.dateTo === "" &&
@@ -70,10 +70,10 @@ const QuickFilterTest = () => {
     Alert.alert(
       "Filter Test Results",
       `Test 1 (Basic): ${test1Pass ? "✅ PASS" : "❌ FAIL"}\n` +
-      `Test 2 (All category): ${test2Pass ? "✅ PASS" : "❌ FAIL"}\n` +
-      `Test 3 (Null values): ${test3Pass ? "✅ PASS" : "❌ FAIL"}\n\n` +
-      `Overall: ${allTestsPass ? "✅ ALL TESTS PASSED" : "❌ SOME TESTS FAILED"}\n\n` +
-      `Check console for detailed results.`
+        `Test 2 (All category): ${test2Pass ? "✅ PASS" : "❌ FAIL"}\n` +
+        `Test 3 (Null values): ${test3Pass ? "✅ PASS" : "❌ FAIL"}\n\n` +
+        `Overall: ${allTestsPass ? "✅ ALL TESTS PASSED" : "❌ SOME TESTS FAILED"}\n\n` +
+        `Check console for detailed results.`,
     );
   };
 
@@ -81,18 +81,26 @@ const QuickFilterTest = () => {
     <View style={styles.container}>
       <Text style={styles.title}>🚀 Quick Filter Test</Text>
       <Text style={styles.description}>
-        Test the filter transformation function to ensure it converts FilterBar filters to API format correctly.
+        Test the filter transformation function to ensure it converts FilterBar
+        filters to API format correctly.
       </Text>
-      
-      <TouchableOpacity style={styles.testButton} onPress={testFilterTransformation}>
+
+      <TouchableOpacity
+        style={styles.testButton}
+        onPress={testFilterTransformation}
+      >
         <Text style={styles.buttonText}>Run Filter Tests</Text>
       </TouchableOpacity>
-      
+
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>What this tests:</Text>
         <Text style={styles.infoText}>• searchTerm → search</Text>
-        <Text style={styles.infoText}>• dateRange.start → dateFrom (ISO format)</Text>
-        <Text style={styles.infoText}>• dateRange.end → dateTo (ISO format)</Text>
+        <Text style={styles.infoText}>
+          • dateRange.start → dateFrom (ISO format)
+        </Text>
+        <Text style={styles.infoText}>
+          • dateRange.end → dateTo (ISO format)
+        </Text>
         <Text style={styles.infoText}>• category "all" → empty string</Text>
         <Text style={styles.infoText}>• hashtags array preservation</Text>
         <Text style={styles.infoText}>• null/undefined value handling</Text>

@@ -37,7 +37,7 @@ export const CompanyBanners: React.FC<CompanyBannersProps> = ({ userRole }) => {
     const baseBanners = [
       {
         id: "1",
-        title: "Welcome to SchoolSnap",
+        title: "Welcome to School App",
         subtitle: "Your complete school management solution",
         backgroundColor: "#9b0737",
         textColor: "#ffffff",

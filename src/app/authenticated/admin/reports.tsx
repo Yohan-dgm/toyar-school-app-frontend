@@ -6,9 +6,7 @@ export default function ReportsPage() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.content}>
         <Text style={styles.title}>📊 Reports & Analytics</Text>
-        <Text style={styles.subtitle}>
-          System reports and usage analytics
-        </Text>
+        <Text style={styles.subtitle}>System reports and usage analytics</Text>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Usage Reports</Text>

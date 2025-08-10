@@ -61,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ userRole }) => {
       case "student":
         return "Student Hub";
       default:
-        return "SchoolSnap";
+        return "School App";
     }
   };
 

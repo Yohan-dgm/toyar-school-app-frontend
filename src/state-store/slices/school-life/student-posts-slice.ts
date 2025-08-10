@@ -14,14 +14,14 @@ interface Post {
   likes_count: number;
   comments_count: number;
   is_liked_by_user: boolean;
-  media: Array<{
+  media: {
     id: number;
     type: "image" | "video" | "pdf";
     url: string;
     thumbnail_url?: string;
     filename: string;
     size: number;
-  }>;
+  }[];
   hashtags: string[];
   school_id: number;
   class_id: number | null;
@@ -101,7 +101,7 @@ const studentPostsSlice = createSlice({
         posts: Post[];
         pagination: Pagination;
         append?: boolean;
-      }>
+      }>,
     ) => {
       const { posts, pagination, append = false } = action.payload;
 
@@ -129,7 +129,7 @@ const studentPostsSlice = createSlice({
     // Update filters
     setFilters: (
       state,
-      action: PayloadAction<Partial<StudentPostsState["filters"]>>
+      action: PayloadAction<Partial<StudentPostsState["filters"]>>,
     ) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -164,7 +164,7 @@ const studentPostsSlice = createSlice({
         postId: number;
         isLiked: boolean;
         likesCount: number;
-      }>
+      }>,
     ) => {
       const { postId, isLiked, likesCount } = action.payload;
 
@@ -213,7 +213,7 @@ export default studentPostsSlice.reducer;
 // Helper function to get user-specific like state
 export const getUserLikeState = (
   state: StudentPostsState,
-  postId: number
+  postId: number,
 ): boolean => {
   if (!state.currentUserId) return false;
   const userPostKey = `${state.currentUserId}_${postId}`;

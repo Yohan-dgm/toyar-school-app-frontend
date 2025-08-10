@@ -10,7 +10,7 @@ export const fetchClassAnalytics = createAsyncThunk(
       //   params: { class_id: classId, period }
       // });
       // return response.data;
-      
+
       // Mock data
       return {
         class_id: classId,
@@ -37,13 +37,18 @@ export const fetchClassAnalytics = createAsyncThunk(
           { student_id: 4, name: "Sarah Wilson", overall_score: 85 },
         ],
         needs_attention: [
-          { student_id: 3, name: "Mike Johnson", overall_score: 65, areas: ["academic", "behavior"] },
+          {
+            student_id: 3,
+            name: "Mike Johnson",
+            overall_score: 65,
+            areas: ["academic", "behavior"],
+          },
         ],
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const fetchStudentAnalytics = createAsyncThunk(
@@ -55,7 +60,7 @@ export const fetchStudentAnalytics = createAsyncThunk(
       //   params: { student_id: studentId, period }
       // });
       // return response.data;
-      
+
       // Mock data
       return {
         student_id: studentId,
@@ -69,9 +74,30 @@ export const fetchStudentAnalytics = createAsyncThunk(
           sports: 88,
         },
         trends: [
-          { date: "2025-01-01", academic: 80, behavior: 85, social: 75, creative: 78, sports: 85 },
-          { date: "2025-01-08", academic: 82, behavior: 87, social: 77, creative: 80, sports: 86 },
-          { date: "2025-01-15", academic: 85, behavior: 90, social: 78, creative: 82, sports: 88 },
+          {
+            date: "2025-01-01",
+            academic: 80,
+            behavior: 85,
+            social: 75,
+            creative: 78,
+            sports: 85,
+          },
+          {
+            date: "2025-01-08",
+            academic: 82,
+            behavior: 87,
+            social: 77,
+            creative: 80,
+            sports: 86,
+          },
+          {
+            date: "2025-01-15",
+            academic: 85,
+            behavior: 90,
+            social: 78,
+            creative: 82,
+            sports: 88,
+          },
         ],
         strengths: ["Mathematics", "Science", "Leadership"],
         areas_for_improvement: ["Art", "Group participation"],
@@ -93,7 +119,7 @@ export const fetchStudentAnalytics = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const fetchComparisonData = createAsyncThunk(
@@ -105,7 +131,7 @@ export const fetchComparisonData = createAsyncThunk(
       //   params: { class_id: classId, category, period }
       // });
       // return response.data;
-      
+
       // Mock data
       return {
         class_id: classId,
@@ -120,16 +146,16 @@ export const fetchComparisonData = createAsyncThunk(
         class_average: 85.75,
         distribution: {
           excellent: 2, // 90-100
-          good: 1,      // 80-89
-          average: 1,   // 70-79
+          good: 1, // 80-89
+          average: 1, // 70-79
           below_average: 0, // 60-69
-          poor: 0,      // <60
+          poor: 0, // <60
         },
       };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const generateAnalyticsReport = createAsyncThunk(
@@ -143,7 +169,7 @@ export const generateAnalyticsReport = createAsyncThunk(
       //   format
       // });
       // return response.data;
-      
+
       // Mock response
       return {
         report_id: Date.now(),
@@ -154,7 +180,7 @@ export const generateAnalyticsReport = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -192,7 +218,7 @@ const studentAnalysisSlice = createSlice({
     },
     removeSelectedStudent: (state, action) => {
       state.selectedStudents = state.selectedStudents.filter(
-        id => id !== action.payload
+        (id) => id !== action.payload,
       );
     },
     clearAnalyticsData: (state) => {
@@ -220,7 +246,7 @@ const studentAnalysisSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Fetch student analytics
       .addCase(fetchStudentAnalytics.pending, (state) => {
         state.studentLoading = true;
@@ -234,7 +260,7 @@ const studentAnalysisSlice = createSlice({
         state.studentLoading = false;
         state.error = action.payload;
       })
-      
+
       // Fetch comparison data
       .addCase(fetchComparisonData.pending, (state) => {
         state.comparisonLoading = true;
@@ -247,7 +273,7 @@ const studentAnalysisSlice = createSlice({
         state.comparisonLoading = false;
         state.error = action.payload;
       })
-      
+
       // Generate report
       .addCase(generateAnalyticsReport.pending, (state) => {
         state.reportGenerating = true;
@@ -277,13 +303,21 @@ export const {
 export default studentAnalysisSlice.reducer;
 
 // Selectors
-export const selectClassAnalytics = (state) => state.studentAnalysis.classAnalytics;
-export const selectStudentAnalytics = (state) => state.studentAnalysis.studentAnalytics;
-export const selectComparisonData = (state) => state.studentAnalysis.comparisonData;
+export const selectClassAnalytics = (state) =>
+  state.studentAnalysis.classAnalytics;
+export const selectStudentAnalytics = (state) =>
+  state.studentAnalysis.studentAnalytics;
+export const selectComparisonData = (state) =>
+  state.studentAnalysis.comparisonData;
 export const selectAnalyticsLoading = (state) => state.studentAnalysis.loading;
-export const selectStudentAnalyticsLoading = (state) => state.studentAnalysis.studentLoading;
-export const selectComparisonLoading = (state) => state.studentAnalysis.comparisonLoading;
+export const selectStudentAnalyticsLoading = (state) =>
+  state.studentAnalysis.studentLoading;
+export const selectComparisonLoading = (state) =>
+  state.studentAnalysis.comparisonLoading;
 export const selectAnalyticsError = (state) => state.studentAnalysis.error;
-export const selectSelectedPeriod = (state) => state.studentAnalysis.selectedPeriod;
-export const selectSelectedCategory = (state) => state.studentAnalysis.selectedCategory;
-export const selectSelectedStudents = (state) => state.studentAnalysis.selectedStudents;
+export const selectSelectedPeriod = (state) =>
+  state.studentAnalysis.selectedPeriod;
+export const selectSelectedCategory = (state) =>
+  state.studentAnalysis.selectedCategory;
+export const selectSelectedStudents = (state) =>
+  state.studentAnalysis.selectedStudents;

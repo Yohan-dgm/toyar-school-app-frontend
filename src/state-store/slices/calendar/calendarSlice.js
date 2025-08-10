@@ -316,7 +316,7 @@ export const fetchGeneralEvents = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 General Events API Response:", {
@@ -362,7 +362,7 @@ export const fetchGeneralEvents = createAsyncThunk(
       });
 
       console.log(
-        `📅 Filtered ${filteredEvents.length} general events from ${events.length} total events`
+        `📅 Filtered ${filteredEvents.length} general events from ${events.length} total events`,
       );
 
       // Normalize events to match frontend calendar structure
@@ -409,7 +409,7 @@ export const fetchGeneralEvents = createAsyncThunk(
       });
       return []; // Return empty array for graceful error handling
     }
-  }
+  },
 );
 
 /**
@@ -470,7 +470,7 @@ export const fetchSpecialClasses = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 Special Classes API Response:", {
@@ -484,7 +484,7 @@ export const fetchSpecialClasses = createAsyncThunk(
       if (!Array.isArray(specialClasses)) {
         console.warn(
           "📅 Expected special classes array, got:",
-          typeof specialClasses
+          typeof specialClasses,
         );
         return [];
       }
@@ -528,7 +528,7 @@ export const fetchSpecialClasses = createAsyncThunk(
 
       console.log(
         `📅 Normalized special classes sample:`,
-        normalizedClasses.slice(0, 2)
+        normalizedClasses.slice(0, 2),
       );
       console.log(`📅 Loaded ${normalizedClasses.length} special classes`);
 
@@ -537,7 +537,7 @@ export const fetchSpecialClasses = createAsyncThunk(
       console.log("📅 Special classes endpoint not available:", error.message);
       return []; // Return empty array instead of rejecting
     }
-  }
+  },
 );
 
 /**
@@ -560,7 +560,7 @@ export const fetchExamSchedules = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 Exam Schedules API Response:", response.data);
@@ -577,7 +577,7 @@ export const fetchExamSchedules = createAsyncThunk(
       console.log("📅 Exam schedules endpoint not available:", error.message);
       return []; // Return empty array instead of rejecting
     }
-  }
+  },
 );
 
 /**
@@ -600,7 +600,7 @@ export const fetchEducatorFeedback = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 Educator Feedback API Response:", response.data);
@@ -616,11 +616,11 @@ export const fetchEducatorFeedback = createAsyncThunk(
     } catch (error) {
       console.log(
         "📅 Educator feedback endpoint not available:",
-        error.message
+        error.message,
       );
       return []; // Return empty array instead of rejecting
     }
-  }
+  },
 );
 
 /**
@@ -643,7 +643,7 @@ export const fetchParentMeetings = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 Parent Meetings API Response:", response.data);
@@ -660,7 +660,7 @@ export const fetchParentMeetings = createAsyncThunk(
       console.log("📅 Parent meetings endpoint not available:", error.message);
       return []; // Return empty array instead of rejecting
     }
-  }
+  },
 );
 
 /**
@@ -722,7 +722,7 @@ export const fetchHolidays = createAsyncThunk(
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("📅 Holidays API Response:", {
@@ -775,7 +775,7 @@ export const fetchHolidays = createAsyncThunk(
 
       console.log(
         "📅 Normalized holidays sample:",
-        normalizedHolidays.slice(0, 2)
+        normalizedHolidays.slice(0, 2),
       );
 
       return normalizedHolidays;
@@ -787,7 +787,7 @@ export const fetchHolidays = createAsyncThunk(
       });
       return []; // Return empty array for graceful error handling
     }
-  }
+  },
 );
 
 /**
@@ -827,7 +827,7 @@ export const fetchAllCalendarData = createAsyncThunk(
         if (result.status === "fulfilled") {
           allEvents.push(...result.value);
           console.log(
-            `📅 Successfully fetched ${result.value.length} items from ${sources[index]}`
+            `📅 Successfully fetched ${result.value.length} items from ${sources[index]}`,
           );
         } else {
           console.error(`📅 Failed to fetch ${sources[index]}:`, result.reason);
@@ -845,7 +845,7 @@ export const fetchAllCalendarData = createAsyncThunk(
       console.error("📅 Error in fetchAllCalendarData:", error);
       return rejectWithValue(error.message || "Failed to fetch calendar data");
     }
-  }
+  },
 );
 
 // ===== HELPER FUNCTIONS =====
@@ -967,7 +967,7 @@ const calendarSlice = createSlice({
         state.lastFetched = new Date().toISOString();
 
         console.log(
-          `📅 Successfully loaded ${state.events.length} normalized events`
+          `📅 Successfully loaded ${state.events.length} normalized events`,
         );
         if (errors && errors.length > 0) {
           console.warn("📅 Some API endpoints failed:", errors);
@@ -1031,7 +1031,7 @@ const calendarSlice = createSlice({
         state.loadingEducatorFeedback = false;
         state.educatorFeedback = action.payload;
         console.log(
-          `📅 Loaded ${action.payload.length} educator feedback items`
+          `📅 Loaded ${action.payload.length} educator feedback items`,
         );
       })
       .addCase(fetchEducatorFeedback.rejected, (state, action) => {

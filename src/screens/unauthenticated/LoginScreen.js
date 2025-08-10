@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { theme } from "../../styles/theme";
 import { globalStyles } from "../../styles/globalStyles";
@@ -32,7 +39,7 @@ const LoginScreen = () => {
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.heading}>Login</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Username/Email"
@@ -40,7 +47,7 @@ const LoginScreen = () => {
         onChangeText={setUsername}
         autoCapitalize="none"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="School PIN"
@@ -48,7 +55,7 @@ const LoginScreen = () => {
         onChangeText={setSchoolPin}
         keyboardType="numeric"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -56,7 +63,7 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>

@@ -112,21 +112,22 @@ Your continued use of our services after changes constitutes acceptance of the u
         <View style={styles.introSection}>
           <Text style={styles.introTitle}>Your Privacy Matters</Text>
           <Text style={styles.introText}>
-            At Nexis College International, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our school management application.
+            At Nexis College International, we are committed to protecting your
+            privacy and ensuring the security of your personal information. This
+            Privacy Policy explains how we collect, use, and safeguard your data
+            when you use our school management application.
           </Text>
-          <Text style={styles.lastUpdated}>
-            Last Updated: January 15, 2025
-          </Text>
+          <Text style={styles.lastUpdated}>Last Updated: January 15, 2025</Text>
         </View>
 
         {/* Privacy Sections */}
         {privacySections.map((section, index) => (
           <View key={index} style={styles.section}>
             <View style={styles.sectionHeader}>
-              <MaterialIcons 
-                name="security" 
-                size={24} 
-                color={theme.colors.primary} 
+              <MaterialIcons
+                name="security"
+                size={24}
+                color={theme.colors.primary}
                 style={styles.sectionIcon}
               />
               <Text style={styles.sectionTitle}>{section.title}</Text>
@@ -139,43 +140,62 @@ Your continued use of our services after changes constitutes acceptance of the u
         <View style={styles.contactSection}>
           <Text style={styles.contactTitle}>Contact Us</Text>
           <Text style={styles.contactText}>
-            If you have any questions about this Privacy Policy or our data practices, please contact us:
+            If you have any questions about this Privacy Policy or our data
+            practices, please contact us:
           </Text>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="email" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="email"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>privacy@nexiscollege.edu</Text>
           </View>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="phone" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>+94 11 234 5678</Text>
           </View>
-          
+
           <View style={styles.contactItem}>
-            <MaterialIcons name="location-on" size={20} color={theme.colors.primary} />
+            <MaterialIcons
+              name="location-on"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.contactDetail}>
-              Nexis College International{'\n'}
-              123 Education Lane{'\n'}
+              Nexis College International{"\n"}
+              123 Education Lane{"\n"}
               Yakkala, Sri Lanka
             </Text>
           </View>
         </View>
 
         {/* Action Buttons */}
-        <View style={styles.actionSection}>
-          <TouchableOpacity style={styles.actionButton}>
+        {/* <View style={styles.actionSection}> */}
+        {/* <TouchableOpacity style={styles.actionButton}>
             <MaterialIcons name="download" size={20} color="#FFFFFF" />
             <Text style={styles.actionButtonText}>Download PDF</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity style={[styles.actionButton, styles.secondaryButton]}>
-            <MaterialIcons name="share" size={20} color={theme.colors.primary} />
+
+          <TouchableOpacity
+            style={[styles.actionButton, styles.secondaryButton]}
+          >
+            <MaterialIcons
+              name="share"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={[styles.actionButtonText, styles.secondaryButtonText]}>
               Share Policy
             </Text>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
+        {/* </View> */}
 
         {/* Footer */}
         <View style={styles.footer}>

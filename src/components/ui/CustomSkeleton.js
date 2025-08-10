@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
 const CustomSkeleton = ({ layout = [], containerStyle = {} }) => {
   return (
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   skeletonItem: {
-    backgroundColor: '#E1E9EE',
+    backgroundColor: "#E1E9EE",
     opacity: 0.7,
   },
 });

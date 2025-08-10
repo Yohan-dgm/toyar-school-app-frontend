@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getCurrentDateString } from "../../../utils/dateUtils";
 
 // Async thunks for API calls
 export const fetchClassAttendance = createAsyncThunk(
@@ -6,11 +7,11 @@ export const fetchClassAttendance = createAsyncThunk(
   async ({ date, classId }, { rejectWithValue }) => {
     try {
       // TODO: Implement actual API call
-      // const response = await api.get("/api/educator/attendance", { 
-      //   params: { date, class_id: classId } 
+      // const response = await api.get("/api/educator/attendance", {
+      //   params: { date, class_id: classId }
       // });
       // return response.data;
-      
+
       // Mock data for now
       return {
         date,
@@ -24,7 +25,7 @@ export const fetchClassAttendance = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const submitAttendance = createAsyncThunk(
@@ -38,7 +39,7 @@ export const submitAttendance = createAsyncThunk(
       //   attendance: attendanceData,
       // });
       // return response.data;
-      
+
       // Mock response
       return {
         date,
@@ -49,7 +50,7 @@ export const submitAttendance = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const fetchAttendanceHistory = createAsyncThunk(
@@ -61,7 +62,7 @@ export const fetchAttendanceHistory = createAsyncThunk(
       //   params: { class_id: classId, start_date: startDate, end_date: endDate }
       // });
       // return response.data;
-      
+
       // Mock data
       return [
         {
@@ -84,7 +85,7 @@ export const fetchAttendanceHistory = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const fetchAttendanceStats = createAsyncThunk(
@@ -96,7 +97,7 @@ export const fetchAttendanceStats = createAsyncThunk(
       //   params: { class_id: classId, period }
       // });
       // return response.data;
-      
+
       // Mock data
       return {
         period,
@@ -116,7 +117,7 @@ export const fetchAttendanceStats = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -127,7 +128,7 @@ const initialState = {
   submitting: false,
   error: null,
   submitError: null,
-  selectedDate: new Date().toISOString().split('T')[0],
+  selectedDate: getCurrentDateString(),
   classId: null,
   lastSubmitted: null,
 };
@@ -146,7 +147,7 @@ const attendanceSlice = createSlice({
       const { studentId, status } = action.payload;
       if (state.currentAttendance && state.currentAttendance.students) {
         const studentIndex = state.currentAttendance.students.findIndex(
-          s => s.id === studentId
+          (s) => s.id === studentId,
         );
         if (studentIndex !== -1) {
           state.currentAttendance.students[studentIndex].status = status;
@@ -178,7 +179,7 @@ const attendanceSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Submit attendance
       .addCase(submitAttendance.pending, (state) => {
         state.submitting = true;
@@ -187,10 +188,10 @@ const attendanceSlice = createSlice({
       .addCase(submitAttendance.fulfilled, (state, action) => {
         state.submitting = false;
         state.lastSubmitted = action.payload.submitted_at;
-        
+
         // Update history if it exists
         const existingIndex = state.attendanceHistory.findIndex(
-          h => h.date === action.payload.date
+          (h) => h.date === action.payload.date,
         );
         if (existingIndex !== -1) {
           state.attendanceHistory[existingIndex] = {
@@ -203,12 +204,12 @@ const attendanceSlice = createSlice({
         state.submitting = false;
         state.submitError = action.payload;
       })
-      
+
       // Fetch attendance history
       .addCase(fetchAttendanceHistory.fulfilled, (state, action) => {
         state.attendanceHistory = action.payload;
       })
-      
+
       // Fetch attendance stats
       .addCase(fetchAttendanceStats.fulfilled, (state, action) => {
         state.attendanceStats = action.payload;
@@ -227,11 +228,15 @@ export const {
 export default attendanceSlice.reducer;
 
 // Selectors
-export const selectCurrentAttendance = (state) => state.attendance.currentAttendance;
-export const selectAttendanceHistory = (state) => state.attendance.attendanceHistory;
-export const selectAttendanceStats = (state) => state.attendance.attendanceStats;
+export const selectCurrentAttendance = (state) =>
+  state.attendance.currentAttendance;
+export const selectAttendanceHistory = (state) =>
+  state.attendance.attendanceHistory;
+export const selectAttendanceStats = (state) =>
+  state.attendance.attendanceStats;
 export const selectAttendanceLoading = (state) => state.attendance.loading;
-export const selectAttendanceSubmitting = (state) => state.attendance.submitting;
+export const selectAttendanceSubmitting = (state) =>
+  state.attendance.submitting;
 export const selectAttendanceError = (state) => state.attendance.error;
 export const selectSelectedDate = (state) => state.attendance.selectedDate;
 export const selectClassId = (state) => state.attendance.classId;

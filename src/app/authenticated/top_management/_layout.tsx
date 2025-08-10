@@ -5,7 +5,7 @@ import { USER_CATEGORIES } from "../../../constants/userCategories";
 
 export default function TopManagementLayout() {
   return (
-    <DynamicUserLayout userCategory={USER_CATEGORIES.TOP_MANAGEMENT}>
+    <DynamicUserLayout userCategory={USER_CATEGORIES.MANAGEMENT}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="strategy" />

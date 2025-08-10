@@ -61,7 +61,7 @@ const GrowthChart = ({ selectedMetric }) => {
   }
 
   const { level, color: levelColor } = getLevelFromRating(
-    selectedMetric.rating
+    selectedMetric.rating,
   );
 
   // Prepare bar chart data with safety checks

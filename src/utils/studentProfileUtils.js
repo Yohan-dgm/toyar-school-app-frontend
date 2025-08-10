@@ -55,7 +55,7 @@ export const getStudentProfilePicture = (student) => {
     // Single attachment object
     attachmentId = student.attachment.id;
     console.log(
-      `🖼️ Found attachment ID from student.attachment.id: ${attachmentId}`
+      `🖼️ Found attachment ID from student.attachment.id: ${attachmentId}`,
     );
   } else if (
     student?.attachments &&
@@ -87,6 +87,52 @@ export const getStudentProfilePicture = (student) => {
         attachmentId = sortedAttachments[0].id;
         console.log(`🖼️ Found most recent attachment ID: ${attachmentId}`);
       }
+    }
+  } else if (
+    student?.student_attachment_list &&
+    Array.isArray(student.student_attachment_list) &&
+    student.student_attachment_list.length > 0
+  ) {
+    // Handle student_attachment_list structure from API
+    console.log(
+      `🖼️ Processing student_attachment_list with ${student.student_attachment_list.length} attachments`,
+    );
+
+    // Filter for image attachments only
+    const imageAttachments = student.student_attachment_list.filter(
+      (attachment) => {
+        const fileType = attachment.file_type?.toLowerCase();
+        const fileName = attachment.file_name?.toLowerCase();
+        return (
+          fileType === "image" ||
+          fileType?.startsWith("image/") ||
+          fileName?.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/)
+        );
+      },
+    );
+
+    console.log(
+      `🖼️ Found ${imageAttachments.length} image attachments out of ${student.student_attachment_list.length} total`,
+    );
+
+    if (imageAttachments.length > 0) {
+      // Use most recent image attachment or first one if no upload_date
+      const sortedImageAttachments = [...imageAttachments].sort((a, b) => {
+        if (!a.upload_date) return 1;
+        if (!b.upload_date) return -1;
+        return new Date(b.upload_date) - new Date(a.upload_date);
+      });
+
+      attachmentId = sortedImageAttachments[0].id;
+      console.log(
+        `🖼️ Selected attachment from student_attachment_list: ID ${attachmentId}, file: ${sortedImageAttachments[0].file_name}`,
+      );
+    } else {
+      // No image attachments found, but try first attachment anyway
+      attachmentId = student.student_attachment_list[0]?.id;
+      console.log(
+        `🖼️ No image attachments found, using first attachment: ID ${attachmentId}`,
+      );
     }
   }
 

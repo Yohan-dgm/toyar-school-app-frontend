@@ -21,7 +21,7 @@ const DynamicGrowthChart = ({ selectedMetric }) => {
   }
 
   const { level, color: levelColor } = getLevelFromRating(
-    selectedMetric.rating
+    selectedMetric.rating,
   );
 
   // Prepare chart data

@@ -20,7 +20,8 @@ export default function ResourcesPage() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Reference Guides</Text>
           <Text style={styles.cardDescription}>
-            Professional guidelines, best practices, and intervention strategies.
+            Professional guidelines, best practices, and intervention
+            strategies.
           </Text>
         </View>
 

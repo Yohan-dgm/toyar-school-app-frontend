@@ -40,7 +40,7 @@ const StudentGrowthMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `📈 StudentGrowthMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
+        `📈 StudentGrowthMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -62,12 +62,12 @@ const StudentGrowthMain = () => {
     "📈 StudentGrowthMain - User category:",
     userCategory,
     "Is parent:",
-    isParent
+    isParent,
   );
   console.log("📈 StudentGrowthMain - Students count:", students.length);
   console.log(
     "📈 StudentGrowthMain - Selected student:",
-    selectedStudent?.student_calling_name
+    selectedStudent?.student_calling_name,
   );
 
   return (

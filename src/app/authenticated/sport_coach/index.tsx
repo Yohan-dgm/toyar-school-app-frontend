@@ -13,21 +13,24 @@ export default function SportCoachHome() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Teams Overview</Text>
           <Text style={styles.cardDescription}>
-            View and manage all your sports teams, track their progress, and organize training schedules.
+            View and manage all your sports teams, track their progress, and
+            organize training schedules.
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Training Sessions</Text>
           <Text style={styles.cardDescription}>
-            Plan and schedule training sessions, track attendance, and monitor player development.
+            Plan and schedule training sessions, track attendance, and monitor
+            player development.
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Upcoming Matches</Text>
           <Text style={styles.cardDescription}>
-            View scheduled matches, manage team lineups, and track match results.
+            View scheduled matches, manage team lineups, and track match
+            results.
           </Text>
         </View>
       </View>

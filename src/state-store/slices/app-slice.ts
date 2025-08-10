@@ -2,10 +2,10 @@ import { createSlice, createAction } from "@reduxjs/toolkit";
 
 // Create thunk actions for user management that will be handled by middleware
 export const setUserWithPostsUpdate = createAction<any>(
-  "app/setUserWithPostsUpdate"
+  "app/setUserWithPostsUpdate",
 );
 export const logoutWithPostsCleanup = createAction(
-  "app/logoutWithPostsCleanup"
+  "app/logoutWithPostsCleanup",
 );
 
 // Define interface for selected student data
@@ -61,7 +61,7 @@ const appSlice = createSlice({
       state.selectedStudent = action.payload;
       console.log(
         "🎓 Global State - Selected student updated:",
-        action.payload?.student_calling_name
+        action.payload?.student_calling_name,
       );
     },
     clearSelectedStudent: (state) => {
@@ -75,12 +75,20 @@ const appSlice = createSlice({
       state.sessionData = null;
       state.selectedStudent = null;
     },
+    clearAuth: (state) => {
+      state.token = null;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.sessionData = null;
+      state.selectedStudent = null;
+    },
   },
 });
 
 export const {
   setToken,
   logout,
+  clearAuth,
   setIsAuthenticated,
   setSessionData,
   setUser,

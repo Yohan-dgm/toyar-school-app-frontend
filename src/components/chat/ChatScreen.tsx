@@ -83,7 +83,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       if (!sessionValid) {
         Alert.alert(
           "Session Error",
-          "Please restart the app to continue chatting."
+          "Please restart the app to continue chatting.",
         );
         return;
       }
@@ -112,12 +112,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
                 if (Platform.OS === "android") {
                   ToastAndroid.show(
                     `Rate limit resets at ${timeString}`,
-                    ToastAndroid.LONG
+                    ToastAndroid.LONG,
                   );
                 }
               },
             },
-          ]
+          ],
         );
         return;
       }
@@ -135,11 +135,11 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         console.error("Send message error:", error);
         Alert.alert(
           "Send Error",
-          "Failed to send message. Please check your connection and try again."
+          "Failed to send message. Please check your connection and try again.",
         );
       }
     },
-    [sessionValid, sendMessage, enableStreaming]
+    [sessionValid, sendMessage, enableStreaming],
   );
 
   // Handle message retry
@@ -148,7 +148,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       if (!sessionValid) {
         Alert.alert(
           "Session Error",
-          "Please restart the app to continue chatting."
+          "Please restart the app to continue chatting.",
         );
         return;
       }
@@ -159,11 +159,11 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         console.error("Retry message error:", error);
         Alert.alert(
           "Retry Error",
-          "Failed to retry message. Please try again."
+          "Failed to retry message. Please try again.",
         );
       }
     },
-    [sessionValid, retryMessage]
+    [sessionValid, retryMessage],
   );
 
   // Handle copy message
@@ -200,7 +200,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           style: "destructive",
           onPress: clearChat,
         },
-      ]
+      ],
     );
   }, [clearChat]);
 
@@ -213,7 +213,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         onCopy={handleCopyMessage}
       />
     ),
-    [handleRetryMessage, handleCopyMessage]
+    [handleRetryMessage, handleCopyMessage],
   );
 
   // Get item key
@@ -234,7 +234,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         />
       </View>
     ),
-    [handleCopyMessage]
+    [handleCopyMessage],
   );
 
   if (!sessionValid) {
@@ -254,7 +254,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
               // Restart app or reload
               Alert.alert(
                 "Restart Required",
-                "Please close and reopen the app to continue."
+                "Please close and reopen the app to continue.",
               );
             }}
           />

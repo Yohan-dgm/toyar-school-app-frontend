@@ -108,13 +108,22 @@ const FilterBarTest = () => {
       <View style={styles.testSection}>
         <Text style={styles.sectionTitle}>Quick Tests</Text>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.testButton} onPress={testDateRangeFilter}>
+          <TouchableOpacity
+            style={styles.testButton}
+            onPress={testDateRangeFilter}
+          >
             <Text style={styles.buttonText}>Test Date Range</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.testButton} onPress={testCategoryFilter}>
+          <TouchableOpacity
+            style={styles.testButton}
+            onPress={testCategoryFilter}
+          >
             <Text style={styles.buttonText}>Test Category</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.testButton} onPress={testHashtagFilter}>
+          <TouchableOpacity
+            style={styles.testButton}
+            onPress={testHashtagFilter}
+          >
             <Text style={styles.buttonText}>Test Hashtags</Text>
           </TouchableOpacity>
         </View>
@@ -125,16 +134,16 @@ const FilterBarTest = () => {
         <Text style={styles.sectionTitle}>Current Filter State</Text>
         <ScrollView style={styles.stateDisplay}>
           <Text style={styles.stateText}>
-            Search Term: "{filters.searchTerm || 'None'}"
+            Search Term: "{filters.searchTerm || "None"}"
           </Text>
           <Text style={styles.stateText}>
-            Date Range: {formatDate(filters.dateRange.start)} - {formatDate(filters.dateRange.end)}
+            Date Range: {formatDate(filters.dateRange.start)} -{" "}
+            {formatDate(filters.dateRange.end)}
           </Text>
+          <Text style={styles.stateText}>Category: {filters.category}</Text>
           <Text style={styles.stateText}>
-            Category: {filters.category}
-          </Text>
-          <Text style={styles.stateText}>
-            Hashtags: {filters.hashtags.length > 0 ? filters.hashtags.join(", ") : "None"}
+            Hashtags:{" "}
+            {filters.hashtags.length > 0 ? filters.hashtags.join(", ") : "None"}
           </Text>
         </ScrollView>
       </View>

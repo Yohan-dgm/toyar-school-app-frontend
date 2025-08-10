@@ -6,7 +6,9 @@ import { educatorFeedbackApi } from "../api/educator-feedback-api";
  */
 export const testEducatorFeedbackAPI = async () => {
   console.log("🚀 Starting Educator Feedback API Test...");
-  console.log("📡 Endpoint: api/student-management/student/get-student-list-data");
+  console.log(
+    "📡 Endpoint: api/student-management/student/get-student-list-data",
+  );
   console.log("🔍 Method: POST with empty body");
 
   const dispatch = store.dispatch;
@@ -14,7 +16,7 @@ export const testEducatorFeedbackAPI = async () => {
   try {
     console.log("📞 Making API call...");
     const result = await dispatch(
-      educatorFeedbackApi.endpoints.getStudentListData.initiate()
+      educatorFeedbackApi.endpoints.getStudentListData.initiate(),
     );
 
     console.log("📥 Raw API Response:", result);
@@ -27,33 +29,41 @@ export const testEducatorFeedbackAPI = async () => {
       if (result.data.status === "successful" && result.data.data) {
         console.log("🎓 Grades found:", result.data.data.grades?.length || 0);
         console.log("📋 Grades data:", result.data.data.grades);
-        console.log("📊 Grade level data:", result.data.data.grade_level_student_count?.length || 0);
-        console.log("📋 Grade level data:", result.data.data.grade_level_student_count);
-        
+        console.log(
+          "📊 Grade level data:",
+          result.data.data.grade_level_student_count?.length || 0,
+        );
+        console.log(
+          "📋 Grade level data:",
+          result.data.data.grade_level_student_count,
+        );
+
         // Test first grade selection
         if (result.data.data.grades && result.data.data.grades.length > 0) {
           const firstGrade = result.data.data.grades[0];
           console.log("🔍 Testing student fetch for first grade:", firstGrade);
-          
+
           // Test students by grade
           const studentsResult = await dispatch(
             educatorFeedbackApi.endpoints.getStudentsByGrade.initiate({
               grade_level_id: firstGrade.id,
-              search: ""
-            })
+              search: "",
+            }),
           );
-          
+
           console.log("👥 Students API Response:", studentsResult);
-          
+
           if (studentsResult.data) {
             console.log("✅ Students API call successful!");
             console.log("📊 Students data:", studentsResult.data.data);
-            console.log("👥 Students count:", studentsResult.data.data?.students?.length || 0);
+            console.log(
+              "👥 Students count:",
+              studentsResult.data.data?.students?.length || 0,
+            );
           } else if (studentsResult.error) {
             console.log("❌ Students API call failed:", studentsResult.error);
           }
         }
-        
       } else if (result.data.status === "authentication-required") {
         console.log("🔐 Authentication required - this is expected");
         console.log("✅ API is responding correctly");
@@ -68,7 +78,6 @@ export const testEducatorFeedbackAPI = async () => {
       console.log("🔴 Error data:", result.error.data);
       console.log("🔴 Error status:", result.error.status);
     }
-    
   } catch (error) {
     console.log("💥 Exception caught:");
     console.log("🔴 Error:", error);
@@ -79,21 +88,29 @@ export const testEducatorFeedbackAPI = async () => {
   console.log("\n🏪 Checking Redux Store State...");
   const currentState = store.getState();
   console.log("📊 Available slices:", Object.keys(currentState));
-  
+
   if (currentState.educatorFeedback) {
     console.log("✅ educatorFeedback slice found");
-    console.log("📊 Educator feedback state:", Object.keys(currentState.educatorFeedback));
+    console.log(
+      "📊 Educator feedback state:",
+      Object.keys(currentState.educatorFeedback),
+    );
   } else {
     console.log("❌ educatorFeedback slice NOT found");
   }
-  
+
   if (currentState.apiServer1) {
     console.log("✅ apiServer1 slice found");
-    console.log("📊 API queries:", Object.keys(currentState.apiServer1.queries || {}));
-    
+    console.log(
+      "📊 API queries:",
+      Object.keys(currentState.apiServer1.queries || {}),
+    );
+
     // Check if our query is in the cache
     const queries = currentState.apiServer1.queries || {};
-    const ourQuery = Object.keys(queries).find(key => key.includes('getStudentListData'));
+    const ourQuery = Object.keys(queries).find((key) =>
+      key.includes("getStudentListData"),
+    );
     if (ourQuery) {
       console.log("✅ Student list query found in cache:", ourQuery);
       console.log("📊 Query data:", queries[ourQuery]);
@@ -112,18 +129,22 @@ export const testEducatorFeedbackAPI = async () => {
  */
 export const testEducatorFeedbackHooks = () => {
   console.log("🎯 Testing Educator Feedback Hooks...");
-  
+
   try {
-    const { useGetStudentListDataQuery } = require("../api/educator-feedback-api");
+    const {
+      useGetStudentListDataQuery,
+    } = require("../api/educator-feedback-api");
     console.log("✅ useGetStudentListDataQuery hook imported successfully");
-    
+
     // Check if it's a function
-    if (typeof useGetStudentListDataQuery === 'function') {
+    if (typeof useGetStudentListDataQuery === "function") {
       console.log("✅ Hook is a function, ready to use");
     } else {
-      console.log("❌ Hook is not a function:", typeof useGetStudentListDataQuery);
+      console.log(
+        "❌ Hook is not a function:",
+        typeof useGetStudentListDataQuery,
+      );
     }
-    
   } catch (error) {
     console.log("❌ Failed to import hooks:", error.message);
   }
@@ -139,12 +160,12 @@ if (typeof window !== "undefined") {
       console.log("📊 Current Store State:", {
         educatorFeedback: state.educatorFeedback ? "exists" : "missing",
         apiServer1: state.apiServer1 ? "exists" : "missing",
-        apiQueries: Object.keys(state.apiServer1?.queries || {}).length
+        apiQueries: Object.keys(state.apiServer1?.queries || {}).length,
       });
       return state;
-    }
+    },
   };
-  
+
   console.log("🌐 Global test functions available:");
   console.log("  - window.testEducatorFeedback.api()");
   console.log("  - window.testEducatorFeedback.hooks()");

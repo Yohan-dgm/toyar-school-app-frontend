@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -6,34 +6,34 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-} from 'react-native';
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from '../../styles/theme';
-import { attendanceData } from '../../data/studentGrowthData';
+} from "react-native";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { MaterialIcons } from "@expo/vector-icons";
+import { theme } from "../../styles/theme";
+import { attendanceData } from "../../data/studentGrowthData";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const AttendanceStatusIcon = ({ status, size = 24 }) => {
   const getStatusConfig = () => {
     switch (status) {
-      case 'present':
-        return { icon: 'check-circle', color: '#4CAF50' };
-      case 'absent':
-        return { icon: 'cancel', color: '#F44336' };
-      case 'late':
-        return { icon: 'schedule', color: '#FF9800' };
-      case 'holiday':
-        return { icon: 'event', color: '#9C27B0' };
-      case 'weekend':
-        return { icon: 'weekend', color: '#607D8B' };
+      case "present":
+        return { icon: "check-circle", color: "#4CAF50" };
+      case "absent":
+        return { icon: "cancel", color: "#F44336" };
+      case "late":
+        return { icon: "schedule", color: "#FF9800" };
+      case "holiday":
+        return { icon: "event", color: "#9C27B0" };
+      case "weekend":
+        return { icon: "weekend", color: "#607D8B" };
       default:
-        return { icon: 'help', color: '#999999' };
+        return { icon: "help", color: "#999999" };
     }
   };
 
   const { icon, color } = getStatusConfig();
-  
+
   return <MaterialIcons name={icon} size={size} color={color} />;
 };
 
@@ -42,7 +42,7 @@ const AttendanceDay = ({ day }) => {
     const date = new Date(dateString);
     return {
       day: date.getDate(),
-      weekday: date.toLocaleDateString('en-US', { weekday: 'short' }),
+      weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
     };
   };
 
@@ -55,9 +55,7 @@ const AttendanceDay = ({ day }) => {
       <View style={styles.statusContainer}>
         <AttendanceStatusIcon status={day.status} size={20} />
       </View>
-      {day.time && (
-        <Text style={styles.timeText}>{day.time}</Text>
-      )}
+      {day.time && <Text style={styles.timeText}>{day.time}</Text>}
     </View>
   );
 };
@@ -77,7 +75,7 @@ const WeeklyView = ({ weekData }) => {
 
 const MonthlyStats = ({ monthlyStats }) => {
   const months = Object.keys(monthlyStats);
-  
+
   return (
     <View style={styles.monthlyContainer}>
       <Text style={styles.sectionTitle}>Monthly Statistics</Text>
@@ -89,7 +87,19 @@ const MonthlyStats = ({ monthlyStats }) => {
               <Text style={styles.monthName}>
                 {month.charAt(0).toUpperCase() + month.slice(1)}
               </Text>
-              <Text style={[styles.monthPercentage, { color: stats.percentage >= 95 ? '#4CAF50' : stats.percentage >= 90 ? '#FF9800' : '#F44336' }]}>
+              <Text
+                style={[
+                  styles.monthPercentage,
+                  {
+                    color:
+                      stats.percentage >= 95
+                        ? "#4CAF50"
+                        : stats.percentage >= 90
+                          ? "#FF9800"
+                          : "#F44336",
+                  },
+                ]}
+              >
                 {stats.percentage}%
               </Text>
             </View>
@@ -118,27 +128,29 @@ const AttendanceOverview = ({ data }) => {
   return (
     <View style={styles.overviewContainer}>
       <Text style={styles.sectionTitle}>Attendance Overview</Text>
-      
+
       {/* Main Stats */}
       <View style={styles.mainStatsContainer}>
         <View style={styles.percentageCircle}>
-          <Text style={styles.percentageText}>{data.attendancePercentage}%</Text>
+          <Text style={styles.percentageText}>
+            {data.attendancePercentage}%
+          </Text>
           <Text style={styles.percentageLabel}>Attendance</Text>
         </View>
-        
+
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
             <AttendanceStatusIcon status="present" size={24} />
             <Text style={styles.statNumber}>{data.presentDays}</Text>
             <Text style={styles.statLabel}>Present</Text>
           </View>
-          
+
           <View style={styles.statCard}>
             <AttendanceStatusIcon status="absent" size={24} />
             <Text style={styles.statNumber}>{data.absentDays}</Text>
             <Text style={styles.statLabel}>Absent</Text>
           </View>
-          
+
           <View style={styles.statCard}>
             <AttendanceStatusIcon status="late" size={24} />
             <Text style={styles.statNumber}>{data.lateDays}</Text>
@@ -153,14 +165,19 @@ const AttendanceOverview = ({ data }) => {
           {data.presentDays} of {data.totalDays} school days attended
         </Text>
         <View style={styles.progressBar}>
-          <View 
+          <View
             style={[
-              styles.progressFill, 
-              { 
+              styles.progressFill,
+              {
                 width: `${data.attendancePercentage}%`,
-                backgroundColor: data.attendancePercentage >= 95 ? '#4CAF50' : data.attendancePercentage >= 90 ? '#FF9800' : '#F44336'
-              }
-            ]} 
+                backgroundColor:
+                  data.attendancePercentage >= 95
+                    ? "#4CAF50"
+                    : data.attendancePercentage >= 90
+                      ? "#FF9800"
+                      : "#F44336",
+              },
+            ]}
           />
         </View>
       </View>
@@ -170,20 +187,23 @@ const AttendanceOverview = ({ data }) => {
 
 const AttendanceSheet = ({ isVisible, onClose }) => {
   const bottomSheetRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'weekly', 'monthly'
-  
-  const snapPoints = useMemo(() => ['25%', '50%', '90%'], []);
+  const [activeTab, setActiveTab] = useState("overview"); // 'overview', 'weekly', 'monthly'
 
-  const handleSheetChanges = useCallback((index) => {
-    if (index === -1) {
-      onClose();
-    }
-  }, [onClose]);
+  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+
+  const handleSheetChanges = useCallback(
+    (index) => {
+      if (index === -1) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: 'dashboard' },
-    { id: 'weekly', label: 'Weekly', icon: 'view-week' },
-    { id: 'monthly', label: 'Monthly', icon: 'calendar-view-month' },
+    { id: "overview", label: "Overview", icon: "dashboard" },
+    { id: "weekly", label: "Weekly", icon: "view-week" },
+    { id: "monthly", label: "Monthly", icon: "calendar-view-month" },
   ];
 
   if (!isVisible) return null;
@@ -210,16 +230,13 @@ const AttendanceSheet = ({ isVisible, onClose }) => {
         {tabs.map((tab) => (
           <TouchableOpacity
             key={tab.id}
-            style={[
-              styles.tab,
-              activeTab === tab.id && styles.activeTab,
-            ]}
+            style={[styles.tab, activeTab === tab.id && styles.activeTab]}
             onPress={() => setActiveTab(tab.id)}
           >
             <MaterialIcons
               name={tab.icon}
               size={20}
-              color={activeTab === tab.id ? '#FFFFFF' : '#666666'}
+              color={activeTab === tab.id ? "#FFFFFF" : "#666666"}
             />
             <Text
               style={[
@@ -235,11 +252,11 @@ const AttendanceSheet = ({ isVisible, onClose }) => {
 
       {/* Content */}
       <BottomSheetScrollView style={styles.scrollContainer}>
-        {activeTab === 'overview' && (
+        {activeTab === "overview" && (
           <AttendanceOverview data={attendanceData} />
         )}
-        
-        {activeTab === 'weekly' && (
+
+        {activeTab === "weekly" && (
           <View style={styles.weeklyContainer}>
             <Text style={styles.sectionTitle}>Weekly Attendance</Text>
             {attendanceData.weeklyData.map((week, index) => (
@@ -247,8 +264,8 @@ const AttendanceSheet = ({ isVisible, onClose }) => {
             ))}
           </View>
         )}
-        
-        {activeTab === 'monthly' && (
+
+        {activeTab === "monthly" && (
           <MonthlyStats monthlyStats={attendanceData.monthlyStats} />
         )}
       </BottomSheetScrollView>
@@ -258,48 +275,48 @@ const AttendanceSheet = ({ isVisible, onClose }) => {
 
 const styles = StyleSheet.create({
   bottomSheetBackground: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   handleIndicator: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     width: 40,
   },
   sheetHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: "#F0F0F0",
   },
   sheetTitle: {
     fontSize: 20,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
   },
   closeButton: {
     padding: 4,
   },
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: "#F0F0F0",
   },
   tab: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 12,
     marginHorizontal: 4,
     borderRadius: 8,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     gap: 6,
   },
   activeTab: {
@@ -308,10 +325,10 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 14,
     fontFamily: theme.fonts.medium,
-    color: '#666666',
+    color: "#666666",
   },
   activeTabText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   scrollContainer: {
     flex: 1,
@@ -320,46 +337,46 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
     marginVertical: 16,
   },
   overviewContainer: {
     paddingBottom: 20,
   },
   mainStatsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
   percentageCircle: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#F8F9FA',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#F8F9FA",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 20,
     borderWidth: 4,
-    borderColor: '#4CAF50',
+    borderColor: "#4CAF50",
   },
   percentageText: {
     fontSize: 24,
     fontFamily: theme.fonts.bold,
-    color: '#4CAF50',
+    color: "#4CAF50",
   },
   percentageLabel: {
     fontSize: 12,
     fontFamily: theme.fonts.regular,
-    color: '#666666',
+    color: "#666666",
   },
   statsGrid: {
     flex: 1,
     gap: 8,
   },
   statCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8F9FA',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
     padding: 12,
     borderRadius: 8,
     gap: 12,
@@ -367,13 +384,13 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 18,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
     minWidth: 30,
   },
   statLabel: {
     fontSize: 14,
     fontFamily: theme.fonts.regular,
-    color: '#666666',
+    color: "#666666",
     flex: 1,
   },
   progressContainer: {
@@ -382,17 +399,17 @@ const styles = StyleSheet.create({
   progressLabel: {
     fontSize: 14,
     fontFamily: theme.fonts.regular,
-    color: '#666666',
+    color: "#666666",
     marginBottom: 8,
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 4,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: 4,
   },
   weeklyContainer: {
@@ -400,34 +417,34 @@ const styles = StyleSheet.create({
   },
   weekContainer: {
     marginBottom: 20,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: "#F8F9FA",
     borderRadius: 12,
     padding: 16,
   },
   weekTitle: {
     fontSize: 16,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
     marginBottom: 12,
   },
   daysContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   attendanceDay: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
     gap: 4,
   },
   dayNumber: {
     fontSize: 16,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
   },
   weekday: {
     fontSize: 12,
     fontFamily: theme.fonts.regular,
-    color: '#666666',
+    color: "#666666",
   },
   statusContainer: {
     marginVertical: 4,
@@ -435,45 +452,45 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 10,
     fontFamily: theme.fonts.regular,
-    color: '#999999',
+    color: "#999999",
   },
   monthlyContainer: {
     paddingBottom: 20,
   },
   monthCard: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: "#F8F9FA",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
   monthHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 12,
   },
   monthName: {
     fontSize: 16,
     fontFamily: theme.fonts.bold,
-    color: '#000000',
+    color: "#000000",
   },
   monthPercentage: {
     fontSize: 18,
     fontFamily: theme.fonts.bold,
   },
   monthStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   statText: {
     fontSize: 12,
     fontFamily: theme.fonts.regular,
-    color: '#666666',
+    color: "#666666",
   },
 });
 

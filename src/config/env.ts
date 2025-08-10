@@ -12,17 +12,17 @@ export const ENV_CONFIG = {
   DEEPSEEK_MODEL:
     process.env.EXPO_PUBLIC_DEEPSEEK_MODEL || "deepseek/deepseek-r1-0528",
   SITE_URL: process.env.EXPO_PUBLIC_SITE_URL || "https://schoolsnap.app",
-  SITE_NAME: process.env.EXPO_PUBLIC_SITE_NAME || "SchoolSnap SnapBot",
+  SITE_NAME: process.env.EXPO_PUBLIC_SITE_NAME || "School App SnapBot",
 
   // Security Configuration
   APP_SECRET:
     process.env.EXPO_PUBLIC_APP_SECRET ||
     "SnapBot2024SecureKey!@#$%^&*()_+1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
   RATE_LIMIT_REQUESTS: parseInt(
-    process.env.EXPO_PUBLIC_RATE_LIMIT_REQUESTS || "10"
+    process.env.EXPO_PUBLIC_RATE_LIMIT_REQUESTS || "10",
   ),
   RATE_LIMIT_WINDOW: parseInt(
-    process.env.EXPO_PUBLIC_RATE_LIMIT_WINDOW || "60000"
+    process.env.EXPO_PUBLIC_RATE_LIMIT_WINDOW || "60000",
   ),
 
   // Environment
@@ -59,7 +59,7 @@ export const validateEnvConfig = (): void => {
     console.warn("Missing required environment variables:", missingVars);
     if (__DEV__) {
       console.warn(
-        "Using default values for development. Please set proper values for production."
+        "Using default values for development. Please set proper values for production.",
       );
     }
   }

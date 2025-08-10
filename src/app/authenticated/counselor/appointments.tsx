@@ -11,9 +11,9 @@ export default function AppointmentsPage() {
         </Text>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Today's Schedule</Text>
+          <Text style={styles.cardTitle}>Today&apos;s Schedule</Text>
           <Text style={styles.cardDescription}>
-            View today's appointments and session details.
+            View today&apos;s appointments and session details.
           </Text>
         </View>
 

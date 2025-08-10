@@ -186,7 +186,7 @@ const FilterBar = ({
   // Debug log for categories
   console.log(
     "🏷️ FilterBar - Dynamic categories extracted:",
-    dynamicCategories
+    dynamicCategories,
   );
   console.log("🏷️ FilterBar - Posts data count:", postsData?.length || 0);
 
@@ -384,7 +384,7 @@ const FilterBar = ({
   // Remove individual hashtag
   const removeHashtag = (hashtagToRemove) => {
     const newHashtags = filters.hashtags.filter(
-      (tag) => tag !== hashtagToRemove
+      (tag) => tag !== hashtagToRemove,
     );
     onFilterChange({ ...filters, hashtags: newHashtags });
   };
@@ -431,7 +431,7 @@ const FilterBar = ({
   };
 
   const selectedCategory = categories.find(
-    (cat) => cat.value === filters.category
+    (cat) => cat.value === filters.category,
   );
 
   return (

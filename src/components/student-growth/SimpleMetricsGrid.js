@@ -31,7 +31,7 @@ const StarRating = ({ rating, size = 16, color = "#FFD700" }) => {
     const iconColor = filled || halfFilled ? color : "#E0E0E0";
 
     stars.push(
-      <MaterialIcons key={i} name={iconName} size={size} color={iconColor} />
+      <MaterialIcons key={i} name={iconName} size={size} color={iconColor} />,
     );
   }
 

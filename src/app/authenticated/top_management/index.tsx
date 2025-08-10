@@ -13,21 +13,24 @@ export default function TopManagementHome() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Executive Overview</Text>
           <Text style={styles.cardDescription}>
-            High-level institutional metrics, KPIs, and strategic performance indicators.
+            High-level institutional metrics, KPIs, and strategic performance
+            indicators.
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Strategic Planning</Text>
           <Text style={styles.cardDescription}>
-            Long-term strategic initiatives, goals, and institutional development plans.
+            Long-term strategic initiatives, goals, and institutional
+            development plans.
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Governance</Text>
           <Text style={styles.cardDescription}>
-            Board meetings, policy decisions, and institutional governance matters.
+            Board meetings, policy decisions, and institutional governance
+            matters.
           </Text>
         </View>
       </View>

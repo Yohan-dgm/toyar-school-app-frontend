@@ -130,7 +130,7 @@ const MediaViewer = ({
       // Try direct URI first (expo-video might not support headers properly)
       try {
         console.log(
-          `🎬 Attempting direct URI load (${isHttpVideo ? "HTTP" : "HTTPS"})...`
+          `🎬 Attempting direct URI load (${isHttpVideo ? "HTTP" : "HTTPS"})...`,
         );
         await videoPlayer.replaceAsync(videoUri);
 
@@ -179,7 +179,7 @@ const MediaViewer = ({
           console.log("✅ Enhanced headers approach successful");
         } else {
           throw new Error(
-            `Headers approach failed, status: ${videoPlayer.status}`
+            `Headers approach failed, status: ${videoPlayer.status}`,
           );
         }
       }
@@ -200,7 +200,7 @@ const MediaViewer = ({
       } catch (playError) {
         console.log(
           "⚠️ Auto-play failed (this is normal on some devices):",
-          playError.message
+          playError.message,
         );
       }
     } catch (error) {
@@ -212,7 +212,7 @@ const MediaViewer = ({
 
         // Show error message for HTTP video loading issues
         console.log(
-          "❌ Video loading failed - likely due to HTTP URL restrictions"
+          "❌ Video loading failed - likely due to HTTP URL restrictions",
         );
         setVideoLoadError(true);
         setIsVideoLoading(false);
@@ -298,7 +298,7 @@ const MediaViewer = ({
   const handleVideoPress = async (mediaData) => {
     console.log(
       "🎬 Opening fullscreen WebView video player for:",
-      mediaData.uri
+      mediaData.uri,
     );
     console.log("🎬 Video media data:", mediaData);
 
@@ -560,7 +560,7 @@ const MediaViewer = ({
                   onLoad={() => {
                     console.log(
                       "✅ Image loaded successfully:",
-                      selectedMedia?.uri
+                      selectedMedia?.uri,
                     );
                     setImageLoadError(false);
                   }}
@@ -633,7 +633,7 @@ const MediaViewer = ({
             console.log("🎬 WebView message received:", event.nativeEvent.data);
             if (event.nativeEvent.data === "CLOSE_VIDEO") {
               console.log(
-                "🎬 WebView close button pressed - closing video player"
+                "🎬 WebView close button pressed - closing video player",
               );
               closeVideoModal();
             }
@@ -645,7 +645,7 @@ const MediaViewer = ({
           style={styles.videoCloseButton}
           onPress={() => {
             console.log(
-              "🎬 React Native close button pressed - closing video player"
+              "🎬 React Native close button pressed - closing video player",
             );
             closeVideoModal();
           }}
@@ -709,7 +709,7 @@ const MediaViewer = ({
                 onLoad={() => {
                   console.log(
                     "✅ PDF loaded successfully:",
-                    selectedMedia?.uri
+                    selectedMedia?.uri,
                   );
                 }}
               />

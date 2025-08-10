@@ -14,14 +14,14 @@ interface Post {
   likes_count: number;
   comments_count: number;
   is_liked_by_user: boolean;
-  media: Array<{
+  media: {
     id: number;
     type: "image" | "video" | "pdf";
     url: string;
     thumbnail_url?: string;
     filename: string;
     size: number;
-  }>;
+  }[];
   hashtags: string[];
   school_id: number;
   class_id: number | null;
@@ -93,7 +93,7 @@ const schoolPostsSlice = createSlice({
         posts: Post[];
         pagination: Pagination;
         append?: boolean;
-      }>
+      }>,
     ) => {
       const { posts, pagination, append = false } = action.payload;
 
@@ -126,7 +126,7 @@ const schoolPostsSlice = createSlice({
     // Update filters
     setFilters: (
       state,
-      action: PayloadAction<Partial<SchoolPostsState["filters"]>>
+      action: PayloadAction<Partial<SchoolPostsState["filters"]>>,
     ) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -161,7 +161,7 @@ const schoolPostsSlice = createSlice({
         postId: number;
         isLiked: boolean;
         likesCount: number;
-      }>
+      }>,
     ) => {
       const { postId, isLiked, likesCount } = action.payload;
 
@@ -180,7 +180,7 @@ const schoolPostsSlice = createSlice({
 
       // Also update in allPosts array if it exists
       const allPostIndex = state.allPosts.findIndex(
-        (post) => post.id === postId
+        (post) => post.id === postId,
       );
       if (allPostIndex !== -1) {
         state.allPosts[allPostIndex].is_liked_by_user = isLiked;
@@ -191,7 +191,7 @@ const schoolPostsSlice = createSlice({
     // Set like loading state for specific post (placeholder for future implementation)
     setLikeLoading: (
       _state,
-      _action: PayloadAction<{ postId: number; loading: boolean }>
+      _action: PayloadAction<{ postId: number; loading: boolean }>,
     ) => {
       // Future implementation: track loading state per post
       // const { postId, loading } = action.payload;
@@ -205,7 +205,7 @@ const schoolPostsSlice = createSlice({
         postId: number;
         isLiked: boolean;
         likesCount: number;
-      }>
+      }>,
     ) => {
       const { postId, isLiked, likesCount } = action.payload;
 
@@ -224,7 +224,7 @@ const schoolPostsSlice = createSlice({
 
       // Also revert in allPosts array if it exists
       const allPostIndex = state.allPosts.findIndex(
-        (post) => post.id === postId
+        (post) => post.id === postId,
       );
       if (allPostIndex !== -1) {
         state.allPosts[allPostIndex].is_liked_by_user = isLiked;
@@ -265,7 +265,7 @@ export default schoolPostsSlice.reducer;
 // Helper function to get user-specific like state
 export const getUserLikeState = (
   state: SchoolPostsState,
-  postId: number
+  postId: number,
 ): boolean => {
   if (!state.currentUserId) return false;
   const userPostKey = `${state.currentUserId}_${postId}`;

@@ -160,7 +160,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
         console.log(
           "✅ Successfully extracted",
           allPostsData.length,
-          "posts for class filtering"
+          "posts for class filtering",
         );
 
         // Debug: Show all posts and their class_id values
@@ -219,7 +219,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
           selectedStudent.class_id === undefined
         ) {
           console.log(
-            `🎓 Filtering out post ${post.id}: no selected student or student has no class_id`
+            `🎓 Filtering out post ${post.id}: no selected student or student has no class_id`,
           );
           return false;
         }
@@ -239,29 +239,29 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
         // Show post if class_id matches (including null class_id posts if student has null class_id)
         if (postClassId !== studentClassId) {
           console.log(
-            `🎓 Filtering out post ${post.id}: class_id mismatch. Post class_id=${postClassId}, Student class_id=${studentClassId}`
+            `🎓 Filtering out post ${post.id}: class_id mismatch. Post class_id=${postClassId}, Student class_id=${studentClassId}`,
           );
           return false;
         }
 
         console.log(
-          `🎓 Including class post ${post.id}: matches student's class_id (${studentClassId})`
+          `🎓 Including class post ${post.id}: matches student's class_id (${studentClassId})`,
         );
 
         // CLASS TAB: Show ALL posts for this class - no additional filtering
         console.log(
-          `🎓 ✅ Including ALL class posts for class_id ${studentClassId}`
+          `🎓 ✅ Including ALL class posts for class_id ${studentClassId}`,
         );
         return true;
       });
     },
-    [selectedStudent]
+    [selectedStudent],
   );
 
   // Clear any existing filters when component mounts
   useEffect(() => {
     console.log(
-      "🧹 Clearing any existing filters on component mount (Class Tab)"
+      "🧹 Clearing any existing filters on component mount (Class Tab)",
     );
     dispatch(clearFilters());
   }, [dispatch]);
@@ -277,7 +277,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
   useEffect(() => {
     console.log(
       "🔄 allPostsLocal changed (Class Tab):",
-      allPostsLocal?.length || 0
+      allPostsLocal?.length || 0,
     );
   }, [allPostsLocal]);
 
@@ -285,10 +285,10 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
   useEffect(() => {
     if (selectedStudent) {
       console.log(
-        `🎓 Class Tab - Selected student changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`
+        `🎓 Class Tab - Selected student changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`,
       );
       console.log(
-        `🎓 Class Tab - Student class info: grade="${selectedStudent.grade}", class_id=${selectedStudent.class_id}`
+        `🎓 Class Tab - Student class info: grade="${selectedStudent.grade}", class_id=${selectedStudent.class_id}`,
       );
 
       // Reload posts to ensure we have fresh data for the new student
@@ -310,7 +310,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
     if (!allPostsLocal || allPostsLocal.length === 0) {
       console.log(
         "❌ No allPostsLocal available (Class Tab):",
-        allPostsLocal?.length || 0
+        allPostsLocal?.length || 0,
       );
       return [];
     }
@@ -337,7 +337,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
     const filtered = filterPostsLocally(allPostsLocal, filters || {});
     console.log(
       "🔍 Class filtering applied - filtered posts:",
-      filtered.length
+      filtered.length,
     );
     return filtered;
   }, [allPostsLocal, filters, filterPostsLocally]);
@@ -346,7 +346,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
   useEffect(() => {
     if (hasLoadedInitialData && filteredPosts) {
       console.log(
-        `🔍 Class filtering complete: ${filteredPosts.length} posts match criteria`
+        `🔍 Class filtering complete: ${filteredPosts.length} posts match criteria`,
       );
       dispatch(
         setPosts({
@@ -356,7 +356,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
             total: filteredPosts.length,
             has_more: false,
           },
-        })
+        }),
       );
     }
   }, [filteredPosts, hasLoadedInitialData, dispatch]);
@@ -371,7 +371,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
   const handleLoadMore = useCallback(() => {
     // No pagination needed since we load all posts initially
     console.log(
-      "📄 Load more not needed - all posts loaded initially (Class Tab)"
+      "📄 Load more not needed - all posts loaded initially (Class Tab)",
     );
   }, []);
 
@@ -391,7 +391,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
           postId: post.id,
           isLiked: !isCurrentlyLiked,
           likesCount: newLikesCount,
-        })
+        }),
       );
 
       try {
@@ -407,7 +407,7 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
               postId: post.id,
               isLiked: response.data.is_liked_by_user,
               likesCount: response.data.likes_count,
-            })
+            }),
           );
         }
       } catch (error) {
@@ -418,18 +418,18 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
             postId: post.id,
             isLiked: isCurrentlyLiked,
             likesCount: post.likes_count,
-          })
+          }),
         );
 
         if (__DEV__) {
           Alert.alert(
             "API Error",
-            "Like functionality requires backend implementation. Please check the backend API endpoints."
+            "Like functionality requires backend implementation. Please check the backend API endpoints.",
           );
         }
       }
     },
-    [likedPosts, dispatch, likePost]
+    [likedPosts, dispatch, likePost],
   );
 
   // Render post item (same as SchoolTab but with class-specific styling)

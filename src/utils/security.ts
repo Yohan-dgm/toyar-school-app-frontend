@@ -115,7 +115,7 @@ export class EnhancedRateLimiter {
       const windowDuration = 60 * 1000; // 1 minute
 
       const stored = await AsyncStorage.getItem(
-        `${this.RATE_LIMIT_KEY}_${deviceId}`
+        `${this.RATE_LIMIT_KEY}_${deviceId}`,
       );
       let rateLimitData = stored
         ? JSON.parse(stored)
@@ -127,7 +127,7 @@ export class EnhancedRateLimiter {
 
       // Remove old requests outside the window
       rateLimitData.requests = rateLimitData.requests.filter(
-        (timestamp: number) => now - timestamp < windowDuration
+        (timestamp: number) => now - timestamp < windowDuration,
       );
 
       // Check if currently blocked
@@ -155,7 +155,7 @@ export class EnhancedRateLimiter {
 
         await AsyncStorage.setItem(
           `${this.RATE_LIMIT_KEY}_${deviceId}`,
-          JSON.stringify(rateLimitData)
+          JSON.stringify(rateLimitData),
         );
 
         return {
@@ -171,7 +171,7 @@ export class EnhancedRateLimiter {
 
       await AsyncStorage.setItem(
         `${this.RATE_LIMIT_KEY}_${deviceId}`,
-        JSON.stringify(rateLimitData)
+        JSON.stringify(rateLimitData),
       );
 
       return {
@@ -215,7 +215,7 @@ export class RequestSecurity {
   static async decryptPayload(
     encrypted: string,
     iv: string,
-    salt: string
+    salt: string,
   ): Promise<string> {
     try {
       // Simple base64 decoding
@@ -231,7 +231,7 @@ export class RequestSecurity {
   static async createRequestSignature(
     payload: string,
     timestamp: number,
-    nonce: string
+    nonce: string,
   ): Promise<string> {
     try {
       const deviceId = await DeviceFingerprint.generate();
@@ -256,13 +256,13 @@ export class RequestSecurity {
     payload: string,
     timestamp: number,
     nonce: string,
-    signature: string
+    signature: string,
   ): Promise<boolean> {
     try {
       const expectedSignature = await this.createRequestSignature(
         payload,
         timestamp,
-        nonce
+        nonce,
       );
       return expectedSignature === signature;
     } catch (error) {

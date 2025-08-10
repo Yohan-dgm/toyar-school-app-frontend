@@ -29,11 +29,11 @@ const EducatorHomeMain = () => {
     "🏫 EducatorHomeMain - User category:",
     userCategory,
     "Is Educator:",
-    isEducator
+    isEducator,
   );
   console.log("🏫 EducatorHomeMain - Component loaded successfully!");
   console.log(
-    "🏫 EducatorHomeMain - Current route should be /authenticated/educator"
+    "🏫 EducatorHomeMain - Current route should be /authenticated/educator",
   );
 
   return (

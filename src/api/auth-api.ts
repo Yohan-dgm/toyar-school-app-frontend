@@ -63,7 +63,7 @@ export const authApi = apiServer1
         transformResponse: (apiResponse: any) => {
           console.log(
             "🔥 Auth API - Raw response received:",
-            JSON.stringify(apiResponse, null, 2)
+            JSON.stringify(apiResponse, null, 2),
           );
 
           // Return the response as-is, but log it for debugging
@@ -76,7 +76,7 @@ export const authApi = apiServer1
             const { data } = await queryFulfilled;
             console.log(
               "✅ Auth API - Query fulfilled with data:",
-              JSON.stringify(data, null, 2)
+              JSON.stringify(data, null, 2),
             );
 
             // Store the token from the API response
@@ -98,7 +98,7 @@ export const authApi = apiServer1
               dispatch(setUser(userData));
               console.log(
                 "👤 Auth API - User data stored:",
-                JSON.stringify(userData, null, 2)
+                JSON.stringify(userData, null, 2),
               );
             }
           } catch (error) {

@@ -16,8 +16,8 @@ interface UniversalActivityFeedProps {
   userCategory: number;
 }
 
-const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({ 
-  userCategory 
+const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
+  userCategory,
 }) => {
   const [isConnected, setIsConnected] = useState(true);
   const [activeTab, setActiveTab] = useState("School");
@@ -30,10 +30,12 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
 
   // Get posts data from Redux for dynamic filtering
   const { posts: schoolPosts, allPosts: schoolAllPosts } = useSelector(
-    (state: any) => state.schoolPosts
+    (state: any) => state.schoolPosts,
   );
   const { posts: classPosts } = useSelector((state: any) => state.classPosts);
-  const { posts: studentPosts } = useSelector((state: any) => state.studentPosts);
+  const { posts: studentPosts } = useSelector(
+    (state: any) => state.studentPosts,
+  );
 
   const filters = filtersState;
 
@@ -85,7 +87,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
         Alert.alert(
           "No Internet Connection",
           "Please check your internet connection and try again.",
-          [{ text: "OK" }]
+          [{ text: "OK" }],
         );
       }
     });
@@ -122,7 +124,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
             icon: "face",
             label: "Student",
             description: "Individual student progress and achievements",
-          }
+          },
         );
         break;
 
@@ -166,7 +168,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
             icon: "sports",
             label: "Sports",
             description: "Sports activities and achievements",
-          }
+          },
         );
         break;
 
@@ -188,14 +190,20 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
 
   // Set default active tab to first visible tab
   useEffect(() => {
-    if (visibleTabs.length > 0 && !visibleTabs.find(tab => tab.name === activeTab)) {
+    if (
+      visibleTabs.length > 0 &&
+      !visibleTabs.find((tab) => tab.name === activeTab)
+    ) {
       setActiveTab(visibleTabs[0].name);
     }
   }, [visibleTabs, activeTab]);
 
   // Handle filter changes
   const handleFilterChange = (newFilters: any) => {
-    console.log("🔄 UniversalActivityFeed: Filter change requested:", newFilters);
+    console.log(
+      "🔄 UniversalActivityFeed: Filter change requested:",
+      newFilters,
+    );
     setFiltersState(newFilters);
   };
 

@@ -19,10 +19,26 @@ const MakePaymentPage = ({ onClose, onBack }) => {
   const [paymentStep, setPaymentStep] = useState(1); // 1: Amount, 2: Method, 3: Confirmation
 
   const predefinedAmounts = [
-    { label: "Full Term Fee", amount: 125000, description: "Complete term payment" },
-    { label: "Tuition Fee", amount: 75000, description: "Academic tuition only" },
-    { label: "Activity Fee", amount: 25000, description: "Sports and activities" },
-    { label: "Library Fee", amount: 15000, description: "Library and resources" },
+    {
+      label: "Full Term Fee",
+      amount: 125000,
+      description: "Complete term payment",
+    },
+    {
+      label: "Tuition Fee",
+      amount: 75000,
+      description: "Academic tuition only",
+    },
+    {
+      label: "Activity Fee",
+      amount: 25000,
+      description: "Sports and activities",
+    },
+    {
+      label: "Library Fee",
+      amount: 15000,
+      description: "Library and resources",
+    },
   ];
 
   const paymentMethods = [
@@ -31,29 +47,29 @@ const MakePaymentPage = ({ onClose, onBack }) => {
       name: "Credit/Debit Card",
       icon: "credit-card",
       description: "Visa, MasterCard, American Express",
-      fee: "2.5% processing fee"
+      fee: "2.5% processing fee",
     },
     {
       id: "bank",
       name: "Online Banking",
       icon: "account-balance",
       description: "Direct bank transfer",
-      fee: "No additional fees"
+      fee: "No additional fees",
     },
     {
       id: "mobile",
       name: "Mobile Payment",
       icon: "phone-android",
       description: "eZCash, mCash, Dialog Pay",
-      fee: "1.5% processing fee"
+      fee: "1.5% processing fee",
     },
     {
       id: "wallet",
       name: "Digital Wallet",
       icon: "account-balance-wallet",
       description: "PayPal, Google Pay, Apple Pay",
-      fee: "2% processing fee"
-    }
+      fee: "2% processing fee",
+    },
   ];
 
   const handleAmountSelect = (amount) => {
@@ -73,13 +89,19 @@ const MakePaymentPage = ({ onClose, onBack }) => {
   const handleNextStep = () => {
     if (paymentStep === 1) {
       if (!getCurrentAmount() || parseInt(getCurrentAmount()) < 1000) {
-        Alert.alert("Invalid Amount", "Please select or enter a valid amount (minimum LKR 1,000)");
+        Alert.alert(
+          "Invalid Amount",
+          "Please select or enter a valid amount (minimum LKR 1,000)",
+        );
         return;
       }
       setPaymentStep(2);
     } else if (paymentStep === 2) {
       if (!selectedMethod) {
-        Alert.alert("Payment Method Required", "Please select a payment method");
+        Alert.alert(
+          "Payment Method Required",
+          "Please select a payment method",
+        );
         return;
       }
       setPaymentStep(3);
@@ -100,22 +122,25 @@ const MakePaymentPage = ({ onClose, onBack }) => {
       `Are you sure you want to proceed with payment of LKR ${parseInt(getCurrentAmount()).toLocaleString()}?`,
       [
         { text: "Cancel", style: "cancel" },
-        { 
-          text: "Confirm", 
+        {
+          text: "Confirm",
           onPress: () => {
             // Here you would integrate with actual payment gateway
-            Alert.alert("Payment Initiated", "You will be redirected to the payment gateway.");
+            Alert.alert(
+              "Payment Initiated",
+              "You will be redirected to the payment gateway.",
+            );
             onClose();
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
   const renderAmountStep = () => (
     <ScrollView style={styles.stepContent}>
       <Text style={styles.stepTitle}>Select Payment Amount</Text>
-      
+
       {/* Predefined Amounts */}
       <View style={styles.amountSection}>
         <Text style={styles.sectionLabel}>Quick Select</Text>
@@ -124,7 +149,8 @@ const MakePaymentPage = ({ onClose, onBack }) => {
             key={index}
             style={[
               styles.amountCard,
-              selectedAmount === amount.amount.toString() && styles.selectedAmountCard
+              selectedAmount === amount.amount.toString() &&
+                styles.selectedAmountCard,
             ]}
             onPress={() => handleAmountSelect(amount.amount)}
           >
@@ -132,7 +158,9 @@ const MakePaymentPage = ({ onClose, onBack }) => {
               <Text style={styles.amountLabel}>{amount.label}</Text>
               <Text style={styles.amountDescription}>{amount.description}</Text>
             </View>
-            <Text style={styles.amountValue}>LKR {amount.amount.toLocaleString()}</Text>
+            <Text style={styles.amountValue}>
+              LKR {amount.amount.toLocaleString()}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -159,19 +187,23 @@ const MakePaymentPage = ({ onClose, onBack }) => {
   const renderMethodStep = () => (
     <ScrollView style={styles.stepContent}>
       <Text style={styles.stepTitle}>Choose Payment Method</Text>
-      
+
       <View style={styles.methodSection}>
         {paymentMethods.map((method) => (
           <TouchableOpacity
             key={method.id}
             style={[
               styles.methodCard,
-              selectedMethod === method.id && styles.selectedMethodCard
+              selectedMethod === method.id && styles.selectedMethodCard,
             ]}
             onPress={() => setSelectedMethod(method.id)}
           >
             <View style={styles.methodIcon}>
-              <MaterialIcons name={method.icon} size={32} color={theme.colors.primary} />
+              <MaterialIcons
+                name={method.icon}
+                size={32}
+                color={theme.colors.primary}
+              />
             </View>
             <View style={styles.methodInfo}>
               <Text style={styles.methodName}>{method.name}</Text>
@@ -179,10 +211,18 @@ const MakePaymentPage = ({ onClose, onBack }) => {
               <Text style={styles.methodFee}>{method.fee}</Text>
             </View>
             <View style={styles.methodSelector}>
-              <MaterialIcons 
-                name={selectedMethod === method.id ? "radio-button-checked" : "radio-button-unchecked"} 
-                size={24} 
-                color={selectedMethod === method.id ? theme.colors.primary : "#CCCCCC"} 
+              <MaterialIcons
+                name={
+                  selectedMethod === method.id
+                    ? "radio-button-checked"
+                    : "radio-button-unchecked"
+                }
+                size={24}
+                color={
+                  selectedMethod === method.id
+                    ? theme.colors.primary
+                    : "#CCCCCC"
+                }
               />
             </View>
           </TouchableOpacity>
@@ -192,45 +232,60 @@ const MakePaymentPage = ({ onClose, onBack }) => {
   );
 
   const renderConfirmationStep = () => {
-    const selectedMethodData = paymentMethods.find(m => m.id === selectedMethod);
+    const selectedMethodData = paymentMethods.find(
+      (m) => m.id === selectedMethod,
+    );
     const amount = parseInt(getCurrentAmount());
-    const processingFee = selectedMethod === "card" ? amount * 0.025 : 
-                         selectedMethod === "mobile" ? amount * 0.015 : 
-                         selectedMethod === "wallet" ? amount * 0.02 : 0;
+    const processingFee =
+      selectedMethod === "card"
+        ? amount * 0.025
+        : selectedMethod === "mobile"
+          ? amount * 0.015
+          : selectedMethod === "wallet"
+            ? amount * 0.02
+            : 0;
     const totalAmount = amount + processingFee;
 
     return (
       <ScrollView style={styles.stepContent}>
         <Text style={styles.stepTitle}>Confirm Payment Details</Text>
-        
+
         <View style={styles.confirmationCard}>
           <View style={styles.confirmationSection}>
             <Text style={styles.confirmationLabel}>Payment Amount</Text>
-            <Text style={styles.confirmationValue}>LKR {amount.toLocaleString()}</Text>
+            <Text style={styles.confirmationValue}>
+              LKR {amount.toLocaleString()}
+            </Text>
           </View>
-          
+
           <View style={styles.confirmationSection}>
             <Text style={styles.confirmationLabel}>Payment Method</Text>
-            <Text style={styles.confirmationValue}>{selectedMethodData?.name}</Text>
+            <Text style={styles.confirmationValue}>
+              {selectedMethodData?.name}
+            </Text>
           </View>
-          
+
           {processingFee > 0 && (
             <View style={styles.confirmationSection}>
               <Text style={styles.confirmationLabel}>Processing Fee</Text>
-              <Text style={styles.confirmationValue}>LKR {processingFee.toFixed(2)}</Text>
+              <Text style={styles.confirmationValue}>
+                LKR {processingFee.toFixed(2)}
+              </Text>
             </View>
           )}
-          
+
           <View style={[styles.confirmationSection, styles.totalSection]}>
             <Text style={styles.totalLabel}>Total Amount</Text>
-            <Text style={styles.totalValue}>LKR {totalAmount.toLocaleString()}</Text>
+            <Text style={styles.totalValue}>
+              LKR {totalAmount.toLocaleString()}
+            </Text>
           </View>
         </View>
 
         <View style={styles.termsSection}>
           <MaterialIcons name="info" size={20} color={theme.colors.primary} />
           <Text style={styles.termsText}>
-            By proceeding, you agree to our Terms of Service and Payment Policy. 
+            By proceeding, you agree to our Terms of Service and Payment Policy.
             This transaction is secure and encrypted.
           </Text>
         </View>
@@ -242,7 +297,10 @@ const MakePaymentPage = ({ onClose, onBack }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handlePreviousStep}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={handlePreviousStep}
+        >
           <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Make Payment</Text>
@@ -254,16 +312,47 @@ const MakePaymentPage = ({ onClose, onBack }) => {
       {/* Progress Indicator */}
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressStep, paymentStep >= 1 && styles.activeStep]}>
-            <Text style={[styles.stepNumber, paymentStep >= 1 && styles.activeStepText]}>1</Text>
+          <View
+            style={[styles.progressStep, paymentStep >= 1 && styles.activeStep]}
+          >
+            <Text
+              style={[
+                styles.stepNumber,
+                paymentStep >= 1 && styles.activeStepText,
+              ]}
+            >
+              1
+            </Text>
           </View>
-          <View style={[styles.progressLine, paymentStep >= 2 && styles.activeLine]} />
-          <View style={[styles.progressStep, paymentStep >= 2 && styles.activeStep]}>
-            <Text style={[styles.stepNumber, paymentStep >= 2 && styles.activeStepText]}>2</Text>
+          <View
+            style={[styles.progressLine, paymentStep >= 2 && styles.activeLine]}
+          />
+          <View
+            style={[styles.progressStep, paymentStep >= 2 && styles.activeStep]}
+          >
+            <Text
+              style={[
+                styles.stepNumber,
+                paymentStep >= 2 && styles.activeStepText,
+              ]}
+            >
+              2
+            </Text>
           </View>
-          <View style={[styles.progressLine, paymentStep >= 3 && styles.activeLine]} />
-          <View style={[styles.progressStep, paymentStep >= 3 && styles.activeStep]}>
-            <Text style={[styles.stepNumber, paymentStep >= 3 && styles.activeStepText]}>3</Text>
+          <View
+            style={[styles.progressLine, paymentStep >= 3 && styles.activeLine]}
+          />
+          <View
+            style={[styles.progressStep, paymentStep >= 3 && styles.activeStep]}
+          >
+            <Text
+              style={[
+                styles.stepNumber,
+                paymentStep >= 3 && styles.activeStepText,
+              ]}
+            >
+              3
+            </Text>
           </View>
         </View>
         <View style={styles.stepLabels}>
@@ -290,7 +379,10 @@ const MakePaymentPage = ({ onClose, onBack }) => {
             <MaterialIcons name="arrow-forward" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPayment}>
+          <TouchableOpacity
+            style={styles.confirmButton}
+            onPress={handleConfirmPayment}
+          >
             <MaterialIcons name="payment" size={20} color="#FFFFFF" />
             <Text style={styles.confirmButtonText}>Proceed to Payment</Text>
           </TouchableOpacity>

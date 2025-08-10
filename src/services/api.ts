@@ -45,7 +45,7 @@ class SecurityManager {
   static async createSignature(
     payload: string,
     timestamp: number,
-    nonce: string
+    nonce: string,
   ): Promise<string> {
     const deviceId = await this.getDeviceId();
     const message = `${payload}${timestamp}${nonce}${deviceId}`;
@@ -99,7 +99,7 @@ class RateLimiter {
   }
 
   private static async saveRateLimitState(
-    state: RateLimitState
+    state: RateLimitState,
   ): Promise<void> {
     try {
       await AsyncStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(state));
@@ -148,7 +148,7 @@ class ApiErrorHandler {
     message: string,
     type: ApiError["type"],
     code?: string,
-    status?: number
+    status?: number,
   ): ApiError {
     return { message, type, code, status };
   }
@@ -164,21 +164,21 @@ class ApiErrorHandler {
             "Invalid API key",
             "auth",
             "UNAUTHORIZED",
-            status
+            status,
           );
         case 429:
           return this.createError(
             "Rate limit exceeded",
             "rate_limit",
             "RATE_LIMITED",
-            status
+            status,
           );
         case 500:
           return this.createError(
             "Server error",
             "api",
             "SERVER_ERROR",
-            status
+            status,
           );
         default:
           return this.createError(message, "api", "API_ERROR", status);
@@ -189,7 +189,7 @@ class ApiErrorHandler {
       return this.createError(
         error.message || "Unknown error",
         "unknown",
-        "UNKNOWN_ERROR"
+        "UNKNOWN_ERROR",
       );
     }
   }
@@ -207,14 +207,14 @@ export class DeepSeekAPI {
       model?: string;
       maxTokens?: number;
       temperature?: number;
-    } = {}
+    } = {},
   ): Promise<DeepSeekResponse | ReadableStream<DeepSeekStreamResponse>> {
     // Rate limiting check
     const rateLimitCheck = await RateLimiter.checkRateLimit();
     if (!rateLimitCheck.allowed) {
       throw ApiErrorHandler.createError(
         `Rate limit exceeded. Try again after ${new Date(rateLimitCheck.resetTime!).toLocaleTimeString()}`,
-        "rate_limit"
+        "rate_limit",
       );
     }
 
@@ -236,7 +236,7 @@ export class DeepSeekAPI {
     const signature = await SecurityManager.createSignature(
       JSON.stringify(payload),
       timestamp,
-      nonce
+      nonce,
     );
 
     try {
@@ -254,7 +254,7 @@ export class DeepSeekAPI {
             "X-Signature": signature,
           },
           responseType: options.stream ? "stream" : "json",
-        }
+        },
       );
 
       if (options.stream) {
@@ -268,7 +268,7 @@ export class DeepSeekAPI {
   }
 
   private static handleStreamResponse(
-    response: AxiosResponse
+    response: AxiosResponse,
   ): ReadableStream<DeepSeekStreamResponse> {
     const reader = response.data.getReader();
 
@@ -317,13 +317,13 @@ export class DeepSeekAPI {
 // Convenience functions
 export const fetchDeepSeekResponse = async (
   messages: ChatMessage[],
-  stream = false
+  stream = false,
 ): Promise<DeepSeekResponse | ReadableStream<DeepSeekStreamResponse>> => {
   return DeepSeekAPI.fetchResponse(messages, { stream });
 };
 
 export const fetchDeepSeekStreamResponse = async (
-  messages: ChatMessage[]
+  messages: ChatMessage[],
 ): Promise<ReadableStream<DeepSeekStreamResponse>> => {
   return DeepSeekAPI.fetchResponse(messages, { stream: true }) as Promise<
     ReadableStream<DeepSeekStreamResponse>

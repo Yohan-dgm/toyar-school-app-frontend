@@ -1,6 +1,6 @@
 import React from "react";
-import UserActionsMain from "../../../screens/authenticated/educator/user-actions/UserActionsMain";
+import EducatorDashboardMain from "../../../screens/authenticated/educator/dashboard/EducatorDashboardMain";
 
 export default function EducatorUserActionsPage() {
-  return <UserActionsMain />;
+  return <EducatorDashboardMain />;
 }

@@ -10,12 +10,12 @@ export const DrawerProvider = ({ children }) => {
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
   return (
-    <DrawerContext.Provider 
-      value={{ 
-        isDrawerOpen, 
-        openDrawer, 
-        closeDrawer, 
-        toggleDrawer 
+    <DrawerContext.Provider
+      value={{
+        isDrawerOpen,
+        openDrawer,
+        closeDrawer,
+        toggleDrawer,
       }}
     >
       {children}

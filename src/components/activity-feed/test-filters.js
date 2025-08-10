@@ -6,7 +6,8 @@ const testPosts = [
     id: 1,
     category: "announcement",
     author: "Principal Johnson",
-    content: "🎉 Congratulations to our Grade 10 students for their outstanding performance in the Science Fair! #ScienceFair #Achievement",
+    content:
+      "🎉 Congratulations to our Grade 10 students for their outstanding performance in the Science Fair! #ScienceFair #Achievement",
     date: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     hashtags: ["ScienceFair", "Achievement"],
   },
@@ -14,7 +15,8 @@ const testPosts = [
     id: 2,
     category: "sports",
     author: "Coach Martinez",
-    content: "⚽ Great victory for our school football team! #Football #Victory #TeamSpirit",
+    content:
+      "⚽ Great victory for our school football team! #Football #Victory #TeamSpirit",
     date: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
     hashtags: ["Football", "Victory", "TeamSpirit"],
   },
@@ -22,7 +24,8 @@ const testPosts = [
     id: 3,
     category: "academic",
     author: "Mrs. Sarah Wilson",
-    content: "📚 Mathematics test for Grade 9 students tomorrow. #MathTest #Grade9 #Exam",
+    content:
+      "📚 Mathematics test for Grade 9 students tomorrow. #MathTest #Grade9 #Exam",
     date: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
     hashtags: ["MathTest", "Grade9", "Exam"],
   },
@@ -39,7 +42,7 @@ const applyFilters = (posts, filters) => {
       (post) =>
         post.content.toLowerCase().includes(searchLower) ||
         post.author.toLowerCase().includes(searchLower) ||
-        post.hashtags.some((tag) => tag.toLowerCase().includes(searchLower))
+        post.hashtags.some((tag) => tag.toLowerCase().includes(searchLower)),
     );
   }
 
@@ -71,9 +74,9 @@ const applyFilters = (posts, filters) => {
     filtered = filtered.filter((post) =>
       filters.hashtags.some((filterTag) =>
         post.hashtags.some((postTag) =>
-          postTag.toLowerCase().includes(filterTag.toLowerCase())
-        )
-      )
+          postTag.toLowerCase().includes(filterTag.toLowerCase()),
+        ),
+      ),
     );
   }
 
@@ -88,38 +91,48 @@ const runTests = () => {
   console.log("Test 1: Search Filter");
   const searchResult = applyFilters(testPosts, { searchTerm: "football" });
   console.log(`Expected: 1 post, Got: ${searchResult.length}`);
-  console.log(`✅ Search filter: ${searchResult.length === 1 ? "PASS" : "FAIL"}\n`);
+  console.log(
+    `✅ Search filter: ${searchResult.length === 1 ? "PASS" : "FAIL"}\n`,
+  );
 
   // Test 2: Category filter
   console.log("Test 2: Category Filter");
   const categoryResult = applyFilters(testPosts, { category: "sports" });
   console.log(`Expected: 1 post, Got: ${categoryResult.length}`);
-  console.log(`✅ Category filter: ${categoryResult.length === 1 ? "PASS" : "FAIL"}\n`);
+  console.log(
+    `✅ Category filter: ${categoryResult.length === 1 ? "PASS" : "FAIL"}\n`,
+  );
 
   // Test 3: Hashtag filter
   console.log("Test 3: Hashtag Filter");
   const hashtagResult = applyFilters(testPosts, { hashtags: ["Achievement"] });
   console.log(`Expected: 1 post, Got: ${hashtagResult.length}`);
-  console.log(`✅ Hashtag filter: ${hashtagResult.length === 1 ? "PASS" : "FAIL"}\n`);
+  console.log(
+    `✅ Hashtag filter: ${hashtagResult.length === 1 ? "PASS" : "FAIL"}\n`,
+  );
 
   // Test 4: Date range filter
   console.log("Test 4: Date Range Filter");
   const now = new Date();
   const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
   const dateResult = applyFilters(testPosts, {
-    dateRange: { start: oneHourAgo, end: now }
+    dateRange: { start: oneHourAgo, end: now },
   });
   console.log(`Expected: 2 posts, Got: ${dateResult.length}`);
-  console.log(`✅ Date range filter: ${dateResult.length === 2 ? "PASS" : "FAIL"}\n`);
+  console.log(
+    `✅ Date range filter: ${dateResult.length === 2 ? "PASS" : "FAIL"}\n`,
+  );
 
   // Test 5: Combined filters
   console.log("Test 5: Combined Filters");
   const combinedResult = applyFilters(testPosts, {
     category: "academic",
-    searchTerm: "math"
+    searchTerm: "math",
   });
   console.log(`Expected: 1 post, Got: ${combinedResult.length}`);
-  console.log(`✅ Combined filters: ${combinedResult.length === 1 ? "PASS" : "FAIL"}\n`);
+  console.log(
+    `✅ Combined filters: ${combinedResult.length === 1 ? "PASS" : "FAIL"}\n`,
+  );
 
   // Test 6: No results
   console.log("Test 6: No Results");

@@ -45,6 +45,13 @@ const PARENT_NAVIGATION: NavigationConfig = {
       route: "student-profile",
     },
     {
+      id: "userActions",
+      icon: "dashboard",
+      iconFamily: "MaterialIcons",
+      title: "Dashboard",
+      route: "user-actions",
+    },
+    {
       id: "notifications",
       icon: "notifications",
       iconFamily: "MaterialIcons",
@@ -74,7 +81,7 @@ const EDUCATOR_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -116,7 +123,7 @@ const SENIOR_MANAGEMENT_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -193,7 +200,7 @@ const MANAGEMENT_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -228,7 +235,7 @@ const ADMIN_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -263,7 +270,7 @@ const SPORT_COACH_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -298,7 +305,7 @@ const COUNSELOR_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -333,7 +340,7 @@ const STUDENT_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -368,7 +375,7 @@ const TOYAR_TEAM_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -403,7 +410,7 @@ const SECURITY_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",
@@ -438,7 +445,7 @@ const CANTEEN_NAVIGATION: NavigationConfig = {
     },
     {
       id: "userActions",
-      icon: "settings",
+      icon: "dashboard",
       iconFamily: "MaterialIcons",
       title: "User Actions",
       route: "user-actions",

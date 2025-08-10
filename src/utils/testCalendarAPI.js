@@ -52,13 +52,13 @@ export const testCalendarAPI = async () => {
           user_category: user.user_category,
           show_all_public: true,
         }),
-      }
+      },
     );
 
     console.log("🧪 API Response status:", response.status);
     console.log(
       "🧪 API Response headers:",
-      Object.fromEntries(response.headers)
+      Object.fromEntries(response.headers),
     );
 
     const data = await response.text();
@@ -74,7 +74,7 @@ export const testCalendarAPI = async () => {
 
         // Filter and show only public events
         const publicEvents = jsonData.events.filter(
-          (event) => event.visibility_type === "Public"
+          (event) => event.visibility_type === "Public",
         );
         console.log("🧪 Public events:", publicEvents.length);
 

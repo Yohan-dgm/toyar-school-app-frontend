@@ -25,7 +25,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Bank Transfer",
       reference: "BT20250115001",
       description: "Term 1 - Partial Payment",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2025002",
@@ -36,7 +36,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Credit Card",
       reference: "CC20250110002",
       description: "Annual Registration",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2024003",
@@ -47,7 +47,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Online Banking",
       reference: "OB20241220003",
       description: "Sports & Extra-curricular",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2024004",
@@ -58,7 +58,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Mobile Payment",
       reference: "MP20241215004",
       description: "Term 3 - Full Payment",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2024005",
@@ -69,7 +69,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Credit Card",
       reference: "CC20241130005",
       description: "Library Resources",
-      receiptUrl: null
+      receiptUrl: null,
     },
     {
       id: "TXN2024006",
@@ -80,7 +80,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Bank Transfer",
       reference: "BT20241125006",
       description: "Final Examinations",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2024007",
@@ -91,7 +91,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Online Banking",
       reference: "OB20241020007",
       description: "Term 2 - Full Payment",
-      receiptUrl: "#"
+      receiptUrl: "#",
     },
     {
       id: "TXN2024008",
@@ -102,15 +102,15 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       method: "Mobile Payment",
       reference: "MP20240915008",
       description: "School Transport Service",
-      receiptUrl: null
-    }
+      receiptUrl: null,
+    },
   ];
 
   const filterOptions = [
     { key: "all", label: "All Payments" },
     { key: "completed", label: "Completed" },
     { key: "pending", label: "Pending" },
-    { key: "failed", label: "Failed" }
+    { key: "failed", label: "Failed" },
   ];
 
   const getFilteredPayments = () => {
@@ -118,17 +118,18 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
 
     // Filter by status
     if (selectedFilter !== "all") {
-      filtered = filtered.filter(payment => 
-        payment.status.toLowerCase() === selectedFilter
+      filtered = filtered.filter(
+        (payment) => payment.status.toLowerCase() === selectedFilter,
       );
     }
 
     // Filter by search query
     if (searchQuery.trim()) {
-      filtered = filtered.filter(payment =>
-        payment.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        payment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        payment.description.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (payment) =>
+          payment.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          payment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          payment.description.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -163,7 +164,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
 
   const getTotalAmount = () => {
     return paymentHistory
-      .filter(payment => payment.status === "Completed")
+      .filter((payment) => payment.status === "Completed")
       .reduce((total, payment) => total + payment.amount, 0);
   };
 
@@ -182,12 +183,17 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
           <Text style={styles.paymentDate}>{payment.date}</Text>
         </View>
         <View style={styles.paymentStatus}>
-          <MaterialIcons 
-            name={getStatusIcon(payment.status)} 
-            size={20} 
-            color={getStatusColor(payment.status)} 
+          <MaterialIcons
+            name={getStatusIcon(payment.status)}
+            size={20}
+            color={getStatusColor(payment.status)}
           />
-          <Text style={[styles.statusText, { color: getStatusColor(payment.status) }]}>
+          <Text
+            style={[
+              styles.statusText,
+              { color: getStatusColor(payment.status) },
+            ]}
+          >
             {payment.status}
           </Text>
         </View>
@@ -196,24 +202,26 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       <View style={styles.paymentDetails}>
         <View style={styles.amountSection}>
           <Text style={styles.amountLabel}>Amount</Text>
-          <Text style={styles.amountValue}>LKR {payment.amount.toLocaleString()}</Text>
+          <Text style={styles.amountValue}>
+            LKR {payment.amount.toLocaleString()}
+          </Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Transaction ID:</Text>
           <Text style={styles.detailValue}>{payment.id}</Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Payment Method:</Text>
           <Text style={styles.detailValue}>{payment.method}</Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Reference:</Text>
           <Text style={styles.detailValue}>{payment.reference}</Text>
         </View>
-        
+
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Description:</Text>
           <Text style={styles.detailValue}>{payment.description}</Text>
@@ -222,11 +230,15 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
 
       {payment.status === "Completed" && payment.receiptUrl && (
         <View style={styles.paymentActions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.receiptButton}
             onPress={() => handleDownloadReceipt(payment)}
           >
-            <MaterialIcons name="receipt" size={16} color={theme.colors.primary} />
+            <MaterialIcons
+              name="receipt"
+              size={16}
+              color={theme.colors.primary}
+            />
             <Text style={styles.receiptButtonText}>Download Receipt</Text>
           </TouchableOpacity>
         </View>
@@ -251,7 +263,9 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       <View style={styles.summaryCard}>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>Total Paid</Text>
-          <Text style={styles.summaryValue}>LKR {getTotalAmount().toLocaleString()}</Text>
+          <Text style={styles.summaryValue}>
+            LKR {getTotalAmount().toLocaleString()}
+          </Text>
         </View>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>Total Transactions</Text>
@@ -260,7 +274,7 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>Successful</Text>
           <Text style={styles.summaryValue}>
-            {paymentHistory.filter(p => p.status === "Completed").length}
+            {paymentHistory.filter((p) => p.status === "Completed").length}
           </Text>
         </View>
       </View>
@@ -276,9 +290,9 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
             onChangeText={setSearchQuery}
           />
         </View>
-        
-        <ScrollView 
-          horizontal 
+
+        <ScrollView
+          horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}
         >
@@ -287,14 +301,17 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
               key={option.key}
               style={[
                 styles.filterButton,
-                selectedFilter === option.key && styles.activeFilterButton
+                selectedFilter === option.key && styles.activeFilterButton,
               ]}
               onPress={() => setSelectedFilter(option.key)}
             >
-              <Text style={[
-                styles.filterButtonText,
-                selectedFilter === option.key && styles.activeFilterButtonText
-              ]}>
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  selectedFilter === option.key &&
+                    styles.activeFilterButtonText,
+                ]}
+              >
                 {option.label}
               </Text>
             </TouchableOpacity>
@@ -303,7 +320,10 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
       </View>
 
       {/* Payment List */}
-      <ScrollView style={styles.paymentList} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.paymentList}
+        showsVerticalScrollIndicator={false}
+      >
         {getFilteredPayments().length > 0 ? (
           getFilteredPayments().map((payment) => (
             <PaymentCard key={payment.id} payment={payment} />
@@ -313,10 +333,9 @@ const PaymentHistoryPage = ({ onClose, onBack }) => {
             <MaterialIcons name="receipt-long" size={64} color="#CCCCCC" />
             <Text style={styles.emptyStateTitle}>No Payments Found</Text>
             <Text style={styles.emptyStateText}>
-              {searchQuery.trim() || selectedFilter !== "all" 
+              {searchQuery.trim() || selectedFilter !== "all"
                 ? "Try adjusting your search or filter criteria"
-                : "You haven't made any payments yet"
-              }
+                : "You haven't made any payments yet"}
             </Text>
           </View>
         )}

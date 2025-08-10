@@ -94,7 +94,8 @@ export default function Login() {
   // Map school PIN to database name
   const getDbNameFromPin = (pin: string): string => {
     const pinMapping: Record<string, string> = {
-      nesixy: "sms_v1",
+      nesixy: "nexis_college_sms_staging",
+      // nesixy: "sms_v1",
       school2: "sms_v2",
       school3: "sms_v3",
     };
@@ -153,7 +154,7 @@ export default function Login() {
 
         // Clear any old cached data to ensure fresh backend data
         console.log(
-          "🧹 Clearing old cached data before setting fresh session data..."
+          "🧹 Clearing old cached data before setting fresh session data...",
         );
 
         // Set authentication state with fresh backend data
@@ -169,11 +170,11 @@ export default function Login() {
         };
         AsyncStorage.setItem(
           "loginCredentials",
-          JSON.stringify(credentialsForRefresh)
+          JSON.stringify(credentialsForRefresh),
         )
           .then(() => {
             console.log(
-              "🔑 Login credentials stored for refresh functionality"
+              "🔑 Login credentials stored for refresh functionality",
             );
           })
           .catch((error) => {
@@ -184,7 +185,7 @@ export default function Login() {
         console.log("🔄 Login - About to redirect after successful login");
         console.log(
           "🔄 Login - user_category in enhancedSessionData:",
-          enhancedSessionData.user_category
+          enhancedSessionData.user_category,
         );
         const userTypeList = userData.user_type_list || [];
 
@@ -231,7 +232,7 @@ export default function Login() {
         Toast.show({
           type: "success",
           text1: "Login Successful! 🎉",
-          text2: "Welcome back to SchoolSnap",
+          text2: "Welcome back to School App",
           position: "top",
           visibilityTime: 3000,
         });
@@ -254,13 +255,13 @@ export default function Login() {
               "User category detected:",
               userCategory,
               "->",
-              categoryName
+              categoryName,
             );
             console.log("Redirecting to:", `/authenticated/${categoryName}`);
             router.replace(`/authenticated/${categoryName}`);
           } else {
             console.log(
-              "No user_category found, using legacy user_role system"
+              "No user_category found, using legacy user_role system",
             );
             // Legacy system: use user_role string
             switch (userRole) {
@@ -482,7 +483,7 @@ export default function Login() {
               </View>
               <Text style={styles.pinTitle}>School PIN</Text>
               <Text style={styles.pinSubtitle}>
-                Enter your school PIN to access your school's system
+                Enter your school PIN to access your school&apos;s system
               </Text>
             </View>
 

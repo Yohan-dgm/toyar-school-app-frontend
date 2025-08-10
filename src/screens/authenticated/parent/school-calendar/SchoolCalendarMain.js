@@ -30,7 +30,7 @@ const SchoolCalendarMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `📅 SchoolCalendarMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
+        `📅 SchoolCalendarMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -41,12 +41,12 @@ const SchoolCalendarMain = () => {
     "📅 SchoolCalendarMain - User category:",
     userCategory,
     "Is parent:",
-    isParent
+    isParent,
   );
   console.log("📅 SchoolCalendarMain - Students count:", students.length);
   console.log(
     "📅 SchoolCalendarMain - Selected student:",
-    selectedStudent?.student_calling_name
+    selectedStudent?.student_calling_name,
   );
   console.log("📅 SchoolCalendarMain - Session data structure:", {
     hasSessionData: !!sessionData,

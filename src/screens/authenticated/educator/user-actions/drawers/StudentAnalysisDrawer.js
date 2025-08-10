@@ -14,7 +14,7 @@ import { theme } from "../../../../../styles/theme";
 import { USER_CATEGORIES } from "../../../../../constants/userCategories";
 
 const { width } = Dimensions.get("window");
-const chartWidth = width - (theme.spacing.md * 4);
+const chartWidth = width - theme.spacing.md * 4;
 
 const StudentAnalysisDrawer = () => {
   const [selectedView, setSelectedView] = useState("overview");
@@ -73,8 +73,11 @@ const StudentAnalysisDrawer = () => {
   // Generate class overview data
   const getClassOverviewData = () => {
     const categoryAverages = analysisCategories.map((category) => {
-      const scores = classStudents.map((student) => student[`${category.id}_score`]);
-      const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      const scores = classStudents.map(
+        (student) => student[`${category.id}_score`],
+      );
+      const average =
+        scores.reduce((sum, score) => sum + score, 0) / scores.length;
       return {
         ...category,
         average: Math.round(average),
@@ -124,7 +127,9 @@ const StudentAnalysisDrawer = () => {
           <MaterialIcons
             name={option.icon}
             size={20}
-            color={selectedView === option.id ? "white" : theme.colors.textSecondary}
+            color={
+              selectedView === option.id ? "white" : theme.colors.textSecondary
+            }
           />
           <Text
             style={[
@@ -141,7 +146,7 @@ const StudentAnalysisDrawer = () => {
 
   const renderClassOverview = () => {
     const overviewData = getClassOverviewData();
-    
+
     const barData = {
       labels: overviewData.map((item) => item.label),
       datasets: [
@@ -162,7 +167,7 @@ const StudentAnalysisDrawer = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.chartTitle}>Class Performance Overview</Text>
-        
+
         <View style={styles.chartContainer}>
           <BarChart
             data={barData}
@@ -175,7 +180,7 @@ const StudentAnalysisDrawer = () => {
         </View>
 
         <Text style={styles.chartTitle}>Performance Distribution</Text>
-        
+
         <View style={styles.chartContainer}>
           <PieChart
             data={pieData}
@@ -205,7 +210,11 @@ const StudentAnalysisDrawer = () => {
   const renderIndividualAnalysis = () => (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Text style={styles.sectionTitle}>Select Student</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.studentSelector}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.studentSelector}
+      >
         {classStudents.map((student) => (
           <TouchableOpacity
             key={student.id}
@@ -218,7 +227,8 @@ const StudentAnalysisDrawer = () => {
             <Text
               style={[
                 styles.studentChipText,
-                selectedStudent?.id === student.id && styles.selectedStudentChipText,
+                selectedStudent?.id === student.id &&
+                  styles.selectedStudentChipText,
               ]}
             >
               {student.student_calling_name}
@@ -232,12 +242,16 @@ const StudentAnalysisDrawer = () => {
           <Text style={styles.chartTitle}>
             {selectedStudent.student_calling_name}'s Performance
           </Text>
-          
+
           <View style={styles.individualStats}>
             {getIndividualData(selectedStudent).map((item) => (
               <View key={item.id} style={styles.individualStatCard}>
                 <View style={styles.statHeader}>
-                  <MaterialIcons name={item.icon} size={20} color={item.color} />
+                  <MaterialIcons
+                    name={item.icon}
+                    size={20}
+                    color={item.color}
+                  />
                   <Text style={styles.statTitle}>{item.label}</Text>
                   <Text style={[styles.statScore, { color: item.color }]}>
                     {item.score}%
@@ -262,14 +276,18 @@ const StudentAnalysisDrawer = () => {
   const renderComparison = () => (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Text style={styles.sectionTitle}>Student Comparison</Text>
-      
+
       {analysisCategories.map((category) => (
         <View key={category.id} style={styles.comparisonSection}>
           <View style={styles.comparisonHeader}>
-            <MaterialIcons name={category.icon} size={20} color={category.color} />
+            <MaterialIcons
+              name={category.icon}
+              size={20}
+              color={category.color}
+            />
             <Text style={styles.comparisonTitle}>{category.label}</Text>
           </View>
-          
+
           {classStudents.map((student) => (
             <View key={student.id} style={styles.comparisonRow}>
               <Text style={styles.comparisonStudentName}>
@@ -318,9 +336,7 @@ const StudentAnalysisDrawer = () => {
 
       {renderViewSelector()}
 
-      <View style={styles.content}>
-        {renderContent()}
-      </View>
+      <View style={styles.content}>{renderContent()}</View>
     </View>
   );
 };

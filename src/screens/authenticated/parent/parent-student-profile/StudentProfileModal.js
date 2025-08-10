@@ -289,7 +289,7 @@ const StudentProfileModal = ({ visible, onClose, student }) => {
 
             <View style={styles.timelineContainer}>
               {student.timeline.map((item, index) =>
-                renderTimelineItem(item, index)
+                renderTimelineItem(item, index),
               )}
             </View>
           </View>

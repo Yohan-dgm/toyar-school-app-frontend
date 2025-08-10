@@ -26,6 +26,7 @@ interface FullScreenModalProps {
   title?: string;
   children: React.ReactNode;
   backgroundColor?: string;
+  headerAction?: React.ReactNode;
 }
 
 const FullScreenModal: React.FC<FullScreenModalProps> = ({
@@ -34,6 +35,7 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({
   title,
   children,
   backgroundColor = "#FFFFFF",
+  headerAction,
 }) => {
   const slideAnim = useRef(new Animated.Value(screenHeight)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -99,7 +101,7 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({
 
   const onGestureEvent = Animated.event(
     [{ nativeEvent: { translationY: dragY } }],
-    { useNativeDriver: true }
+    { useNativeDriver: true },
   );
 
   const onHandlerStateChange = (event: PanGestureHandlerGestureEvent) => {
@@ -183,11 +185,22 @@ const FullScreenModal: React.FC<FullScreenModalProps> = ({
             <View style={styles.dragIndicator} />
           </View>
 
-          {/* Header without Close Button */}
+          {/* Header with Back Button */}
           <View style={styles.header}>
+            {/* Back Button */}
+            <TouchableOpacity style={styles.backButton} onPress={handleClose}>
+              <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            {/* Title */}
             <View style={styles.headerContent}>
               <Text style={styles.headerTitle}>{title}</Text>
             </View>
+
+            {/* Action Button */}
+            {headerAction && (
+              <View style={styles.headerAction}>{headerAction}</View>
+            )}
           </View>
 
           {/* Content Area */}
@@ -236,7 +249,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     paddingTop: 10,
     paddingHorizontal: 20,
     paddingBottom: 10,
@@ -250,15 +262,25 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  backButton: {
+    paddingRight: 15,
+    paddingVertical: 5,
+    marginRight: 5,
+  },
   headerContent: {
     flex: 1,
     alignItems: "center",
+    paddingHorizontal: 10,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "600",
     color: "#FFFFFF",
     textAlign: "center",
+  },
+  headerAction: {
+    paddingLeft: 15,
+    marginLeft: 5,
   },
   content: {
     flex: 1,

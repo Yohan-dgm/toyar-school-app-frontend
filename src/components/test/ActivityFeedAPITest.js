@@ -64,7 +64,7 @@ const ActivityFeedAPITest = () => {
     try {
       addLog(
         "📡 Calling API: api/activity-feed-management/school-posts/list",
-        "info"
+        "info",
       );
       addLog("📤 Request parameters:", "info", requestParams);
 
@@ -78,17 +78,17 @@ const ActivityFeedAPITest = () => {
             posts: response.data || [],
             pagination: response.pagination || null,
             append: false,
-          })
+          }),
         );
         addLog(
           `📊 Posts loaded: ${response.data?.length || 0} posts`,
-          "success"
+          "success",
         );
         addLog("📄 Pagination info:", "info", response.pagination);
       } else {
         addLog("⚠️ API returned unsuccessful status", "warning", response);
         dispatch(
-          setError(response.message || "API returned unsuccessful response")
+          setError(response.message || "API returned unsuccessful response"),
         );
       }
     } catch (error) {
@@ -135,12 +135,12 @@ const ActivityFeedAPITest = () => {
             posts: response.data || [],
             pagination: response.pagination || null,
             append: false,
-          })
+          }),
         );
         dispatch(setFilters(testFilters));
         addLog(
           `📊 Filtered posts loaded: ${response.data?.length || 0} posts`,
-          "success"
+          "success",
         );
       }
     } catch (error) {
@@ -171,11 +171,11 @@ const ActivityFeedAPITest = () => {
             posts: response.data || [],
             pagination: response.pagination || null,
             append: true, // Append for pagination
-          })
+          }),
         );
         addLog(
           `📊 Page 2 posts loaded: ${response.data?.length || 0} posts`,
-          "success"
+          "success",
         );
       }
     } catch (error) {
@@ -218,7 +218,7 @@ const ActivityFeedAPITest = () => {
     addLog("🎯 Activity Feed API Test Component mounted", "info");
     addLog(
       "🔗 API Endpoint: api/activity-feed-management/school-posts/list",
-      "info"
+      "info",
     );
   }, []);
 

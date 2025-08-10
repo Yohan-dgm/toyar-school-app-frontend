@@ -1,73 +1,270 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   TextInput,
+  Image,
+  ActivityIndicator,
+  Alert,
+  FlatList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Modalize } from "react-native-modalize";
+import { useGetAllStudentsWithPaginationQuery } from "../../../../../api/educator-feedback-api";
 
 const StudentsModal = forwardRef<Modalize>((_, ref) => {
-  const studentData = [
-    {
-      id: "1",
-      name: "Alice Johnson",
-      grade: "Grade 10",
-      class: "10A",
-      attendance: "95%",
-      status: "Active",
-    },
-    {
-      id: "2",
-      name: "Bob Smith",
-      grade: "Grade 9",
-      class: "9B",
-      attendance: "88%",
-      status: "Active",
-    },
-    {
-      id: "3",
-      name: "Carol Davis",
-      grade: "Grade 11",
-      class: "11C",
-      attendance: "92%",
-      status: "Active",
-    },
-    {
-      id: "4",
-      name: "David Wilson",
-      grade: "Grade 8",
-      class: "8A",
-      attendance: "87%",
-      status: "Active",
-    },
-  ];
+  const [searchPhrase, setSearchPhrase] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  const renderStudentCard = (student: any) => (
-    <TouchableOpacity key={student.id} style={styles.studentCard}>
-      <View style={styles.avatarContainer}>
-        <MaterialIcons name="person" size={24} color="#2196F3" />
+  // Debounce search input and reset page when search changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchPhrase);
+      setCurrentPage(1); // Reset to first page when search changes
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchPhrase]);
+
+  // API call for students with proper pagination
+  const {
+    data: studentsResponse,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllStudentsWithPaginationQuery({
+    page: currentPage,
+    page_size: pageSize, // Match backend's actual page size (10)
+    search_phrase: debouncedSearch,
+    search_filter_list: [],
+  });
+
+  // Extract data from API response - handle different response structures
+  const responseData = studentsResponse?.data || studentsResponse;
+  const students = responseData?.students || responseData?.data || [];
+  const totalCount = responseData?.total_count || 0;
+  const totalPages =
+    responseData?.total_pages ||
+    (totalCount > 0 ? Math.ceil(totalCount / pageSize) : 1);
+  const hasNextPage =
+    responseData?.has_next_page === true ||
+    (totalCount > 0 && currentPage < totalPages);
+  const hasPreviousPage =
+    responseData?.has_previous_page === true || currentPage > 1;
+
+  // Debug logging
+  console.log("StudentsModal Debug:", {
+    currentPage,
+    pageSize,
+    studentsCount: students.length,
+    totalCount,
+    totalPages,
+    hasNextPage,
+    hasPreviousPage,
+    responseData,
+  });
+
+  // No need for client-side filtering since API handles search
+  const filteredStudents = students;
+
+  // Pagination navigation functions
+  const handlePreviousPage = () => {
+    if (hasPreviousPage && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (hasNextPage && currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleJumpToPage = () => {
+    Alert.prompt(
+      "Jump to Page",
+      `Enter page number (1-${totalPages}):`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Go",
+          onPress: (value) => {
+            const pageNum = parseInt(value || "1", 10);
+            if (pageNum >= 1 && pageNum <= totalPages) {
+              setCurrentPage(pageNum);
+            } else {
+              Alert.alert(
+                "Invalid Page",
+                `Please enter a page number between 1 and ${totalPages}`,
+              );
+            }
+          },
+        },
+      ],
+      "plain-text",
+      currentPage.toString(),
+    );
+  };
+
+  const renderStudentItem = ({ item: student }: { item: any }) => (
+    <View style={styles.studentCard}>
+      {/* Profile Image */}
+      <View style={styles.profileImageContainer}>
+        <Image
+          source={{
+            uri: student.profile_image || student.profileImage,
+          }}
+          style={styles.profileImage}
+          onError={() => console.log("Failed to load profile image")}
+        />
       </View>
+
+      {/* Student Information */}
       <View style={styles.studentInfo}>
-        <Text style={styles.studentName}>{student.name}</Text>
-        <Text style={styles.studentDetails}>
-          {student.grade} • {student.class}
-        </Text>
-        <Text style={styles.attendanceText}>
-          Attendance: {student.attendance}
-        </Text>
-      </View>
-      <View style={styles.statusContainer}>
-        <View style={[styles.statusBadge, { backgroundColor: "#4CAF50" }]}>
-          <Text style={styles.statusText}>{student.status}</Text>
+        <Text style={styles.studentName}>{student.full_name}</Text>
+
+        <View style={styles.infoRow}>
+          <MaterialIcons name="school" size={16} color="#666" />
+          <Text style={styles.infoText}>
+            {student.grade_level?.name || `Grade ${student.grade_level_id}`}
+          </Text>
         </View>
-        <MaterialIcons name="chevron-right" size={24} color="#ccc" />
+
+        <View style={styles.infoRow}>
+          <MaterialIcons name="badge" size={16} color="#666" />
+          <Text style={styles.infoText}>{student.admission_number}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <MaterialIcons name="home" size={16} color="#666" />
+          <Text style={styles.infoText}>
+            {student.school_house?.name || "No House Assigned"}
+          </Text>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2196F3" />
+          <Text style={styles.loadingText}>Loading students...</Text>
+        </View>
+      );
+    }
+
+    if (error) {
+      return (
+        <View style={styles.errorContainer}>
+          <MaterialIcons name="error-outline" size={48} color="#F44336" />
+          <Text style={styles.errorTitle}>Failed to Load Students</Text>
+          <Text style={styles.errorText}>
+            {error && typeof error === "object" && "message" in error
+              ? (error as any).message
+              : "Please check your internet connection and try again."}
+          </Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={() => refetch()}
+          >
+            <MaterialIcons name="refresh" size={20} color="white" />
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    if (filteredStudents.length === 0) {
+      return (
+        <View style={styles.emptyContainer}>
+          <MaterialIcons name="school" size={48} color="#ccc" />
+          <Text style={styles.emptyTitle}>No Students Found</Text>
+          <Text style={styles.emptyText}>
+            {searchPhrase
+              ? "Try adjusting your search terms."
+              : "No students available."}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={filteredStudents}
+          renderItem={renderStudentItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+        />
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <View style={styles.paginationContainer}>
+            <TouchableOpacity
+              style={[
+                styles.navButton,
+                !hasPreviousPage && styles.navButtonDisabled,
+              ]}
+              onPress={handlePreviousPage}
+              disabled={!hasPreviousPage}
+            >
+              <MaterialIcons
+                name="chevron-left"
+                size={20}
+                color={hasPreviousPage ? "#2196F3" : "#ccc"}
+              />
+              <Text
+                style={[
+                  styles.navButtonText,
+                  !hasPreviousPage && styles.navButtonTextDisabled,
+                ]}
+              >
+                Previous
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleJumpToPage}
+              style={styles.pageIndicator}
+            >
+              <Text style={styles.pageText}>{currentPage}</Text>
+              <Text style={styles.pageTotal}>of {totalPages}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.navButton,
+                !hasNextPage && styles.navButtonDisabled,
+              ]}
+              onPress={handleNextPage}
+              disabled={!hasNextPage}
+            >
+              <Text
+                style={[
+                  styles.navButtonText,
+                  !hasNextPage && styles.navButtonTextDisabled,
+                ]}
+              >
+                Next
+              </Text>
+              <MaterialIcons
+                name="chevron-right"
+                size={20}
+                color={hasNextPage ? "#2196F3" : "#ccc"}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  };
 
   return (
     <Modalize
@@ -77,8 +274,6 @@ const StudentsModal = forwardRef<Modalize>((_, ref) => {
       adjustToContentHeight={false}
       modalStyle={styles.modal}
       rootStyle={styles.modalRoot}
-      animationIn="slideInUp"
-      animationOut="slideOutDown"
       HeaderComponent={
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -86,7 +281,11 @@ const StudentsModal = forwardRef<Modalize>((_, ref) => {
             <Text style={styles.headerTitle}>All Students</Text>
           </View>
           <Text style={styles.headerSubtitle}>
-            Total: {studentData.length} students
+            {!isLoading && totalCount > 0
+              ? `Page ${currentPage} of ${totalPages} - Showing ${filteredStudents.length} of ${totalCount} students${debouncedSearch ? ` (search: "${debouncedSearch}")` : ""}`
+              : isLoading
+                ? "Loading students..."
+                : "No students found"}
           </Text>
         </View>
       }
@@ -99,48 +298,21 @@ const StudentsModal = forwardRef<Modalize>((_, ref) => {
             style={styles.searchInput}
             placeholder="Search students..."
             placeholderTextColor="#999"
+            value={searchPhrase}
+            onChangeText={setSearchPhrase}
           />
+          {searchPhrase.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setSearchPhrase("")}
+              style={styles.clearSearchButton}
+            >
+              <MaterialIcons name="clear" size={20} color="#999" />
+            </TouchableOpacity>
+          )}
         </View>
 
-        {/* Quick Stats */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>1,250</Text>
-            <Text style={styles.statLabel}>Total Students</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>42</Text>
-            <Text style={styles.statLabel}>Classes</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>94%</Text>
-            <Text style={styles.statLabel}>Avg Attendance</Text>
-          </View>
-        </View>
-
-        {/* Students List */}
-        <ScrollView
-          style={styles.studentsList}
-          showsVerticalScrollIndicator={false}
-        >
-          {studentData.map(renderStudentCard)}
-        </ScrollView>
-
-        {/* Action Buttons */}
-        <View style={styles.actionContainer}>
-          <TouchableOpacity style={styles.actionButton}>
-            <MaterialIcons name="add" size={20} color="white" />
-            <Text style={styles.actionButtonText}>Add Student</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.secondaryButton]}
-          >
-            <MaterialIcons name="file-download" size={20} color="#2196F3" />
-            <Text style={[styles.actionButtonText, styles.secondaryButtonText]}>
-              Export List
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* Student List */}
+        <View style={styles.studentListSection}>{renderContent()}</View>
       </View>
     </Modalize>
   );
@@ -214,116 +386,190 @@ const styles = StyleSheet.create({
     color: "#333",
     marginLeft: 12,
   },
-  statsContainer: {
+  clearSearchButton: {
+    padding: 4,
+  },
+  counterContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 24,
-  },
-  statCard: {
-    backgroundColor: "#f8f9fa",
-    borderRadius: 12,
-    padding: 16,
     alignItems: "center",
-    flex: 1,
-    marginHorizontal: 4,
+    marginBottom: 20,
   },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: "bold",
+  counterText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+  },
+  jumpButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: "#e3f2fd",
+    borderRadius: 8,
+  },
+  jumpButtonText: {
+    fontSize: 14,
     color: "#2196F3",
-    marginBottom: 4,
+    fontWeight: "500",
+    marginLeft: 4,
   },
-  statLabel: {
-    fontSize: 12,
-    color: "#666",
-    textAlign: "center",
-  },
-  studentsList: {
+  studentListSection: {
     flex: 1,
+  },
+  flatListContainer: {
+    paddingBottom: 20,
+  },
+  studentCardContainer: {
+    alignItems: "center",
   },
   studentCard: {
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
     marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  avatarContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#e3f2fd",
-    justifyContent: "center",
+    shadowRadius: 8,
+    elevation: 4,
+    flexDirection: "row",
     alignItems: "center",
-    marginRight: 12,
+  },
+  profileImageContainer: {
+    marginRight: 16,
+  },
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#f0f0f0",
   },
   studentInfo: {
     flex: 1,
   },
   studentName: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "bold",
     color: "#1a1a1a",
-    marginBottom: 2,
+    marginBottom: 8,
   },
-  studentDetails: {
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  infoText: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 2,
+    marginLeft: 8,
+    flex: 1,
   },
-  attendanceText: {
-    fontSize: 12,
-    color: "#4CAF50",
+  paginationContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#f0f0f0",
+  },
+  navButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: "#e3f2fd",
+    borderRadius: 8,
+    minWidth: 80,
+  },
+  navButtonDisabled: {
+    backgroundColor: "#f5f5f5",
+  },
+  navButtonText: {
+    fontSize: 14,
+    color: "#2196F3",
     fontWeight: "500",
   },
-  statusContainer: {
+  navButtonTextDisabled: {
+    color: "#ccc",
+  },
+  pageIndicator: {
     alignItems: "center",
-    flexDirection: "row",
   },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginRight: 8,
+  pageText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2196F3",
   },
-  statusText: {
-    fontSize: 10,
-    color: "white",
-    fontWeight: "600",
+  pageTotal: {
+    fontSize: 14,
+    color: "#666",
   },
-  actionContainer: {
-    flexDirection: "row",
-    gap: 12,
-    paddingTop: 20,
-  },
-  actionButton: {
+  // Loading, Error, and Empty States
+  loadingContainer: {
     flex: 1,
-    backgroundColor: "#2196F3",
-    borderRadius: 12,
-    padding: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 60,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 16,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 60,
+    paddingHorizontal: 20,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#F44336",
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  errorText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 20,
+    lineHeight: 20,
+  },
+  retryButton: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#F44336",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
   },
-  secondaryButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: "#2196F3",
-  },
-  actionButtonText: {
+  retryButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "600",
     marginLeft: 8,
   },
-  secondaryButtonText: {
-    color: "#2196F3",
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 60,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#999",
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
   },
 });
 

@@ -3,7 +3,7 @@ import React, { useCallback, useRef, useMemo } from "react";
 // Debounce hook for performance optimization
 export const useDebounce = <T extends (...args: any[]) => any>(
   callback: T,
-  delay: number
+  delay: number,
 ): T => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -17,14 +17,14 @@ export const useDebounce = <T extends (...args: any[]) => any>(
         callback(...args);
       }, delay);
     }) as T,
-    [callback, delay]
+    [callback, delay],
   );
 };
 
 // Throttle hook for performance optimization
 export const useThrottle = <T extends (...args: any[]) => any>(
   callback: T,
-  delay: number
+  delay: number,
 ): T => {
   const lastCallRef = useRef<number>(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -48,14 +48,14 @@ export const useThrottle = <T extends (...args: any[]) => any>(
         }, delay - timeSinceLastCall);
       }
     }) as T,
-    [callback, delay]
+    [callback, delay],
   );
 };
 
 // Memoization utilities
 export const createMemoizedSelector = <T, R>(
   selector: (input: T) => R,
-  equalityFn?: (a: R, b: R) => boolean
+  equalityFn?: (a: R, b: R) => boolean,
 ) => {
   let lastInput: T;
   let lastResult: R;
@@ -235,32 +235,32 @@ export class MemoryManager {
 // React component performance utilities
 export const useMemoizedCallback = <T extends (...args: any[]) => any>(
   callback: T,
-  deps: React.DependencyList
+  deps: React.DependencyList,
 ): T => {
   return useCallback(callback, deps);
 };
 
 export const useMemoizedValue = <T>(
   factory: () => T,
-  deps: React.DependencyList
+  deps: React.DependencyList,
 ): T => {
   return useMemo(factory, deps);
 };
 
 // Bundle size optimization utilities
 export const lazyImport = <T extends React.ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>
+  importFn: () => Promise<{ default: T }>,
 ): React.LazyExoticComponent<T> => {
   return React.lazy(importFn);
 };
 
 // Network optimization
 export class NetworkOptimizer {
-  private static requestQueue: Array<{
+  private static requestQueue: {
     id: string;
     request: () => Promise<any>;
     priority: number;
-  }> = [];
+  }[] = [];
 
   private static isProcessing = false;
   private static maxConcurrent = 3;
@@ -269,7 +269,7 @@ export class NetworkOptimizer {
   static addRequest(
     id: string,
     request: () => Promise<any>,
-    priority: number = 0
+    priority: number = 0,
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.requestQueue.push({

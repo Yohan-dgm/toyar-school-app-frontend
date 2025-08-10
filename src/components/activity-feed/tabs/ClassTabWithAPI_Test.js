@@ -6,7 +6,9 @@ const ClassTabWithAPI_Test = ({ userCategory, isConnected, filters }) => {
     <View style={styles.container}>
       <Text style={styles.text}>Class Tab Test Component</Text>
       <Text style={styles.subText}>User Category: {userCategory}</Text>
-      <Text style={styles.subText}>Connected: {isConnected ? "Yes" : "No"}</Text>
+      <Text style={styles.subText}>
+        Connected: {isConnected ? "Yes" : "No"}
+      </Text>
     </View>
   );
 };

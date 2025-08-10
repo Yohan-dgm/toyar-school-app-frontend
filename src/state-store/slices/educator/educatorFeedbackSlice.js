@@ -46,7 +46,7 @@ export const fetchEducatorFeedbacks = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const submitEducatorFeedback = createAsyncThunk(
@@ -67,7 +67,7 @@ export const submitEducatorFeedback = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const updateEducatorFeedback = createAsyncThunk(
@@ -83,7 +83,7 @@ export const updateEducatorFeedback = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const deleteEducatorFeedback = createAsyncThunk(
@@ -96,7 +96,7 @@ export const deleteEducatorFeedback = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -187,7 +187,7 @@ const educatorFeedbackSlice = createSlice({
       // Update feedback
       .addCase(updateEducatorFeedback.fulfilled, (state, action) => {
         const index = state.feedbacks.findIndex(
-          (f) => f.id === action.payload.id
+          (f) => f.id === action.payload.id,
         );
         if (index !== -1) {
           state.feedbacks[index] = {
@@ -200,7 +200,7 @@ const educatorFeedbackSlice = createSlice({
       // Delete feedback
       .addCase(deleteEducatorFeedback.fulfilled, (state, action) => {
         state.feedbacks = state.feedbacks.filter(
-          (f) => f.id !== action.payload
+          (f) => f.id !== action.payload,
         );
         state.pagination.total -= 1;
       });

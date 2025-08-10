@@ -24,7 +24,7 @@ const StarRating = ({ rating, size = 16 }) => {
         name={i < rating ? "star" : "star-border"}
         size={size}
         color={i < rating ? "#FFD700" : "#E0E0E0"}
-      />
+      />,
     );
   }
   return <View style={styles.starContainer}>{stars}</View>;
@@ -192,7 +192,7 @@ const EducatorFeedbackSheet = ({ isVisible, onClose }) => {
         feedback.category
           .toLowerCase()
           .includes(selectedFilter.toLowerCase()) ||
-        feedback.subject.toLowerCase().includes(selectedFilter.toLowerCase())
+        feedback.subject.toLowerCase().includes(selectedFilter.toLowerCase()),
     );
   }, [selectedFilter]);
 
@@ -202,7 +202,7 @@ const EducatorFeedbackSheet = ({ isVisible, onClose }) => {
         onClose();
       }
     },
-    [onClose]
+    [onClose],
   );
 
   const handleReply = (feedbackId, replyText) => {
@@ -226,17 +226,17 @@ const EducatorFeedbackSheet = ({ isVisible, onClose }) => {
     switch (selectedFilter) {
       case "academic":
         filtered = filtered.filter((f) =>
-          f.category.toLowerCase().includes("academic")
+          f.category.toLowerCase().includes("academic"),
         );
         break;
       case "behaviour":
         filtered = filtered.filter((f) =>
-          f.category.toLowerCase().includes("behaviour")
+          f.category.toLowerCase().includes("behaviour"),
         );
         break;
       case "extracurricular":
         filtered = filtered.filter((f) =>
-          f.category.toLowerCase().includes("extra")
+          f.category.toLowerCase().includes("extra"),
         );
         break;
       case "recent":

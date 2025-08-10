@@ -8,9 +8,7 @@ export default function StudentAssignments() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Text style={styles.title}>Assignments</Text>
-          <Text style={styles.subtitle}>
-            View and manage your assignments
-          </Text>
+          <Text style={styles.subtitle}>View and manage your assignments</Text>
         </View>
 
         <View style={styles.cardContainer}>

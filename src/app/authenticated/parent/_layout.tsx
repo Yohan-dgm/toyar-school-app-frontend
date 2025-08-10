@@ -12,6 +12,7 @@ export default function ParentLayout() {
         <Stack.Screen name="student-growth" />
         <Stack.Screen name="student-profile" />
         <Stack.Screen name="notifications-messages" />
+        <Stack.Screen name="user-actions" />
 
         {/* Legacy routes for backward compatibility */}
         <Stack.Screen name="school-life" />

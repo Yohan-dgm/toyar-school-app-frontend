@@ -38,7 +38,12 @@ const HexagonCard = ({ metric, isSelected, onPress, style }) => {
       >
         {/* Selection pulse effect */}
         {isSelected && (
-          <View style={[styles.selectionPulse, { backgroundColor: metric.color + "15" }]} />
+          <View
+            style={[
+              styles.selectionPulse,
+              { backgroundColor: metric.color + "15" },
+            ]}
+          />
         )}
 
         {/* Icon */}
@@ -57,7 +62,8 @@ const HexagonCard = ({ metric, isSelected, onPress, style }) => {
               style={[
                 styles.starDot,
                 {
-                  backgroundColor: i < Math.floor(metric.rating) ? metric.color : "#E0E0E0",
+                  backgroundColor:
+                    i < Math.floor(metric.rating) ? metric.color : "#E0E0E0",
                 },
               ]}
             />
@@ -74,7 +80,7 @@ const HexagonCard = ({ metric, isSelected, onPress, style }) => {
 
       {/* Title below hexagon */}
       <Text style={styles.hexTitle} numberOfLines={1}>
-        {metric.title.split(' ')[0]}
+        {metric.title.split(" ")[0]}
       </Text>
     </TouchableOpacity>
   );
@@ -114,7 +120,7 @@ const BeeHiveMetrics = ({ selectedMetric, onMetricSelect }) => {
             onPress={onMetricSelect}
             style={styles.middleLeft}
           />
-          
+
           {/* Center hexagon - Overall */}
           <HexagonCard
             metric={centerMetric}
@@ -122,7 +128,7 @@ const BeeHiveMetrics = ({ selectedMetric, onMetricSelect }) => {
             onPress={onMetricSelect}
             style={[styles.centerHex, { transform: [{ scale: 1.2 }] }]}
           />
-          
+
           <HexagonCard
             metric={surroundingMetrics[3]}
             isSelected={selectedMetric?.id === surroundingMetrics[3]?.id}

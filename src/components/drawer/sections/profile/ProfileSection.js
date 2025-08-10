@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,20 +11,19 @@ import {
   Platform,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AuthContext } from "../../../../context/AuthContext";
 import { theme } from "../../../../styles/theme";
 import { useSelector } from "react-redux";
 import {
   getStudentProfilePicture,
   getDefaultStudentProfileImage,
-  getLocalFallbackProfileImage,
 } from "../../../../utils/studentProfileUtils";
 
 const ProfileSection = ({ onClose }) => {
-  const { user, setUser } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Get global state for student profile picture
+  // Get session data and user data from Redux store
+  const sessionData = useSelector((state) => state.app.sessionData);
+  const user = useSelector((state) => state.app.user);
   const { selectedStudent } = useSelector((state) => state.app);
 
   // Get profile picture for the selected student
@@ -34,30 +33,68 @@ const ProfileSection = ({ onClose }) => {
 
   // Fallback to default image if no profile picture
   const profileImage = profilePictureSource || getDefaultStudentProfileImage();
+
+  // Extract real data from session using same pattern as profile.tsx
+  const userName =
+    sessionData?.data?.full_name ||
+    sessionData?.full_name ||
+    user?.full_name ||
+    sessionData?.data?.username ||
+    sessionData?.username ||
+    user?.username ||
+    "No data";
+
+  const userEmail =
+    sessionData?.data?.email || sessionData?.email || user?.email || "No data";
+
+  const userPhone =
+    sessionData?.data?.phone || sessionData?.phone || user?.phone || "No data";
+
+  const userAddress =
+    sessionData?.data?.address ||
+    sessionData?.address ||
+    user?.address ||
+    "No data";
+
+  const userGrade =
+    sessionData?.data?.grade ||
+    sessionData?.grade ||
+    user?.grade ||
+    selectedStudent?.grade ||
+    "No data";
+
+  const userStudentId =
+    sessionData?.data?.student_id ||
+    sessionData?.student_id ||
+    user?.student_id ||
+    selectedStudent?.student_id ||
+    selectedStudent?.admission_number ||
+    "No data";
+
   const [editedUser, setEditedUser] = useState({
-    full_name: user?.full_name || "John Doe",
-    email: user?.email || "john.doe@example.com",
-    phone: user?.phone || "+1 234 567 8900",
-    address: user?.address || "123 Main Street, City, State",
-    grade: user?.grade || "Grade 10",
-    student_id: user?.student_id || "STU123456",
+    full_name: userName,
+    email: userEmail,
+    phone: userPhone,
+    address: userAddress,
+    grade: userGrade,
+    student_id: userStudentId,
   });
 
   const handleSave = () => {
     // Here you would typically make an API call to update the user profile
-    setUser({ ...user, ...editedUser });
+    // For now, just show success message as we're not implementing actual save functionality
     setIsEditing(false);
     Alert.alert("Success", "Profile updated successfully!");
   };
 
   const handleCancel = () => {
     setEditedUser({
-      full_name: user?.full_name || "John Doe",
-      email: user?.email || "john.doe@example.com",
-      phone: user?.phone || "+1 234 567 8900",
-      address: user?.address || "123 Main Street, City, State",
-      grade: user?.grade || "Grade 10",
-      student_id: user?.student_id || "STU123456",
+      full_name: userName,
+      email: userEmail,
+      phone: userPhone,
+      address: userAddress,
+      grade: userGrade,
+      student_id: userStudentId,
     });
     setIsEditing(false);
   };
@@ -95,7 +132,7 @@ const ProfileSection = ({ onClose }) => {
           <MaterialIcons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.editButton}
           onPress={() => {
             if (isEditing) {
@@ -110,7 +147,7 @@ const ProfileSection = ({ onClose }) => {
             size={24}
             color="#FFFFFF"
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -125,7 +162,7 @@ const ProfileSection = ({ onClose }) => {
             )}
           </View>
           <Text style={styles.profileName}>{editedUser.full_name}</Text>
-          <Text style={styles.profileRole}>Student</Text>
+          {/* <Text style={styles.profileRole}>Student</Text> */}
         </View>
 
         {/* Profile Information */}
@@ -159,7 +196,7 @@ const ProfileSection = ({ onClose }) => {
         </View>
 
         {/* Academic Information */}
-        <View style={styles.infoSection}>
+        {/* <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Academic Information</Text>
 
           <ProfileField
@@ -175,10 +212,10 @@ const ProfileSection = ({ onClose }) => {
             field="grade"
             editable={false}
           />
-        </View>
+        </View> */}
 
         {/* Action Buttons */}
-        {isEditing && (
+        {/* {isEditing && (
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={styles.cancelButton}
@@ -190,10 +227,10 @@ const ProfileSection = ({ onClose }) => {
               <Text style={styles.saveButtonText}>Save Changes</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
 
         {/* Additional Options */}
-        <View style={styles.optionsSection}>
+        {/* <View style={styles.optionsSection}>
           <TouchableOpacity style={styles.optionItem}>
             <MaterialIcons
               name="security"
@@ -219,7 +256,7 @@ const ProfileSection = ({ onClose }) => {
             <Text style={styles.optionText}>Help & Support</Text>
             <MaterialIcons name="chevron-right" size={24} color="#CCCCCC" />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );

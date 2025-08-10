@@ -41,22 +41,33 @@ const AddActivityDrawer = () => {
 
   // Post target options
   const targetOptions = [
-    { id: "class", label: "Class Timeline", description: "Visible to class students and parents" },
-    { id: "school", label: "School Timeline", description: "Visible to entire school community" },
+    {
+      id: "class",
+      label: "Class Timeline",
+      description: "Visible to class students and parents",
+    },
+    {
+      id: "school",
+      label: "School Timeline",
+      description: "Visible to entire school community",
+    },
   ];
 
   const toggleTag = (tagId) => {
     setSelectedTags((prev) =>
       prev.includes(tagId)
         ? prev.filter((id) => id !== tagId)
-        : [...prev, tagId]
+        : [...prev, tagId],
     );
   };
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permission needed", "Please grant camera roll permissions to add images.");
+      Alert.alert(
+        "Permission needed",
+        "Please grant camera roll permissions to add images.",
+      );
       return;
     }
 
@@ -128,7 +139,7 @@ const AddActivityDrawer = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       Alert.alert("Success", "Activity posted successfully!");
-      
+
       // Reset form
       setPostContent("");
       setSelectedMedia([]);
@@ -155,13 +166,23 @@ const AddActivityDrawer = () => {
         >
           <View style={styles.targetOptionContent}>
             <MaterialIcons
-              name={postTarget === option.id ? "radio-button-checked" : "radio-button-unchecked"}
+              name={
+                postTarget === option.id
+                  ? "radio-button-checked"
+                  : "radio-button-unchecked"
+              }
               size={20}
-              color={postTarget === option.id ? theme.colors.primary : theme.colors.textSecondary}
+              color={
+                postTarget === option.id
+                  ? theme.colors.primary
+                  : theme.colors.textSecondary
+              }
             />
             <View style={styles.targetOptionText}>
               <Text style={styles.targetOptionLabel}>{option.label}</Text>
-              <Text style={styles.targetOptionDescription}>{option.description}</Text>
+              <Text style={styles.targetOptionDescription}>
+                {option.description}
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -187,38 +208,58 @@ const AddActivityDrawer = () => {
   const renderMediaSection = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Media & Documents</Text>
-      
+
       <View style={styles.mediaActions}>
         <TouchableOpacity style={styles.mediaButton} onPress={pickImage}>
-          <MaterialIcons name="photo-library" size={20} color={theme.colors.primary} />
+          <MaterialIcons
+            name="photo-library"
+            size={20}
+            color={theme.colors.primary}
+          />
           <Text style={styles.mediaButtonText}>Add Photos/Videos</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity style={styles.mediaButton} onPress={pickDocument}>
-          <MaterialIcons name="attach-file" size={20} color={theme.colors.primary} />
+          <MaterialIcons
+            name="attach-file"
+            size={20}
+            color={theme.colors.primary}
+          />
           <Text style={styles.mediaButtonText}>Add Documents</Text>
         </TouchableOpacity>
       </View>
 
       {selectedMedia.length > 0 && (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mediaPreview}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.mediaPreview}
+        >
           {selectedMedia.map((media) => (
             <View key={media.id} style={styles.mediaItem}>
               {media.type === "image" ? (
                 <Image source={{ uri: media.uri }} style={styles.mediaImage} />
               ) : media.type === "video" ? (
                 <View style={styles.videoPlaceholder}>
-                  <MaterialIcons name="play-circle-filled" size={32} color="white" />
+                  <MaterialIcons
+                    name="play-circle-filled"
+                    size={32}
+                    color="white"
+                  />
                 </View>
               ) : (
                 <View style={styles.documentPlaceholder}>
-                  <MaterialIcons name="description" size={32} color={theme.colors.primary} />
+                  <MaterialIcons
+                    name="description"
+                    size={32}
+                    color={theme.colors.primary}
+                  />
                   <Text style={styles.documentName} numberOfLines={2}>
                     {media.name}
                   </Text>
                 </View>
               )}
-              
+
               <TouchableOpacity
                 style={styles.removeMediaButton}
                 onPress={() => removeMedia(media.id)}
@@ -265,7 +306,9 @@ const AddActivityDrawer = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Post Classroom Activity</Text>
-        <Text style={styles.subtitle}>Share updates with students and parents</Text>
+        <Text style={styles.subtitle}>
+          Share updates with students and parents
+        </Text>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -277,7 +320,10 @@ const AddActivityDrawer = () => {
 
       <View style={styles.footer}>
         <TouchableOpacity
-          style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+          style={[
+            styles.submitButton,
+            isSubmitting && styles.submitButtonDisabled,
+          ]}
           onPress={handleSubmitPost}
           disabled={isSubmitting}
         >

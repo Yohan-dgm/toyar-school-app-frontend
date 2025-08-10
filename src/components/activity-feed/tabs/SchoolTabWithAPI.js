@@ -162,7 +162,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
               posts: response.data.posts,
               pagination: response.data.pagination,
               append: pageNum > 1 && !isRefresh,
-            })
+            }),
           );
 
           if (pageNum > 1) {
@@ -180,7 +180,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
           Alert.alert(
             "API Not Available",
             "Using dummy data for development. Please implement the backend API endpoints.",
-            [{ text: "OK" }]
+            [{ text: "OK" }],
           );
         }
       } finally {
@@ -189,7 +189,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
         setIsLoadingMore(false);
       }
     },
-    [getSchoolPosts, dispatch]
+    [getSchoolPosts, dispatch],
   );
 
   // Load all posts initially (without filters)
@@ -221,7 +221,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
         console.log(
           "✅ Successfully extracted",
           allPostsData.length,
-          "posts for frontend filtering"
+          "posts for frontend filtering",
         );
 
         // Store all posts in local state for frontend filtering
@@ -236,7 +236,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
           setPosts({
             posts: allPostsData,
             pagination: response.data.pagination || null,
-          })
+          }),
         );
 
         dispatch(setError(null));
@@ -263,27 +263,27 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
       // AND both class_id and student_id are null
       if (!post.school_id || post.school_id !== 1) {
         console.log(
-          `🏫 Filtering out post ${post.id}: school_id is not 1 (current: ${post.school_id})`
+          `🏫 Filtering out post ${post.id}: school_id is not 1 (current: ${post.school_id})`,
         );
         return false;
       }
 
       if (post.class_id !== null && post.class_id !== undefined) {
         console.log(
-          `🏫 Filtering out post ${post.id}: has class_id (${post.class_id}) - not school-wide`
+          `🏫 Filtering out post ${post.id}: has class_id (${post.class_id}) - not school-wide`,
         );
         return false;
       }
 
       if (post.student_id !== null && post.student_id !== undefined) {
         console.log(
-          `🏫 Filtering out post ${post.id}: has student_id (${post.student_id}) - not school-wide`
+          `🏫 Filtering out post ${post.id}: has student_id (${post.student_id}) - not school-wide`,
         );
         return false;
       }
 
       console.log(
-        `🏫 Including school post ${post.id}: school_id=${post.school_id}, class_id=${post.class_id}, student_id=${post.student_id}`
+        `🏫 Including school post ${post.id}: school_id=${post.school_id}, class_id=${post.class_id}, student_id=${post.student_id}`,
       );
 
       // Search term filter
@@ -316,8 +316,8 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
         const postHashtags = post.hashtags || [];
         const hasMatchingHashtag = currentFilters.hashtags.some((filterTag) =>
           postHashtags.some((postTag) =>
-            postTag.toLowerCase().includes(filterTag.toLowerCase())
-          )
+            postTag.toLowerCase().includes(filterTag.toLowerCase()),
+          ),
         );
         if (!hasMatchingHashtag) return false;
       }
@@ -390,7 +390,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
     const filtered = filterPostsLocally(allPostsLocal, filters);
     console.log(
       "🔍 School filtering complete - filtered posts:",
-      filtered.length
+      filtered.length,
     );
     return filtered;
   }, [allPostsLocal, filters, filterPostsLocally]);
@@ -399,7 +399,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
   useEffect(() => {
     if (hasLoadedInitialData && filteredPosts) {
       console.log(
-        `🔍 Frontend filtering complete: ${filteredPosts.length} posts match filters`
+        `🔍 Frontend filtering complete: ${filteredPosts.length} posts match filters`,
       );
       dispatch(
         setPosts({
@@ -409,7 +409,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
             total: filteredPosts.length,
             has_more: false,
           },
-        })
+        }),
       );
     }
   }, [filteredPosts, hasLoadedInitialData, dispatch]);
@@ -442,7 +442,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
           postId: post.id,
           isLiked: !isCurrentlyLiked,
           likesCount: newLikesCount,
-        })
+        }),
       );
 
       try {
@@ -458,7 +458,7 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
               postId: post.id,
               isLiked: response.data.is_liked_by_user,
               likesCount: response.data.likes_count,
-            })
+            }),
           );
         }
       } catch (error) {
@@ -469,18 +469,18 @@ const SchoolTabWithAPI = ({ filters, userCategory, isConnected }) => {
             postId: post.id,
             isLiked: isCurrentlyLiked,
             likesCount: post.likes_count,
-          })
+          }),
         );
 
         if (__DEV__) {
           Alert.alert(
             "API Error",
-            "Like functionality requires backend implementation. Please check the backend API endpoints."
+            "Like functionality requires backend implementation. Please check the backend API endpoints.",
           );
         }
       }
     },
-    [likedPosts, dispatch, likePost]
+    [likedPosts, dispatch, likePost],
   );
 
   // Render post item

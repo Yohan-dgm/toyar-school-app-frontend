@@ -57,7 +57,7 @@ export const activityFeedApi = apiServer1
           ) {
             console.error(
               "❌ School Posts API returned HTML instead of JSON:",
-              response.substring(0, 200)
+              response.substring(0, 200),
             );
             throw new Error("Server returned HTML error page instead of JSON");
           }

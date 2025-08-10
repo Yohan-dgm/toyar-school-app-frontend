@@ -20,7 +20,8 @@ export default function PlayersPage() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Performance Analytics</Text>
           <Text style={styles.cardDescription}>
-            Track individual player statistics, goals, assists, and improvement areas.
+            Track individual player statistics, goals, assists, and improvement
+            areas.
           </Text>
         </View>
 

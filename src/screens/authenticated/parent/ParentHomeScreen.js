@@ -171,7 +171,7 @@ const ParentHomeScreen = () => {
   const tabs = ["Ongoing", "Upcoming", "Ended", "Cancelled"];
 
   const filteredMeetings = meetings.filter(
-    (meeting) => meeting.status === activeTab
+    (meeting) => meeting.status === activeTab,
   );
 
   // Handle like functionality

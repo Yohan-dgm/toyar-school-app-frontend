@@ -10,7 +10,7 @@ const testMessages = [
   "📤 Students By Grade API Request Body:",
   "👥 Students Data for grade:",
   "❌ Grade List Error:",
-  "❌ Students Error:"
+  "❌ Students Error:",
 ];
 
 console.log("\n📋 Expected console messages when using the form:");
@@ -34,5 +34,9 @@ console.log("5. Then select a student from that grade");
 console.log("6. Check console logs for API calls and responses");
 
 console.log("\n📊 API Endpoints being used:");
-console.log("- GET grades: api/student-management/student/get-student-list-data (POST)");
-console.log("- GET students by grade: api/student-management/student/get-student-list-data (POST with grade_level_id)");
+console.log(
+  "- GET grades: api/student-management/student/get-student-list-data (POST)",
+);
+console.log(
+  "- GET students by grade: api/student-management/student/get-student-list-data (POST with grade_level_id)",
+);

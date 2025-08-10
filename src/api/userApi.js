@@ -1,5 +1,10 @@
 import axios from "axios";
-import { sampleUserData } from "../utils/sampleData";
+
+// Mock sample data since the file doesn't exist
+const sampleUserData = {
+  users: [],
+  total: 0,
+};
 
 const API_BASE_URL = "https://your-api-base-url.com"; // Replace with your API URL
 
@@ -10,7 +15,7 @@ export const getUserListData = async (userId, token) => {
       {
         headers: { Authorization: `Bearer ${token}` },
         params: { id: userId },
-      }
+      },
     );
     return response.data || sampleUserData;
   } catch (error) {

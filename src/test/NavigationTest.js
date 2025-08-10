@@ -3,13 +3,18 @@ import { View, Text, StyleSheet } from "react-native";
 
 // Test imports to verify navigation files are working
 try {
-  const SchoolLifeMain = require("../screens/authenticated/parent/school-life/SchoolLifeMain").default;
-  const EducatorFeedbackMain = require("../screens/authenticated/parent/educator-feedback/EducatorFeedbackMain").default;
-  const CalendarMain = require("../screens/authenticated/parent/calendar/CalendarMain").default;
-  const AcademicMain = require("../screens/authenticated/parent/academic/AcademicMain").default;
-  const PerformanceMain = require("../screens/authenticated/parent/performance/PerformanceMain").default;
+  const SchoolLifeMain =
+    require("../screens/authenticated/parent/school-life/SchoolLifeMain").default;
+  const EducatorFeedbackMain =
+    require("../screens/authenticated/parent/educator-feedback/EducatorFeedbackMain").default;
+  const CalendarMain =
+    require("../screens/authenticated/parent/calendar/CalendarMain").default;
+  const AcademicMain =
+    require("../screens/authenticated/parent/academic/AcademicMain").default;
+  const PerformanceMain =
+    require("../screens/authenticated/parent/performance/PerformanceMain").default;
   const ParentNavigator = require("../navigation/ParentNavigator").default;
-  
+
   console.log("✅ All navigation files imported successfully!");
   console.log("✅ SchoolLifeMain:", typeof SchoolLifeMain);
   console.log("✅ EducatorFeedbackMain:", typeof EducatorFeedbackMain);
@@ -17,7 +22,6 @@ try {
   console.log("✅ AcademicMain:", typeof AcademicMain);
   console.log("✅ PerformanceMain:", typeof PerformanceMain);
   console.log("✅ ParentNavigator:", typeof ParentNavigator);
-  
 } catch (error) {
   console.error("❌ Navigation import error:", error.message);
 }

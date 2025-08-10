@@ -80,7 +80,7 @@ const InputBar: React.FC<InputBarProps> = ({
       console.log("Cannot send - message too long");
       Alert.alert(
         "Message Too Long",
-        `Please keep your message under ${maxLength} characters.`
+        `Please keep your message under ${maxLength} characters.`,
       );
       return;
     }

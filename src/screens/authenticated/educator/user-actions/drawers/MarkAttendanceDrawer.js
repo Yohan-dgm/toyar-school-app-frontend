@@ -12,11 +12,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../../../../styles/theme";
 import { USER_CATEGORIES } from "../../../../../constants/userCategories";
+import { getCurrentDateString } from "../../../../../utils/dateUtils";
 
 const MarkAttendanceDrawer = () => {
   const dispatch = useDispatch();
   const [attendanceData, setAttendanceData] = useState({});
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    getCurrentDateString(),
+  );
 
   // Get global state
   const { sessionData } = useSelector((state) => state.app);
@@ -86,13 +89,13 @@ const MarkAttendanceDrawer = () => {
   const handleSubmitAttendance = () => {
     // Check if all students have attendance marked
     const unmarkedStudents = classStudents.filter(
-      (student) => !attendanceData[student.id]
+      (student) => !attendanceData[student.id],
     );
 
     if (unmarkedStudents.length > 0) {
       Alert.alert(
         "Incomplete Attendance",
-        "Please mark attendance for all students before submitting."
+        "Please mark attendance for all students before submitting.",
       );
       return;
     }
@@ -114,13 +117,16 @@ const MarkAttendanceDrawer = () => {
 
   const renderAttendanceOption = (student, option) => {
     const isSelected = attendanceData[student.id] === option.id;
-    
+
     return (
       <TouchableOpacity
         key={option.id}
         style={[
           styles.attendanceOption,
-          isSelected && { backgroundColor: option.color + "20", borderColor: option.color },
+          isSelected && {
+            backgroundColor: option.color + "20",
+            borderColor: option.color,
+          },
         ]}
         onPress={() => updateAttendance(student.id, option.id)}
       >
@@ -146,9 +152,16 @@ const MarkAttendanceDrawer = () => {
       <View style={styles.studentInfo}>
         <View style={styles.studentAvatar}>
           {student.profile_picture ? (
-            <Image source={{ uri: student.profile_picture }} style={styles.avatarImage} />
+            <Image
+              source={{ uri: student.profile_picture }}
+              style={styles.avatarImage}
+            />
           ) : (
-            <MaterialIcons name="person" size={24} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="person"
+              size={24}
+              color={theme.colors.textSecondary}
+            />
           )}
         </View>
         <View style={styles.studentDetails}>
@@ -158,23 +171,29 @@ const MarkAttendanceDrawer = () => {
           </Text>
         </View>
       </View>
-      
+
       <View style={styles.attendanceOptions}>
-        {attendanceOptions.map((option) => renderAttendanceOption(student, option))}
+        {attendanceOptions.map((option) =>
+          renderAttendanceOption(student, option),
+        )}
       </View>
     </View>
   );
 
   const renderSummary = () => {
     const summary = getAttendanceSummary();
-    
+
     return (
       <View style={styles.summaryContainer}>
         <Text style={styles.summaryTitle}>Attendance Summary</Text>
         <View style={styles.summaryRow}>
           {attendanceOptions.map((option) => (
             <View key={option.id} style={styles.summaryItem}>
-              <MaterialIcons name={option.icon} size={20} color={option.color} />
+              <MaterialIcons
+                name={option.icon}
+                size={20}
+                color={option.color}
+              />
               <Text style={[styles.summaryText, { color: option.color }]}>
                 {summary[option.id] || 0}
               </Text>
@@ -195,13 +214,21 @@ const MarkAttendanceDrawer = () => {
 
       {renderSummary()}
 
-      <ScrollView style={styles.studentsList} showsVerticalScrollIndicator={false}>
-        <Text style={styles.sectionTitle}>Students ({classStudents.length})</Text>
+      <ScrollView
+        style={styles.studentsList}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.sectionTitle}>
+          Students ({classStudents.length})
+        </Text>
         {classStudents.map(renderStudentRow)}
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmitAttendance}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSubmitAttendance}
+        >
           <MaterialIcons name="check" size={20} color="white" />
           <Text style={styles.submitButtonText}>Submit Attendance</Text>
         </TouchableOpacity>

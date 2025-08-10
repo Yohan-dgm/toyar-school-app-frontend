@@ -38,7 +38,7 @@ const ActivityFeedMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `🎓 ActivityFeedMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
+        `🎓 ActivityFeedMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -49,12 +49,12 @@ const ActivityFeedMain = () => {
     "🏠 ActivityFeedMain - User category:",
     userCategory,
     "Is parent:",
-    isParent
+    isParent,
   );
   console.log("🏠 ActivityFeedMain - Students count:", students.length);
   console.log(
     "🏠 ActivityFeedMain - Selected student:",
-    selectedStudent?.student_calling_name
+    selectedStudent?.student_calling_name,
   );
 
   return (

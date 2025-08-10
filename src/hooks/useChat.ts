@@ -74,10 +74,12 @@ export const useChat = (): ChatState => {
   const updateMessage = useCallback(
     (messageId: string, updates: Partial<ChatMessage>) => {
       setMessages((prev) =>
-        prev.map((msg) => (msg.id === messageId ? { ...msg, ...updates } : msg))
+        prev.map((msg) =>
+          msg.id === messageId ? { ...msg, ...updates } : msg,
+        ),
       );
     },
-    []
+    [],
   );
 
   // Handle streaming response
@@ -121,7 +123,7 @@ export const useChat = (): ChatState => {
         streamingMessageIdRef.current = null;
       }
     },
-    [updateMessage]
+    [updateMessage],
   );
 
   // Send message to API
@@ -175,7 +177,7 @@ export const useChat = (): ChatState => {
         const contextMessages = [...messages, userMessage].slice(-10);
         console.log(
           "Sending to API with context messages:",
-          contextMessages.length
+          contextMessages.length,
         );
 
         if (useStreaming) {
@@ -231,7 +233,7 @@ export const useChat = (): ChatState => {
       addMessage,
       handleStreamingResponse,
       updateMessage,
-    ]
+    ],
   );
 
   // Retry failed message
@@ -253,7 +255,7 @@ export const useChat = (): ChatState => {
       // Retry sending
       await sendMessage(userMessage.content);
     },
-    [messages, sendMessage]
+    [messages, sendMessage],
   );
 
   // Clear all messages

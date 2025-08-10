@@ -68,7 +68,8 @@ const EducatorNotificationsMain = () => {
         id: 4,
         category: "feedback",
         title: "Feedback Approved",
-        message: "Your feedback for John Doe has been approved by the principal",
+        message:
+          "Your feedback for John Doe has been approved by the principal",
         timestamp: "2025-01-16T16:20:00Z",
         read: true,
         priority: "low",
@@ -113,20 +114,26 @@ const EducatorNotificationsMain = () => {
   useEffect(() => {
     const updatedCategories = categories.map((category) => {
       if (category.id === "all") {
-        return { ...category, count: notifications.filter(n => !n.read).length };
+        return {
+          ...category,
+          count: notifications.filter((n) => !n.read).length,
+        };
       }
       return {
         ...category,
-        count: notifications.filter(n => n.category === category.id && !n.read).length,
+        count: notifications.filter(
+          (n) => n.category === category.id && !n.read,
+        ).length,
       };
     });
     // Note: In a real app, you'd update the categories state here
   }, [notifications]);
 
   // Filter notifications based on selected category
-  const filteredNotifications = selectedCategory === "all"
-    ? notifications
-    : notifications.filter(n => n.category === selectedCategory);
+  const filteredNotifications =
+    selectedCategory === "all"
+      ? notifications
+      : notifications.filter((n) => n.category === selectedCategory);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -137,18 +144,18 @@ const EducatorNotificationsMain = () => {
   };
 
   const markAsRead = (notificationId) => {
-    setNotifications(prev =>
-      prev.map(notification =>
+    setNotifications((prev) =>
+      prev.map((notification) =>
         notification.id === notificationId
           ? { ...notification, read: true }
-          : notification
-      )
+          : notification,
+      ),
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(notification => ({ ...notification, read: true }))
+    setNotifications((prev) =>
+      prev.map((notification) => ({ ...notification, read: true })),
     );
   };
 
@@ -156,27 +163,35 @@ const EducatorNotificationsMain = () => {
     const now = new Date();
     const notificationTime = new Date(timestamp);
     const diffInHours = Math.floor((now - notificationTime) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return "Just now";
     if (diffInHours < 24) return `${diffInHours}h ago`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays < 7) return `${diffInDays}d ago`;
-    
+
     return notificationTime.toLocaleDateString();
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case "high": return "#F44336";
-      case "medium": return "#FF9800";
-      case "low": return "#4CAF50";
-      default: return theme.colors.textSecondary;
+      case "high":
+        return "#F44336";
+      case "medium":
+        return "#FF9800";
+      case "low":
+        return "#4CAF50";
+      default:
+        return theme.colors.textSecondary;
     }
   };
 
   const renderCategoryTabs = () => (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.categoriesContainer}
+    >
       {categories.map((category) => (
         <TouchableOpacity
           key={category.id}
@@ -189,7 +204,11 @@ const EducatorNotificationsMain = () => {
           <MaterialIcons
             name={category.icon}
             size={18}
-            color={selectedCategory === category.id ? "white" : theme.colors.textSecondary}
+            color={
+              selectedCategory === category.id
+                ? "white"
+                : theme.colors.textSecondary
+            }
           />
           <Text
             style={[
@@ -232,7 +251,9 @@ const EducatorNotificationsMain = () => {
             {!notification.read && <View style={styles.unreadDot} />}
           </View>
           <Text style={styles.notificationMessage}>{notification.message}</Text>
-          <Text style={styles.notificationTime}>{getTimeAgo(notification.timestamp)}</Text>
+          <Text style={styles.notificationTime}>
+            {getTimeAgo(notification.timestamp)}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -243,12 +264,23 @@ const EducatorNotificationsMain = () => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <MaterialIcons name="notifications" size={24} color={theme.colors.primary} />
+          <MaterialIcons
+            name="notifications"
+            size={24}
+            color={theme.colors.primary}
+          />
           <Text style={styles.headerTitle}>Notifications</Text>
         </View>
         <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.markAllButton} onPress={markAllAsRead}>
-            <MaterialIcons name="done-all" size={20} color={theme.colors.primary} />
+          <TouchableOpacity
+            style={styles.markAllButton}
+            onPress={markAllAsRead}
+          >
+            <MaterialIcons
+              name="done-all"
+              size={20}
+              color={theme.colors.primary}
+            />
             <Text style={styles.markAllText}>Mark All Read</Text>
           </TouchableOpacity>
         </View>
@@ -266,13 +298,19 @@ const EducatorNotificationsMain = () => {
         }
       >
         <Text style={styles.resultsText}>
-          {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? 's' : ''}
-          {selectedCategory !== "all" && ` in ${categories.find(c => c.id === selectedCategory)?.label}`}
+          {filteredNotifications.length} notification
+          {filteredNotifications.length !== 1 ? "s" : ""}
+          {selectedCategory !== "all" &&
+            ` in ${categories.find((c) => c.id === selectedCategory)?.label}`}
         </Text>
-        
+
         {filteredNotifications.length === 0 ? (
           <View style={styles.emptyState}>
-            <MaterialIcons name="notifications-none" size={64} color={theme.colors.textSecondary} />
+            <MaterialIcons
+              name="notifications-none"
+              size={64}
+              color={theme.colors.textSecondary}
+            />
             <Text style={styles.emptyStateText}>No notifications found</Text>
             <Text style={styles.emptyStateSubtext}>
               You're all caught up! Check back later for updates.

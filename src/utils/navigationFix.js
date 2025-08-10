@@ -5,10 +5,10 @@ import { getUserCategoryName } from "../constants/userCategories";
 export const handleNavigationPress = (
   tabId,
   currentScreen = "unknown",
-  userCategory = null
+  userCategory = null,
 ) => {
   console.log(
-    `🚀 NAVIGATING: ${currentScreen} -> ${tabId} (userCategory: ${userCategory})`
+    `🚀 NAVIGATING: ${currentScreen} -> ${tabId} (userCategory: ${userCategory})`,
   );
 
   // Determine the base route based on user category
@@ -63,7 +63,7 @@ export const handleNavigationPress = (
             : "notifications";
         console.log("✅ Navigate to Notifications");
         console.log(
-          `🔄 Calling router.push('${baseRoute}/${notificationRoute}')`
+          `🔄 Calling router.push('${baseRoute}/${notificationRoute}')`,
         );
         router.push(`${baseRoute}/${notificationRoute}`);
         break;
@@ -108,7 +108,7 @@ export const handleNavigationPress = (
       default:
         console.log(`❓ Unknown navigation target: ${tabId}`);
         console.log(
-          `🔄 Available user category: ${userCategory}, base route: ${baseRoute}`
+          `🔄 Available user category: ${userCategory}, base route: ${baseRoute}`,
         );
         break;
     }

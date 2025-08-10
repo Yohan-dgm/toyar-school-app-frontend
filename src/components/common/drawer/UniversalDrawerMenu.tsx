@@ -16,19 +16,26 @@ import { RootState } from "../../../state-store/store";
 import { logout } from "../../../state-store/slices/app-slice";
 import { AuthContext } from "../../../context/AuthContext";
 import { theme } from "../../../styles/theme";
-import { USER_CATEGORIES, getUserCategoryDisplayName } from "../../../constants/userCategories";
+import {
+  USER_CATEGORIES,
+  getUserCategoryDisplayName,
+} from "../../../constants/userCategories";
 
 interface UniversalDrawerMenuProps {
   onClose: () => void;
 }
 
-const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({ onClose }) => {
+const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({
+  onClose,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { setUser } = useContext(AuthContext);
-  
+
   // Get user information from Redux
-  const { user, selectedStudent } = useSelector((state: RootState) => state.app);
+  const { user, selectedStudent } = useSelector(
+    (state: RootState) => state.app,
+  );
   const userCategory = user?.user_category || USER_CATEGORIES.PARENT;
   const userDisplayName = getUserCategoryDisplayName(userCategory);
 
@@ -42,25 +49,21 @@ const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({ onClose }) =>
 
   // Handle logout
   const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => {
+          dispatch(logout());
+          setUser(null);
+          router.replace("/login");
         },
-        {
-          text: "Logout",
-          style: "destructive",
-          onPress: () => {
-            dispatch(logout());
-            setUser(null);
-            router.replace("/login");
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   // Common menu items for all users
@@ -139,9 +142,11 @@ const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({ onClose }) =>
     }
 
     // Admin-specific items
-    if (userCategory === USER_CATEGORIES.ADMIN || 
-        userCategory === USER_CATEGORIES.SENIOR_MANAGEMENT ||
-        userCategory === USER_CATEGORIES.PRINCIPAL) {
+    if (
+      userCategory === USER_CATEGORIES.ADMIN ||
+      userCategory === USER_CATEGORIES.SENIOR_MANAGEMENT ||
+      userCategory === USER_CATEGORIES.PRINCIPAL
+    ) {
       items.push({
         id: "admin",
         title: "Administration",
@@ -214,17 +219,9 @@ const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({ onClose }) =>
 
   const MenuItem = ({ item }: { item: any }) => (
     <TouchableOpacity style={styles.menuItem} onPress={item.onPress}>
-      <MaterialIcons 
-        name={item.icon} 
-        size={24} 
-        color={theme.colors.primary} 
-      />
+      <MaterialIcons name={item.icon} size={24} color={theme.colors.primary} />
       <Text style={styles.menuText}>{item.title}</Text>
-      <MaterialIcons 
-        name="chevron-right" 
-        size={24} 
-        color="#CCCCCC" 
-      />
+      <MaterialIcons name="chevron-right" size={24} color="#CCCCCC" />
     </TouchableOpacity>
   );
 
@@ -279,7 +276,7 @@ const UniversalDrawerMenu: React.FC<UniversalDrawerMenuProps> = ({ onClose }) =>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>SchoolSnap v1.0.0</Text>
+          <Text style={styles.footerText}>School App v1.0.0</Text>
           <Text style={styles.footerSubtext}>Toyar Technologies</Text>
         </View>
       </ScrollView>

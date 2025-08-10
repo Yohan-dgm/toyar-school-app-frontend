@@ -40,7 +40,7 @@ const NotificationsMessagesMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `🔔 NotificationsMessagesMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
+        `🔔 NotificationsMessagesMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -130,15 +130,15 @@ const NotificationsMessagesMain = () => {
     "🔔 NotificationsMessagesMain - User category:",
     userCategory,
     "Is parent:",
-    isParent
+    isParent,
   );
   console.log(
     "🔔 NotificationsMessagesMain - Students count:",
-    students.length
+    students.length,
   );
   console.log(
     "🔔 NotificationsMessagesMain - Selected student:",
-    selectedStudent?.student_calling_name
+    selectedStudent?.student_calling_name,
   );
 
   const onRefresh = () => {
@@ -385,7 +385,7 @@ const NotificationsMessagesMain = () => {
                             styles.priorityDot,
                             {
                               backgroundColor: getPriorityColor(
-                                notification.priority
+                                notification.priority,
                               ),
                             },
                           ]}

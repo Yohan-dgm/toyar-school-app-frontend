@@ -24,7 +24,7 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
 
   // Get posts data from Redux for dynamic filtering
   const { posts: schoolPosts, allPosts: schoolAllPosts } = useSelector(
-    (state) => state.schoolPosts
+    (state) => state.schoolPosts,
   );
   const { posts: classPosts } = useSelector((state) => state.classPosts);
   const { posts: studentPosts } = useSelector((state) => state.studentPosts);
@@ -76,7 +76,7 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
         Alert.alert(
           "No Internet Connection",
           "Please check your internet connection and try again.",
-          [{ text: "OK" }]
+          [{ text: "OK" }],
         );
       }
     });

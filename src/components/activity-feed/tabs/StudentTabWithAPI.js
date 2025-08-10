@@ -132,7 +132,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
     try {
       dispatch(setLoading(true));
       console.log(
-        "🔄 Loading all posts for student filtering... [STUDENT TAB]"
+        "🔄 Loading all posts for student filtering... [STUDENT TAB]",
       );
 
       // Load all posts without any filters
@@ -158,7 +158,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
         console.log(
           "✅ Successfully extracted",
           allPostsData.length,
-          "posts for student filtering"
+          "posts for student filtering",
         );
 
         // Store all posts in local state for frontend filtering
@@ -225,13 +225,13 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
 
         if (postStudentId !== selectedStudentId) {
           console.log(
-            `👤 Filtering out post ${post.id}: student ID mismatch. Post student_id=${postStudentId}, Selected student_id=${selectedStudentId}`
+            `👤 Filtering out post ${post.id}: student ID mismatch. Post student_id=${postStudentId}, Selected student_id=${selectedStudentId}`,
           );
           return false;
         }
 
         console.log(
-          `👤 Including student post ${post.id}: matches selected student`
+          `👤 Including student post ${post.id}: matches selected student`,
         );
 
         // Apply other filters (search, category, hashtags, date range)
@@ -263,8 +263,8 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
           const postHashtags = post.hashtags || [];
           const hasMatchingHashtag = currentFilters.hashtags.some((filterTag) =>
             postHashtags.some((postTag) =>
-              postTag.toLowerCase().includes(filterTag.toLowerCase())
-            )
+              postTag.toLowerCase().includes(filterTag.toLowerCase()),
+            ),
           );
           if (!hasMatchingHashtag) return false;
         }
@@ -286,13 +286,13 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
         return true;
       });
     },
-    [selectedStudent]
+    [selectedStudent],
   );
 
   // Clear any existing filters when component mounts
   useEffect(() => {
     console.log(
-      "🧹 Clearing any existing filters on component mount (Student Tab)"
+      "🧹 Clearing any existing filters on component mount (Student Tab)",
     );
     dispatch(clearFilters());
   }, [dispatch]);
@@ -308,7 +308,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
   useEffect(() => {
     console.log(
       "🔄 allPostsLocal changed (Student Tab):",
-      allPostsLocal?.length || 0
+      allPostsLocal?.length || 0,
     );
   }, [allPostsLocal]);
 
@@ -316,13 +316,13 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
   useEffect(() => {
     if (selectedStudent) {
       console.log(
-        `👤 Student Tab - Selected student changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`
+        `👤 Student Tab - Selected student changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`,
       );
 
       // Reload posts to ensure we have fresh data for the new student
       if (hasLoadedInitialData) {
         console.log(
-          "🔄 Student Tab - Reloading posts for new student selection"
+          "🔄 Student Tab - Reloading posts for new student selection",
         );
         loadAllPosts();
       }
@@ -335,7 +335,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
     if (!allPostsLocal || allPostsLocal.length === 0) {
       console.log(
         "❌ No allPostsLocal available (Student Tab):",
-        allPostsLocal?.length || 0
+        allPostsLocal?.length || 0,
       );
       return [];
     }
@@ -362,7 +362,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
     const filtered = filterPostsLocally(allPostsLocal, filters || {});
     console.log(
       "🔍 Student filtering applied - filtered posts:",
-      filtered.length
+      filtered.length,
     );
     return filtered;
   }, [allPostsLocal, filters, filterPostsLocally]);
@@ -371,7 +371,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
   useEffect(() => {
     if (hasLoadedInitialData && filteredPosts) {
       console.log(
-        `🔍 Student filtering complete: ${filteredPosts.length} posts match criteria`
+        `🔍 Student filtering complete: ${filteredPosts.length} posts match criteria`,
       );
       dispatch(
         setPosts({
@@ -381,7 +381,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
             total: filteredPosts.length,
             has_more: false,
           },
-        })
+        }),
       );
     }
   }, [filteredPosts, hasLoadedInitialData, dispatch]);
@@ -396,7 +396,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
   const handleLoadMore = useCallback(() => {
     // No pagination needed since we load all posts initially
     console.log(
-      "📄 Load more not needed - all posts loaded initially (Student Tab)"
+      "📄 Load more not needed - all posts loaded initially (Student Tab)",
     );
   }, []);
 
@@ -416,7 +416,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
           postId: post.id,
           isLiked: !isCurrentlyLiked,
           likesCount: newLikesCount,
-        })
+        }),
       );
 
       try {
@@ -432,7 +432,7 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
               postId: post.id,
               isLiked: response.data.is_liked_by_user,
               likesCount: response.data.likes_count,
-            })
+            }),
           );
         }
       } catch (error) {
@@ -443,18 +443,18 @@ const StudentTabWithAPI = ({ userCategory, isConnected, filters }) => {
             postId: post.id,
             isLiked: isCurrentlyLiked,
             likesCount: post.likes_count,
-          })
+          }),
         );
 
         if (__DEV__) {
           Alert.alert(
             "API Error",
-            "Like functionality requires backend implementation. Please check the backend API endpoints."
+            "Like functionality requires backend implementation. Please check the backend API endpoints.",
           );
         }
       }
     },
-    [likedPosts, dispatch, likePost]
+    [likedPosts, dispatch, likePost],
   );
 
   // Render post item (same as others but with student-specific styling)

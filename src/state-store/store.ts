@@ -1,15 +1,16 @@
-import { apiServer1 } from "@/api/api-server-1";
-import appSlice from "@/state-store/slices/app-slice";
-import schoolPostsSlice from "@/state-store/slices/school-life/school-posts-slice";
-import classPostsSlice from "@/state-store/slices/school-life/class-posts-slice";
-import studentPostsSlice from "@/state-store/slices/school-life/student-posts-slice";
-import calendarSlice from "@/state-store/slices/calendar/calendarSlice";
-import studentGrowthSlice from "@/state-store/slices/student-growth/studentGrowthSlice";
-import educatorFeedbackSlice from "@/state-store/slices/educator/educatorFeedbackSliceWithAPI";
-import attendanceSlice from "@/state-store/slices/educator/attendanceSlice";
-import studentAnalysisSlice from "@/state-store/slices/educator/studentAnalysisSlice";
-import { userPostsMiddleware } from "@/state-store/middleware/user-posts-middleware";
-import { studentSelectionMiddleware } from "@/state-store/middleware/student-selection-middleware";
+import { apiServer1 } from "../api/api-server-1";
+import { apiService } from "../services/api/ApiService";
+import appSlice from "./slices/app-slice";
+import schoolPostsSlice from "./slices/school-life/school-posts-slice";
+import classPostsSlice from "./slices/school-life/class-posts-slice";
+import studentPostsSlice from "./slices/school-life/student-posts-slice";
+import calendarSlice from "./slices/calendar/calendarSlice";
+import studentGrowthSlice from "./slices/student-growth/studentGrowthSlice";
+import educatorFeedbackSlice from "./slices/educator/educatorFeedbackSliceWithAPI";
+import attendanceSlice from "./slices/educator/attendanceSlice";
+import studentAnalysisSlice from "./slices/educator/studentAnalysisSlice";
+import { userPostsMiddleware } from "./middleware/user-posts-middleware";
+import { studentSelectionMiddleware } from "./middleware/student-selection-middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import {
@@ -32,7 +33,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage: AsyncStorage,
-  blacklist: [apiServer1.reducerPath], // these reduce will not persist data (NOTE: blacklist rtk api slices so that to use tags)
+  blacklist: [apiServer1.reducerPath, apiService.reducerPath], // these reduce will not persist data (NOTE: blacklist rtk api slices so that to use tags)
   // whitelist: ['users'], //these reduce will persist data
 };
 
@@ -52,9 +53,10 @@ export const rtkQueryErrorLogger: Middleware =
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
       // Check if this is an authentication error
-      const isAuthError = action.meta?.arg?.endpointName === 'loginUser' || 
-                          action.meta?.baseQueryMeta?.request?.url?.includes('sign-in');
-      
+      const isAuthError =
+        action.meta?.arg?.endpointName === "loginUser" ||
+        action.meta?.baseQueryMeta?.request?.url?.includes("sign-in");
+
       if (!isAuthError) {
         console.log("isRejectedWithValue", action.error, action.payload);
         alert(JSON.stringify(action)); // This is just an example. You can replace it with your preferred method for displaying notifications.
@@ -68,6 +70,7 @@ export const rtkQueryErrorLogger: Middleware =
 const rootReducer = combineReducers({
   app: appSlice,
   apiServer1: apiServer1.reducer,
+  [apiService.reducerPath]: apiService.reducer,
   schoolPosts: schoolPostsSlice,
   classPosts: classPostsSlice,
   studentPosts: studentPostsSlice,
@@ -80,7 +83,7 @@ const rootReducer = combineReducers({
 export type RootReducer = ReturnType<typeof rootReducer>;
 const persistedReducer = persistReducer<RootReducer>(
   persistConfig,
-  rootReducer
+  rootReducer,
 );
 
 const store = configureStore({
@@ -94,9 +97,10 @@ const store = configureStore({
       },
     }).concat(
       apiServer1.middleware,
+      apiService.middleware,
       rtkQueryErrorLogger,
       userPostsMiddleware,
-      studentSelectionMiddleware
+      studentSelectionMiddleware,
     ),
   enhancers: getEnhancers,
 });

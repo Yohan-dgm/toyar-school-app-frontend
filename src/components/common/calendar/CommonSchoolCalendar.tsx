@@ -6,11 +6,11 @@ interface CommonSchoolCalendarProps {
   userCategory: number;
   title?: string;
   subtitle?: string;
-  customEvents?: Array<{
+  customEvents?: {
     title: string;
     description: string;
     icon: string;
-  }>;
+  }[];
 }
 
 export default function CommonSchoolCalendar({

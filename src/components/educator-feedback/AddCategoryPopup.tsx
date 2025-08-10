@@ -8,8 +8,10 @@ import {
   TextInput,
   Alert,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useCreateFeedbackCategoryMutation } from "../../api/educator-feedback-api";
 
 // Define theme colors inline since we're not sure about the theme import path
 const theme = {
@@ -44,9 +46,10 @@ interface MCQOption {
 interface Question {
   id: number;
   text: string;
-  answerType: "rating" | "mcq" | "custom";
+  answerType: "rating" | "mcq" | "custom" | "text" | "number" | "boolean";
   mcqOptions: MCQOption[];
   marks: number;
+  required?: boolean;
 }
 
 interface CategoryData {
@@ -57,136 +60,276 @@ interface CategoryData {
 interface AddCategoryPopupProps {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (data: CategoryData) => void;
+  onSubmit?: (data: CategoryData) => void;
+  onSuccess?: () => void;
 }
 
-const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, onSubmit }) => {
-  // Debug logging
-  console.log("🎯 AddCategoryPopup props:", { visible, onClose: !!onClose, onSubmit: !!onSubmit });
-  console.log("🎯 AddCategoryPopup component rendered with visible:", visible);
-  
+const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({
+  visible,
+  onClose,
+  onSubmit,
+  onSuccess,
+}) => {
+  // API Integration
+  const [createCategory, { isLoading: isSubmitting, error: submitError }] =
+    useCreateFeedbackCategoryMutation();
+
+  // Form State
   const [categoryTitle, setCategoryTitle] = useState("");
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, text: "", answerType: "rating", mcqOptions: [], marks: 1 }
+    {
+      id: 1,
+      text: "",
+      answerType: "text",
+      mcqOptions: [],
+      marks: 1,
+      required: false,
+    },
   ]);
 
   const answerTypes = [
-    { id: "rating" as const, label: "Rating (1-5 Likert Scale)", needsOptions: false },
-    { id: "mcq" as const, label: "MCQ Answer", needsOptions: true },
-    { id: "custom" as const, label: "Custom Answer", needsOptions: false },
+    {
+      id: "text" as const,
+      label: "Text Answer",
+      needsOptions: false,
+      description: "Students provide written responses",
+    },
+    {
+      id: "mcq" as const,
+      label: "Multiple Choice",
+      needsOptions: true,
+      description: "Students select from predefined options",
+    },
+    {
+      id: "number" as const,
+      label: "Number",
+      needsOptions: false,
+      description: "Students enter numeric values",
+    },
+    {
+      id: "boolean" as const,
+      label: "Yes/No",
+      needsOptions: false,
+      description: "Students answer yes or no",
+    },
   ];
 
   const addQuestion = () => {
     const newQuestion: Question = {
       id: Date.now(),
       text: "",
-      answerType: "rating",
+      answerType: "text",
       mcqOptions: [],
-      marks: 1
+      marks: 1,
+      required: false,
     };
     setQuestions([...questions, newQuestion]);
   };
 
   const removeQuestion = (questionId: number) => {
-    setQuestions(questions.filter(q => q.id !== questionId));
+    setQuestions(questions.filter((q) => q.id !== questionId));
   };
 
-  const updateQuestion = (questionId: number, field: keyof Question, value: any) => {
-    setQuestions(questions.map(q => 
-      q.id === questionId ? { ...q, [field]: value } : q
-    ));
+  const updateQuestion = (
+    questionId: number,
+    field: keyof Question,
+    value: any,
+  ) => {
+    setQuestions(
+      questions.map((q) =>
+        q.id === questionId ? { ...q, [field]: value } : q,
+      ),
+    );
   };
 
   const addMCQOption = (questionId: number) => {
-    const question = questions.find(q => q.id === questionId);
+    const question = questions.find((q) => q.id === questionId);
     if (!question) return;
-    
+
     const newOption: MCQOption = {
       id: Date.now(),
       text: "",
-      marks: 1
+      marks: 1,
     };
-    updateQuestion(questionId, "mcqOptions", [...(question.mcqOptions || []), newOption]);
+    updateQuestion(questionId, "mcqOptions", [
+      ...(question.mcqOptions || []),
+      newOption,
+    ]);
   };
 
   const removeMCQOption = (questionId: number, optionId: number) => {
-    const question = questions.find(q => q.id === questionId);
+    const question = questions.find((q) => q.id === questionId);
     if (!question) return;
-    
-    const updatedOptions = question.mcqOptions.filter(opt => opt.id !== optionId);
-    updateQuestion(questionId, "mcqOptions", updatedOptions);
-  };
 
-  const updateMCQOption = (questionId: number, optionId: number, field: keyof MCQOption, value: any) => {
-    const question = questions.find(q => q.id === questionId);
-    if (!question) return;
-    
-    const updatedOptions = question.mcqOptions.map(opt =>
-      opt.id === optionId ? { ...opt, [field]: value } : opt
+    const updatedOptions = question.mcqOptions.filter(
+      (opt) => opt.id !== optionId,
     );
     updateQuestion(questionId, "mcqOptions", updatedOptions);
   };
 
-  const handleSubmit = () => {
+  const updateMCQOption = (
+    questionId: number,
+    optionId: number,
+    field: keyof MCQOption,
+    value: any,
+  ) => {
+    const question = questions.find((q) => q.id === questionId);
+    if (!question) return;
+
+    const updatedOptions = question.mcqOptions.map((opt) =>
+      opt.id === optionId ? { ...opt, [field]: value } : opt,
+    );
+    updateQuestion(questionId, "mcqOptions", updatedOptions);
+  };
+
+  const handleSubmit = async () => {
+    // Validation
     if (!categoryTitle.trim()) {
       Alert.alert("Error", "Please enter a category title");
       return;
     }
 
-    const emptyQuestions = questions.filter(q => !q.text.trim());
+    const emptyQuestions = questions.filter((q) => !q.text.trim());
     if (emptyQuestions.length > 0) {
       Alert.alert("Error", "Please fill in all question texts");
       return;
     }
 
-    const mcqQuestionsWithoutOptions = questions.filter(q => 
-      q.answerType === "mcq" && (!q.mcqOptions || q.mcqOptions.length === 0)
+    const mcqQuestionsWithoutOptions = questions.filter(
+      (q) =>
+        q.answerType === "mcq" && (!q.mcqOptions || q.mcqOptions.length === 0),
     );
     if (mcqQuestionsWithoutOptions.length > 0) {
-      Alert.alert("Error", "MCQ questions must have at least one option");
+      Alert.alert(
+        "Error",
+        "Multiple choice questions must have at least one option",
+      );
       return;
     }
 
-    const mcqOptionsWithoutText = questions.some(q => 
-      q.answerType === "mcq" && q.mcqOptions.some(opt => !opt.text.trim())
+    const mcqOptionsWithoutText = questions.some(
+      (q) =>
+        q.answerType === "mcq" && q.mcqOptions.some((opt) => !opt.text.trim()),
     );
     if (mcqOptionsWithoutText) {
-      Alert.alert("Error", "All MCQ options must have text");
+      Alert.alert("Error", "All multiple choice options must have text");
       return;
     }
 
-    const categoryData: CategoryData = {
+    // Prepare category data for API
+    const categoryData = {
       title: categoryTitle.trim(),
-      questions: questions.map(q => ({
-        id: q.id,
+      questions: questions.map((q) => ({
         text: q.text.trim(),
         answerType: q.answerType,
-        mcqOptions: q.answerType === "mcq" ? q.mcqOptions : [],
-        marks: q.marks
-      }))
+        mcqOptions:
+          q.answerType === "mcq"
+            ? q.mcqOptions.map((opt) => opt.text.trim())
+            : [],
+        marks: q.marks,
+        required: q.required || false,
+      })),
     };
 
-    onSubmit(categoryData);
-    handleCancel();
+    try {
+      console.log("📤 Submitting category:", categoryData);
+
+      // Submit to API
+      const result = await createCategory(categoryData).unwrap();
+
+      console.log("✅ Category created successfully:", result);
+
+      Alert.alert("Success", "Category created successfully!", [
+        {
+          text: "OK",
+          onPress: () => {
+            // Call legacy onSubmit if provided (for backward compatibility)
+            if (onSubmit) {
+              const legacyData: CategoryData = {
+                title: categoryTitle.trim(),
+                questions: questions.map((q) => ({
+                  id: q.id,
+                  text: q.text.trim(),
+                  answerType: q.answerType,
+                  mcqOptions: q.answerType === "mcq" ? q.mcqOptions : [],
+                  marks: q.marks,
+                  required: q.required,
+                })),
+              };
+              onSubmit(legacyData);
+            }
+
+            // Call success callback
+            if (onSuccess) {
+              onSuccess();
+            }
+
+            // Reset form and close
+            handleResetForm();
+            onClose();
+          },
+        },
+      ]);
+    } catch (error: any) {
+      console.error("❌ Failed to create category:", error);
+
+      let errorMessage = "Failed to create category. Please try again.";
+
+      // Handle specific API errors
+      if (error?.data?.message) {
+        errorMessage = error.data.message;
+      } else if (error?.data?.errors) {
+        // Handle validation errors
+        const errors = Object.values(error.data.errors).flat();
+        errorMessage = errors.join(", ");
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
+      Alert.alert("Error", errorMessage);
+    }
+  };
+
+  const handleResetForm = () => {
+    setCategoryTitle("");
+    setQuestions([
+      {
+        id: 1,
+        text: "",
+        answerType: "text",
+        mcqOptions: [],
+        marks: 1,
+        required: false,
+      },
+    ]);
   };
 
   const handleCancel = () => {
-    Alert.alert(
-      "Cancel",
-      "Are you sure you want to cancel? All changes will be lost.",
-      [
-        { text: "No", style: "cancel" },
-        { 
-          text: "Yes", 
-          style: "destructive",
-          onPress: () => {
-            setCategoryTitle("");
-            setQuestions([{ id: 1, text: "", answerType: "rating", mcqOptions: [], marks: 1 }]);
-            onClose();
-          }
-        }
-      ]
-    );
+    // Check if form has any data
+    const hasData =
+      categoryTitle.trim() !== "" ||
+      questions.some((q) => q.text.trim() !== "" || q.mcqOptions.length > 0);
+
+    if (hasData && !isSubmitting) {
+      Alert.alert(
+        "Cancel",
+        "Are you sure you want to cancel? All changes will be lost.",
+        [
+          { text: "No", style: "cancel" },
+          {
+            text: "Yes",
+            style: "destructive",
+            onPress: () => {
+              handleResetForm();
+              onClose();
+            },
+          },
+        ],
+      );
+    } else {
+      handleResetForm();
+      onClose();
+    }
   };
 
   const renderQuestion = (question: Question, index: number) => {
@@ -219,18 +362,45 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
               key={type.id}
               style={[
                 styles.answerTypeChip,
-                question.answerType === type.id && styles.selectedAnswerType
+                question.answerType === type.id && styles.selectedAnswerType,
               ]}
               onPress={() => updateQuestion(question.id, "answerType", type.id)}
             >
-              <Text style={[
-                styles.answerTypeText,
-                question.answerType === type.id && styles.selectedAnswerTypeText
-              ]}>
+              <Text
+                style={[
+                  styles.answerTypeText,
+                  question.answerType === type.id &&
+                    styles.selectedAnswerTypeText,
+                ]}
+              >
                 {type.label}
               </Text>
             </TouchableOpacity>
           ))}
+        </View>
+
+        {/* Required Field Toggle */}
+        <View style={styles.requiredContainer}>
+          <TouchableOpacity
+            style={styles.requiredToggle}
+            onPress={() =>
+              updateQuestion(question.id, "required", !question.required)
+            }
+          >
+            <MaterialIcons
+              name={question.required ? "check-box" : "check-box-outline-blank"}
+              size={20}
+              color={question.required ? theme.colors.primary : "#999"}
+            />
+            <Text
+              style={[
+                styles.requiredLabel,
+                question.required && styles.requiredLabelActive,
+              ]}
+            >
+              Required field
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {question.answerType === "rating" && (
@@ -243,10 +413,15 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                     <Text style={styles.ratingNumber}>{rating}</Text>
                   </View>
                   <Text style={styles.ratingLabel}>
-                    {rating === 1 ? "Poor" : 
-                     rating === 2 ? "Fair" :
-                     rating === 3 ? "Good" :
-                     rating === 4 ? "Very Good" : "Excellent"}
+                    {rating === 1
+                      ? "Poor"
+                      : rating === 2
+                        ? "Fair"
+                        : rating === 3
+                          ? "Good"
+                          : rating === 4
+                            ? "Very Good"
+                            : "Excellent"}
                   </Text>
                 </View>
               ))}
@@ -262,7 +437,11 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                 style={styles.addOptionButton}
                 onPress={() => addMCQOption(question.id)}
               >
-                <MaterialIcons name="add" size={16} color={theme.colors.primary} />
+                <MaterialIcons
+                  name="add"
+                  size={16}
+                  color={theme.colors.primary}
+                />
                 <Text style={styles.addOptionText}>Add Option</Text>
               </TouchableOpacity>
             </View>
@@ -270,7 +449,9 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
             {(question.mcqOptions || []).map((option, optionIndex) => (
               <View key={option.id} style={styles.mcqOptionContainer}>
                 <View style={styles.optionHeader}>
-                  <Text style={styles.optionLabel}>Option {optionIndex + 1}</Text>
+                  <Text style={styles.optionLabel}>
+                    Option {optionIndex + 1}
+                  </Text>
                   {question.mcqOptions.length > 1 && (
                     <TouchableOpacity
                       style={styles.removeOptionButton}
@@ -280,14 +461,16 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                     </TouchableOpacity>
                   )}
                 </View>
-                
+
                 <TextInput
                   style={styles.optionInput}
                   placeholder="Enter option text..."
                   value={option.text}
-                  onChangeText={(text) => updateMCQOption(question.id, option.id, "text", text)}
+                  onChangeText={(text) =>
+                    updateMCQOption(question.id, option.id, "text", text)
+                  }
                 />
-                
+
                 <View style={styles.marksContainer}>
                   <Text style={styles.marksLabel}>Marks (1-5):</Text>
                   <View style={styles.marksSelector}>
@@ -296,14 +479,18 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                         key={mark}
                         style={[
                           styles.markButton,
-                          option.marks === mark && styles.selectedMarkButton
+                          option.marks === mark && styles.selectedMarkButton,
                         ]}
-                        onPress={() => updateMCQOption(question.id, option.id, "marks", mark)}
+                        onPress={() =>
+                          updateMCQOption(question.id, option.id, "marks", mark)
+                        }
                       >
-                        <Text style={[
-                          styles.markText,
-                          option.marks === mark && styles.selectedMarkText
-                        ]}>
+                        <Text
+                          style={[
+                            styles.markText,
+                            option.marks === mark && styles.selectedMarkText,
+                          ]}
+                        >
                           {mark}
                         </Text>
                       </TouchableOpacity>
@@ -318,7 +505,11 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                 style={styles.firstOptionButton}
                 onPress={() => addMCQOption(question.id)}
               >
-                <MaterialIcons name="add" size={20} color={theme.colors.primary} />
+                <MaterialIcons
+                  name="add"
+                  size={20}
+                  color={theme.colors.primary}
+                />
                 <Text style={styles.firstOptionText}>Add First Option</Text>
               </TouchableOpacity>
             )}
@@ -341,7 +532,7 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
   };
 
   console.log("🎯 About to render Modal with visible:", visible);
-  
+
   return (
     <Modal
       visible={visible}
@@ -375,12 +566,18 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
                 style={styles.addQuestionButton}
                 onPress={addQuestion}
               >
-                <MaterialIcons name="add" size={16} color={theme.colors.primary} />
+                <MaterialIcons
+                  name="add"
+                  size={16}
+                  color={theme.colors.primary}
+                />
                 <Text style={styles.addQuestionText}>Add Question</Text>
               </TouchableOpacity>
             </View>
 
-            {questions.map((question, index) => renderQuestion(question, index))}
+            {questions.map((question, index) =>
+              renderQuestion(question, index),
+            )}
           </View>
         </ScrollView>
 
@@ -388,14 +585,34 @@ const AddCategoryPopup: React.FC<AddCategoryPopupProps> = ({ visible, onClose, o
           <TouchableOpacity
             style={styles.cancelButton}
             onPress={handleCancel}
+            disabled={isSubmitting}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text
+              style={[
+                styles.cancelButtonText,
+                isSubmitting && styles.disabledButtonText,
+              ]}
+            >
+              Cancel
+            </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={styles.submitButton}
+            style={[
+              styles.submitButton,
+              isSubmitting && styles.disabledSubmitButton,
+            ]}
             onPress={handleSubmit}
+            disabled={isSubmitting}
           >
-            <Text style={styles.submitButtonText}>Submit</Text>
+            {isSubmitting ? (
+              <View style={styles.submittingContainer}>
+                <ActivityIndicator size="small" color="#FFFFFF" />
+                <Text style={styles.submittingText}>Creating...</Text>
+              </View>
+            ) : (
+              <Text style={styles.submitButtonText}>Create Category</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -727,6 +944,39 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "white",
+  },
+  requiredContainer: {
+    marginBottom: theme.spacing.md,
+  },
+  requiredToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  requiredLabel: {
+    fontSize: 14,
+    color: "#999",
+    marginLeft: theme.spacing.sm,
+  },
+  requiredLabelActive: {
+    color: theme.colors.primary,
+    fontWeight: "500",
+  },
+  disabledSubmitButton: {
+    backgroundColor: "#CCCCCC",
+  },
+  disabledButtonText: {
+    color: "#999",
+  },
+  submittingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submittingText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: theme.spacing.sm,
   },
 });
 

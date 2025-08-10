@@ -1,19 +1,29 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import type { RootState } from "@/state-store/store";
-import { getUserCategoryName, getUserCategoryDisplayName } from "@/constants/userCategories";
+import {
+  getUserCategoryName,
+  getUserCategoryDisplayName,
+} from "@/constants/userCategories";
 import { setSessionData } from "@/state-store/slices/app-slice";
 
 export default function DebugSessionPage() {
   const { isAuthenticated, sessionData } = useSelector(
-    (state: RootState) => state.app
+    (state: RootState) => state.app,
   );
   const dispatch = useDispatch();
 
   const userCategory = (sessionData as any)?.user_category;
-  const userRole = (sessionData as any)?.user_role || (sessionData as any)?.role;
+  const userRole =
+    (sessionData as any)?.user_role || (sessionData as any)?.role;
 
   const simulateUserCategory = (categoryId: number) => {
     const mockSessionData = {
@@ -21,7 +31,7 @@ export default function DebugSessionPage() {
       user_category: categoryId,
     };
     dispatch(setSessionData(mockSessionData));
-    
+
     const categoryName = getUserCategoryName(categoryId);
     console.log(`Simulating user_category: ${categoryId} -> ${categoryName}`);
     router.replace(`/authenticated/${categoryName}`);
@@ -43,15 +53,15 @@ export default function DebugSessionPage() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Current User Category</Text>
           <Text style={styles.value}>
-            {userCategory ? `${userCategory} (${getUserCategoryDisplayName(userCategory)})` : "❌ Not Set"}
+            {userCategory
+              ? `${userCategory} (${getUserCategoryDisplayName(userCategory)})`
+              : "❌ Not Set"}
           </Text>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Current User Role (Legacy)</Text>
-          <Text style={styles.value}>
-            {userRole || "❌ Not Set"}
-          </Text>
+          <Text style={styles.value}>{userRole || "❌ Not Set"}</Text>
         </View>
 
         <View style={styles.card}>
@@ -66,38 +76,38 @@ export default function DebugSessionPage() {
           <Text style={styles.cardDescription}>
             Click to simulate different user categories:
           </Text>
-          
-          <TouchableOpacity 
-            style={styles.testButton} 
+
+          <TouchableOpacity
+            style={styles.testButton}
             onPress={() => simulateUserCategory(1)}
           >
             <Text style={styles.testButtonText}>Test Parent (1)</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.testButton} 
+
+          <TouchableOpacity
+            style={styles.testButton}
             onPress={() => simulateUserCategory(2)}
           >
             <Text style={styles.testButtonText}>Test Educator (2)</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.testButton} 
+
+          <TouchableOpacity
+            style={styles.testButton}
             onPress={() => simulateUserCategory(4)}
           >
             <Text style={styles.testButtonText}>Test Counselor (4)</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.testButton} 
+
+          <TouchableOpacity
+            style={styles.testButton}
             onPress={() => simulateUserCategory(5)}
           >
             <Text style={styles.testButtonText}>Test Admin (5)</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity 
-          style={styles.backButton} 
+        <TouchableOpacity
+          style={styles.backButton}
           onPress={() => router.back()}
         >
           <Text style={styles.backButtonText}>← Back</Text>

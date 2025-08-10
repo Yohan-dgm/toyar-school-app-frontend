@@ -41,13 +41,13 @@ const DynamicBottomNavigation: React.FC<DynamicBottomNavigationProps> = ({
     // Animate tab press with scale effect using reanimated
     animatedValue.value = withSequence(
       withTiming(1, { duration: 150 }),
-      withTiming(0, { duration: 150 })
+      withTiming(0, { duration: 150 }),
     );
 
     // Scale animation for pressed tab
     scaleValue.value = withSequence(
       withTiming(0.95, { duration: 100 }),
-      withTiming(1, { duration: 100 })
+      withTiming(1, { duration: 100 }),
     );
 
     onTabPress?.(tabId);

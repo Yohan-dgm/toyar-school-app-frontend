@@ -1,12 +1,12 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   children: ReactNode;
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
     // Log error to console in development
     if (__DEV__) {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
+      console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
 
     // Call custom error handler if provided
@@ -82,7 +82,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <Text style={styles.message}>
               The chat encountered an unexpected error. Please try again.
             </Text>
-            
+
             {__DEV__ && this.state.error && (
               <ScrollView style={styles.debugContainer}>
                 <Text style={styles.debugTitle}>Debug Information:</Text>
@@ -96,8 +96,11 @@ export class ErrorBoundary extends Component<Props, State> {
                 )}
               </ScrollView>
             )}
-            
-            <TouchableOpacity style={styles.retryButton} onPress={this.handleRetry}>
+
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={this.handleRetry}
+            >
               <Ionicons name="refresh" size={20} color="#FFFFFF" />
               <Text style={styles.retryText}>Try Again</Text>
             </TouchableOpacity>
@@ -113,61 +116,61 @@ export class ErrorBoundary extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   errorContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     maxWidth: 300,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333333',
+    fontWeight: "bold",
+    color: "#333333",
     marginTop: 16,
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   message: {
     fontSize: 16,
-    color: '#666666',
-    textAlign: 'center',
+    color: "#666666",
+    textAlign: "center",
     lineHeight: 22,
     marginBottom: 24,
   },
   debugContainer: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
     maxHeight: 200,
-    width: '100%',
+    width: "100%",
   },
   debugTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333333',
+    fontWeight: "bold",
+    color: "#333333",
     marginBottom: 8,
   },
   debugText: {
     fontSize: 12,
-    color: '#666666',
-    fontFamily: 'monospace',
+    color: "#666666",
+    fontFamily: "monospace",
   },
   retryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#007AFF',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#007AFF",
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   retryText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 8,
   },
 });
@@ -176,11 +179,15 @@ const styles = StyleSheet.create({
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   fallback?: ReactNode,
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void,
 ) => {
-  return (props: P) => (
+  const WrappedComponent = (props: P) => (
     <ErrorBoundary fallback={fallback} onError={onError}>
       <Component {...props} />
     </ErrorBoundary>
   );
+
+  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name || "Component"})`;
+
+  return WrappedComponent;
 };

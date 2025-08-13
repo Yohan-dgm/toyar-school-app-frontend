@@ -120,7 +120,7 @@ const AttendanceEditModal: React.FC<AttendanceEditModalProps> = ({
   useEffect(() => {
     if (student) {
       const defaultTimes = getDefaultAttendanceTimes();
-      
+
       // Use preSelectedStatus if provided, otherwise use student's current attendance
       const initialStatus = preSelectedStatus || student.attendance;
       setSelectedStatus(initialStatus);
@@ -129,8 +129,8 @@ const AttendanceEditModal: React.FC<AttendanceEditModalProps> = ({
       setHasChanges(false);
       setInTime(defaultTimes.schoolStartTime);
       setOutTime(defaultTimes.currentTime);
-      
-      // If status is "late" (either pre-selected or student's current status), 
+
+      // If status is "late" (either pre-selected or student's current status),
       // ensure we show the time section and mark as having changes
       if (initialStatus === "late") {
         setHasChanges(true); // Mark as having changes to enable save button
@@ -263,249 +263,254 @@ const AttendanceEditModal: React.FC<AttendanceEditModalProps> = ({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
       >
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Student Profile Header */}
-        <View style={styles.profileHeader}>
-          <LinearGradient
-            colors={currentStatusConfig.gradient}
-            style={styles.profileGradient}
-          >
-            <Image
-              source={getStudentImage()}
-              style={styles.profileImage}
-              defaultSource={getLocalFallbackProfileImage()}
-            />
-          </LinearGradient>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Student Profile Header */}
+          <View style={styles.profileHeader}>
+            <LinearGradient
+              colors={currentStatusConfig.gradient}
+              style={styles.profileGradient}
+            >
+              <Image
+                source={getStudentImage()}
+                style={styles.profileImage}
+                defaultSource={getLocalFallbackProfileImage()}
+              />
+            </LinearGradient>
 
-          <View style={styles.profileInfo}>
-            <Text style={styles.studentName}>{student.full_name}</Text>
-            <Text style={styles.admissionNumber}>
-              ID: {student.admission_number}
-            </Text>
-            <View style={styles.studentMeta}>
-              <Text style={styles.gradeClass}>{student.grade}</Text>
-              {student.house && (
-                <>
-                  <Text style={styles.separator}> • </Text>
-                  <Text style={styles.house}>{student.house}</Text>
-                </>
-              )}
+            <View style={styles.profileInfo}>
+              <Text style={styles.studentName}>{student.full_name}</Text>
+              <Text style={styles.admissionNumber}>
+                ID: {student.admission_number}
+              </Text>
+              <View style={styles.studentMeta}>
+                <Text style={styles.gradeClass}>{student.grade}</Text>
+                {student.house && (
+                  <>
+                    <Text style={styles.separator}> • </Text>
+                    <Text style={styles.house}>{student.house}</Text>
+                  </>
+                )}
+              </View>
+            </View>
+
+            {/* Current Status Badge */}
+            <View
+              style={[
+                styles.currentStatusBadge,
+                { backgroundColor: currentStatusConfig.background },
+              ]}
+            >
+              <MaterialIcons
+                name={currentStatusConfig.icon as any}
+                size={20}
+                color={currentStatusConfig.color}
+              />
+              <Text
+                style={[
+                  styles.currentStatusText,
+                  { color: currentStatusConfig.color },
+                ]}
+              >
+                {currentStatusConfig.label}
+              </Text>
             </View>
           </View>
 
-          {/* Current Status Badge */}
-          <View
-            style={[
-              styles.currentStatusBadge,
-              { backgroundColor: currentStatusConfig.background },
-            ]}
-          >
-            <MaterialIcons
-              name={currentStatusConfig.icon as any}
-              size={20}
-              color={currentStatusConfig.color}
-            />
-            <Text
-              style={[
-                styles.currentStatusText,
-                { color: currentStatusConfig.color },
-              ]}
-            >
-              {currentStatusConfig.label}
+          {/* Date Information */}
+          <View style={styles.dateCard}>
+            <MaterialIcons name="calendar-today" size={20} color="#920734" />
+            <View style={styles.dateInfo}>
+              <Text style={styles.dateLabel}>Attendance Date</Text>
+              <Text style={styles.dateValue}>{formatDate(attendanceDate)}</Text>
+            </View>
+          </View>
+
+          {/* Status Selection */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Attendance Status</Text>
+            <Text style={styles.sectionDescription}>
+              Select the attendance status for this student
             </Text>
+
+            <View style={styles.statusOptions}>
+              {["present", "absent", "late"].map((status) => {
+                const config = getStatusConfig(status);
+                const isSelected = selectedStatus === status;
+
+                return (
+                  <TouchableOpacity
+                    key={status}
+                    style={[
+                      styles.statusOption,
+                      isSelected && {
+                        backgroundColor: config.background,
+                        borderColor: config.color,
+                      },
+                    ]}
+                    onPress={() => setSelectedStatus(status as any)}
+                  >
+                    <View style={styles.statusOptionHeader}>
+                      <MaterialIcons
+                        name={config.icon as any}
+                        size={24}
+                        color={isSelected ? config.color : "#666"}
+                      />
+                      <Text
+                        style={[
+                          styles.statusOptionLabel,
+                          isSelected && {
+                            color: config.color,
+                            fontWeight: "700",
+                          },
+                        ]}
+                      >
+                        {config.label}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.statusOptionDescription,
+                        isSelected && { color: config.color },
+                      ]}
+                    >
+                      {config.description}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
-        </View>
 
-        {/* Date Information */}
-        <View style={styles.dateCard}>
-          <MaterialIcons name="calendar-today" size={20} color="#920734" />
-          <View style={styles.dateInfo}>
-            <Text style={styles.dateLabel}>Attendance Date</Text>
-            <Text style={styles.dateValue}>{formatDate(attendanceDate)}</Text>
-          </View>
-        </View>
+          {/* Reason Selection (for absent/late) */}
+          {(selectedStatus === "absent" || selectedStatus === "late") && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                Reason{" "}
+                {selectedStatus === "absent" && (
+                  <Text style={styles.required}>*</Text>
+                )}
+              </Text>
+              <Text style={styles.sectionDescription}>
+                Select a reason for the{" "}
+                {selectedStatus === "absent" ? "absence" : "late arrival"}
+              </Text>
 
-        {/* Status Selection */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Attendance Status</Text>
-          <Text style={styles.sectionDescription}>
-            Select the attendance status for this student
-          </Text>
-
-          <View style={styles.statusOptions}>
-            {["present", "absent", "late"].map((status) => {
-              const config = getStatusConfig(status);
-              const isSelected = selectedStatus === status;
-
-              return (
-                <TouchableOpacity
-                  key={status}
-                  style={[
-                    styles.statusOption,
-                    isSelected && {
-                      backgroundColor: config.background,
-                      borderColor: config.color,
-                    },
-                  ]}
-                  onPress={() => setSelectedStatus(status as any)}
-                >
-                  <View style={styles.statusOptionHeader}>
+              <View style={styles.reasonGrid}>
+                {ABSENCE_REASONS.map((reason) => (
+                  <TouchableOpacity
+                    key={reason.id}
+                    style={[
+                      styles.reasonOption,
+                      selectedReason === reason.id && {
+                        backgroundColor: reason.color + "15",
+                        borderColor: reason.color,
+                      },
+                    ]}
+                    onPress={() => setSelectedReason(reason.id)}
+                  >
                     <MaterialIcons
-                      name={config.icon as any}
-                      size={24}
-                      color={isSelected ? config.color : "#666"}
+                      name={reason.icon as any}
+                      size={20}
+                      color={
+                        selectedReason === reason.id ? reason.color : "#666"
+                      }
                     />
                     <Text
                       style={[
-                        styles.statusOptionLabel,
-                        isSelected && {
-                          color: config.color,
-                          fontWeight: "700",
+                        styles.reasonLabel,
+                        selectedReason === reason.id && {
+                          color: reason.color,
+                          fontWeight: "600",
                         },
                       ]}
                     >
-                      {config.label}
+                      {reason.label}
                     </Text>
-                  </View>
-                  <Text
-                    style={[
-                      styles.statusOptionDescription,
-                      isSelected && { color: config.color },
-                    ]}
-                  >
-                    {config.description}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Reason Selection (for absent/late) */}
-        {(selectedStatus === "absent" || selectedStatus === "late") && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              Reason{" "}
-              {selectedStatus === "absent" && (
-                <Text style={styles.required}>*</Text>
-              )}
-            </Text>
-            <Text style={styles.sectionDescription}>
-              Select a reason for the{" "}
-              {selectedStatus === "absent" ? "absence" : "late arrival"}
-            </Text>
-
-            <View style={styles.reasonGrid}>
-              {ABSENCE_REASONS.map((reason) => (
-                <TouchableOpacity
-                  key={reason.id}
-                  style={[
-                    styles.reasonOption,
-                    selectedReason === reason.id && {
-                      backgroundColor: reason.color + "15",
-                      borderColor: reason.color,
-                    },
-                  ]}
-                  onPress={() => setSelectedReason(reason.id)}
-                >
-                  <MaterialIcons
-                    name={reason.icon as any}
-                    size={20}
-                    color={selectedReason === reason.id ? reason.color : "#666"}
-                  />
-                  <Text
-                    style={[
-                      styles.reasonLabel,
-                      selectedReason === reason.id && {
-                        color: reason.color,
-                        fontWeight: "600",
-                      },
-                    ]}
-                  >
-                    {reason.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Time Selection (for late attendance) */}
-        {selectedStatus === "late" && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              Arrival Times <Text style={styles.required}>*</Text>
-            </Text>
-            <Text style={styles.sectionDescription}>
-              Set the in time and out time for late arrival
-            </Text>
+          {/* Time Selection (for late attendance) */}
+          {selectedStatus === "late" && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                Arrival Times <Text style={styles.required}>*</Text>
+              </Text>
+              <Text style={styles.sectionDescription}>
+                Set the in time and out time for late arrival
+              </Text>
 
-            <View style={styles.timePickersContainer}>
-              <TimePickerInput
-                label="In Time"
-                value={inTime}
-                onTimeChange={setInTime}
-                placeholder="07:30"
-                required={true}
-              />
+              <View style={styles.timePickersContainer}>
+                <TimePickerInput
+                  label="In Time"
+                  value={inTime}
+                  onTimeChange={setInTime}
+                  placeholder="07:30"
+                  required={true}
+                />
 
-              <TimePickerInput
-                label="Out Time"
-                value={outTime}
-                onTimeChange={setOutTime}
-                placeholder="13:00"
-                required={true}
-              />
+                <TimePickerInput
+                  label="Out Time"
+                  value={outTime}
+                  onTimeChange={setOutTime}
+                  placeholder="13:00"
+                  required={true}
+                />
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Notes Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Additional Notes</Text>
-          <Text style={styles.sectionDescription}>
-            Add any additional information or context (optional)
-          </Text>
+          {/* Notes Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Additional Notes</Text>
+            <Text style={styles.sectionDescription}>
+              Add any additional information or context (optional)
+            </Text>
 
-          <TextInput
-            style={styles.notesInput}
-            multiline
-            numberOfLines={4}
-            placeholder="Enter any additional notes..."
-            placeholderTextColor="#999"
-            value={notes}
-            onChangeText={setNotes}
-            textAlignVertical="top"
-          />
-        </View>
-
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.saveButton, !hasChanges && styles.disabledButton]}
-            onPress={handleSave}
-            disabled={!hasChanges}
-          >
-            <MaterialIcons
-              name="save"
-              size={16}
-              color={hasChanges ? "#fff" : "#999"}
-              style={{ marginRight: 8 }}
+            <TextInput
+              style={styles.notesInput}
+              multiline
+              numberOfLines={4}
+              placeholder="Enter any additional notes..."
+              placeholderTextColor="#999"
+              value={notes}
+              onChangeText={setNotes}
+              textAlignVertical="top"
             />
-            <Text
-              style={[
-                styles.saveButtonText,
-                !hasChanges && styles.disabledText,
-              ]}
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.saveButton, !hasChanges && styles.disabledButton]}
+              onPress={handleSave}
+              disabled={!hasChanges}
             >
-              Save Changes
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <MaterialIcons
+                name="save"
+                size={16}
+                color={hasChanges ? "#fff" : "#999"}
+                style={{ marginRight: 8 }}
+              />
+              <Text
+                style={[
+                  styles.saveButtonText,
+                  !hasChanges && styles.disabledText,
+                ]}
+              >
+                Save Changes
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </FullScreenModal>

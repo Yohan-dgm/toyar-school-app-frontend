@@ -33,6 +33,9 @@ import {
   setSelectedStudent,
 } from "../../state-store/slices/app-slice";
 import { useLoginUserMutation } from "../../api/auth-api";
+import { useGetNotificationsQuery } from "../../api/notifications";
+import { BaseNotification } from "../../types/notifications";
+import { useRouter, usePathname } from "expo-router";
 
 const { width } = Dimensions.get("window");
 
@@ -42,6 +45,8 @@ const Header = () => {
   const { sessionData, selectedStudent } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   const [loginUserTrigger] = useLoginUserMutation();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Get user category from session data
   const userCategory =
@@ -49,24 +54,51 @@ const Header = () => {
   const isParent = userCategory === USER_CATEGORIES.PARENT;
   const userDisplayName = getUserCategoryDisplayName(userCategory);
 
+  // Get user token and ID for API calls
+  const userToken = sessionData?.token || sessionData?.data?.token;
+  const userId = sessionData?.data?.id || sessionData?.id;
+
+  // Notification API Integration
+  const {
+    data: notificationsData,
+    isLoading: notificationsLoading,
+    error: notificationsError,
+    refetch: refetchNotifications,
+  } = useGetNotificationsQuery(
+    {
+      page: 1,
+      limit: 5, // Only fetch 5 notifications for header popup
+      filters: {
+        filter: "all",
+        search: "",
+        type_id: null,
+        priority: "",
+        unread_only: false,
+      },
+    },
+    {
+      skip: !userId || !userToken,
+    }
+  );
+
   // Debug logging - Focus on sessionData which contains real backend data
   console.log(
     "🏠 Header - Session data:",
-    JSON.stringify(sessionData, null, 2),
+    JSON.stringify(sessionData, null, 2)
   );
   console.log(
     "🏠 Header - Backend user data:",
-    JSON.stringify(sessionData?.data, null, 2),
+    JSON.stringify(sessionData?.data, null, 2)
   );
   console.log(
     "🏠 Header - User category:",
     userCategory,
     "Is parent:",
-    isParent,
+    isParent
   );
   console.log(
     "🏠 Header - Student list:",
-    JSON.stringify(sessionData?.data?.student_list, null, 2),
+    JSON.stringify(sessionData?.data?.student_list, null, 2)
   );
 
   // Debug user name resolution
@@ -130,7 +162,7 @@ const Header = () => {
 
       console.log(
         "🔄 Fresh login response:",
-        JSON.stringify(response, null, 2),
+        JSON.stringify(response, null, 2)
       );
 
       if (response?.success && response?.data) {
@@ -146,17 +178,17 @@ const Header = () => {
 
         dispatch(setSessionData(enhancedSessionData));
         console.log(
-          "✅ Student data refreshed successfully with real API data!",
+          "✅ Student data refreshed successfully with real API data!"
         );
 
         if (showAlerts) {
           alert(
-            `Student data refreshed! Found ${response.data.student_list?.length || 0} students.`,
+            `Student data refreshed! Found ${response.data.student_list?.length || 0} students.`
           );
         }
       } else {
         console.log(
-          "⚠️ Login API returned invalid response, falling back to cache clear...",
+          "⚠️ Login API returned invalid response, falling back to cache clear..."
         );
         await AsyncStorage.removeItem("persist:root");
         dispatch(logout());
@@ -182,7 +214,7 @@ const Header = () => {
 
         if (showAlerts) {
           alert(
-            "Error refreshing student data. Please try logging out and back in manually.",
+            "Error refreshing student data. Please try logging out and back in manually."
           );
         }
       }
@@ -206,7 +238,7 @@ const Header = () => {
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "active" && sessionData?.data?.student_list) {
         console.log(
-          "🔄 App came to foreground, auto-refreshing student data...",
+          "🔄 App came to foreground, auto-refreshing student data..."
         );
         refreshStudentData(false); // Silent refresh (no alerts)
       }
@@ -214,7 +246,7 @@ const Header = () => {
 
     const subscription = AppState.addEventListener(
       "change",
-      handleAppStateChange,
+      handleAppStateChange
     );
 
     // Set up periodic refresh every 5 minutes
@@ -225,7 +257,7 @@ const Header = () => {
           refreshStudentData(false); // Silent refresh (no alerts)
         }
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     ); // 5 minutes
 
     // Cleanup subscription and interval on unmount
@@ -255,7 +287,7 @@ const Header = () => {
           duration: 3000,
           useNativeDriver: false, // Keep false for color/shadow animations
         }),
-      ]),
+      ])
     );
 
     // Create shadow animation with glow effect
@@ -271,7 +303,7 @@ const Header = () => {
           duration: 2500,
           useNativeDriver: false, // Keep false for shadow animations
         }),
-      ]),
+      ])
     );
 
     // Create subtle rotation animation
@@ -280,7 +312,7 @@ const Header = () => {
         toValue: 1,
         duration: 8000,
         useNativeDriver: false, // Changed to false to avoid mixing native/JS drivers
-      }),
+      })
     );
 
     pulseAnimation.start();
@@ -323,8 +355,78 @@ const Header = () => {
     setShowStudentSelector(true);
   };
 
-  // TODO: Replace with real notification data from API
-  const notifications = [];
+  // Process notification data from API
+  const notifications = React.useMemo(() => {
+    if (!notificationsData?.data) return [];
+
+    // Take first 5 notifications and transform them for header popup
+    return notificationsData.data.slice(0, 5).map((notification) => ({
+      id: notification.id,
+      title: notification.title,
+      message: notification.message,
+      time: notification.time_ago,
+      type: notification.notification_type?.slug || "general",
+      read: notification.is_read,
+      icon: notification.notification_type?.icon || "notifications",
+      color: notification.notification_type?.color || "#7c2d3e",
+      priority: notification.priority,
+      // Legacy fields for compatibility
+      isRead: notification.is_read,
+    }));
+  }, [notificationsData]);
+
+  // Log notification data for debugging
+  React.useEffect(() => {
+    if (notificationsData) {
+      console.log("🔔 Header - Notification data received:", {
+        totalCount: notificationsData.data?.length || 0,
+        hasData: !!notificationsData.data,
+        firstFew: notificationsData.data?.slice(0, 2).map((n) => ({
+          id: n.id,
+          title: n.title,
+          is_read: n.is_read,
+        })),
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }, [notificationsData]);
+
+  React.useEffect(() => {
+    if (notificationsError) {
+      console.error("🔔 Header - Notification API error:", {
+        error: notificationsError,
+        status: notificationsError?.status,
+        data: notificationsError?.data,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }, [notificationsError]);
+
+  // Auto-reload notifications on login and component mount
+  React.useEffect(() => {
+    if (userId && userToken) {
+      console.log("🔔 Header - User logged in, refreshing notifications...");
+      refetchNotifications();
+    }
+  }, [userId, userToken, refetchNotifications]);
+
+  // Auto-reload notifications when app comes to foreground
+  React.useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "active" && userId && userToken) {
+        console.log(
+          "🔔 Header - App came to foreground, refreshing notifications..."
+        );
+        refetchNotifications();
+      }
+    };
+
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+    return () => subscription?.remove();
+  }, [userId, userToken, refetchNotifications]);
 
   // Get student data from backend API response
   const backendStudentList = sessionData?.data?.student_list || [];
@@ -348,11 +450,11 @@ const Header = () => {
     // Transform student data using utility function
     const transformedStudent = transformStudentWithProfilePicture(
       student,
-      sessionData,
+      sessionData
     );
 
     console.log(
-      `🎓 Header - Using API calling name: "${transformedStudent.student_calling_name}" for student "${transformedStudent.name}"`,
+      `🎓 Header - Using API calling name: "${transformedStudent.student_calling_name}" for student "${transformedStudent.name}"`
     );
     console.log(`🎓 Header - Student grade_level_class data:`, {
       student_id: transformedStudent.id,
@@ -364,7 +466,7 @@ const Header = () => {
       {
         attachments: student.attachments,
         profileImage: transformedStudent.profileImage,
-      },
+      }
     );
 
     return transformedStudent;
@@ -438,10 +540,10 @@ const Header = () => {
   console.log(`🎓 Header - Total students: ${transformedStudents.length}`);
   console.log(`🎓 Header - Has multiple students: ${hasMultipleStudents}`);
   console.log(
-    `🎓 Header - Current student: ${currentStudent?.student_calling_name}`,
+    `🎓 Header - Current student: ${currentStudent?.student_calling_name}`
   );
   console.log(
-    `🎓 Header - Selected student ID: ${selectedStudent?.id || "none"}`,
+    `🎓 Header - Selected student ID: ${selectedStudent?.id || "none"}`
   );
 
   // Enhanced auto-select first student logic with proper dependency management
@@ -450,7 +552,7 @@ const Header = () => {
     if (hasStudents && !selectedStudent && transformedStudents.length > 0) {
       const firstStudent = transformedStudents[0];
       console.log(
-        `🎓 Header - Auto-selecting first student: ${firstStudent?.student_calling_name} (ID: ${firstStudent?.student_id})`,
+        `🎓 Header - Auto-selecting first student: ${firstStudent?.student_calling_name} (ID: ${firstStudent?.student_id})`
       );
       console.log(`🎓 Header - Auto-selected student class info:`, {
         student_calling_name: firstStudent?.student_calling_name,
@@ -464,11 +566,11 @@ const Header = () => {
     // If we have a selected student but it's not in the current list (e.g., after data refresh)
     else if (selectedStudent && transformedStudents.length > 0) {
       const studentExists = transformedStudents.find(
-        (student) => student.student_id === selectedStudent.student_id,
+        (student) => student.student_id === selectedStudent.student_id
       );
       if (!studentExists) {
         console.log(
-          `🎓 Header - Selected student no longer exists, auto-selecting first available: ${transformedStudents[0]?.student_calling_name}`,
+          `🎓 Header - Selected student no longer exists, auto-selecting first available: ${transformedStudents[0]?.student_calling_name}`
         );
         dispatch(setSelectedStudent(transformedStudents[0]));
       }
@@ -479,11 +581,11 @@ const Header = () => {
   useEffect(() => {
     if (selectedStudent) {
       console.log(
-        `🎓 Header - Student selection changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`,
+        `🎓 Header - Student selection changed to: ${selectedStudent.student_calling_name} (ID: ${selectedStudent.student_id})`
       );
       console.log(
         `🎓 Header - Selected student details:`,
-        JSON.stringify(selectedStudent, null, 2),
+        JSON.stringify(selectedStudent, null, 2)
       );
     } else {
       console.log(`🎓 Header - No student currently selected`);
@@ -492,26 +594,56 @@ const Header = () => {
 
   // Calculate unread notifications count
   const unreadCount = notifications.filter(
-    (notification) => !notification.read,
+    (notification) => !notification.read
   ).length;
+
+  // Check if we're currently on the notifications page for active state
+  const isOnNotificationsPage = pathname?.includes("/notifications");
 
   const handleMenuPress = () => {
     openDrawer();
   };
 
   const handleNotificationPress = () => {
-    console.log("Notification pressed");
+    console.log("🔔 Header - Notification button pressed");
     setShowNotifications(true);
   };
 
+  const handleNotificationItemPress = (notificationId) => {
+    console.log(
+      `🔔 Header - Notification item ${notificationId} pressed, navigating to notifications section`
+    );
+
+    // Close the popup modal
+    setShowNotifications(false);
+
+    // Navigate to notification section based on user category
+    const notificationRoute = `/authenticated/${userCategory}/notifications`;
+
+    try {
+      router.push(notificationRoute);
+      console.log(`🔔 Header - Navigation successful to: ${notificationRoute}`);
+
+      // Trigger notification reload after a short delay to ensure navigation completes
+      setTimeout(() => {
+        refetchNotifications();
+        console.log("🔔 Header - Notifications reloaded after navigation");
+      }, 500);
+    } catch (error) {
+      console.error("🔔 Header - Navigation failed:", error);
+      // Fallback navigation
+      router.push("/authenticated/notifications");
+    }
+  };
+
   const handleMarkAsRead = (notificationId) => {
-    console.log(`Mark notification ${notificationId} as read`);
-    // In real app, this would update the notification status via API
+    console.log(`🔔 Header - Mark notification ${notificationId} as read`);
+    // TODO: Implement mark as read API call when available
   };
 
   const handleMarkAllAsRead = () => {
-    console.log("Mark all notifications as read");
-    // In real app, this would update all notifications via API
+    console.log("🔔 Header - Mark all notifications as read");
+    // TODO: Implement mark all as read API call when available
   };
 
   const handleStudentSelect = (student) => {
@@ -606,9 +738,18 @@ const Header = () => {
 
         <TouchableOpacity
           onPress={handleNotificationPress}
-          style={styles.notificationButton}
+          style={[
+            styles.notificationButton,
+            isOnNotificationsPage && styles.notificationButtonActive,
+          ]}
         >
-          <MaterialIcons name="notifications-none" size={26} color="#333" />
+          <MaterialIcons
+            name={
+              isOnNotificationsPage ? "notifications" : "notifications-none"
+            }
+            size={26}
+            color={isOnNotificationsPage ? "#7c2d3e" : "#333"}
+          />
           {unreadCount > 0 && (
             <View style={styles.notificationBadge}>
               <Text style={styles.notificationBadgeText}>
@@ -801,58 +942,83 @@ const Header = () => {
           onPress={() => setShowNotifications(false)}
         >
           <View style={styles.notificationModalContent}>
+            {/* Simple Header */}
             <View style={styles.notificationHeader}>
               <Text style={styles.notificationTitle}>Notifications</Text>
-              {unreadCount > 0 && (
-                <TouchableOpacity onPress={handleMarkAllAsRead}>
-                  <Text style={styles.markAllReadText}>Mark all as read</Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                onPress={() => setShowNotifications(false)}
+                style={styles.closeModalButton}
+              >
+                <MaterialIcons name="close" size={18} color="#666" />
+              </TouchableOpacity>
             </View>
 
-            <FlatList
-              data={notifications}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.notificationItem,
-                    !item.read && styles.unreadNotificationItem,
-                  ]}
-                  onPress={() => handleMarkAsRead(item.id)}
-                >
-                  <View style={styles.notificationContent}>
-                    <View style={styles.notificationIconContainer}>
+            {notifications.length > 0 ? (
+              <FlatList
+                data={notifications}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      styles.notificationItem,
+                      !item.read && styles.unreadNotificationItem,
+                    ]}
+                    // onPress={() => handleNotificationItemPress(item.id)}
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.notificationContent}>
                       <MaterialIcons
-                        name={
-                          item.type === "assignment"
-                            ? "assignment"
-                            : item.type === "meeting"
-                              ? "event"
-                              : item.type === "payment"
-                                ? "payment"
-                                : "notifications"
-                        }
+                        name={item.icon || "notifications"}
                         size={20}
-                        color={!item.read ? theme.colors.primary : "#666666"}
+                        color={!item.read ? "#7c2d3e" : "#999999"}
                       />
+                      <View style={styles.notificationTextContainer}>
+                        <Text
+                          style={[
+                            styles.notificationItemTitle,
+                            item.read && styles.readNotificationTitle,
+                          ]}
+                          numberOfLines={1}
+                        >
+                          {item.title}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.notificationMessage,
+                            item.read && styles.readNotificationMessage,
+                          ]}
+                          numberOfLines={1}
+                        >
+                          {item.message}
+                        </Text>
+                      </View>
+                      <Text
+                        style={[
+                          styles.notificationTime,
+                          item.read && styles.readNotificationTime,
+                        ]}
+                      >
+                        {item.time}
+                      </Text>
                       {!item.read && <View style={styles.unreadDot} />}
                     </View>
-                    <View style={styles.notificationTextContainer}>
-                      <Text style={styles.notificationItemTitle}>
-                        {item.title}
-                      </Text>
-                      <Text style={styles.notificationMessage}>
-                        {item.message}
-                      </Text>
-                      <Text style={styles.notificationTime}>{item.time}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.id.toString()}
-              style={styles.notificationList}
-              showsVerticalScrollIndicator={false}
-            />
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id.toString()}
+                style={styles.notificationList}
+                showsVerticalScrollIndicator={false}
+              />
+            ) : (
+              <View style={styles.noNotificationsContainer}>
+                <MaterialIcons
+                  name="notifications-none"
+                  size={32}
+                  color="#ccc"
+                />
+                <Text style={styles.noNotificationsText}>
+                  {notificationsLoading ? "Loading..." : "No notifications"}
+                </Text>
+              </View>
+            )}
           </View>
         </TouchableOpacity>
       </Modal>
@@ -914,14 +1080,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8F9FA",
     alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
     position: "relative",
+  },
+  notificationButtonActive: {
+    backgroundColor: "#f3e8ea",
+    borderWidth: 2,
+    borderColor: "#7c2d3e",
   },
   notificationBadge: {
     position: "absolute",
     top: 2,
     right: 2,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: "#7c2d3e",
     borderRadius: 12,
     minWidth: 24,
     height: 24,
@@ -1158,19 +1328,19 @@ const styles = StyleSheet.create({
   },
   notificationModalContent: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: theme.spacing.lg,
+    borderRadius: 12,
     width: width * 0.9,
-    maxHeight: 500,
+    maxHeight: 350,
+    marginTop: 80,
     ...Platform.select({
       ios: {
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.25,
-        shadowRadius: 16,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
       },
       android: {
-        elevation: 16,
+        elevation: 8,
       },
     }),
   },
@@ -1178,15 +1348,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
+    borderBottomColor: "#f0f0f0",
+  },
+  closeModalButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
+    justifyContent: "center",
   },
   notificationTitle: {
     fontFamily: theme.fonts.bold,
-    fontSize: 18,
-    color: "#000000",
+    fontSize: 16,
+    color: "#333",
   },
   markAllReadText: {
     fontFamily: theme.fonts.medium,
@@ -1194,33 +1372,27 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   notificationList: {
-    maxHeight: 400,
+    maxHeight: 260,
   },
   notificationItem: {
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.xs,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#F8F8F8",
+    borderBottomColor: "#f0f0f0",
   },
   unreadNotificationItem: {
-    backgroundColor: "#FFF8F0",
+    backgroundColor: "#fef9fa",
   },
   notificationContent: {
     flexDirection: "row",
-    alignItems: "flex-start",
-  },
-  notificationIconContainer: {
-    marginRight: theme.spacing.sm,
-    position: "relative",
+    alignItems: "center",
+    gap: 12,
   },
   unreadDot: {
-    position: "absolute",
-    top: -2,
-    right: -2,
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: "#7c2d3e",
   },
   notificationTextContainer: {
     flex: 1,
@@ -1228,20 +1400,41 @@ const styles = StyleSheet.create({
   notificationItemTitle: {
     fontFamily: theme.fonts.bold,
     fontSize: 14,
-    color: "#000000",
-    marginBottom: 4,
+    color: "#333",
+    marginBottom: 2,
   },
   notificationMessage: {
     fontFamily: theme.fonts.regular,
     fontSize: 12,
-    color: "#666666",
-    lineHeight: 18,
-    marginBottom: 4,
+    color: "#666",
   },
   notificationTime: {
     fontFamily: theme.fonts.regular,
-    fontSize: 10,
-    color: "#999999",
+    fontSize: 11,
+    color: "#999",
+    minWidth: 50,
+  },
+  readNotificationTitle: {
+    color: "#999",
+  },
+  readNotificationMessage: {
+    color: "#aaa",
+  },
+  readNotificationTime: {
+    color: "#ccc",
+  },
+  noNotificationsContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  noNotificationsText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 14,
+    color: "#999",
+    marginTop: 8,
+    textAlign: "center",
   },
 });
 

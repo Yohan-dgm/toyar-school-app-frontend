@@ -20,11 +20,11 @@ const TeachersModalContent: React.FC = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [expandedTeachers, setExpandedTeachers] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   const [selectedGradeFilter, setSelectedGradeFilter] = useState<string | null>(
-    null
+    null,
   );
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<
     string | null
@@ -112,14 +112,14 @@ const TeachersModalContent: React.FC = () => {
           teacher.calling_name?.toLowerCase().includes(searchLower) ||
           teacher.employee_number?.toLowerCase().includes(searchLower) ||
           teacher.email?.toLowerCase().includes(searchLower) ||
-          teacher.designation?.toLowerCase().includes(searchLower)
+          teacher.designation?.toLowerCase().includes(searchLower),
       );
     }
 
     // Apply educator grade filter
     if (selectedGradeFilter !== null) {
       filtered = filtered.filter(
-        (teacher: any) => teacher.educator_grade === selectedGradeFilter
+        (teacher: any) => teacher.educator_grade === selectedGradeFilter,
       );
     }
 
@@ -129,7 +129,7 @@ const TeachersModalContent: React.FC = () => {
         (teacher: any) =>
           teacher.subject_names &&
           Array.isArray(teacher.subject_names) &&
-          teacher.subject_names.includes(selectedSubjectFilter)
+          teacher.subject_names.includes(selectedSubjectFilter),
       );
     }
 
@@ -209,14 +209,14 @@ const TeachersModalContent: React.FC = () => {
             } else {
               Alert.alert(
                 "Invalid Page",
-                `Please enter a page number between 1 and ${actualTotalPages}`
+                `Please enter a page number between 1 and ${actualTotalPages}`,
               );
             }
           },
         },
       ],
       "plain-text",
-      currentPage.toString()
+      currentPage.toString(),
     );
   };
 
@@ -615,13 +615,13 @@ const TeachersModalContent: React.FC = () => {
             Previous
           </Text>
         </TouchableOpacity>
-        
+
         <View style={styles.pageInfo}>
           <Text style={styles.pageText}>
             Page {currentPage} of {actualTotalPages}
           </Text>
         </View>
-        
+
         <TouchableOpacity
           style={[
             styles.paginationButton,

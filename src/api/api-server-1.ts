@@ -15,6 +15,13 @@ export const apiServer1 = createApi({
     "Auth",
     "News",
     "NewsCategories",
+    "Notifications",
+    "Messages",
+    "NotificationPreferences",
+    "NotificationTypes",
+    "NotificationStats",
+    "Announcements",
+    "AnnouncementCategories",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1,

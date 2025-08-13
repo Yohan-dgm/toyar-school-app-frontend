@@ -17,6 +17,9 @@ import { theme } from "../../../styles/theme";
 import MediaViewer from "../../media/MediaViewer";
 import Constants from "expo-constants";
 
+// Import media utilities
+import { buildActivityFeedMediaUrl, buildVideoThumbnailUrl } from "../../../utils/mediaUtils";
+
 // Import API hooks and slice actions
 import {
   useLazyGetSchoolPostsQuery,
@@ -49,15 +52,16 @@ const transformMediaData = (mediaArray) => {
 
   return mediaArray
     .map((mediaItem) => {
-      const baseUrl = API_BASE_URL.endsWith("/")
-        ? API_BASE_URL.slice(0, -1)
-        : API_BASE_URL;
-
-      // Construct media URL using the backend URL structure
-      const mediaUrl = `${baseUrl}${mediaItem.url}`;
-      const thumbnailUrl = mediaItem.thumbnail_url
-        ? `${baseUrl}${mediaItem.thumbnail_url}`
-        : null;
+      // Use the new media URL builder to construct proper URLs
+      const filename = mediaItem.filename || `file.${mediaItem.type === 'image' ? 'jpg' : mediaItem.type === 'video' ? 'mp4' : 'pdf'}`;
+      const mediaUrl = buildActivityFeedMediaUrl(mediaItem.url, filename);
+      
+      let thumbnailUrl = null;
+      if (mediaItem.thumbnail_url) {
+        // Extract filename from thumbnail URL or use a default
+        const thumbnailFilename = mediaItem.thumbnail_url.split('/').pop() || 'thumbnail.jpg';
+        thumbnailUrl = buildVideoThumbnailUrl(mediaItem.thumbnail_url, thumbnailFilename);
+      }
 
       switch (mediaItem.type) {
         case "image":
@@ -65,7 +69,7 @@ const transformMediaData = (mediaArray) => {
             type: "image",
             uri: mediaUrl,
             id: mediaItem.id,
-            filename: mediaItem.filename || "image.jpg",
+            filename: filename,
             size: mediaItem.size || 0,
           };
 
@@ -75,7 +79,7 @@ const transformMediaData = (mediaArray) => {
             uri: mediaUrl,
             thumbnail: thumbnailUrl || mediaUrl, // Use thumbnail or fallback to video URL
             id: mediaItem.id,
-            filename: mediaItem.filename || "video.mp4",
+            filename: filename,
             size: mediaItem.size || 0,
           };
 
@@ -83,7 +87,7 @@ const transformMediaData = (mediaArray) => {
           return {
             type: "pdf",
             uri: mediaUrl,
-            fileName: mediaItem.filename || "document.pdf",
+            fileName: filename,
             fileSize: mediaItem.size
               ? `${(mediaItem.size / 1024 / 1024).toFixed(1)} MB`
               : "Unknown size",

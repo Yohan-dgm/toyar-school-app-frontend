@@ -29,14 +29,17 @@ import { getHouseProfileColor } from "../../../../../constants/schoolHouses";
 // Helper function to extract house name from student data
 const getStudentHouseName = (student: any): string | null => {
   if (!student.school_house) return null;
-  
+
   // Handle both string and object formats
-  if (typeof student.school_house === 'string') {
+  if (typeof student.school_house === "string") {
     return student.school_house;
-  } else if (typeof student.school_house === 'object' && student.school_house.name) {
+  } else if (
+    typeof student.school_house === "object" &&
+    student.school_house.name
+  ) {
     return student.school_house.name;
   }
-  
+
   return null;
 };
 
@@ -45,13 +48,13 @@ const StudentsModalContent: React.FC = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [expandedStudents, setExpandedStudents] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [selectedGradeFilter, setSelectedGradeFilter] = useState<number | null>(
-    null
+    null,
   );
   const [selectedHouseFilter, setSelectedHouseFilter] = useState<string | null>(
-    null
+    null,
   );
   const [showFilters, setShowFilters] = useState(true);
 
@@ -115,25 +118,23 @@ const StudentsModalContent: React.FC = () => {
         (student: any) =>
           student.full_name?.toLowerCase().includes(searchLower) ||
           student.admission_number?.toLowerCase().includes(searchLower) ||
-          student.student_calling_name?.toLowerCase().includes(searchLower)
+          student.student_calling_name?.toLowerCase().includes(searchLower),
       );
     }
 
     // Apply grade filter
     if (selectedGradeFilter !== null) {
       filtered = filtered.filter(
-        (student: any) => student.grade_level_id === selectedGradeFilter
+        (student: any) => student.grade_level_id === selectedGradeFilter,
       );
     }
 
     // Apply house filter
     if (selectedHouseFilter !== null) {
-      filtered = filtered.filter(
-        (student: any) => {
-          const houseName = getStudentHouseName(student);
-          return houseName && houseName.trim() === selectedHouseFilter;
-        }
-      );
+      filtered = filtered.filter((student: any) => {
+        const houseName = getStudentHouseName(student);
+        return houseName && houseName.trim() === selectedHouseFilter;
+      });
     }
 
     return filtered;
@@ -207,14 +208,14 @@ const StudentsModalContent: React.FC = () => {
             } else {
               Alert.alert(
                 "Invalid Page",
-                `Please enter a page number between 1 and ${actualTotalPages}`
+                `Please enter a page number between 1 and ${actualTotalPages}`,
               );
             }
           },
         },
       ],
       "plain-text",
-      currentPage.toString()
+      currentPage.toString(),
     );
   };
 
@@ -257,7 +258,7 @@ const StudentsModalContent: React.FC = () => {
     console.log(`🏠 Student ${student.full_name}:`, {
       rawHouseData: student.school_house,
       extractedHouseName: houseName,
-      borderColor: houseColor
+      borderColor: houseColor,
     });
 
     return (
@@ -272,8 +273,8 @@ const StudentsModalContent: React.FC = () => {
             style={[
               styles.studentAvatar,
               {
-                borderColor: getHouseProfileColor(student.school_house)
-              }
+                borderColor: getHouseProfileColor(student.school_house),
+              },
             ]}
             onError={() => console.log("Failed to load profile image")}
           />
@@ -310,8 +311,8 @@ const StudentsModalContent: React.FC = () => {
                   style={[
                     styles.largeProfileImage,
                     {
-                      borderColor: getHouseProfileColor(student.school_house)
-                    }
+                      borderColor: getHouseProfileColor(student.school_house),
+                    },
                   ]}
                   defaultSource={getLocalFallbackProfileImage()}
                   onError={(error) => {
@@ -758,13 +759,13 @@ const StudentsModalContent: React.FC = () => {
             Previous
           </Text>
         </TouchableOpacity>
-        
+
         <View style={styles.pageInfo}>
           <Text style={styles.pageText}>
             Page {currentPage} of {actualTotalPages}
           </Text>
         </View>
-        
+
         <TouchableOpacity
           style={[
             styles.paginationButton,

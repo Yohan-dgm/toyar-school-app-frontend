@@ -202,7 +202,7 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
       if (mcq.mcqOptions.length < 2) {
         Alert.alert(
           "Error",
-          "Multiple choice questions must have at least 2 options"
+          "Multiple choice questions must have at least 2 options",
         );
         return;
       }
@@ -217,7 +217,7 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
       if (invalidOptionMarks.length > 0) {
         Alert.alert(
           "Error",
-          "All multiple choice options must have marks >= 0"
+          "All multiple choice options must have marks >= 0",
         );
         return;
       }
@@ -278,10 +278,12 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
   const updateQuestion = (
     questionId: number,
     field: keyof Question,
-    value: any
+    value: any,
   ) => {
     setQuestions(
-      questions.map((q) => (q.id === questionId ? { ...q, [field]: value } : q))
+      questions.map((q) =>
+        q.id === questionId ? { ...q, [field]: value } : q,
+      ),
     );
   };
 
@@ -305,7 +307,7 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
     if (!question) return;
 
     const updatedOptions = question.mcqOptions.filter(
-      (opt) => opt.id !== optionId
+      (opt) => opt.id !== optionId,
     );
     updateQuestion(questionId, "mcqOptions", updatedOptions);
   };
@@ -314,13 +316,13 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
     questionId: number,
     optionId: number,
     field: keyof MCQOption,
-    value: any
+    value: any,
   ) => {
     const question = questions.find((q) => q.id === questionId);
     if (!question) return;
 
     const updatedOptions = question.mcqOptions.map((opt) =>
-      opt.id === optionId ? { ...opt, [field]: value } : opt
+      opt.id === optionId ? { ...opt, [field]: value } : opt,
     );
     updateQuestion(questionId, "mcqOptions", updatedOptions);
   };
@@ -568,7 +570,7 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
                               question.id,
                               option.id,
                               "text",
-                              text
+                              text,
                             )
                           }
                         />
@@ -587,7 +589,7 @@ const AddCategoryOverlay: React.FC<AddCategoryOverlayProps> = ({
                                 question.id,
                                 option.id,
                                 "marks",
-                                marks
+                                marks,
                               );
                             }}
                             keyboardType="numeric"
@@ -834,7 +836,7 @@ const EvaluationSection: React.FC<{
           {evaluations.length > 0 ? (
             evaluations.map((evaluation: any, index: number) => {
               const colors = getEvaluationStatusColor(
-                evaluation.edu_fd_evaluation_type_id
+                evaluation.edu_fd_evaluation_type_id,
               );
               const isLast = index === evaluations.length - 1;
 
@@ -914,7 +916,7 @@ const EvaluationSection: React.FC<{
                               day: "numeric",
                               hour: "2-digit",
                               minute: "2-digit",
-                            }
+                            },
                           )
                         : "Date not available"}
                     </Text>
@@ -948,7 +950,7 @@ const EvaluationSection: React.FC<{
         {evaluations.length > 0 ? (
           evaluations.map((evaluation: any, index: number) => {
             const colors = getEvaluationStatusColor(
-              evaluation.edu_fd_evaluation_type_id
+              evaluation.edu_fd_evaluation_type_id,
             );
             const isLast = index === evaluations.length - 1;
 
@@ -1016,7 +1018,7 @@ const EvaluationSection: React.FC<{
                             day: "numeric",
                             hour: "2-digit",
                             minute: "2-digit",
-                          }
+                          },
                         )
                       : "Date not available"}
                   </Text>
@@ -1220,14 +1222,14 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     console.warn(
       "⚠️ EducatorFeedbackModal: 'visible' prop should be boolean, received:",
       typeof visible,
-      visible
+      visible,
     );
   }
   if (typeof onClose !== "function") {
     console.warn(
       "⚠️ EducatorFeedbackModal: 'onClose' prop should be function, received:",
       typeof onClose,
-      onClose
+      onClose,
     );
   }
 
@@ -1316,7 +1318,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
   const [feedbackDescription, setFeedbackDescription] = useState("");
   const [mainCategory, setMainCategory] = useState<string>("");
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(
-    []
+    [],
   );
   const [feedbackRating, setFeedbackRating] = useState(0);
   // Inline Add Category State
@@ -1354,7 +1356,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
   // Questionnaire States (inline display)
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
-    null
+    null,
   );
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState<{
     [key: string]: {
@@ -1375,7 +1377,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     answer: any,
     marks?: number,
     weight?: number,
-    answerId?: number
+    answerId?: number,
   ) => {
     setQuestionnaireAnswers((prev) => ({
       ...prev,
@@ -1494,7 +1496,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
   React.useEffect(() => {
     console.log(
       "🔄 Expanded card state changed - expandedItemId:",
-      expandedItemId
+      expandedItemId,
     );
   }, [expandedItemId]);
 
@@ -1504,7 +1506,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
   const mainCategories = React.useMemo(() => {
     console.log(
       "🔍 Processing categories - Raw categoriesData:",
-      categoriesData
+      categoriesData,
     );
     console.log("🔍 Legacy categoriesData:", legacyCategoriesData);
 
@@ -1537,7 +1539,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     }
 
     const filteredCategories = categoriesArray.filter(
-      (cat: any) => cat?.active !== false
+      (cat: any) => cat?.active !== false,
     );
     console.log("✅ Filtered categories:", filteredCategories);
     return filteredCategories;
@@ -1639,25 +1641,25 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
       return `Data processing error in ${context}. Please refresh and try again.`;
     },
-    []
+    [],
   );
 
   const handleValidationError = React.useCallback(
     (field: string, value: any, rule: string) => {
       console.warn(
         `⚠️ Validation Error - Field: ${field}, Rule: ${rule}, Value:`,
-        value
+        value,
       );
       return `${field} ${rule}`;
     },
-    []
+    [],
   );
 
   const handleRetryableAction = React.useCallback(
     async (
       action: () => Promise<any>,
       maxRetries: number = 3,
-      context: string = "Action"
+      context: string = "Action",
     ) => {
       let lastError;
 
@@ -1678,7 +1680,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
             error?.status === 404
           ) {
             console.log(
-              `🚫 Not retrying ${context} due to error status: ${error.status}`
+              `🚫 Not retrying ${context} due to error status: ${error.status}`,
             );
             break;
           }
@@ -1695,7 +1697,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
       console.error(`❌ ${context} failed after ${maxRetries} attempts`);
       throw lastError;
     },
-    []
+    [],
   );
 
   // ===== ERROR STATE CHECKS =====
@@ -1826,7 +1828,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     mainCategories.forEach((category: any) => {
       if (category.subcategories && Array.isArray(category.subcategories)) {
         result[category.name] = category.subcategories.map(
-          (sub: any) => sub.name
+          (sub: any) => sub.name,
         );
       } else {
         result[category.name] = [];
@@ -1899,7 +1901,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
   const customSubcategories: { [key: string]: string[] } = {};
   customCategories.forEach((category) => {
     customSubcategories[category.title] = category.questions.map(
-      (q) => q.text || `Question ${q.id}`
+      (q) => q.text || `Question ${q.id}`,
     );
   });
 
@@ -1948,7 +1950,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
             evaluation.is_active === true &&
             evaluation.edu_fd_evaluation_type_id === selectedEvaluationType
           );
-        }
+        },
       );
 
       if (!hasMatchingEvaluation) {
@@ -1961,7 +1963,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               id: e.edu_fd_evaluation_type_id,
               isActive: e.is_active,
             })),
-          }
+          },
         );
         return false;
       }
@@ -2026,7 +2028,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
   const handleToggleAddEvaluationForm = (feedbackId: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShowAddEvaluationForm(
-      showAddEvaluationForm === feedbackId ? null : feedbackId
+      showAddEvaluationForm === feedbackId ? null : feedbackId,
     );
   };
 
@@ -2056,12 +2058,12 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               Alert.alert(
                 "Error",
                 "Failed to delete evaluation. Please try again.",
-                [{ text: "OK" }]
+                [{ text: "OK" }],
               );
             }
           },
         },
-      ]
+      ],
     );
   };
 
@@ -2081,7 +2083,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
             try {
               console.log(
                 "🚀 Sending delete request for feedback ID:",
-                feedbackId
+                feedbackId,
               );
               await deleteFeedback(feedbackId).unwrap();
               console.log("✅ Feedback deleted successfully");
@@ -2098,18 +2100,18 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               Alert.alert(
                 "Success",
                 "Feedback has been deleted successfully.",
-                [{ text: "OK" }]
+                [{ text: "OK" }],
               );
             } catch (error) {
               console.error("❌ Failed to delete feedback:", error);
               Alert.alert(
                 "Error",
-                "Failed to delete feedback. Please try again."
+                "Failed to delete feedback. Please try again.",
               );
             }
           },
         },
-      ]
+      ],
     );
   };
 
@@ -2239,31 +2241,31 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
         if (!question.mcqOptions || question.mcqOptions.length === 0) {
           Alert.alert(
             "Error",
-            `MCQ question "${question.text}" must have at least one option`
+            `MCQ question "${question.text}" must have at least one option`,
           );
           return;
         }
 
         // Check if all MCQ options have text
         const emptyOptions = question.mcqOptions.filter(
-          (opt) => !opt.text.trim()
+          (opt) => !opt.text.trim(),
         );
         if (emptyOptions.length > 0) {
           Alert.alert(
             "Error",
-            `All MCQ options for question "${question.text}" must have text`
+            `All MCQ options for question "${question.text}" must have text`,
           );
           return;
         }
 
         // Check if all MCQ options have valid marks (1-5)
         const invalidMarks = question.mcqOptions.filter(
-          (opt) => opt.marks < 1 || opt.marks > 5
+          (opt) => opt.marks < 1 || opt.marks > 5,
         );
         if (invalidMarks.length > 0) {
           Alert.alert(
             "Error",
-            `All MCQ options for question "${question.text}" must have marks between 1 and 5`
+            `All MCQ options for question "${question.text}" must have marks between 1 and 5`,
           );
           return;
         }
@@ -2274,7 +2276,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
         if (marks.length !== uniqueMarks.length) {
           Alert.alert(
             "Error",
-            `MCQ options for question "${question.text}" cannot have duplicate marks. Each option must have a unique mark value.`
+            `MCQ options for question "${question.text}" cannot have duplicate marks. Each option must have a unique mark value.`,
           );
           return;
         }
@@ -2360,7 +2362,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
       Alert.alert(
         "Success",
         `Category "${newCategoryTitle}" created successfully! It has been automatically selected as your main category.`,
-        [{ text: "OK" }]
+        [{ text: "OK" }],
       );
     } catch (error: any) {
       console.error("❌ Failed to create category:", error);
@@ -2380,7 +2382,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
   const handleQuestionClick = (questionId: string) => {
     setSelectedQuestionId(
-      selectedQuestionId === questionId ? null : questionId
+      selectedQuestionId === questionId ? null : questionId,
     );
   };
 
@@ -2389,7 +2391,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     answer: any,
     marks?: number,
     weight?: number,
-    answerId?: number
+    answerId?: number,
   ) => {
     console.log("🎯 Answer Handler Called:", {
       questionId,
@@ -2411,7 +2413,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     };
     const answers = Object.values(updatedAnswers);
     const validAnswers = answers.filter(
-      (answer) => answer.marks !== undefined && answer.marks > 0
+      (answer) => answer.marks !== undefined && answer.marks > 0,
     );
 
     if (validAnswers.length > 0) {
@@ -2426,7 +2428,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
       const totalMarks = validAnswers.reduce(
         (sum, answer) => sum + (answer.marks || 0),
-        0
+        0,
       );
 
       // Calculate average and ensure it's within 1-5 bounds
@@ -2457,7 +2459,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     if (selectedSubcategories.includes(subcategory)) {
       // Remove subcategory
       setSelectedSubcategories(
-        selectedSubcategories.filter((sub) => sub !== subcategory)
+        selectedSubcategories.filter((sub) => sub !== subcategory),
       );
     } else {
       // Add subcategory (max 5)
@@ -2466,7 +2468,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
       } else {
         Alert.alert(
           "Maximum Limit",
-          "You can select up to 5 subcategories only."
+          "You can select up to 5 subcategories only.",
         );
       }
     }
@@ -2489,7 +2491,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
             setSelectedSubcategories([]);
           },
         },
-      ]
+      ],
     );
   };
 
@@ -2536,7 +2538,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
     // Check if questionnaire has required questions
     const requiredQuestions = questionnaireData.filter((q: any) => q.required);
     const answeredRequiredQuestions = requiredQuestions.filter(
-      (q: any) => questionnaireAnswers[q.id]
+      (q: any) => questionnaireAnswers[q.id],
     );
 
     if (
@@ -2546,7 +2548,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
       const unansweredCount =
         requiredQuestions.length - answeredRequiredQuestions.length;
       missingFields.push(
-        `• ${unansweredCount} required questionnaire question(s)`
+        `• ${unansweredCount} required questionnaire question(s)`,
       );
     }
 
@@ -2556,7 +2558,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
         warnings.length > 0 ? `\n\nWarnings:\n${warnings.join("\n")}` : "";
       Alert.alert(
         "Required Fields Missing",
-        `Please complete the following required fields:\n\n${missingFields.join("\n")}${warningText}\n\nNote: Subcategories are optional.`
+        `Please complete the following required fields:\n\n${missingFields.join("\n")}${warningText}\n\nNote: Subcategories are optional.`,
       );
       return;
     }
@@ -2569,7 +2571,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
         [
           { text: "Cancel", style: "cancel" },
           { text: "Submit Anyway", onPress: () => performSubmission() },
-        ]
+        ],
       );
       return;
     }
@@ -2584,20 +2586,20 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
         async () => {
           // Get category ID from selected category
           const selectedCategoryData = mainCategories.find(
-            (cat: any) => cat.name === mainCategory
+            (cat: any) => cat.name === mainCategory,
           );
           const categoryId = selectedCategoryData?.id;
 
           if (!categoryId) {
             throw new Error(
-              "Category ID not found. Please select a valid category."
+              "Category ID not found. Please select a valid category.",
             );
           }
 
           // Additional validation for required backend fields
           if (!selectedGradeId) {
             throw new Error(
-              "Grade level ID is required for backend submission."
+              "Grade level ID is required for backend submission.",
             );
           }
 
@@ -2615,14 +2617,14 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               edu_fb_predefined_answer_id: answerData.answerId || null,
               selected_predefined_answer_id: answerData.answerId || null,
               answer_mark: answerData.marks || 0,
-            })
+            }),
           );
 
           // Transform subcategories to backend format
           const subcategories_formatted = selectedSubcategories.map(
             (subcategoryName) => ({
               subcategory_name: subcategoryName,
-            })
+            }),
           );
 
           // Prepare data for API submission in backend format
@@ -2672,7 +2674,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
           return apiResponse.data;
         },
         2,
-        "Feedback Submission"
+        "Feedback Submission",
       );
 
       console.log("✅ Feedback submitted successfully:", result);
@@ -2717,7 +2719,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               { text: "Cancel", style: "cancel" },
               { text: "Retry", onPress: () => performSubmission() },
             ]
-          : [{ text: "OK" }]
+          : [{ text: "OK" }],
       );
     }
   };
@@ -2764,7 +2766,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
       Alert.alert(
         "Category Created!",
         `Category "${categoryData.title}" with ${categoryData.questions.length} questions has been created successfully!`,
-        [{ text: "OK" }]
+        [{ text: "OK" }],
       );
 
       // Close the modal
@@ -2785,7 +2787,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
   const renderStarRating = (
     rating: number,
-    onRatingPress?: (rating: number) => void
+    onRatingPress?: (rating: number) => void,
   ) => {
     return Array.from({ length: 5 }, (_, index) => (
       <TouchableOpacity
@@ -3101,7 +3103,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
               -
               {Math.min(
                 paginationInfo.current_page * paginationInfo.page_size,
-                paginationInfo.total_count
+                paginationInfo.total_count,
               )}{" "}
               of {paginationInfo.total_count} feedback(s)
             </Text>
@@ -3144,21 +3146,21 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
 
                 // Ensure all text values are safe strings
                 const studentName = String(
-                  item.student.student_calling_name || "Unknown Student"
+                  item.student.student_calling_name || "Unknown Student",
                 );
                 const admissionNumber = String(
-                  item.student.admission_number || "N/A"
+                  item.student.admission_number || "N/A",
                 );
                 const grade = String(item.grade_level.name || "Unknown Grade");
                 const description = String(
-                  item.comments[0].comment || "No description available"
+                  item.comments[0].comment || "No description available",
                 );
                 const createdBy = String(
-                  item.created_by.call_name_with_title || "Unknown Educator"
+                  item.created_by.call_name_with_title || "Unknown Educator",
                 );
                 const primaryCategory = String(item.category.name || "General");
                 const evaluationType = String(
-                  item.evaluations?.[0]?.evaluation_type?.name || ""
+                  item.evaluations?.[0]?.evaluation_type?.name || "",
                 );
                 // Get student profile image using utility function
                 const profileImageSource =
@@ -3372,13 +3374,13 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                         onPress={() => {
                           console.log(
                             "🗑️ Delete button clicked for item:",
-                            item
+                            item,
                           );
                           console.log("🗑️ Item ID:", item.id);
                           console.log("🗑️ Item ID type:", typeof item.id);
                           console.log(
                             "🗑️ Available item fields:",
-                            Object.keys(item)
+                            Object.keys(item),
                           );
 
                           // Ensure ID is properly formatted
@@ -3862,7 +3864,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                   onPress={() => {
                                     const updatedQuestions =
                                       newCategoryQuestions.filter(
-                                        (_, i) => i !== index
+                                        (_, i) => i !== index,
                                       );
                                     setNewCategoryQuestions(updatedQuestions);
                                   }}
@@ -4010,10 +4012,10 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                                       index
                                                     ].mcqOptions!.filter(
                                                       (_, i) =>
-                                                        i !== optionIndex
+                                                        i !== optionIndex,
                                                     );
                                                   setNewCategoryQuestions(
-                                                    updatedQuestions
+                                                    updatedQuestions,
                                                   );
                                                 }}
                                               >
@@ -4041,7 +4043,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                               optionIndex
                                             ].text = text;
                                             setNewCategoryQuestions(
-                                              updatedQuestions
+                                              updatedQuestions,
                                             );
                                           }}
                                         />
@@ -4055,7 +4057,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                               (markValue) => {
                                                 const usedMarks = getUsedMarks(
                                                   index,
-                                                  optionIndex
+                                                  optionIndex,
                                                 );
                                                 const isUsed =
                                                   usedMarks.includes(markValue);
@@ -4088,7 +4090,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                                           optionIndex
                                                         ].marks = markValue;
                                                         setNewCategoryQuestions(
-                                                          updatedQuestions
+                                                          updatedQuestions,
                                                         );
                                                       }
                                                     }}
@@ -4110,13 +4112,13 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                                     </Text>
                                                   </TouchableOpacity>
                                                 );
-                                              }
+                                              },
                                             )}
                                           </View>
                                         </View>
                                       </View>
                                     </View>
-                                  )
+                                  ),
                                 )}
 
                                 {(!question.mcqOptions ||
@@ -4136,7 +4138,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                                           { text: "", marks: 1 },
                                         ];
                                         setNewCategoryQuestions(
-                                          updatedQuestions
+                                          updatedQuestions,
                                         );
                                       }}
                                     >
@@ -4290,7 +4292,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                         onQuestionSelect={(questionId) => {
                           console.log("🎯 Question Selected:", questionId);
                           setSelectedQuestionId(
-                            questionId ? parseInt(questionId) : null
+                            questionId ? parseInt(questionId) : null,
                           );
                         }}
                         onAnswerChange={handleQuestionAnswer}

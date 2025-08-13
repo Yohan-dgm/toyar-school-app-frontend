@@ -78,11 +78,11 @@ const SettingsSection = ({ onClose, onNavigateToSubSection }) => {
             });
             Alert.alert(
               "Success",
-              "Settings have been reset to default values."
+              "Settings have been reset to default values.",
             );
           },
         },
-      ]
+      ],
     );
   };
 

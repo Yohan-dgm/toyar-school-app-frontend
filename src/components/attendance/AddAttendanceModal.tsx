@@ -84,7 +84,9 @@ const AddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
 
   // Reset all states to default values
   const resetToDefaultState = () => {
-    console.log("🔄 Resetting Add Attendance Modal (legacy) to default state...");
+    console.log(
+      "🔄 Resetting Add Attendance Modal (legacy) to default state...",
+    );
     setSelectedDate(new Date());
     setSelectedGrade(null);
     setStudents([]);

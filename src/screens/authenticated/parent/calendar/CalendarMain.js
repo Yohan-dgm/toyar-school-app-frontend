@@ -34,7 +34,7 @@ const CalendarMain = () => {
 
   // Local state
   const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [calendarViewMode, setCalendarViewMode] = useState("day"); // "day" or "month"
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -46,7 +46,7 @@ const CalendarMain = () => {
   // Fetch calendar data on component mount
   useEffect(() => {
     console.log(
-      "📅 CalendarMain - Component mounted, fetching calendar data..."
+      "📅 CalendarMain - Component mounted, fetching calendar data...",
     );
     dispatch(fetchAllCalendarData());
 
@@ -65,7 +65,7 @@ const CalendarMain = () => {
   // Log calendar data updates
   useEffect(() => {
     console.log(
-      `📅 Calendar data updated: ${schoolEvents.length} events loaded`
+      `📅 Calendar data updated: ${schoolEvents.length} events loaded`,
     );
     if (errors && errors.length > 0) {
       console.warn("📅 Some calendar endpoints failed:", errors);
@@ -1060,7 +1060,7 @@ const CalendarMain = () => {
                                   styles.horizontalEventDot,
                                   {
                                     backgroundColor: getEventTypeColor(
-                                      event.type
+                                      event.type,
                                     ),
                                   },
                                 ]}
@@ -1359,7 +1359,7 @@ const CalendarMain = () => {
               {getSchoolEventsForDate(selectedDate).length > 0 ? (
                 getSchoolEventsForDate(selectedDate)
                   .sort((a, b) =>
-                    (a.start_time || "").localeCompare(b.start_time || "")
+                    (a.start_time || "").localeCompare(b.start_time || ""),
                   )
                   .map((event) => (
                     <TouchableOpacity
@@ -1368,7 +1368,7 @@ const CalendarMain = () => {
                         styles.selectedDayEventCard,
                         {
                           borderLeftColor: getEventTypeColor(
-                            event.event_category || event.type
+                            event.event_category || event.type,
                           ),
                         },
                       ]}
@@ -1388,18 +1388,18 @@ const CalendarMain = () => {
                             {
                               backgroundColor:
                                 getEventTypeColor(
-                                  event.event_category || event.type
+                                  event.event_category || event.type,
                                 ) + "20",
                             },
                           ]}
                         >
                           <MaterialIcons
                             name={getEventTypeIcon(
-                              event.event_category || event.type
+                              event.event_category || event.type,
                             )}
                             size={10}
                             color={getEventTypeColor(
-                              event.event_category || event.type
+                              event.event_category || event.type,
                             )}
                           />
                         </View>

@@ -442,7 +442,11 @@ export const attendanceApi = apiServer1.injectEndpoints({
           body: attendanceData,
         };
       },
-      invalidatesTags: ["Attendance", "StudentAttendance", "StudentAttendanceAggregated"],
+      invalidatesTags: [
+        "Attendance",
+        "StudentAttendance",
+        "StudentAttendanceAggregated",
+      ],
     }),
   }),
   overrideExisting: false,

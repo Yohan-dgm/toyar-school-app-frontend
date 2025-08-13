@@ -142,7 +142,7 @@ const ModernStudentAttendanceCard: React.FC<
       ]}
       onPress={() => {
         // Use the centralized attendance change handler
-        // which will handle late attendance modal logic  
+        // which will handle late attendance modal logic
         onAttendanceChange(student.id, status as any);
       }}
       activeOpacity={0.7}

@@ -62,7 +62,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
     currentPage,
     pageSize,
     searchPhrase,
-    selectedGradeFilter
+    selectedGradeFilter,
   );
 
   // Debug logging to ensure proper parameters
@@ -132,7 +132,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
             total: record.present_student_count + record.absent_student_count,
             rate: getAttendancePercentage(record).toFixed(1) + "%",
             educator: record.user.full_name,
-          }))
+          })),
         );
       }
 
@@ -145,7 +145,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
             name: gc.name,
             gradeLevel: gc.grade_level?.name || "N/A",
             selected: gc.name === selectedGradeFilter,
-          }))
+          })),
         );
       }
 
@@ -157,7 +157,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
   React.useEffect(() => {
     if (isLoading || isFetching) {
       console.log(
-        `⏳ Loading attendance data... (isLoading: ${isLoading}, isFetching: ${isFetching})`
+        `⏳ Loading attendance data... (isLoading: ${isLoading}, isFetching: ${isFetching})`,
       );
     }
   }, [isLoading, isFetching]);
@@ -203,7 +203,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
     1,
     1000, // Large page size to get all records for chart
     "", // No search filter for chart
-    selectedGradeFilter
+    selectedGradeFilter,
   );
 
   const { data: chartData, isLoading: chartLoading } =
@@ -239,16 +239,16 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
   };
 
   // Handle pagination (jumps by 2 pages = 20 records at a time)
-  const handlePageChange = (direction: 'next' | 'previous') => {
+  const handlePageChange = (direction: "next" | "previous") => {
     const jump = 2; // 2 pages = 20 records
     let newPage: number;
-    
-    if (direction === 'next') {
+
+    if (direction === "next") {
       newPage = Math.min(currentPage + jump, totalPages);
     } else {
       newPage = Math.max(currentPage - jump, 1);
     }
-    
+
     console.log("\n📄 PAGE CHANGED (20 records jump):");
     console.log({
       previousPage: currentPage,
@@ -300,7 +300,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
   const handleAddAttendanceSuccess = () => {
     // Invalidate and refetch the attendance data to show new records
     console.log(
-      "🔄 Attendance added successfully, invalidating cache and refreshing data..."
+      "🔄 Attendance added successfully, invalidating cache and refreshing data...",
     );
 
     // Invalidate both the paginated data and chart data
@@ -309,7 +309,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
         "StudentAttendanceAggregated",
         "Attendance",
         "StudentAttendance",
-      ])
+      ]),
     );
 
     // Reset to first page to show latest data
@@ -577,7 +577,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
                         {gradeClass.name}
                       </Text>
                     </TouchableOpacity>
-                  )
+                  ),
                 )}
               </ScrollView>
             </View>
@@ -615,7 +615,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
                   styles.paginationButton,
                   currentPage <= 2 && styles.disabledButton,
                 ]}
-                onPress={() => handlePageChange('previous')}
+                onPress={() => handlePageChange("previous")}
                 disabled={currentPage <= 2}
               >
                 <MaterialIcons
@@ -644,7 +644,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
                   styles.paginationButton,
                   currentPage >= totalPages - 1 && styles.disabledButton,
                 ]}
-                onPress={() => handlePageChange('next')}
+                onPress={() => handlePageChange("next")}
                 disabled={currentPage >= totalPages - 1}
               >
                 <Text

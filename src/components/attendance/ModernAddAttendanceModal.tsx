@@ -124,7 +124,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
       search_phrase: "",
       search_filter_list: [],
     },
-    { skip: !selectedGrade?.id }
+    { skip: !selectedGrade?.id },
   );
 
   const [fetchAdditionalPages] = useLazyGetStudentsByGradeWithPaginationQuery();
@@ -140,7 +140,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     console.log("   🔍 Search query: Clear search");
     console.log("   💾 Attendance details: Clear all details");
     console.log("   🎨 View mode: Reset to list view");
-    
+
     setSelectedDate(new Date());
     setSelectedGrade(null);
     setStudents([]);
@@ -155,7 +155,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     setSelectedStudentForEdit(null);
     setLateAttendanceMode(false);
     setViewMode("list");
-    
+
     console.log("✅ Add Attendance Modal reset completed");
   };
 
@@ -164,7 +164,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     if (visible) {
       // Reset to default state when modal opens
       resetToDefaultState();
-      
+
       // Start entry animation
       fadeValue.value = withTiming(1, { duration: 300 });
       slideValue.value = withSpring(0, { damping: 15, stiffness: 150 });
@@ -247,7 +247,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
           student.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           student.admission_number
             .toLowerCase()
-            .includes(searchQuery.toLowerCase())
+            .includes(searchQuery.toLowerCase()),
         // ||
         // student.house?.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -266,12 +266,12 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
   // Handle attendance change
   const handleAttendanceChange = (
     studentId: number,
-    attendance: "present" | "absent" | "late"
+    attendance: "present" | "absent" | "late",
   ) => {
     setStudents((prev) =>
       prev.map((student) =>
-        student.id === studentId ? { ...student, attendance } : student
-      )
+        student.id === studentId ? { ...student, attendance } : student,
+      ),
     );
   };
 
@@ -294,12 +294,12 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     reason?: string,
     notes?: string,
     inTime?: string,
-    outTime?: string
+    outTime?: string,
   ) => {
     setStudents((prev) =>
       prev.map((student) =>
-        student.id === studentId ? { ...student, attendance } : student
-      )
+        student.id === studentId ? { ...student, attendance } : student,
+      ),
     );
 
     // Save attendance details
@@ -320,25 +320,25 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
   // Bulk actions
   const handleMarkAllPresent = () => {
     setStudents((prev) =>
-      prev.map((student) => ({ ...student, attendance: "present" as const }))
+      prev.map((student) => ({ ...student, attendance: "present" as const })),
     );
   };
 
   const handleMarkAllAbsent = () => {
     setStudents((prev) =>
-      prev.map((student) => ({ ...student, attendance: "absent" as const }))
+      prev.map((student) => ({ ...student, attendance: "absent" as const })),
     );
   };
 
   const handleMarkAllLate = () => {
     setStudents((prev) =>
-      prev.map((student) => ({ ...student, attendance: "late" as const }))
+      prev.map((student) => ({ ...student, attendance: "late" as const })),
     );
   };
 
   const handleResetAll = () => {
     setStudents((prev) =>
-      prev.map((student) => ({ ...student, attendance: "present" as const }))
+      prev.map((student) => ({ ...student, attendance: "present" as const })),
     );
   };
 
@@ -347,7 +347,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     if (!selectedGrade || students.length === 0) {
       Alert.alert(
         "Error",
-        "Please select a grade and ensure students are loaded."
+        "Please select a grade and ensure students are loaded.",
       );
       return;
     }
@@ -382,13 +382,15 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
         students,
         formatDateForCalendar(selectedDate), // YYYY-MM-DD format in local timezone
         students[0]?.grade_level_id || selectedGrade.id, // Use actual student grade_level_id
-        attendanceStates
+        attendanceStates,
       );
 
       console.log("📊 Attendance data being sent:", {
         selectedDate: selectedDate,
         selectedDateString: formatDateForCalendar(selectedDate),
-        selectedDateDisplay: formatAttendanceDate(formatDateForCalendar(selectedDate)),
+        selectedDateDisplay: formatAttendanceDate(
+          formatDateForCalendar(selectedDate),
+        ),
         selectedGradeId: selectedGrade.id,
         studentGradeLevelId: students[0]?.grade_level_id,
         studentsCount: students.length,
@@ -479,7 +481,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
   // Custom handler for attendance changes that includes late attendance logic
   const handleAttendanceChangeWithLateModal = (
     studentId: number,
-    attendance: "present" | "absent" | "late"
+    attendance: "present" | "absent" | "late",
   ) => {
     if (attendance === "late") {
       // Find the student and open modal for late attendance
@@ -561,7 +563,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
                         />
                         <Text style={styles.dateText}>
                           {formatAttendanceDate(
-                            formatDateForCalendar(selectedDate)
+                            formatDateForCalendar(selectedDate),
                           )}
                         </Text>
                         <MaterialIcons
@@ -730,7 +732,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
                         />
                         <Text style={styles.dateText}>
                           {formatAttendanceDate(
-                            formatDateForCalendar(selectedDate)
+                            formatDateForCalendar(selectedDate),
                           )}
                         </Text>
                         <MaterialIcons

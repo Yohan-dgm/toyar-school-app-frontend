@@ -38,7 +38,7 @@ const StudentAttendanceDetailsModal: React.FC<
     searchPhrase,
     "All",
     attendanceDate,
-    gradeLevelClassName
+    gradeLevelClassName,
   );
 
   const {
@@ -122,7 +122,7 @@ const StudentAttendanceDetailsModal: React.FC<
   const renderStudentRecord = (record: StudentAttendanceRecord) => {
     const statusColor = getAttendanceStatusColor(record.attendance_type.name);
     const statusBackground = getAttendanceStatusBackground(
-      record.attendance_type.name
+      record.attendance_type.name,
     );
 
     return (

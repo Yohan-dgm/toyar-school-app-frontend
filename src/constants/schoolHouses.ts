@@ -103,22 +103,24 @@ export const HOUSE_PROFILE_COLORS = {
 };
 
 // Utility function to get house profile border color by house name
-export const getHouseProfileColor = (houseData: string | { name?: string } | null | undefined): string => {
+export const getHouseProfileColor = (
+  houseData: string | { name?: string } | null | undefined,
+): string => {
   if (!houseData) return "#E5E7EB"; // Default gray if no house data
-  
+
   let houseName: string;
-  
+
   // Handle both string and object formats
-  if (typeof houseData === 'string') {
+  if (typeof houseData === "string") {
     houseName = houseData;
-  } else if (typeof houseData === 'object' && houseData.name) {
+  } else if (typeof houseData === "object" && houseData.name) {
     houseName = houseData.name;
   } else {
     return "#E5E7EB"; // Default gray for invalid data
   }
-  
+
   const normalizedName = houseName.toLowerCase().trim();
-  
+
   switch (normalizedName) {
     case "vulcan":
       return HOUSE_PROFILE_COLORS.vulcan;

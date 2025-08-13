@@ -72,7 +72,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   // Safe rating setter to ensure integer values
   const handleRatingChange = (newRating) => {
     const safeRating = Math.round(
-      Math.max(0, Math.min(5, Number(newRating) || 0))
+      Math.max(0, Math.min(5, Number(newRating) || 0)),
     );
     setRating(safeRating);
   };
@@ -82,7 +82,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   // Get global state
   const { sessionData } = useSelector((state) => state.app);
   const { feedbacks, loading, error, submitting } = useSelector(
-    (state) => state.educatorFeedback
+    (state) => state.educatorFeedback,
   );
 
   // API hooks for grade and student data
@@ -99,7 +99,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     refetch: refetchStudents,
   } = useGetStudentsByGradeQuery(
     { grade_level_id: selectedGrade?.id },
-    { skip: !selectedGrade?.id }
+    { skip: !selectedGrade?.id },
   );
 
   // Console logging for API testing
@@ -115,7 +115,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
       "👥 Students Data for grade",
       selectedGrade?.name,
       ":",
-      studentsData
+      studentsData,
     );
     if (studentsError) {
       console.error("❌ Students Error:", studentsError);
@@ -131,7 +131,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
       classStudents.reduce((acc, student) => {
         acc[student.grade_level_id] = (acc[student.grade_level_id] || 0) + 1;
         return acc;
-      }, {})
+      }, {}),
     );
   }, [selectedGrade]);
 
@@ -366,7 +366,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId]
+        : [...prev, categoryId],
     );
   };
 
@@ -380,7 +380,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     ) {
       Alert.alert(
         "Error",
-        "Please fill in all required fields including grade level"
+        "Please fill in all required fields including grade level",
       );
       return;
     }
@@ -416,7 +416,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     console.log("New category added:", categoryData);
     Alert.alert(
       "Category Added",
-      `Category "${categoryData.title}" with ${categoryData.questions.length} questions has been added successfully!`
+      `Category "${categoryData.title}" with ${categoryData.questions.length} questions has been added successfully!`,
     );
     // Here you would typically save the category to your backend/state
     // For now, we'll just show a success message
@@ -494,7 +494,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
         // Filter API students by grade_level_id matching FRONTEND_GRADES.id
         studentsToShow = studentsData.data.students.filter((student) => {
           console.log(
-            `🎓 Checking student ${student.name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`
+            `🎓 Checking student ${student.name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`,
           );
           return student.grade_level_id === selectedGrade.id;
         });
@@ -503,7 +503,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
         // Fallback to static data - filter by grade_level_id
         studentsToShow = classStudents.filter((student) => {
           console.log(
-            `🎓 Checking static student ${student.student_calling_name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`
+            `🎓 Checking static student ${student.student_calling_name}: grade_level_id=${student.grade_level_id} vs selectedGrade.id=${selectedGrade.id}`,
           );
           return student.grade_level_id === selectedGrade.id;
         });
@@ -564,7 +564,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
                   onError={() => {
                     console.warn(
                       "Failed to load profile image for student:",
-                      student?.id
+                      student?.id,
                     );
                   }}
                 />
@@ -762,7 +762,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
                       onError={() => {
                         console.warn(
                           "Failed to load profile image for feedback:",
-                          feedback?.id
+                          feedback?.id,
                         );
                       }}
                     />
@@ -796,7 +796,7 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
               <View style={styles.feedbackCategories}>
                 {(feedback?.categories || []).map((categoryId) => {
                   const category = feedbackCategories.find(
-                    (c) => c.id === categoryId
+                    (c) => c.id === categoryId,
                   );
                   return category ? (
                     <View

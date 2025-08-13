@@ -17,9 +17,7 @@ import { getCurrentDateString } from "../../../../../utils/dateUtils";
 const MarkAttendanceDrawer = () => {
   const dispatch = useDispatch();
   const [attendanceData, setAttendanceData] = useState({});
-  const [selectedDate, setSelectedDate] = useState(
-    getCurrentDateString(),
-  );
+  const [selectedDate, setSelectedDate] = useState(getCurrentDateString());
 
   // Get global state
   const { sessionData } = useSelector((state) => state.app);

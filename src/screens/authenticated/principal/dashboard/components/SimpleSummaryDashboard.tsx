@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -101,12 +100,7 @@ const SimpleSummaryDashboard = () => {
         <Text style={styles.headerSubtitle}>Principal Summary</Text>
       </View> */}
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-        style={styles.scrollView}
-      >
+      <View style={styles.summaryGrid}>
         <SimpleSummaryCard
           title="Students"
           value={isLoading ? "..." : displayData.totalStudents.toLocaleString()}
@@ -125,15 +119,6 @@ const SimpleSummaryDashboard = () => {
           subtitle="Active staff"
         />
 
-        {/* <SimpleSummaryCard
-          title="Classes"
-          value={isLoading ? "..." : displayData.activeClasses}
-          icon="class"
-          colors={["#DC2626", "#EF4444"]}
-          accentColor="#DC2626"
-          subtitle="This semester"
-        /> */}
-
         <SimpleSummaryCard
           title="Attendance"
           value={isLoading ? "..." : `${displayData.averageAttendance}%`}
@@ -151,7 +136,7 @@ const SimpleSummaryDashboard = () => {
           accentColor="#EA580C"
           subtitle="Pending"
         />
-      </ScrollView>
+      </View>
 
       <View style={styles.housesSection}>
         <Text style={styles.sectionTitle}>School Houses</Text>
@@ -189,17 +174,17 @@ const styles = StyleSheet.create({
     color: "#666",
     fontWeight: "500",
   },
-  scrollView: {
-    marginBottom: 15,
-  },
-  scrollContainer: {
+  summaryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
-    paddingRight: 40,
+    marginBottom: 20,
   },
   summaryCard: {
-    width: 140,
+    width: (width - 52) / 2,
     height: 100,
-    marginRight: 8,
+    marginBottom: 12,
     borderRadius: 16,
     overflow: "hidden",
     shadowColor: "#000",

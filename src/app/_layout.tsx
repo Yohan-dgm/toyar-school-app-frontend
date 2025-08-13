@@ -27,6 +27,7 @@ import "../../global.css";
 // Import debug utilities in development
 if (__DEV__) {
   import("../utils/splash-debug");
+  import("../utils/testNotificationAPI");
 }
 
 // Clean app layout without notifications/websockets but with previous functionality

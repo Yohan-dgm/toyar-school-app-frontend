@@ -66,7 +66,7 @@ export default function UniversalNotificationSystem({
               userCategory,
               userId,
             }
-          : ""
+          : "",
       );
     },
     success: (message: string, data?: any) => {
@@ -77,7 +77,7 @@ export default function UniversalNotificationSystem({
               ...data,
               timestamp: new Date().toISOString(),
             }
-          : ""
+          : "",
       );
     },
     error: (message: string, data?: any) => {
@@ -88,7 +88,7 @@ export default function UniversalNotificationSystem({
               ...data,
               timestamp: new Date().toISOString(),
             }
-          : ""
+          : "",
       );
     },
     warn: (message: string, data?: any) => {
@@ -99,7 +99,7 @@ export default function UniversalNotificationSystem({
               ...data,
               timestamp: new Date().toISOString(),
             }
-          : ""
+          : "",
       );
     },
   };
@@ -130,7 +130,7 @@ export default function UniversalNotificationSystem({
     },
     {
       skip: !userId || !token,
-    }
+    },
   );
 
   // Stats API - disabled temporarily but hook must be called to maintain hook order
@@ -151,7 +151,7 @@ export default function UniversalNotificationSystem({
     },
     {
       skip: true, // Always skip to prevent API calls until backend is ready
-    }
+    },
   );
 
   const [markAsRead] = useMarkNotificationAsReadMutation();
@@ -276,7 +276,7 @@ export default function UniversalNotificationSystem({
       };
 
       console.log(
-        "🧪 Component test functions available at window.testNotificationAPI"
+        "🧪 Component test functions available at window.testNotificationAPI",
       );
     }
   }, [userCategory, userId, token, refetchNotifications, refetchStats]);
@@ -311,7 +311,7 @@ export default function UniversalNotificationSystem({
         clearInterval(refreshInterval);
         apiLogger.info("Auto-refresh cleanup completed");
       };
-    }, [refetchNotifications])
+    }, [refetchNotifications]),
   );
 
   const handleRefresh = React.useCallback(async () => {
@@ -385,7 +385,7 @@ export default function UniversalNotificationSystem({
             }
           },
         },
-      ]
+      ],
     );
   };
 
@@ -473,7 +473,7 @@ export default function UniversalNotificationSystem({
                 {String(
                   item.time_ago ||
                     formatTimeAgo(item.timestamp || item.created_at) ||
-                    "Unknown time"
+                    "Unknown time",
                 )}
               </Text>
             </View>
@@ -711,7 +711,7 @@ export default function UniversalNotificationSystem({
   const notifications = React.useMemo(() => {
     // First ensure we have valid notifications
     const validNotifications = allNotifications.filter(
-      (n) => n && typeof n === "object" && n.id && (n.title || n.message)
+      (n) => n && typeof n === "object" && n.id && (n.title || n.message),
     );
 
     switch (filter) {
@@ -734,7 +734,7 @@ export default function UniversalNotificationSystem({
             {getUserCategoryDisplayName(
               typeof userCategory === "string"
                 ? parseInt(userCategory)
-                : userCategory
+                : userCategory,
             )}
           </Text>
         </View>
@@ -855,7 +855,7 @@ export default function UniversalNotificationSystem({
                     "API Status",
                     notificationsError
                       ? `❌ Error: ${error?.status || "Unknown"}\n${error?.data?.message || error?.message || "API failed"}`
-                      : "✅ Notifications API working correctly"
+                      : "✅ Notifications API working correctly",
                   );
                 }}
               >
@@ -884,7 +884,7 @@ export default function UniversalNotificationSystem({
                 onPress={() => {
                   Alert.alert(
                     "Stats API Status",
-                    "Stats API is temporarily disabled to prevent 500 errors.\n\nWill be re-enabled when backend is ready."
+                    "Stats API is temporarily disabled to prevent 500 errors.\n\nWill be re-enabled when backend is ready.",
                   );
                 }}
               >
@@ -901,7 +901,7 @@ export default function UniversalNotificationSystem({
                       "• testNotificationAPI.testAll()\n" +
                       "• testNotificationAPI.interactive()\n" +
                       "• window.testNotificationAPI.testInComponent()",
-                    [{ text: "Got it" }]
+                    [{ text: "Got it" }],
                   );
                 }}
               >

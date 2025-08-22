@@ -1,20 +1,73 @@
-import React from "react";
-import { Image, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+} from "react-native";
 
 import { Menu } from "@/lib/icons/Menu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  USER_CATEGORIES,
+  getUserCategoryDisplayName,
+} from "@/constants/userCategories";
+import { setSelectedStudent } from "@/state-store/slices/app-slice";
 import {
   getStudentProfilePicture,
   getDefaultStudentProfileImage,
   getLocalFallbackProfileImage,
 } from "../utils/studentProfileUtils";
 export default function HeaderAuthenticated() {
+  const dispatch = useDispatch();
+  const [showStudentModal, setShowStudentModal] = useState(false);
+
   // Get global state
   const { sessionData, selectedStudent } = useSelector(
     (state: any) => state.app,
   );
+
+  // Get user category from session data
+  const userCategory =
+    sessionData?.user_category ||
+    sessionData?.data?.user_category ||
+    USER_CATEGORIES.PARENT;
+  const isParent = userCategory === USER_CATEGORIES.PARENT;
+
+  // Mock students data for parent (this should come from API in real implementation)
+  const mockStudents = [
+    {
+      id: 1,
+      name: "Emma Johnson",
+      student_calling_name: "Emma",
+      admission_number: "2024001",
+      grade: "Grade 10",
+    },
+    {
+      id: 2,
+      name: "Michael Johnson",
+      student_calling_name: "Mike",
+      admission_number: "2024002",
+      grade: "Grade 8",
+    },
+    {
+      id: 3,
+      name: "Sarah Johnson",
+      student_calling_name: "Sarah",
+      admission_number: "2024003",
+      grade: "Grade 12",
+    },
+  ];
+
+  // Handle student selection
+  const handleStudentSelect = (student: any) => {
+    dispatch(setSelectedStudent(student));
+    setShowStudentModal(false);
+  };
 
   // Get profile picture for the selected student
   const profilePictureSource = selectedStudent
@@ -42,7 +95,22 @@ export default function HeaderAuthenticated() {
     <View className="flex flex-col w-full pt-[8px] bg-[#2569CF]">
       {/*  */}
       <View className="flex flex-row w-full justify-end items-center px-[16px]">
-        <Text className="text-[#fff] opacity-[0.75]">Parent Account</Text>
+        {isParent ? (
+          <TouchableOpacity
+            className="flex flex-row items-center"
+            onPress={() => setShowStudentModal(true)}
+          >
+            <Text className="text-[#fff] opacity-[0.75]">
+              {selectedStudent
+                ? `Selected: ${selectedStudent.student_calling_name || selectedStudent.name || "Student"}`
+                : "Select Student"}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Text className="text-[#fff] opacity-[0.75]">
+            {getUserCategoryDisplayName(userCategory)} Account
+          </Text>
+        )}
       </View>
       {/*  */}
       <View className="flex flex-row w-full justify-between items-center px-[16px]">
@@ -114,6 +182,52 @@ export default function HeaderAuthenticated() {
           </Text>
         </View>
       </View>
+
+      {/* Student Selection Modal for Parents */}
+      {isParent && (
+        <Modal
+          visible={showStudentModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowStudentModal(false)}
+        >
+          <View className="flex-1 justify-center items-center bg-black/50">
+            <View className="bg-white rounded-lg mx-4 p-4 w-80 max-h-96">
+              <Text className="text-lg font-semibold mb-4 text-center">
+                Select Student
+              </Text>
+
+              <FlatList
+                data={mockStudents}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    className={`p-3 border-b border-gray-200 ${selectedStudent?.id === item.id ? "bg-blue-50" : ""}`}
+                    onPress={() => handleStudentSelect(item)}
+                  >
+                    <Text className="font-medium text-gray-900">
+                      {item.student_calling_name}
+                    </Text>
+                    <Text className="text-sm text-gray-600">{item.name}</Text>
+                    <Text className="text-xs text-gray-500">
+                      {item.admission_number} - {item.grade}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+
+              <TouchableOpacity
+                className="mt-4 p-3 bg-gray-200 rounded-lg"
+                onPress={() => setShowStudentModal(false)}
+              >
+                <Text className="text-center text-gray-700 font-medium">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 }

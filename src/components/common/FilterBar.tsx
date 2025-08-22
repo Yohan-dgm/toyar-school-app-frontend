@@ -27,9 +27,7 @@ export default function FilterBar({
   showSearch = true,
   showDateRange = false,
 }: FilterBarProps) {
-  const [searchText, setSearchText] = useState(
-    (filters as any).search || ""
-  );
+  const [searchText, setSearchText] = useState((filters as any).search || "");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [tempFilters, setTempFilters] = useState(filters);
 
@@ -196,7 +194,10 @@ export default function FilterBar({
                 <Text
                   style={[
                     styles.quickFilterText,
-                    { color: filters.priority === "urgent" ? "#ffffff" : "#ef4444" },
+                    {
+                      color:
+                        filters.priority === "urgent" ? "#ffffff" : "#ef4444",
+                    },
                   ]}
                 >
                   Urgent
@@ -315,7 +316,8 @@ export default function FilterBar({
                       key={value}
                       style={[
                         styles.filterOption,
-                        tempFilters.filter === value && styles.selectedFilterOption,
+                        tempFilters.filter === value &&
+                          styles.selectedFilterOption,
                       ]}
                       onPress={() =>
                         setTempFilters({
@@ -327,7 +329,8 @@ export default function FilterBar({
                       <Text
                         style={[
                           styles.filterOptionText,
-                          tempFilters.filter === value && styles.selectedFilterOptionText,
+                          tempFilters.filter === value &&
+                            styles.selectedFilterOptionText,
                         ]}
                       >
                         {key.charAt(0) + key.slice(1).toLowerCase()}
@@ -340,30 +343,37 @@ export default function FilterBar({
               <View style={styles.filterSection}>
                 <Text style={styles.filterSectionTitle}>Priority</Text>
                 <View style={styles.filterOptions}>
-                  {Object.entries(NOTIFICATION_PRIORITIES).map(([key, value]) => (
-                    <TouchableOpacity
-                      key={value}
-                      style={[
-                        styles.filterOption,
-                        tempFilters.priority === value && styles.selectedFilterOption,
-                      ]}
-                      onPress={() =>
-                        setTempFilters({
-                          ...tempFilters,
-                          priority: tempFilters.priority === value ? undefined : value as any,
-                        })
-                      }
-                    >
-                      <Text
+                  {Object.entries(NOTIFICATION_PRIORITIES).map(
+                    ([key, value]) => (
+                      <TouchableOpacity
+                        key={value}
                         style={[
-                          styles.filterOptionText,
-                          tempFilters.priority === value && styles.selectedFilterOptionText,
+                          styles.filterOption,
+                          tempFilters.priority === value &&
+                            styles.selectedFilterOption,
                         ]}
+                        onPress={() =>
+                          setTempFilters({
+                            ...tempFilters,
+                            priority:
+                              tempFilters.priority === value
+                                ? undefined
+                                : (value as any),
+                          })
+                        }
                       >
-                        {key.charAt(0) + key.slice(1).toLowerCase()}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                        <Text
+                          style={[
+                            styles.filterOptionText,
+                            tempFilters.priority === value &&
+                              styles.selectedFilterOptionText,
+                          ]}
+                        >
+                          {key.charAt(0) + key.slice(1).toLowerCase()}
+                        </Text>
+                      </TouchableOpacity>
+                    ),
+                  )}
                 </View>
               </View>
 
@@ -376,19 +386,24 @@ export default function FilterBar({
                         key={type.id}
                         style={[
                           styles.filterOption,
-                          tempFilters.type_id === type.id && styles.selectedFilterOption,
+                          tempFilters.type_id === type.id &&
+                            styles.selectedFilterOption,
                         ]}
                         onPress={() =>
                           setTempFilters({
                             ...tempFilters,
-                            type_id: tempFilters.type_id === type.id ? undefined : type.id,
+                            type_id:
+                              tempFilters.type_id === type.id
+                                ? undefined
+                                : type.id,
                           })
                         }
                       >
                         <Text
                           style={[
                             styles.filterOptionText,
-                            tempFilters.type_id === type.id && styles.selectedFilterOptionText,
+                            tempFilters.type_id === type.id &&
+                              styles.selectedFilterOptionText,
                           ]}
                         >
                           {type.name}
@@ -413,19 +428,24 @@ export default function FilterBar({
                         key={category.id}
                         style={[
                           styles.filterOption,
-                          tempFilters.category_id === category.id && styles.selectedFilterOption,
+                          tempFilters.category_id === category.id &&
+                            styles.selectedFilterOption,
                         ]}
                         onPress={() =>
                           setTempFilters({
                             ...tempFilters,
-                            category_id: tempFilters.category_id === category.id ? undefined : category.id,
+                            category_id:
+                              tempFilters.category_id === category.id
+                                ? undefined
+                                : category.id,
                           })
                         }
                       >
                         <Text
                           style={[
                             styles.filterOptionText,
-                            tempFilters.category_id === category.id && styles.selectedFilterOptionText,
+                            tempFilters.category_id === category.id &&
+                              styles.selectedFilterOptionText,
                           ]}
                         >
                           {category.name}
@@ -439,30 +459,37 @@ export default function FilterBar({
               <View style={styles.filterSection}>
                 <Text style={styles.filterSectionTitle}>Priority Level</Text>
                 <View style={styles.filterOptions}>
-                  {Object.entries(ANNOUNCEMENT_PRIORITY_LEVELS).map(([key, value]) => (
-                    <TouchableOpacity
-                      key={value}
-                      style={[
-                        styles.filterOption,
-                        tempFilters.priority_level === value && styles.selectedFilterOption,
-                      ]}
-                      onPress={() =>
-                        setTempFilters({
-                          ...tempFilters,
-                          priority_level: tempFilters.priority_level === value ? undefined : value as any,
-                        })
-                      }
-                    >
-                      <Text
+                  {Object.entries(ANNOUNCEMENT_PRIORITY_LEVELS).map(
+                    ([key, value]) => (
+                      <TouchableOpacity
+                        key={value}
                         style={[
-                          styles.filterOptionText,
-                          tempFilters.priority_level === value && styles.selectedFilterOptionText,
+                          styles.filterOption,
+                          tempFilters.priority_level === value &&
+                            styles.selectedFilterOption,
                         ]}
+                        onPress={() =>
+                          setTempFilters({
+                            ...tempFilters,
+                            priority_level:
+                              tempFilters.priority_level === value
+                                ? undefined
+                                : (value as any),
+                          })
+                        }
                       >
-                        {key.charAt(0) + key.slice(1).toLowerCase()}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                        <Text
+                          style={[
+                            styles.filterOptionText,
+                            tempFilters.priority_level === value &&
+                              styles.selectedFilterOptionText,
+                          ]}
+                        >
+                          {key.charAt(0) + key.slice(1).toLowerCase()}
+                        </Text>
+                      </TouchableOpacity>
+                    ),
+                  )}
                 </View>
               </View>
 
@@ -474,19 +501,24 @@ export default function FilterBar({
                       key={value}
                       style={[
                         styles.filterOption,
-                        tempFilters.status === value && styles.selectedFilterOption,
+                        tempFilters.status === value &&
+                          styles.selectedFilterOption,
                       ]}
                       onPress={() =>
                         setTempFilters({
                           ...tempFilters,
-                          status: tempFilters.status === value ? undefined : value as any,
+                          status:
+                            tempFilters.status === value
+                              ? undefined
+                              : (value as any),
                         })
                       }
                     >
                       <Text
                         style={[
                           styles.filterOptionText,
-                          tempFilters.status === value && styles.selectedFilterOptionText,
+                          tempFilters.status === value &&
+                            styles.selectedFilterOptionText,
                         ]}
                       >
                         {key.charAt(0) + key.slice(1).toLowerCase()}

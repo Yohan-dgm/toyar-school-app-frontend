@@ -43,7 +43,7 @@ export default function EnhancedNotificationItem({
       onRead(
         typeof notification.id === "string"
           ? parseInt(notification.id)
-          : notification.id
+          : notification.id,
       );
     }
   };
@@ -52,14 +52,14 @@ export default function EnhancedNotificationItem({
     onDelete?.(
       typeof notification.id === "string"
         ? parseInt(notification.id)
-        : notification.id
+        : notification.id,
     );
   const handleSelect = () =>
     onSelect?.(
       typeof notification.id === "string"
         ? parseInt(notification.id)
         : notification.id,
-      !selected
+      !selected,
     );
 
   const priorityColor =
@@ -292,7 +292,7 @@ export default function EnhancedNotificationItem({
               onRead?.(
                 typeof notification.id === "string"
                   ? parseInt(notification.id)
-                  : notification.id
+                  : notification.id,
               )
             }
             activeOpacity={0.7}

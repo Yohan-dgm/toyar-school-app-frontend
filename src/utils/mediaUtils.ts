@@ -9,45 +9,45 @@ const API_BASE_URL =
  * Get MIME type based on file extension
  */
 const getMimeType = (filename: string): string => {
-  if (!filename) return 'application/octet-stream';
-  
-  const extension = filename.toLowerCase().split('.').pop();
-  
+  if (!filename) return "application/octet-stream";
+
+  const extension = filename.toLowerCase().split(".").pop();
+
   switch (extension) {
     // Image types
-    case 'jpg':
-    case 'jpeg':
-      return 'image/jpeg';
-    case 'png':
-      return 'image/png';
-    case 'gif':
-      return 'image/gif';
-    case 'webp':
-      return 'image/webp';
-    case 'svg':
-      return 'image/svg+xml';
-    
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "png":
+      return "image/png";
+    case "gif":
+      return "image/gif";
+    case "webp":
+      return "image/webp";
+    case "svg":
+      return "image/svg+xml";
+
     // Video types
-    case 'mp4':
-      return 'video/mp4';
-    case 'webm':
-      return 'video/webm';
-    case 'ogg':
-      return 'video/ogg';
-    case 'avi':
-      return 'video/avi';
-    case 'mov':
-      return 'video/quicktime';
-    case 'wmv':
-      return 'video/x-ms-wmv';
-    
+    case "mp4":
+      return "video/mp4";
+    case "webm":
+      return "video/webm";
+    case "ogg":
+      return "video/ogg";
+    case "avi":
+      return "video/avi";
+    case "mov":
+      return "video/quicktime";
+    case "wmv":
+      return "video/x-ms-wmv";
+
     // PDF
-    case 'pdf':
-      return 'application/pdf';
-    
+    case "pdf":
+      return "application/pdf";
+
     // Default
     default:
-      return 'application/octet-stream';
+      return "application/octet-stream";
   }
 };
 
@@ -57,41 +57,44 @@ const getMimeType = (filename: string): string => {
  */
 export const buildActivityFeedMediaUrl = (
   mediaPath: string,
-  filename: string
+  filename: string,
 ): string => {
   if (!mediaPath || !filename) {
-    console.warn('⚠️ buildActivityFeedMediaUrl: Missing mediaPath or filename', {
-      mediaPath,
-      filename
-    });
-    return '';
+    console.warn(
+      "⚠️ buildActivityFeedMediaUrl: Missing mediaPath or filename",
+      {
+        mediaPath,
+        filename,
+      },
+    );
+    return "";
   }
 
   // Ensure base URL doesn't end with slash
-  const baseUrl = API_BASE_URL?.endsWith('/') 
-    ? API_BASE_URL.slice(0, -1) 
+  const baseUrl = API_BASE_URL?.endsWith("/")
+    ? API_BASE_URL.slice(0, -1)
     : API_BASE_URL;
 
   if (!baseUrl) {
-    console.error('❌ buildActivityFeedMediaUrl: No API base URL configured');
-    return '';
+    console.error("❌ buildActivityFeedMediaUrl: No API base URL configured");
+    return "";
   }
 
   // Clean up the media path to match expected format
   let cleanPath = mediaPath;
-  
+
   // Remove /storage prefix if present
-  if (cleanPath.startsWith('/storage/')) {
-    cleanPath = cleanPath.replace('/storage/', '/');
+  if (cleanPath.startsWith("/storage/")) {
+    cleanPath = cleanPath.replace("/storage/", "/");
   }
-  
+
   // Remove filename from path if it's included (path should be directory only)
   if (cleanPath.includes(filename)) {
-    cleanPath = cleanPath.replace('/' + filename, '');
+    cleanPath = cleanPath.replace("/" + filename, "");
   }
-  
+
   // Remove any trailing slashes
-  cleanPath = cleanPath.replace(/\/$/, '');
+  cleanPath = cleanPath.replace(/\/$/, "");
 
   // Get MIME type from filename
   const mimeType = getMimeType(filename);
@@ -100,12 +103,12 @@ export const buildActivityFeedMediaUrl = (
   // Note: Do not URL encode the path in the url parameter, only filename and mime_type
   const mediaUrl = `${baseUrl}/get-activity-feed-media?url=${cleanPath}&filename=${encodeURIComponent(filename)}&mime_type=${encodeURIComponent(mimeType)}`;
 
-  console.log('🔗 Built media URL:', {
+  console.log("🔗 Built media URL:", {
     originalPath: mediaPath,
     cleanedPath: cleanPath,
     filename,
     mimeType,
-    finalUrl: mediaUrl
+    finalUrl: mediaUrl,
   });
 
   return mediaUrl;
@@ -117,14 +120,17 @@ export const buildActivityFeedMediaUrl = (
  */
 export const buildVideoThumbnailUrl = (
   thumbnailPath: string,
-  filename: string
+  filename: string,
 ): string => {
   if (!thumbnailPath || !filename) {
-    console.warn('⚠️ buildVideoThumbnailUrl: Missing thumbnailPath or filename', {
-      thumbnailPath,
-      filename
-    });
-    return '';
+    console.warn(
+      "⚠️ buildVideoThumbnailUrl: Missing thumbnailPath or filename",
+      {
+        thumbnailPath,
+        filename,
+      },
+    );
+    return "";
   }
 
   // For now, use the same media endpoint for thumbnails
@@ -137,12 +143,14 @@ export const buildVideoThumbnailUrl = (
  */
 export const isValidMediaUrl = (url: string): boolean => {
   if (!url) return false;
-  
+
   try {
     const urlObj = new URL(url);
-    return urlObj.pathname.includes('get-activity-feed-media') ||
-           urlObj.href.startsWith('http://') ||
-           urlObj.href.startsWith('https://');
+    return (
+      urlObj.pathname.includes("get-activity-feed-media") ||
+      urlObj.href.startsWith("http://") ||
+      urlObj.href.startsWith("https://")
+    );
   } catch {
     return false;
   }
@@ -152,5 +160,5 @@ export default {
   buildActivityFeedMediaUrl,
   buildVideoThumbnailUrl,
   isValidMediaUrl,
-  getMimeType
+  getMimeType,
 };

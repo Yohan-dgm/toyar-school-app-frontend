@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import { useSelector } from "react-redux";
 import { theme } from "../../../styles/theme";
 import { USER_CATEGORIES } from "../../../constants/userCategories";
@@ -11,6 +10,7 @@ import SchoolTabWithAPI from "../../activity-feed/tabs/SchoolTabWithAPI";
 import ClassTabWithAPI from "../../activity-feed/tabs/ClassTabWithAPI";
 import StudentTabWithAPI from "../../activity-feed/tabs/StudentTabWithAPI";
 import FilterBar from "../../activity-feed/FilterBar";
+import PremiumTabNavigation from "../PremiumTabNavigation";
 
 interface UniversalActivityFeedProps {
   userCategory: number;
@@ -101,7 +101,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
       {
         name: "School",
         component: SchoolTabWithAPI,
-        icon: "school",
+        icon: "book-open",
         label: "School",
         description: "School-wide announcements and events",
       },
@@ -114,14 +114,14 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
           {
             name: "Class",
             component: ClassTabWithAPI,
-            icon: "category",
+            icon: "users",
             label: "Class",
             description: "Class-specific updates and activities",
           },
           {
             name: "Student",
             component: StudentTabWithAPI,
-            icon: "face",
+            icon: "user",
             label: "Student",
             description: "Individual student progress and achievements",
           },
@@ -137,7 +137,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
         tabs.push({
           name: "Class",
           component: ClassTabWithAPI,
-          icon: "category",
+          icon: "users",
           label: "Class",
           description: "Class management and academic updates",
         });
@@ -147,7 +147,7 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
         tabs.push({
           name: "Sports",
           component: SchoolTabWithAPI, // TODO: Create SportsTabWithAPI
-          icon: "sports",
+          icon: "activity",
           label: "Sports",
           description: "Sports activities and student achievements",
         });
@@ -158,14 +158,14 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
           {
             name: "Class",
             component: ClassTabWithAPI,
-            icon: "category",
+            icon: "users",
             label: "Class",
             description: "Your class updates and assignments",
           },
           {
             name: "Sports",
             component: SchoolTabWithAPI, // TODO: Create SportsTabWithAPI
-            icon: "sports",
+            icon: "activity",
             label: "Sports",
             description: "Sports activities and achievements",
           },
@@ -219,33 +219,13 @@ const UniversalActivityFeed: React.FC<UniversalActivityFeedProps> = ({
 
   return (
     <View style={styles.container}>
-      {/* Custom Tab Bar */}
-      <View style={styles.tabBar}>
-        {visibleTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.name}
-            style={[
-              styles.tabButton,
-              activeTab === tab.name && styles.activeTabButton,
-            ]}
-            onPress={() => setActiveTab(tab.name)}
-          >
-            <Icon
-              name={tab.icon}
-              size={18}
-              color={activeTab === tab.name ? theme.colors.primary : "#8E8E93"}
-            />
-            <Text
-              style={[
-                styles.tabLabel,
-                activeTab === tab.name && styles.activeTabLabel,
-              ]}
-            >
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* Premium Tab Navigation */}
+      <PremiumTabNavigation
+        tabs={visibleTabs}
+        activeTab={activeTab}
+        onTabPress={setActiveTab}
+        userCategory={userCategory}
+      />
 
       {/* Filter Bar */}
       <FilterBar
@@ -295,41 +275,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  tabBar: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#E5E5EA",
-    paddingVertical: 3,
-    paddingHorizontal: 12,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 4,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(146, 7, 52, 0.08)",
-    borderRadius: 6,
-    marginHorizontal: 2,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  tabLabel: {
-    fontSize: 10,
-    fontWeight: "500",
-    color: "#8E8E93",
-    marginTop: 0,
-    marginBottom: 0,
-    textAlign: "center",
-  },
-  activeTabLabel: {
-    color: theme.colors.primary,
-    fontWeight: "600",
   },
   tabContent: {
     flex: 1,

@@ -128,13 +128,13 @@ export const TARGET_TYPES = [
 
 // Helper functions
 export const getCategoryById = (
-  id: number
+  id: number,
 ): AnnouncementCategory | undefined => {
   return ANNOUNCEMENT_CATEGORIES.find((cat) => cat.id === id);
 };
 
 export const getCategoryBySlug = (
-  slug: string
+  slug: string,
 ): AnnouncementCategory | undefined => {
   return ANNOUNCEMENT_CATEGORIES.find((cat) => cat.slug === slug);
 };
@@ -144,7 +144,7 @@ export const getPriorityLevel = (level: number) => {
 };
 
 export const getActiveCategoriesForUser = (
-  userCategory: number
+  userCategory: number,
 ): AnnouncementCategory[] => {
   // Return all categories for now, but this can be filtered based on user permissions
   return ANNOUNCEMENT_CATEGORIES.filter((cat) => cat.is_active);

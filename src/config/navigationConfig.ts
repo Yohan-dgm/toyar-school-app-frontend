@@ -45,13 +45,6 @@ const PARENT_NAVIGATION: NavigationConfig = {
       route: "student-profile",
     },
     {
-      id: "userActions",
-      icon: "dashboard",
-      iconFamily: "MaterialIcons",
-      title: "Dashboard",
-      route: "user-actions",
-    },
-    {
       id: "notifications",
       icon: "notifications",
       iconFamily: "MaterialIcons",

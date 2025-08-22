@@ -47,7 +47,7 @@ export default function CreateAnnouncementModal({
     {
       // Skip the API call and use fallback categories to avoid 404 errors
       skip: true,
-    }
+    },
   );
   const [createAnnouncement, { isLoading }] = useCreateAnnouncementMutation();
 
@@ -119,7 +119,7 @@ export default function CreateAnnouncementModal({
     if (!formData.title.trim() || !formData.content.trim()) {
       Alert.alert(
         "Error",
-        "Please fill in all required fields (Title and Content)"
+        "Please fill in all required fields (Title and Content)",
       );
       return;
     }
@@ -127,7 +127,7 @@ export default function CreateAnnouncementModal({
     if (formData.status === "scheduled" && !formData.scheduled_at) {
       Alert.alert(
         "Error",
-        "Please select a schedule time for scheduled announcements"
+        "Please select a schedule time for scheduled announcements",
       );
       return;
     }
@@ -175,7 +175,7 @@ export default function CreateAnnouncementModal({
     } catch (error: any) {
       Alert.alert(
         "Error",
-        error?.data?.message || "Failed to create announcement"
+        error?.data?.message || "Failed to create announcement",
       );
     }
   };
@@ -456,7 +456,7 @@ export default function CreateAnnouncementModal({
                   onPress={() => {
                     if (isSelected) {
                       setSelectedRoles((prev) =>
-                        prev.filter((r) => r !== key.toLowerCase())
+                        prev.filter((r) => r !== key.toLowerCase()),
                       );
                     } else {
                       setSelectedRoles((prev) => [...prev, key.toLowerCase()]);

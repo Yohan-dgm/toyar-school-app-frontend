@@ -57,15 +57,9 @@ export const handleNavigationPress = (
         router.push(`${baseRoute}/school-calendar`);
         break;
       case "notifications":
-        const notificationRoute =
-          userCategoryName === "parent"
-            ? "notifications-messages"
-            : "notifications";
         console.log("✅ Navigate to Notifications");
-        console.log(
-          `🔄 Calling router.push('${baseRoute}/${notificationRoute}')`,
-        );
-        router.push(`${baseRoute}/${notificationRoute}`);
+        console.log(`🔄 Calling router.push('${baseRoute}/notifications')`);
+        router.push(`${baseRoute}/notifications`);
         break;
 
       // Principal-specific navigation
@@ -136,10 +130,7 @@ export const getNavigationRoutes = (userCategory = null) => {
 
     // Common routes
     schoolCalendar: `${baseRoute}/school-calendar`,
-    notifications:
-      userCategoryName === "parent"
-        ? `${baseRoute}/notifications-messages`
-        : `${baseRoute}/notifications`,
+    notifications: `${baseRoute}/notifications`,
 
     // Principal routes
     dashboard: `${baseRoute}/dashboard`,

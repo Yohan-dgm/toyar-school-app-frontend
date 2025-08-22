@@ -3,7 +3,9 @@
 // Global functions available in browser console for testing notification APIs
 // ============================================================================
 
-const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1 || "https://school-app.toyar.lk";
+const BASE_URL =
+  process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1 ||
+  "https://school-app.toyar.lk";
 
 // Global logger for test results
 const testLogger = {
@@ -40,15 +42,15 @@ const getAuthToken = () => {
     if (window.__REDUX_STORE__) {
       return window.__REDUX_STORE__.getState().app.token;
     }
-    
+
     // Fallback: try to get from AsyncStorage or other sources
-    const stored = localStorage.getItem('persist:root');
+    const stored = localStorage.getItem("persist:root");
     if (stored) {
       const parsed = JSON.parse(stored);
-      const appState = JSON.parse(parsed.app || '{}');
+      const appState = JSON.parse(parsed.app || "{}");
       return appState.token;
     }
-    
+
     return null;
   } catch (error) {
     testLogger.error("Failed to get auth token", { error });
@@ -71,15 +73,20 @@ const getUserId = () => {
 };
 
 // Generic API test function
-const testAPI = async (endpoint, method = 'GET', body = null, description = '') => {
+const testAPI = async (
+  endpoint,
+  method = "GET",
+  body = null,
+  description = "",
+) => {
   const token = getAuthToken();
   const fullUrl = `${BASE_URL}/api${endpoint}`;
-  
+
   testLogger.info(`Testing ${method} ${endpoint}`, {
     description,
     fullUrl,
     hasToken: !!token,
-    tokenPreview: token ? `${token.substring(0, 15)}...` : 'No token',
+    tokenPreview: token ? `${token.substring(0, 15)}...` : "No token",
     body,
   });
 
@@ -87,33 +94,33 @@ const testAPI = async (endpoint, method = 'GET', body = null, description = '') 
 
   try {
     const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     };
 
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     const config = {
       method,
       headers,
-      credentials: 'include',
+      credentials: "include",
     };
 
-    if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+    if (body && (method === "POST" || method === "PUT" || method === "PATCH")) {
       config.body = JSON.stringify(body);
     }
 
     const response = await fetch(fullUrl, config);
     const duration = Date.now() - startTime;
-    
+
     // Try to parse response as JSON
     let responseData;
-    const contentType = response.headers.get('content-type');
-    
-    if (contentType && contentType.includes('application/json')) {
+    const contentType = response.headers.get("content-type");
+
+    if (contentType && contentType.includes("application/json")) {
       responseData = await response.json();
     } else {
       responseData = await response.text();
@@ -126,12 +133,17 @@ const testAPI = async (endpoint, method = 'GET', body = null, description = '') 
         duration: `${duration}ms`,
         contentType,
         responseType: typeof responseData,
-        responseStructure: typeof responseData === 'object' ? {
-          success: responseData?.success,
-          message: responseData?.message,
-          hasData: !!responseData?.data,
-          dataKeys: responseData?.data ? Object.keys(responseData.data).slice(0, 10) : [],
-        } : null,
+        responseStructure:
+          typeof responseData === "object"
+            ? {
+                success: responseData?.success,
+                message: responseData?.message,
+                hasData: !!responseData?.data,
+                dataKeys: responseData?.data
+                  ? Object.keys(responseData.data).slice(0, 10)
+                  : [],
+              }
+            : null,
         fullResponse: responseData,
       });
     } else {
@@ -150,7 +162,6 @@ const testAPI = async (endpoint, method = 'GET', body = null, description = '') 
       data: responseData,
       duration,
     };
-
   } catch (error) {
     const duration = Date.now() - startTime;
     testLogger.error(`${method} ${endpoint} - NETWORK ERROR`, {
@@ -183,7 +194,12 @@ const testNotificationAPI = {
       type_id: null, // Required: null for all types, or 1-8 for specific notification types
     };
     const body = { ...defaultParams, ...params };
-    return await testAPI('/communication-management/notifications/list', 'POST', body, 'Get user notifications with required type_id parameter');
+    return await testAPI(
+      "/communication-management/notifications/list",
+      "POST",
+      body,
+      "Get user notifications with required type_id parameter",
+    );
   },
 
   // Test notification stats endpoint - POST /api/communication-management/notifications/stats
@@ -201,7 +217,12 @@ const testNotificationAPI = {
       ...defaultFilters,
       ...filters,
     };
-    return await testAPI('/communication-management/notifications/stats', 'POST', body, 'Get notification statistics with all required validation parameters');
+    return await testAPI(
+      "/communication-management/notifications/stats",
+      "POST",
+      body,
+      "Get notification statistics with all required validation parameters",
+    );
   },
 
   // Test mark notification as read - POST /api/communication-management/notifications/mark-read
@@ -212,7 +233,12 @@ const testNotificationAPI = {
       notification_id: parseInt(notificationId),
       mark_all: false,
     };
-    return await testAPI('/communication-management/notifications/mark-read', 'POST', body, `Mark notification ${notificationId} as read with POST method`);
+    return await testAPI(
+      "/communication-management/notifications/mark-read",
+      "POST",
+      body,
+      `Mark notification ${notificationId} as read with POST method`,
+    );
   },
 
   // Test delete notification - POST /api/communication-management/notifications/delete
@@ -222,7 +248,12 @@ const testNotificationAPI = {
       user_id: userId,
       notification_id: parseInt(notificationId),
     };
-    return await testAPI('/communication-management/notifications/delete', 'POST', body, `Delete notification ${notificationId} with POST method`);
+    return await testAPI(
+      "/communication-management/notifications/delete",
+      "POST",
+      body,
+      `Delete notification ${notificationId} with POST method`,
+    );
   },
 
   // Test mark all notifications as read - POST /api/communication-management/notifications/mark-read
@@ -232,7 +263,12 @@ const testNotificationAPI = {
       user_id: userId,
       mark_all: true,
     };
-    return await testAPI('/communication-management/notifications/mark-read', 'POST', body, 'Mark all notifications as read with POST method');
+    return await testAPI(
+      "/communication-management/notifications/mark-read",
+      "POST",
+      body,
+      "Mark all notifications as read with POST method",
+    );
   },
 
   // Test notification types endpoint - POST /api/communication-management/notification-types
@@ -243,7 +279,12 @@ const testNotificationAPI = {
       search_phrase: "",
       search_filter_list: [],
     };
-    return await testAPI('/communication-management/notification-types', 'POST', body, 'Get notification types with POST method');
+    return await testAPI(
+      "/communication-management/notification-types",
+      "POST",
+      body,
+      "Get notification types with POST method",
+    );
   },
 
   // Test announcement categories endpoint - POST /api/communication-management/announcement-categories
@@ -254,7 +295,12 @@ const testNotificationAPI = {
       search_phrase: "",
       search_filter_list: [],
     };
-    return await testAPI('/communication-management/announcement-categories', 'POST', body, 'Get announcement categories with POST method');
+    return await testAPI(
+      "/communication-management/announcement-categories",
+      "POST",
+      body,
+      "Get announcement categories with POST method",
+    );
   },
 
   // Test create notification - POST /api/communication-management/notifications/create
@@ -268,28 +314,37 @@ const testNotificationAPI = {
       user_id: getUserId(),
     };
     const body = { ...defaultData, ...notificationData };
-    return await testAPI('/communication-management/notifications/create', 'POST', body, 'Create a test notification with POST method');
+    return await testAPI(
+      "/communication-management/notifications/create",
+      "POST",
+      body,
+      "Create a test notification with POST method",
+    );
   },
 
   // Test specific notification types (1-8)
   async testNotificationTypes() {
     const notificationTypes = [
-      { id: 1, name: 'System' },
-      { id: 2, name: 'Announcement' },
-      { id: 3, name: 'Academic' },
-      { id: 4, name: 'Event' },
-      { id: 5, name: 'Alert' },
-      { id: 6, name: 'Attendance' },
-      { id: 7, name: 'Financial' },
-      { id: 8, name: 'Social' },
+      { id: 1, name: "System" },
+      { id: 2, name: "Announcement" },
+      { id: 3, name: "Academic" },
+      { id: 4, name: "Event" },
+      { id: 5, name: "Alert" },
+      { id: 6, name: "Attendance" },
+      { id: 7, name: "Financial" },
+      { id: 8, name: "Social" },
     ];
 
     testLogger.info("Testing notifications by type...");
     const results = {};
 
     for (const type of notificationTypes) {
-      testLogger.info(`Testing notifications for type: ${type.name} (ID: ${type.id})`);
-      results[`type_${type.id}`] = await this.getNotifications({ type_id: type.id });
+      testLogger.info(
+        `Testing notifications for type: ${type.name} (ID: ${type.id})`,
+      );
+      results[`type_${type.id}`] = await this.getNotifications({
+        type_id: type.id,
+      });
     }
 
     return results;
@@ -298,30 +353,31 @@ const testNotificationAPI = {
   // Test different filter combinations
   async testFilterCombinations() {
     testLogger.info("Testing different filter combinations...");
-    
+
     const testCases = [
       {
         name: "All notifications",
-        params: { type_id: null }
+        params: { type_id: null },
       },
       {
         name: "System notifications only",
-        params: { type_id: 1 }
+        params: { type_id: 1 },
       },
       {
         name: "High priority only",
-        params: { priority: "high" }
+        params: { priority: "high" },
       },
       {
         name: "Urgent announcements",
-        params: { type_id: 2, priority: "urgent" }
+        params: { type_id: 2, priority: "urgent" },
       },
     ];
 
     const results = {};
     for (const testCase of testCases) {
       testLogger.info(`Testing: ${testCase.name}`);
-      results[testCase.name.replace(/\s+/g, '_').toLowerCase()] = await this.getNotifications(testCase.params);
+      results[testCase.name.replace(/\s+/g, "_").toLowerCase()] =
+        await this.getNotifications(testCase.params);
     }
 
     return results;
@@ -330,34 +386,35 @@ const testNotificationAPI = {
   // Test stats with different filters
   async testStatsFilters() {
     testLogger.info("Testing stats with different filters...");
-    
+
     const testCases = [
       {
         name: "All stats",
-        filters: {}
+        filters: {},
       },
       {
         name: "Today only",
-        filters: { date_range: "today" }
+        filters: { date_range: "today" },
       },
       {
         name: "High priority only",
-        filters: { priority_filter: ["high", "urgent"] }
+        filters: { priority_filter: ["high", "urgent"] },
       },
       {
         name: "System notifications only",
-        filters: { type_filter: [1] }
+        filters: { type_filter: [1] },
       },
       {
         name: "Unread only",
-        filters: { include_read: false }
+        filters: { include_read: false },
       },
     ];
 
     const results = {};
     for (const testCase of testCases) {
       testLogger.info(`Testing stats: ${testCase.name}`);
-      results[testCase.name.replace(/\s+/g, '_').toLowerCase()] = await this.getNotificationStats(testCase.filters);
+      results[testCase.name.replace(/\s+/g, "_").toLowerCase()] =
+        await this.getNotificationStats(testCase.filters);
     }
 
     return results;
@@ -365,28 +422,36 @@ const testNotificationAPI = {
 
   // Test all endpoints in sequence
   async testAll() {
-    testLogger.info("Running comprehensive notification API test suite with POST methods");
-    
+    testLogger.info(
+      "Running comprehensive notification API test suite with POST methods",
+    );
+
     const results = {};
-    
+
     testLogger.info("=== Testing Core POST Endpoints ===");
     results.stats = await this.getNotificationStats();
     results.notifications = await this.getNotifications();
     results.types = await this.getNotificationTypes();
     results.categories = await this.getAnnouncementCategories();
-    
+
     testLogger.info("=== Testing Mutation POST Endpoints ===");
     // Test with sample notification ID if notifications exist
-    if (results.notifications?.success && results.notifications?.data?.notifications?.length > 0) {
-      const firstNotificationId = results.notifications.data.notifications[0].id;
-      testLogger.info(`Testing actions with notification ID: ${firstNotificationId}`);
-      
+    if (
+      results.notifications?.success &&
+      results.notifications?.data?.notifications?.length > 0
+    ) {
+      const firstNotificationId =
+        results.notifications.data.notifications[0].id;
+      testLogger.info(
+        `Testing actions with notification ID: ${firstNotificationId}`,
+      );
+
       // Test mark as read (only if notification is unread)
       const firstNotification = results.notifications.data.notifications[0];
       if (!firstNotification.is_read) {
         results.markAsRead = await this.markAsRead(firstNotificationId);
       }
-      
+
       // Optionally test delete (uncomment if needed)
       // results.deleteNotification = await this.deleteNotification(firstNotificationId);
     }
@@ -395,77 +460,120 @@ const testNotificationAPI = {
     testLogger.info("=== API Test Summary ===");
     const summary = Object.entries(results).map(([endpoint, result]) => ({
       endpoint,
-      status: result.success ? '✅ SUCCESS' : '❌ FAILED',
+      status: result.success ? "✅ SUCCESS" : "❌ FAILED",
       httpStatus: result.status,
       duration: result.duration,
-      method: 'POST', // All endpoints now use POST
+      method: "POST", // All endpoints now use POST
     }));
 
     console.table(summary);
-    
-    const successCount = Object.values(results).filter(r => r.success).length;
+
+    const successCount = Object.values(results).filter((r) => r.success).length;
     const totalCount = Object.keys(results).length;
-    
-    testLogger.info(`Test Results: ${successCount}/${totalCount} endpoints successful`, {
-      successRate: `${Math.round((successCount / totalCount) * 100)}%`,
-      details: summary,
-      methodUsed: 'POST (like educator-feedback-api.ts)',
-    });
+
+    testLogger.info(
+      `Test Results: ${successCount}/${totalCount} endpoints successful`,
+      {
+        successRate: `${Math.round((successCount / totalCount) * 100)}%`,
+        details: summary,
+        methodUsed: "POST (like educator-feedback-api.ts)",
+      },
+    );
 
     return results;
   },
 
   // Interactive test mode
   async interactive() {
-    testLogger.info("Interactive mode - Available commands (all using POST method with validation parameters):");
+    testLogger.info(
+      "Interactive mode - Available commands (all using POST method with validation parameters):",
+    );
     console.log("// Basic API calls:");
-    console.log("testNotificationAPI.getNotifications() // POST with type_id parameter");
-    console.log("testNotificationAPI.getNotificationStats() // POST with validation parameters");
-    console.log("testNotificationAPI.getNotificationTypes() // POST communication-management/notification-types");
-    console.log("testNotificationAPI.getAnnouncementCategories() // POST communication-management/announcement-categories");
-    console.log("testNotificationAPI.markAsRead(notificationId) // POST communication-management/notifications/mark-read");
-    console.log("testNotificationAPI.deleteNotification(notificationId) // POST communication-management/notifications/delete");
-    console.log("testNotificationAPI.markAllAsRead() // POST communication-management/notifications/mark-read");
-    console.log("testNotificationAPI.createNotification(data) // POST communication-management/notifications/create");
+    console.log(
+      "testNotificationAPI.getNotifications() // POST with type_id parameter",
+    );
+    console.log(
+      "testNotificationAPI.getNotificationStats() // POST with validation parameters",
+    );
+    console.log(
+      "testNotificationAPI.getNotificationTypes() // POST communication-management/notification-types",
+    );
+    console.log(
+      "testNotificationAPI.getAnnouncementCategories() // POST communication-management/announcement-categories",
+    );
+    console.log(
+      "testNotificationAPI.markAsRead(notificationId) // POST communication-management/notifications/mark-read",
+    );
+    console.log(
+      "testNotificationAPI.deleteNotification(notificationId) // POST communication-management/notifications/delete",
+    );
+    console.log(
+      "testNotificationAPI.markAllAsRead() // POST communication-management/notifications/mark-read",
+    );
+    console.log(
+      "testNotificationAPI.createNotification(data) // POST communication-management/notifications/create",
+    );
     console.log("");
     console.log("// Advanced testing:");
-    console.log("testNotificationAPI.testNotificationTypes() // Test all 8 notification types");
-    console.log("testNotificationAPI.testFilterCombinations() // Test different filter combinations");
-    console.log("testNotificationAPI.testStatsFilters() // Test stats with different filters");
+    console.log(
+      "testNotificationAPI.testNotificationTypes() // Test all 8 notification types",
+    );
+    console.log(
+      "testNotificationAPI.testFilterCombinations() // Test different filter combinations",
+    );
+    console.log(
+      "testNotificationAPI.testStatsFilters() // Test stats with different filters",
+    );
     console.log("testNotificationAPI.testAll() // Test all endpoints");
     console.log("");
     console.log("// Filter examples:");
-    console.log("testNotificationAPI.getNotifications({type_id: 1}) // System notifications only");
-    console.log("testNotificationAPI.getNotifications({priority: 'high'}) // High priority only");
-    console.log("testNotificationAPI.getNotificationStats({date_range: 'today'}) // Today's stats only");
-    
+    console.log(
+      "testNotificationAPI.getNotifications({type_id: 1}) // System notifications only",
+    );
+    console.log(
+      "testNotificationAPI.getNotifications({priority: 'high'}) // High priority only",
+    );
+    console.log(
+      "testNotificationAPI.getNotificationStats({date_range: 'today'}) // Today's stats only",
+    );
+
     // Show current user context and notification types
     testLogger.info("Current user context", {
       userId: getUserId(),
       hasToken: !!getAuthToken(),
-      tokenPreview: getAuthToken() ? `${getAuthToken().substring(0, 15)}...` : 'No token',
+      tokenPreview: getAuthToken()
+        ? `${getAuthToken().substring(0, 15)}...`
+        : "No token",
       baseUrl: BASE_URL,
-      apiPattern: 'POST method with validation parameters',
+      apiPattern: "POST method with validation parameters",
     });
 
     testLogger.info("Available notification types", {
       types: [
-        "1: System", "2: Announcement", "3: Academic", "4: Event",
-        "5: Alert", "6: Attendance", "7: Financial", "8: Social"
+        "1: System",
+        "2: Announcement",
+        "3: Academic",
+        "4: Event",
+        "5: Alert",
+        "6: Attendance",
+        "7: Financial",
+        "8: Social",
       ],
       priorities: ["normal", "high", "urgent"],
       dateRanges: ["today", "week", "month", "all"],
     });
-  }
+  },
 };
 
 // Make functions globally available
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   window.testNotificationAPI = testNotificationAPI;
-  
+
   // Auto-run on load
   testLogger.info("🚀 Notification API Test Utilities Loaded!");
-  testLogger.info("💡 Run testNotificationAPI.interactive() to see available commands");
+  testLogger.info(
+    "💡 Run testNotificationAPI.interactive() to see available commands",
+  );
   testLogger.info("🏃 Run testNotificationAPI.testAll() to test all endpoints");
 }
 

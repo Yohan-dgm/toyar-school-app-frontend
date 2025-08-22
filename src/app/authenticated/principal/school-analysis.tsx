@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import UnderDevelopmentOverlay from "../../../components/development/UnderDevelopmentOverlay";
+import { useFocusEffect } from "@react-navigation/native";
+import {
+  StudentAttendanceChart,
+  EducatorFeedbackChart,
+  SubjectEducatorsChart,
+} from "../../../components/dashboard-charts";
 
 interface AnalysisCard {
   id: string;
@@ -22,6 +28,39 @@ interface AnalysisCard {
 }
 
 export default function PrincipalSchoolAnalysis() {
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Add refresh functionality for real-time updates
+  useFocusEffect(
+    useCallback(() => {
+      // Force refresh of all chart data when user navigates to this screen
+      // This ensures real-time updates when new data is added
+      console.log(
+        "🔄 School Analysis page focused - triggering aggressive data refresh",
+      );
+
+      // Each chart component will handle its own refetch via useFocusEffect
+      // This provides double assurance of fresh data on navigation
+      console.log("📊 All chart components will refresh automatically");
+    }, []),
+  );
+
+  // Handle pull-to-refresh when user scrolls down
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    console.log("🔄 Pull-to-refresh triggered - forcing all charts to reload");
+
+    // Force immediate re-render of chart components by changing the key
+    setRefreshKey((prev) => prev + 1);
+
+    // Give visual feedback for refresh
+    setTimeout(() => {
+      setRefreshing(false);
+      console.log("✅ Refresh completed - charts should reload automatically");
+    }, 1500); // Slightly longer to ensure charts have time to refresh
+  }, []);
+
   const analysisCards: AnalysisCard[] = [
     {
       id: "academic_performance",
@@ -160,32 +199,42 @@ export default function PrincipalSchoolAnalysis() {
   };
 
   return (
-    <UnderDevelopmentOverlay
-      featureName="School Analysis"
-      comingSoonFeatures={[
-        "Academic performance analytics",
-        "Attendance tracking & insights",
-        "Teacher performance metrics",
-        "Budget analysis & forecasting",
-        "Resource utilization reports",
-        "Student behavior analytics",
-      ]}
-    >
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>School Analysis</Text>
-            <Text style={styles.headerSubtitle}>
-              Comprehensive analytics and performance insights
-            </Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.headerTop}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.headerTitle}>School Analytics</Text>
+            {/* <Text style={styles.userCategory}>
+              {getUserCategoryDisplayName(
+                typeof userCategory === "string"
+                  ? parseInt(userCategory)
+                  : userCategory
+              )}
+            </Text> */}
           </View>
+        </View>
+      </View>
 
-          <View style={styles.analysisContainer}>
-            {analysisCards.map((card) => renderAnalysisCard(card))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </UnderDevelopmentOverlay>
+      {/* Analytics Charts Section with Pull-to-Refresh */}
+      <ScrollView
+        style={styles.chartsSection}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#920734"]}
+            tintColor="#920734"
+            title="Pull to refresh charts..."
+            titleColor="#666"
+          />
+        }
+      >
+        <View style={styles.chartContainer}>
+          <EducatorFeedbackChart key={refreshKey} compact={false} />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -198,22 +247,22 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
   },
-  header: {
-    paddingVertical: 30,
-    alignItems: "center",
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#1a1a1a",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: "#666666",
-    textAlign: "center",
-  },
+  // header: {
+  //   paddingVertical: 30,
+  //   alignItems: "center",
+  // },
+  // headerTitle: {
+  //   fontSize: 24,
+  //   fontWeight: "bold",
+  //   color: "#1a1a1a",
+  //   marginBottom: 8,
+  //   textAlign: "center",
+  // },
+  // headerSubtitle: {
+  //   fontSize: 16,
+  //   color: "#666666",
+  //   textAlign: "center",
+  // },
   analysisContainer: {
     gap: 16,
     paddingBottom: 20,
@@ -270,5 +319,54 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666666",
     lineHeight: 18,
+  },
+  chartsSection: {
+    marginTop: 6,
+    paddingTop: 4,
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1a1a1a",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: "#666666",
+    textAlign: "center",
+    marginBottom: 24,
+  },
+  chartContainer: {
+    padding: 12,
+    marginBottom: 20,
+  },
+  header: {
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  headerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 8,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#111827",
   },
 });

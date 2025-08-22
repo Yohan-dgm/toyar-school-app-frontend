@@ -24,7 +24,7 @@ export interface BaseNotification {
   expires_at?: string;
   created_at: string;
   time_ago: string;
-  
+
   // Legacy fields for backward compatibility
   userId?: string;
   userCategory?: number;
@@ -86,14 +86,17 @@ export interface NotificationStats {
     this_week: number;
     this_month: number;
   };
-  by_type?: Record<string, {
-    name: string;
-    slug: string;
-    color: string;
-    icon: string;
-    count: number;
-    unread: number;
-  }>;
+  by_type?: Record<
+    string,
+    {
+      name: string;
+      slug: string;
+      color: string;
+      icon: string;
+      count: number;
+      unread: number;
+    }
+  >;
   priority_breakdown?: {
     normal: number;
     high: number;
@@ -101,7 +104,7 @@ export interface NotificationStats {
   };
   last_notification_at?: string;
   generated_at?: string;
-  
+
   // Legacy fields for backward compatibility
   totalUnread?: number;
   unreadByType?: Record<string, number>;
@@ -128,7 +131,7 @@ export interface CreateNotificationRequest {
   is_scheduled?: boolean;
   scheduled_at?: string;
   expires_at?: string;
-  
+
   // Legacy fields for backward compatibility
   recipientIds?: string[];
   recipientCategories?: number[];
@@ -145,7 +148,7 @@ export interface NotificationFilters {
   type_id?: number;
   search?: string;
   unread_only?: boolean;
-  
+
   // Legacy fields for backward compatibility
   type?: string;
   isRead?: boolean;
@@ -167,7 +170,7 @@ export interface PaginatedNotifications {
     to: number;
   };
   unread_count: number;
-  
+
   // Legacy fields for backward compatibility
   notifications?: BaseNotification[];
   totalCount?: number;
@@ -186,7 +189,7 @@ export interface PaginatedMessageThreads {
     from: number;
     to: number;
   };
-  
+
   // Legacy fields for backward compatibility
   threads?: MessageThread[];
   totalCount?: number;

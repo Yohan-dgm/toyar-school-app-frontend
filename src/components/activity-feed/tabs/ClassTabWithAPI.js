@@ -19,7 +19,10 @@ import MediaViewer from "../../media/MediaViewer";
 import Constants from "expo-constants";
 
 // Import media utilities
-import { buildActivityFeedMediaUrl, buildVideoThumbnailUrl } from "../../../utils/mediaUtils";
+import {
+  buildActivityFeedMediaUrl,
+  buildVideoThumbnailUrl,
+} from "../../../utils/mediaUtils";
 
 // Import API hooks and slice actions
 import {
@@ -42,6 +45,10 @@ import {
 // Import filter transformation utility
 import { transformFiltersForAPI } from "../FilterBar";
 
+// Import grade level utilities and user category constants
+import { getGradeNameById } from "../../../constants/gradeLevels";
+import { USER_CATEGORIES } from "../../../constants/userCategories";
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 // Get API base URL from environment
@@ -57,14 +64,20 @@ const transformMediaData = (mediaArray) => {
   return mediaArray
     .map((mediaItem) => {
       // Use the new media URL builder to construct proper URLs
-      const filename = mediaItem.filename || `file.${mediaItem.type === 'image' ? 'jpg' : mediaItem.type === 'video' ? 'mp4' : 'pdf'}`;
+      const filename =
+        mediaItem.filename ||
+        `file.${mediaItem.type === "image" ? "jpg" : mediaItem.type === "video" ? "mp4" : "pdf"}`;
       const mediaUrl = buildActivityFeedMediaUrl(mediaItem.url, filename);
-      
+
       let thumbnailUrl = null;
       if (mediaItem.thumbnail_url) {
         // Extract filename from thumbnail URL or use a default
-        const thumbnailFilename = mediaItem.thumbnail_url.split('/').pop() || 'thumbnail.jpg';
-        thumbnailUrl = buildVideoThumbnailUrl(mediaItem.thumbnail_url, thumbnailFilename);
+        const thumbnailFilename =
+          mediaItem.thumbnail_url.split("/").pop() || "thumbnail.jpg";
+        thumbnailUrl = buildVideoThumbnailUrl(
+          mediaItem.thumbnail_url,
+          thumbnailFilename,
+        );
       }
 
       switch (mediaItem.type) {
@@ -203,63 +216,69 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
       if (!postsToFilter || postsToFilter.length === 0) return [];
 
       console.log("🔍 Class Tab - Frontend filtering with:", currentFilters);
+      console.log("🎓 User category:", userCategory);
       console.log("🎓 Selected student:", selectedStudent);
-      console.log("🎓 Selected student grade level class info:", {
-        student_calling_name: selectedStudent?.student_calling_name,
-        grade: selectedStudent?.grade,
-        class_id: selectedStudent?.class_id,
-        campus: selectedStudent?.campus,
-      });
 
       return postsToFilter.filter((post) => {
-        // CLASS TAB SPECIFIC FILTERING:
-        // Show ALL posts where class_id matches the selected student's class_id
-        // No additional filtering - just match the class_id
+        // Different filtering logic based on user category
+        if (userCategory === USER_CATEGORIES.PARENT) {
+          // PARENT (user_category=1): Show class-specific posts
+          console.log("🎓 Parent filtering - class-specific posts");
 
-        // Check if we have a selected student with class_id
-        if (
-          !selectedStudent ||
-          selectedStudent.class_id === null ||
-          selectedStudent.class_id === undefined
-        ) {
+          // Check if we have a selected student with class_id
+          if (
+            !selectedStudent ||
+            selectedStudent.class_id === null ||
+            selectedStudent.class_id === undefined
+          ) {
+            console.log(
+              `🎓 Filtering out post ${post.id}: no selected student or student has no class_id`,
+            );
+            return false;
+          }
+
+          // Check if post has class_id that matches selected student's class_id
+          const postClassId = post.class_id;
+          const studentClassId = selectedStudent.class_id;
+
+          console.log(`🎓 Post ${post.id} class_id comparison:`, {
+            post_class_id: postClassId,
+            student_class_id: studentClassId,
+            match: postClassId === studentClassId,
+          });
+
+          // Show post if class_id matches
+          if (postClassId !== studentClassId) {
+            console.log(
+              `🎓 Filtering out post ${post.id}: class_id mismatch. Post class_id=${postClassId}, Student class_id=${studentClassId}`,
+            );
+            return false;
+          }
+
           console.log(
-            `🎓 Filtering out post ${post.id}: no selected student or student has no class_id`,
+            `🎓 Including class post ${post.id}: matches student's class_id (${studentClassId})`,
+          );
+          return true;
+        } else {
+          // NON-PARENT (user_category=2-12): Show all grade posts
+          console.log("🎓 Non-parent filtering - all grade posts");
+
+          // Show all posts that have grade information (grade_id)
+          if (post.grade_id || post.class_id) {
+            console.log(
+              `🎓 Including grade post ${post.id}: grade_id=${post.grade_id}, class_id=${post.class_id}`,
+            );
+            return true;
+          }
+
+          console.log(
+            `🎓 Filtering out post ${post.id}: no grade_id or class_id`,
           );
           return false;
         }
-
-        // Check if post has class_id that matches selected student's class_id
-        const postClassId = post.class_id;
-        const studentClassId = selectedStudent.class_id;
-
-        console.log(`🎓 Post ${post.id} class_id comparison:`, {
-          post_class_id: postClassId,
-          student_class_id: studentClassId,
-          student_grade: selectedStudent?.grade,
-          student_campus: selectedStudent?.campus,
-          match: postClassId === studentClassId,
-        });
-
-        // Show post if class_id matches (including null class_id posts if student has null class_id)
-        if (postClassId !== studentClassId) {
-          console.log(
-            `🎓 Filtering out post ${post.id}: class_id mismatch. Post class_id=${postClassId}, Student class_id=${studentClassId}`,
-          );
-          return false;
-        }
-
-        console.log(
-          `🎓 Including class post ${post.id}: matches student's class_id (${studentClassId})`,
-        );
-
-        // CLASS TAB: Show ALL posts for this class - no additional filtering
-        console.log(
-          `🎓 ✅ Including ALL class posts for class_id ${studentClassId}`,
-        );
-        return true;
       });
     },
-    [selectedStudent],
+    [selectedStudent, userCategory],
   );
 
   // Clear any existing filters when component mounts
@@ -444,9 +463,13 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
 
     return (
       <View style={styles.postContainer}>
-        {/* Class indicator */}
+        {/* Class/Grade indicator */}
         <View style={styles.classIndicator}>
-          <Text style={styles.classText}>Class Post</Text>
+          <Text style={styles.classText}>
+            {userCategory === USER_CATEGORIES.PARENT
+              ? "Class Post"
+              : `${getGradeNameById(post.class_id)} Post`}
+          </Text>
         </View>
 
         {/* Post Header */}
@@ -560,9 +583,11 @@ const ClassTabWithAPI = ({ filters, userCategory, isConnected }) => {
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              {selectedStudent
-                ? `No class posts found for ${selectedStudent.student_calling_name}'s class (${selectedStudent.grade})\n\nClass posts are specific to your child's grade/class and are different from school-wide posts.`
-                : "No class posts available"}
+              {userCategory === USER_CATEGORIES.PARENT
+                ? selectedStudent
+                  ? `No class posts found for ${selectedStudent.student_calling_name}'s class (${selectedStudent.grade})\n\nClass posts are specific to your child's grade/class and are different from school-wide posts.`
+                  : "No class posts available"
+                : "No grade posts available\n\nGrade posts are organized by grade levels and show content across all grades."}
             </Text>
           </View>
         )}
@@ -578,6 +603,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: 10,
+    paddingBottom: 100,
   },
   emptyContainer: {
     flex: 1,

@@ -87,6 +87,12 @@ export interface StudentAttendanceQueryParams {
   grade_level_class_name: string;
 }
 
+export interface StudentAttendanceByIdQueryParams {
+  student_id: number;
+  page: number;
+  page_size: number;
+}
+
 export interface AttendanceResponse {
   status: string;
   message: string;
@@ -110,6 +116,28 @@ export interface StudentAttendanceResponse {
     student_attendance_count: number;
     present_student_count: number;
     absent_student_count: number;
+  };
+  metadata: {
+    is_system_update_pending: boolean;
+  };
+}
+
+export interface StudentAttendanceByIdResponse {
+  status: string;
+  message: string;
+  data: {
+    attendance_records: StudentAttendanceRecord[];
+    pagination: {
+      page: number;
+      page_size: number;
+      total: number;
+      total_pages: number;
+    };
+    student_info: {
+      id: number;
+      full_name: string;
+      admission_number: string;
+    };
   };
   metadata: {
     is_system_update_pending: boolean;
@@ -409,6 +437,80 @@ export const attendanceApi = apiServer1.injectEndpoints({
       providesTags: ["StudentAttendance"],
     }),
 
+    getStudentAttendanceById: builder.query<
+      StudentAttendanceByIdResponse,
+      StudentAttendanceByIdQueryParams
+    >({
+      // TEMPORARY MOCK - Remove when backend endpoint is ready
+      queryFn: async (params) => {
+        console.log("🔗 Mock Student Attendance By ID API Request:", {
+          params,
+        });
+
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 800));
+
+        // Generate mock attendance records for specific student
+        const attendanceRecords = generateMockStudentAttendanceById(params);
+
+        const mockData: StudentAttendanceByIdResponse = {
+          status: "successful",
+          message: "",
+          data: {
+            attendance_records: attendanceRecords.records,
+            pagination: attendanceRecords.pagination,
+            student_info: attendanceRecords.studentInfo,
+          },
+          metadata: {
+            is_system_update_pending: true,
+          },
+        };
+
+        console.log("📊 Mock Student Attendance By ID Response:", {
+          status: mockData.status,
+          recordsCount: mockData.data.attendance_records.length,
+          totalRecords: mockData.data.pagination.total,
+          studentName: mockData.data.student_info.full_name,
+          currentPage: params.page,
+          pageSize: params.page_size,
+        });
+
+        // Log monthly distribution for debugging
+        const monthlyDistribution = mockData.data.attendance_records.reduce(
+          (acc, record) => {
+            const month = record.date.substring(0, 7); // Get YYYY-MM
+            if (!acc[month]) acc[month] = 0;
+            acc[month]++;
+            return acc;
+          },
+          {} as Record<string, number>,
+        );
+
+        console.log("📅 Monthly Distribution of Records:", monthlyDistribution);
+
+        return { data: mockData };
+      },
+
+      // REAL API CALL - Uncomment when backend is ready
+      /*
+      query: (params) => {
+        console.log("🔗 Student Attendance By ID API Request:", {
+          url: "api/attendance-management/student-attendance/get-student-attendance-by-id",
+          method: "POST",
+          params,
+          baseUrl: process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1,
+        });
+        return {
+          url: "api/attendance-management/student-attendance/get-student-attendance-by-id",
+          method: "POST",
+          body: params,
+        };
+      },
+      */
+
+      providesTags: ["StudentAttendanceById"],
+    }),
+
     createStudentAttendance: builder.mutation<
       CreateAttendanceResponse,
       CreateAttendanceRequest
@@ -446,6 +548,7 @@ export const attendanceApi = apiServer1.injectEndpoints({
         "Attendance",
         "StudentAttendance",
         "StudentAttendanceAggregated",
+        "StudentAttendanceById",
       ],
     }),
   }),
@@ -453,6 +556,139 @@ export const attendanceApi = apiServer1.injectEndpoints({
 });
 
 // Mock data generators
+function generateMockStudentAttendanceById(
+  params: StudentAttendanceByIdQueryParams,
+): {
+  records: StudentAttendanceRecord[];
+  pagination: {
+    page: number;
+    page_size: number;
+    total: number;
+    total_pages: number;
+  };
+  studentInfo: {
+    id: number;
+    full_name: string;
+    admission_number: string;
+  };
+} {
+  const { student_id, page, page_size } = params;
+
+  // Generate consistent student info based on student_id
+  const studentNames = [
+    "Thanumi Sasithma Dissanayake",
+    "Godakumbure Gedara Upeksha Sathsarani Bandara",
+    "Dissanayaka Mudiyanselage Sehas Saswindu Bandara",
+    "Liyanage Disas Damyuga Perara",
+    "Mirihagalla Kankanamlage Shiyon Menosha Mirihagalla",
+    "Wijesinghe Mudiyanselage Rivitha Nethdula Wijesinghe",
+    "Zero Senaji",
+    "Ranpati Dewage Kusal Bimsara Dissanayake",
+    "Withan Kankanamlage Lagni Akelya Withana",
+    "Kande Hevayalage Osindu Nethmina Jayarathna",
+  ];
+
+  const studentInfo = {
+    id: student_id,
+    full_name:
+      studentNames[(student_id - 1) % studentNames.length] || "Unknown Student",
+    admission_number: `NY24/${String(student_id).padStart(3, "0")}`,
+  };
+
+  // Generate mock attendance records for the current full calendar year
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const allRecords: StudentAttendanceRecord[] = [];
+
+  // Generate records for all 12 months of the current year
+  for (let month = 1; month <= 12; month++) {
+    // Get number of days in this month
+    const daysInMonth = new Date(currentYear, month, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentYear, month - 1, day);
+
+      // Skip weekends (Saturday = 6, Sunday = 0) for school attendance
+      if (date.getDay() === 0 || date.getDay() === 6) {
+        continue;
+      }
+
+      // Skip future dates (don't generate attendance for future school days)
+      if (date > now) {
+        continue;
+      }
+
+      // Fix timezone issue: use local date instead of UTC
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+      // Determine attendance pattern (90% present, 10% absent)
+      // Use date and student_id as seed for consistent patterns
+      const seed = student_id + date.getTime() / 1000000;
+      const random = Math.sin(seed) * 10000;
+      const randomValue = random - Math.floor(random);
+
+      let attendanceTypeId: number;
+      let inTime: string | null = null;
+      let outTime: string | null = null;
+
+      if (randomValue < 0.9) {
+        // Present - create single record with both in and out times
+        inTime = "07:30";
+        outTime = "13:00";
+        attendanceTypeId = 1; // Use type 1 for present (with both times)
+
+        allRecords.push({
+          id: 25000 + allRecords.length,
+          date: dateStr,
+          time: inTime, // Primary time (in time)
+          student_id: student_id,
+          attendance_type_id: attendanceTypeId,
+          notes: null,
+          out_time: outTime,
+          in_time: inTime,
+          attendance_type: { id: 1, name: "Present" },
+          student: studentInfo,
+        });
+      } else {
+        // Absent (attendance_type_id = 3)
+        allRecords.push({
+          id: 25000 + allRecords.length,
+          date: dateStr,
+          time: null,
+          student_id: student_id,
+          attendance_type_id: 3,
+          notes: "",
+          out_time: null,
+          in_time: null,
+          attendance_type: { id: 3, name: "Absent" },
+          student: studentInfo,
+        });
+      }
+    }
+  }
+
+  // Sort by date descending
+  allRecords.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  // Apply pagination
+  const startIndex = (page - 1) * page_size;
+  const endIndex = startIndex + page_size;
+  const paginatedRecords = allRecords.slice(startIndex, endIndex);
+
+  return {
+    records: paginatedRecords,
+    pagination: {
+      page: page,
+      page_size: page_size,
+      total: allRecords.length,
+      total_pages: Math.ceil(allRecords.length / page_size),
+    },
+    studentInfo,
+  };
+}
+
 function generateMockAttendanceRecords(params: AttendanceQueryParams): {
   filteredRecords: AttendanceRecord[];
   totalCount: number;
@@ -855,6 +1091,8 @@ export const {
   useLazyGetAttendanceAggregatedQuery,
   useGetStudentAttendanceListQuery,
   useLazyGetStudentAttendanceListQuery,
+  useGetStudentAttendanceByIdQuery,
+  useLazyGetStudentAttendanceByIdQuery,
   useCreateStudentAttendanceMutation,
 } = attendanceApi;
 
@@ -941,15 +1179,30 @@ export const formatAttendanceDate = (dateString: string): string => {
 
 // ===== CHART DATA PROCESSING UTILITIES =====
 
-export interface MonthlyAttendanceData {
-  month: string;
-  monthLabel: string;
+export interface DailyAttendanceData {
+  date: string;
+  dateLabel: string;
   year: number;
+  month: number;
+  day: number;
   totalStudents: number;
   presentCount: number;
   absentCount: number;
   attendanceRate: number;
   recordsCount: number;
+}
+
+export interface MonthlyAttendanceData {
+  month: string; // Format: "2024-01"
+  monthLabel: string; // Format: "Jan 2024"
+  year: number;
+  monthNumber: number; // 1-12
+  totalPresentStudents: number; // Sum of daily present counts for the month
+  totalStudentDays: number; // Sum of daily total students for the month
+  averageDailyPresent: number; // Average present students per day
+  attendanceRate: number; // Overall month attendance rate
+  daysWithData: number; // Number of days in month that have attendance data
+  totalDaysInMonth: number; // Total days in the calendar month
 }
 
 export const processAttendanceDataForChart = (
@@ -1000,6 +1253,145 @@ export const processAttendanceDataForChart = (
   return monthlyData;
 };
 
+export const processAttendanceDataForDates = (
+  attendanceRecords: AttendanceRecord[],
+  daysCount: number = 30,
+): DailyAttendanceData[] => {
+  if (!attendanceRecords || attendanceRecords.length === 0) {
+    return [];
+  }
+
+  const days = getLastNDays(daysCount);
+  const dailyData: DailyAttendanceData[] = [];
+
+  days.forEach(({ date, label, year, month, day }) => {
+    // Filter records for this specific date
+    const dayRecords = attendanceRecords.filter((record) => {
+      // Parse date safely to avoid timezone issues
+      const recordDate = record.date;
+      return recordDate === date;
+    });
+
+    // Calculate daily totals
+    const totalPresent = dayRecords.reduce(
+      (sum, record) => sum + record.present_student_count,
+      0,
+    );
+    const totalAbsent = dayRecords.reduce(
+      (sum, record) => sum + record.absent_student_count,
+      0,
+    );
+    const totalStudents = totalPresent + totalAbsent;
+    const attendanceRate =
+      totalStudents > 0 ? (totalPresent / totalStudents) * 100 : 0;
+
+    dailyData.push({
+      date,
+      dateLabel: label,
+      year,
+      month,
+      day,
+      totalStudents,
+      presentCount: totalPresent,
+      absentCount: totalAbsent,
+      attendanceRate: Math.round(attendanceRate * 100) / 100,
+      recordsCount: dayRecords.length,
+    });
+  });
+
+  return dailyData;
+};
+
+export const processAttendanceDataForMonths = (
+  attendanceRecords: AttendanceRecord[],
+  monthsCount: number = 6,
+): MonthlyAttendanceData[] => {
+  if (!attendanceRecords || attendanceRecords.length === 0) {
+    return [];
+  }
+
+  // First get all daily data for a longer period to ensure we have enough days for each month
+  const daysForMonths = monthsCount * 31; // Get enough days to cover all months
+  const dailyData = processAttendanceDataForDates(
+    attendanceRecords,
+    daysForMonths,
+  );
+
+  // Get the target months
+  const targetMonths = getLastNMonths(monthsCount);
+  const monthlyData: MonthlyAttendanceData[] = [];
+
+  targetMonths.forEach(({ month, label, year }) => {
+    // Filter daily data for this month
+    const monthDailyData = dailyData.filter((day) => {
+      return day.year === year && day.month === parseInt(month.split("-")[1]);
+    });
+
+    if (monthDailyData.length === 0) {
+      // If no data for this month, still include it with zeros
+      const monthDate = new Date(year, parseInt(month.split("-")[1]) - 1, 1);
+      const totalDaysInMonth = new Date(
+        year,
+        parseInt(month.split("-")[1]),
+        0,
+      ).getDate();
+
+      monthlyData.push({
+        month,
+        monthLabel: label + " " + year,
+        year,
+        monthNumber: parseInt(month.split("-")[1]),
+        totalPresentStudents: 0,
+        totalStudentDays: 0,
+        averageDailyPresent: 0,
+        attendanceRate: 0,
+        daysWithData: 0,
+        totalDaysInMonth,
+      });
+      return;
+    }
+
+    // Calculate monthly aggregates from daily data
+    const totalPresentStudents = monthDailyData.reduce(
+      (sum, day) => sum + day.presentCount,
+      0,
+    );
+    const totalStudentDays = monthDailyData.reduce(
+      (sum, day) => sum + day.totalStudents,
+      0,
+    );
+    const daysWithData = monthDailyData.length;
+    const averageDailyPresent =
+      daysWithData > 0 ? totalPresentStudents / daysWithData : 0;
+    const attendanceRate =
+      totalStudentDays > 0
+        ? (totalPresentStudents / totalStudentDays) * 100
+        : 0;
+
+    const monthDate = new Date(year, parseInt(month.split("-")[1]) - 1, 1);
+    const totalDaysInMonth = new Date(
+      year,
+      parseInt(month.split("-")[1]),
+      0,
+    ).getDate();
+
+    monthlyData.push({
+      month,
+      monthLabel: label + " " + year,
+      year,
+      monthNumber: parseInt(month.split("-")[1]),
+      totalPresentStudents,
+      totalStudentDays,
+      averageDailyPresent: Math.round(averageDailyPresent * 10) / 10,
+      attendanceRate: Math.round(attendanceRate * 100) / 100,
+      daysWithData,
+      totalDaysInMonth,
+    });
+  });
+
+  return monthlyData;
+};
+
 export const getLastNMonths = (n: number = 6) => {
   const months = [];
 
@@ -1015,6 +1407,35 @@ export const getLastNMonths = (n: number = 6) => {
   }
 
   return months;
+};
+
+export const getLastNDays = (n: number = 30) => {
+  const days = [];
+  const now = new Date();
+
+  for (let i = n - 1; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+
+    const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    const label = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    days.push({
+      date: dateStr,
+      label,
+      year,
+      month,
+      day,
+      fullDate: new Date(date),
+    });
+  }
+  return days;
 };
 
 export const calculateAttendancePercentages = (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,37 +6,74 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../../../styles/theme";
 import { USER_CATEGORIES } from "../../../../constants/userCategories";
 import { setSelectedStudent } from "../../../../state-store/slices/app-slice";
 import { transformStudentWithProfilePicture } from "../../../../utils/studentProfileUtils";
 
-// House color mapping and validation
+// House logo and color mapping
 const getHouseInfo = (houseName) => {
   if (!houseName || houseName === "Unknown House") {
-    return { isValid: false, color: "#999999" }; // Gray for no house
+    return { isValid: false, color: "#999999", logo: null };
   }
 
   const lowerHouseName = houseName.toLowerCase();
 
   if (lowerHouseName.includes("vulcan")) {
-    return { isValid: true, color: "#FF8C00" }; // Orange
+    return {
+      isValid: true,
+      color: "#FF8C00",
+      logo: require("../../../../assets/nexis-college/Houses/Vulcan.png"),
+    };
   } else if (lowerHouseName.includes("tellus")) {
-    return { isValid: true, color: "#FFD700" }; // Yellow
+    return {
+      isValid: true,
+      color: "#FFD700",
+      logo: require("../../../../assets/nexis-college/Houses/Tellus.png"),
+    };
   } else if (lowerHouseName.includes("eurus")) {
-    return { isValid: true, color: "#87CEEB" }; // Light blue
+    return {
+      isValid: true,
+      color: "#87CEEB",
+      logo: require("../../../../assets/nexis-college/Houses/Eurus.png"),
+    };
   } else if (lowerHouseName.includes("calypso")) {
-    return { isValid: true, color: "#32CD32" }; // Green
+    return {
+      isValid: true,
+      color: "#32CD32",
+      logo: require("../../../../assets/nexis-college/Houses/Calypso.png"),
+    };
   }
 
-  return { isValid: false, color: "#999999" }; // Gray for unrecognized house
+  return { isValid: false, color: "#999999", logo: null };
 };
+
+// Sample badges data
+const sampleBadges = [
+  { id: 1, name: "Honor Roll", icon: "🏆", color: "#FFD700" },
+  { id: 2, name: "Perfect Attendance", icon: "📅", color: "#4CAF50" },
+  { id: 3, name: "Sports Excellence", icon: "⚽", color: "#FF5722" },
+  { id: 4, name: "Leadership", icon: "👑", color: "#9C27B0" },
+  { id: 5, name: "Academic Star", icon: "⭐", color: "#2196F3" },
+];
 
 const StudentProfileMain = () => {
   const dispatch = useDispatch();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Enable LayoutAnimation on Android
+  if (
+    Platform.OS === "android" &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
 
   // Get global state
   const { sessionData, selectedStudent } = useSelector((state) => state.app);
@@ -58,7 +95,7 @@ const StudentProfileMain = () => {
   useEffect(() => {
     if (students.length > 0 && !selectedStudent) {
       console.log(
-        `👤 StudentProfileMain - Auto-selecting first student: ${students[0]?.student_calling_name}`,
+        `👤 StudentProfileMain - Auto-selecting first student: ${students[0]?.student_calling_name}`
       );
       dispatch(setSelectedStudent(students[0]));
     }
@@ -69,12 +106,12 @@ const StudentProfileMain = () => {
     "👤 StudentProfileMain - User category:",
     userCategory,
     "Is parent:",
-    isParent,
+    isParent
   );
   console.log("👤 StudentProfileMain - Students count:", students.length);
   console.log(
     "👤 StudentProfileMain - Selected student:",
-    selectedStudent?.student_calling_name,
+    selectedStudent?.student_calling_name
   );
 
   if (!selectedStudent) {
@@ -91,53 +128,6 @@ const StudentProfileMain = () => {
     );
   }
 
-  const renderTimelineItem = (item, index) => (
-    <View key={index} style={styles.timelineItem}>
-      <View style={styles.timelineLeft}>
-        <View style={styles.timelineYear}>
-          <Text style={styles.timelineYearText}>{item.year}</Text>
-        </View>
-        {index < selectedStudent.timeline.length - 1 && (
-          <View style={styles.timelineLine} />
-        )}
-      </View>
-
-      <View style={styles.timelineContent}>
-        <View style={styles.timelineCard}>
-          <View style={styles.timelineHeader}>
-            <Image
-              source={selectedStudent.profileImage}
-              style={styles.timelineAvatar}
-            />
-            <View style={styles.timelineInfo}>
-              <Text style={styles.timelineGrade}>{item.grade}</Text>
-              <Text style={styles.timelineGPA}>GPA: {item.gpa}</Text>
-            </View>
-          </View>
-
-          {/* Badges */}
-          <View style={styles.badgesContainer}>
-            {item.badges.map((badge, badgeIndex) => (
-              <View key={badgeIndex} style={styles.badge}>
-                <Text style={styles.badgeText}>{badge}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* Achievements */}
-          <View style={styles.achievementsContainer}>
-            <Text style={styles.achievementsTitle}>Achievements:</Text>
-            {item.achievements.map((achievement, achIndex) => (
-              <Text key={achIndex} style={styles.achievementText}>
-                • {achievement}
-              </Text>
-            ))}
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -145,59 +135,164 @@ const StudentProfileMain = () => {
         showsVerticalScrollIndicator={false}
         bounces={true}
       >
-        {/* Modern Profile Card */}
-        <View style={styles.profileCard}>
-          <View style={styles.profileImageWrapper}>
-            <Image
-              source={selectedStudent.profileImage}
-              style={styles.profileImage}
-            />
-            <View style={styles.verifiedBadge}>
-              <MaterialIcons name="verified" size={18} color="#FFFFFF" />
+        {/* Expandable Academic Information Header */}
+        <TouchableOpacity
+          style={styles.academicHeader}
+          onPress={() => {
+            LayoutAnimation.configureNext(
+              LayoutAnimation.Presets.easeInEaseOut
+            );
+            setIsExpanded(!isExpanded);
+          }}
+          activeOpacity={0.9}
+        >
+          <View style={styles.headerMainContent}>
+            <View style={styles.studentPhotoSection}>
+              <View style={styles.photoContainer}>
+                <Image
+                  source={selectedStudent.profileImage}
+                  style={styles.academicProfileImage}
+                />
+                {(() => {
+                  const houseInfo = getHouseInfo(selectedStudent.schoolHouse);
+                  if (houseInfo.isValid && houseInfo.logo) {
+                    return (
+                      <View style={styles.houseLogoContainer}>
+                        <Image
+                          source={houseInfo.logo}
+                          style={styles.houseLogo}
+                        />
+                      </View>
+                    );
+                  }
+                  return null;
+                })()}
+              </View>
+            </View>
+
+            <View style={styles.academicInfo}>
+              <Text style={styles.academicStudentName}>
+                {selectedStudent.name}
+              </Text>
+              <Text style={styles.academicStudentId}>
+                ID: {selectedStudent.studentId}
+              </Text>
+              <Text style={styles.academicClass}>
+                Class {selectedStudent.grade}
+              </Text>
+              <Text style={styles.academicHouse}>
+                {selectedStudent.schoolHouse}
+              </Text>
+            </View>
+
+            <View style={styles.expandIcon}>
+              <MaterialIcons
+                name={isExpanded ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                size={24}
+                color="#920734"
+              />
             </View>
           </View>
 
-          <View style={styles.profileInfo}>
-            <Text style={styles.studentName}>{selectedStudent.name}</Text>
-            <Text style={styles.studentDetails}>
-              {selectedStudent.studentId} • Class {selectedStudent.grade}
-            </Text>
-            <Text style={styles.campusName}>{selectedStudent.campus}</Text>
+          {/* Expanded Student Details */}
+          {isExpanded && (
+            <View style={styles.expandedContent}>
+              <View style={styles.divider} />
+              <View style={styles.detailsGrid}>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Admission Number</Text>
+                  <Text style={styles.detailValue}>
+                    {selectedStudent.admissionNumber || "ADM/2024/001"}
+                  </Text>
+                </View>
 
-            {(() => {
-              const houseInfo = getHouseInfo(selectedStudent.schoolHouse);
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Full Name</Text>
+                  <Text style={styles.detailValue}>{selectedStudent.name}</Text>
+                </View>
 
-              if (!houseInfo.isValid) {
-                // Show small gray circle for no house or unrecognized house
-                return (
-                  <View
-                    style={[
-                      styles.houseCircle,
-                      { backgroundColor: houseInfo.color },
-                    ]}
-                  />
-                );
-              }
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Date of Birth</Text>
+                  <Text style={styles.detailValue}>
+                    {selectedStudent.dateOfBirth || "12 Mar 2010"}
+                  </Text>
+                </View>
 
-              // Show house name with color
-              return (
-                <View
-                  style={[
-                    styles.houseChip,
-                    { backgroundColor: houseInfo.color },
-                  ]}
-                >
-                  <Text style={styles.houseText}>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Gender</Text>
+                  <Text style={styles.detailValue}>
+                    {selectedStudent.gender || "Male"}
+                  </Text>
+                </View>
+
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>School House</Text>
+                  <Text style={styles.detailValue}>
                     {selectedStudent.schoolHouse}
                   </Text>
                 </View>
-              );
-            })()}
-          </View>
+              </View>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        {/* Premium Badges Section */}
+        <View style={styles.badgesSection}>
+          <Text style={styles.badgesSectionTitle}>Achievements & Badges</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.badgesScrollContainer}
+          >
+            {sampleBadges.map((badge) => (
+              <View
+                key={badge.id}
+                style={[styles.premiumBadge, { borderColor: badge.color }]}
+              >
+                <Text style={styles.badgeIcon}>{badge.icon}</Text>
+                <Text style={styles.badgeName}>{badge.name}</Text>
+                <View
+                  style={[
+                    styles.badgeColorBar,
+                    { backgroundColor: badge.color },
+                  ]}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Academic Cards */}
+        <View style={styles.academicCardsSection}>
+          <TouchableOpacity style={styles.academicCard}>
+            <View style={styles.cardIcon}>
+              <MaterialIcons name="quiz" size={32} color="#6366F1" />
+            </View>
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>Exams</Text>
+              <Text style={styles.cardSubtitle}>
+                View exam schedules & results
+              </Text>
+            </View>
+            <MaterialIcons name="arrow-forward-ios" size={16} color="#9CA3AF" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.academicCard}>
+            <View style={styles.cardIcon}>
+              <MaterialIcons name="assignment" size={32} color="#10B981" />
+            </View>
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>Report Cards</Text>
+              <Text style={styles.cardSubtitle}>
+                Academic performance reports
+              </Text>
+            </View>
+            <MaterialIcons name="arrow-forward-ios" size={16} color="#9CA3AF" />
+          </TouchableOpacity>
         </View>
 
         {/* Modern Stats Cards */}
-        <View style={styles.statsGrid}>
+        {/* <View style={styles.statsGrid}>
           <View style={styles.statCard}>
             <View style={styles.statIcon}>
               <Ionicons name="calendar-outline" size={24} color="#920734" />
@@ -215,7 +310,7 @@ const StudentProfileMain = () => {
             <Text style={styles.statNumber}>
               {selectedStudent.timeline.reduce(
                 (sum, item) => sum + item.achievements.length,
-                0,
+                0
               )}
             </Text>
             <Text style={styles.statTitle}>Awards</Text>
@@ -232,53 +327,10 @@ const StudentProfileMain = () => {
             <Text style={styles.statNumber}>95%</Text>
             <Text style={styles.statTitle}>Attendance</Text>
           </View>
-        </View>
-
-        {/* Student Information Section */}
-        <View style={styles.infoSection}>
-          <View style={styles.sectionHeader}>
-            <Ionicons name="person-outline" size={20} color="#920734" />
-            <Text style={styles.sectionTitle}>Student Information</Text>
-          </View>
-
-          <View style={styles.infoList}>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Admission Number</Text>
-              <Text style={styles.infoValue}>
-                {selectedStudent.admissionNumber || "ADM/2024/001"}
-              </Text>
-            </View>
-
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Full Name</Text>
-              <Text style={styles.infoValue}>{selectedStudent.name}</Text>
-            </View>
-
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Date of Birth</Text>
-              <Text style={styles.infoValue}>
-                {selectedStudent.dateOfBirth || "12 Mar 2010"}
-              </Text>
-            </View>
-
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>Gender</Text>
-              <Text style={styles.infoValue}>
-                {selectedStudent.gender || "Male"}
-              </Text>
-            </View>
-
-            <View style={styles.infoItem}>
-              <Text style={styles.infoLabel}>School House</Text>
-              <Text style={styles.infoValue}>
-                {selectedStudent.schoolHouse}
-              </Text>
-            </View>
-          </View>
-        </View>
+        </View> */}
 
         {/* Academic Timeline Section */}
-        <View style={styles.timelineSection}>
+        {/* <View style={styles.timelineSection}>
           <View style={styles.sectionHeader}>
             <Ionicons name="school-outline" size={20} color="#920734" />
             <Text style={styles.sectionTitle}>Academic Timeline</Text>
@@ -286,10 +338,10 @@ const StudentProfileMain = () => {
 
           <View style={styles.timelineContainer}>
             {selectedStudent.timeline.map((item, index) =>
-              renderTimelineItem(item, index),
+              renderTimelineItem(item, index)
             )}
           </View>
-        </View>
+        </View> */}
 
         {/* Bottom Spacing */}
         <View style={styles.bottomSpacing} />
@@ -302,6 +354,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+    paddingBottom: 30,
   },
   content: {
     flex: 1,
@@ -438,6 +491,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: theme.spacing.md,
     gap: 8,
   },
@@ -584,6 +638,200 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 40,
+  },
+  // New Academic Header Styles
+  academicHeader: {
+    backgroundColor: "#F4E5E8",
+    margin: theme.spacing.md,
+    borderRadius: 16,
+    borderColor: "maroon",
+    padding: theme.spacing.md,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    overflow: "hidden",
+  },
+  headerMainContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  expandIcon: {
+    marginLeft: "auto",
+    paddingLeft: theme.spacing.sm,
+  },
+  expandedContent: {
+    marginTop: theme.spacing.sm,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#E5E7EB",
+    marginBottom: theme.spacing.sm,
+  },
+  detailsGrid: {
+    gap: theme.spacing.xs,
+  },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 6,
+  },
+  detailLabel: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 13,
+    color: "#6B7280",
+    flex: 1,
+  },
+  detailValue: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 13,
+    color: "#111827",
+    flex: 1,
+    textAlign: "right",
+  },
+  studentPhotoSection: {
+    marginRight: theme.spacing.md,
+  },
+  photoContainer: {
+    position: "relative",
+  },
+  academicProfileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "#920734",
+  },
+  houseLogoContainer: {
+    position: "absolute",
+    bottom: -3,
+    right: -3,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  houseLogo: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+  },
+  academicInfo: {
+    flex: 1,
+  },
+  academicStudentName: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 15,
+    color: "#000000",
+    marginBottom: 3,
+  },
+  academicStudentId: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 13,
+    color: "#666666",
+    marginBottom: 2,
+  },
+  academicClass: {
+    fontFamily: theme.fonts.medium,
+    fontSize: 14,
+    color: "#920734",
+    marginBottom: 2,
+  },
+  academicHouse: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 13,
+    color: "#888888",
+  },
+  // Premium Badges Styles
+  badgesSection: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+  },
+  badgesSectionTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 18,
+    color: "#000000",
+    marginBottom: theme.spacing.md,
+  },
+  badgesScrollContainer: {
+    paddingHorizontal: 4,
+  },
+  premiumBadge: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 16,
+    marginRight: 12,
+    alignItems: "center",
+    minWidth: 100,
+    borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  badgeIcon: {
+    fontSize: 24,
+    marginBottom: 8,
+  },
+  badgeName: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 12,
+    color: "#000000",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  badgeColorBar: {
+    width: "100%",
+    height: 3,
+    borderRadius: 2,
+  },
+  // Academic Cards Styles
+  academicCardsSection: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    gap: 12,
+  },
+  academicCard: {
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: theme.spacing.lg,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  cardIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#F8FAFC",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: theme.spacing.md,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 16,
+    color: "#000000",
+    marginBottom: 4,
+  },
+  cardSubtitle: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 14,
+    color: "#6B7280",
   },
 });
 

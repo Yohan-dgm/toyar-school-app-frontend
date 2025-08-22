@@ -17,7 +17,10 @@ import MediaViewer from "../../media/MediaViewer";
 import Constants from "expo-constants";
 
 // Import media utilities
-import { buildActivityFeedMediaUrl, buildVideoThumbnailUrl } from "../../../utils/mediaUtils";
+import {
+  buildActivityFeedMediaUrl,
+  buildVideoThumbnailUrl,
+} from "../../../utils/mediaUtils";
 
 // Import API hooks and slice actions
 import {
@@ -52,14 +55,20 @@ const transformMediaData = (mediaArray) => {
   return mediaArray
     .map((mediaItem) => {
       // Use the new media URL builder to construct proper URLs
-      const filename = mediaItem.filename || `file.${mediaItem.type === 'image' ? 'jpg' : mediaItem.type === 'video' ? 'mp4' : 'pdf'}`;
+      const filename =
+        mediaItem.filename ||
+        `file.${mediaItem.type === "image" ? "jpg" : mediaItem.type === "video" ? "mp4" : "pdf"}`;
       const mediaUrl = buildActivityFeedMediaUrl(mediaItem.url, filename);
-      
+
       let thumbnailUrl = null;
       if (mediaItem.thumbnail_url) {
         // Extract filename from thumbnail URL or use a default
-        const thumbnailFilename = mediaItem.thumbnail_url.split('/').pop() || 'thumbnail.jpg';
-        thumbnailUrl = buildVideoThumbnailUrl(mediaItem.thumbnail_url, thumbnailFilename);
+        const thumbnailFilename =
+          mediaItem.thumbnail_url.split("/").pop() || "thumbnail.jpg";
+        thumbnailUrl = buildVideoThumbnailUrl(
+          mediaItem.thumbnail_url,
+          thumbnailFilename,
+        );
       }
 
       switch (mediaItem.type) {
@@ -615,6 +624,8 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: 10,
+    // backgroundColor: "red",
+    paddingBottom: 100,
   },
   postContainer: {
     backgroundColor: "white",

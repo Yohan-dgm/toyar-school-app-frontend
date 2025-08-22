@@ -268,7 +268,7 @@ const StudentDetailsDrawer = () => {
           </View>
         </View>
 
-        <View style={styles.profileSection}>
+        {/* <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Academic Information</Text>
           <View style={styles.infoRow}>
             <MaterialIcons
@@ -292,7 +292,7 @@ const StudentDetailsDrawer = () => {
               {selectedStudent.behavior_rating}/5.0
             </Text>
           </View>
-        </View>
+        </View> */}
 
         <View style={styles.profileSection}>
           <Text style={styles.sectionTitle}>Personal Information</Text>

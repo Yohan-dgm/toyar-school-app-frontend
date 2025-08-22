@@ -11,8 +11,7 @@ export default function ParentLayout() {
         <Stack.Screen name="school-calendar" />
         <Stack.Screen name="student-growth" />
         <Stack.Screen name="student-profile" />
-        <Stack.Screen name="notifications-messages" />
-        <Stack.Screen name="user-actions" />
+        <Stack.Screen name="notifications" />
 
         {/* Legacy routes for backward compatibility */}
         <Stack.Screen name="school-life" />
@@ -20,6 +19,7 @@ export default function ParentLayout() {
         <Stack.Screen name="calendar" />
         <Stack.Screen name="academic" />
         <Stack.Screen name="performance" />
+        <Stack.Screen name="user-actions" />
       </Stack>
     </DynamicUserLayout>
   );

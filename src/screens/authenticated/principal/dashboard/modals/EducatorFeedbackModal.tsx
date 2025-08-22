@@ -3153,7 +3153,7 @@ const EducatorFeedbackModal: React.FC<EducatorFeedbackModalProps> = ({
                 );
                 const grade = String(item.grade_level.name || "Unknown Grade");
                 const description = String(
-                  item.comments[0].comment || "No description available",
+                  item.comments?.[0]?.comment || "No description available",
                 );
                 const createdBy = String(
                   item.created_by.call_name_with_title || "Unknown Educator",

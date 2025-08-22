@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useSelector } from "react-redux";
 import { theme } from "../../styles/theme";
 import { USER_CATEGORIES } from "../../constants/userCategories";
+import PremiumTabNavigation from "../common/PremiumTabNavigation";
 
 // Import tab components
 import SchoolTabWithAPI from "./tabs/SchoolTabWithAPI";
@@ -84,37 +85,8 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
     return () => unsubscribe();
   }, []);
 
-  // Determine which tabs to show based on user category
-  const getVisibleTabs = () => {
-    const tabs = [
-      {
-        name: "School",
-        component: SchoolTabWithAPI,
-        icon: "school",
-        label: "School",
-      },
-      {
-        name: "Class",
-        component: ClassTabWithAPI,
-        icon: "category",
-        label: "Class",
-      },
-    ];
-
-    // Only parents can see the Student tab
-    if (userCategory === USER_CATEGORIES.PARENT) {
-      tabs.push({
-        name: "Student",
-        component: StudentTabWithAPI,
-        icon: "face",
-        label: "Student",
-      });
-    }
-
-    return tabs;
-  };
-
-  const visibleTabs = getVisibleTabs();
+  // Tabs are now handled by PremiumTabNavigation component
+  // No need for getVisibleTabs() as it's built into the component
 
   // Handle filter changes
   const handleFilterChange = (newFilters) => {
@@ -136,33 +108,12 @@ const ActivityFeed = ({ userCategory = USER_CATEGORIES.PARENT }) => {
 
   return (
     <View style={styles.container}>
-      {/* Custom Tab Bar */}
-      <View style={styles.tabBar}>
-        {visibleTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.name}
-            style={[
-              styles.tabButton,
-              activeTab === tab.name && styles.activeTabButton,
-            ]}
-            onPress={() => setActiveTab(tab.name)}
-          >
-            <Icon
-              name={tab.icon}
-              size={18}
-              color={activeTab === tab.name ? theme.colors.primary : "#8E8E93"}
-            />
-            <Text
-              style={[
-                styles.tabLabel,
-                activeTab === tab.name && styles.activeTabLabel,
-              ]}
-            >
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* Premium Tab Navigation */}
+      <PremiumTabNavigation
+        activeTab={activeTab}
+        onTabPress={setActiveTab}
+        userCategory={userCategory}
+      />
 
       {/* Filter Bar */}
       <FilterBar
@@ -204,41 +155,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  tabBar: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#E5E5EA",
-    paddingVertical: 3,
-    paddingHorizontal: 12,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  tabButton: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 4,
-    paddingHorizontal: 4,
-  },
-  activeTabButton: {
-    backgroundColor: "rgba(146, 7, 52, 0.08)",
-    borderRadius: 6,
-    marginHorizontal: 2,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  tabLabel: {
-    fontSize: 10,
-    fontWeight: "500",
-    color: "#8E8E93",
-    marginTop: 0,
-    marginBottom: 0,
-    textAlign: "center",
-  },
-  activeTabLabel: {
-    color: theme.colors.primary,
-    fontWeight: "600",
   },
   tabContent: {
     flex: 1,

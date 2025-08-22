@@ -196,7 +196,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
     error,
     isLoading,
     isFetching,
-  } = useGetStudentAttendanceAggregatedQuery(queryParams);
+  } = useGetAttendanceAggregatedQuery(queryParams);
 
   // API query for chart data (all records)
   const chartQueryParams = createAttendanceQueryParams(
@@ -207,7 +207,7 @@ const StudentAttendanceModal: React.FC<StudentAttendanceModalProps> = ({
   );
 
   const { data: chartData, isLoading: chartLoading } =
-    useGetStudentAttendanceAggregatedQuery(chartQueryParams);
+    useGetAttendanceAggregatedQuery(chartQueryParams);
 
   // Reset page when filters change
   useEffect(() => {

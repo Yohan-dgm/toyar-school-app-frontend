@@ -60,7 +60,7 @@ const DrawerMenu = ({ isVisible, onClose }) => {
     "🏠 DrawerMenu - User category:",
     userCategory,
     "Is parent:",
-    isParent,
+    isParent
   );
 
   // State for section overlay
@@ -182,18 +182,18 @@ const DrawerMenu = ({ isVisible, onClose }) => {
       icon: "person",
       onPress: () => handleSectionOpen("profile"),
     },
-    {
-      id: "notifications",
-      title: "Notifications",
-      icon: "notifications",
-      onPress: () => handleSectionOpen("notifications"),
-    },
-    {
-      id: "settings",
-      title: "Settings",
-      icon: "settings",
-      onPress: () => handleSectionOpen("settings"),
-    },
+    // {
+    //   id: "notifications",
+    //   title: "Notifications",
+    //   icon: "notifications",
+    //   onPress: () => handleSectionOpen("notifications"),
+    // },
+    // {
+    //   id: "settings",
+    //   title: "Settings",
+    //   icon: "settings",
+    //   onPress: () => handleSectionOpen("settings"),
+    // },
     {
       id: "help",
       title: "Help & Support",

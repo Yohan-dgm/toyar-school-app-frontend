@@ -17,7 +17,7 @@ export const useActiveTab = () => {
     "/authenticated/parent/school-calendar": "schoolCalendar",
     "/authenticated/parent/student-growth": "studentGrowth",
     "/authenticated/parent/student-profile": "studentProfile",
-    "/authenticated/parent/notifications-messages": "notifications",
+    "/authenticated/parent/notifications": "notifications",
 
     // Educator routes
     "/authenticated/educator": "home",

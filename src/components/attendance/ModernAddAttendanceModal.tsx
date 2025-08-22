@@ -526,7 +526,7 @@ const ModernAddAttendanceModal: React.FC<AddAttendanceModalProps> = ({
     <FullScreenModal
       visible={visible}
       onClose={handleClose}
-      title="Add Attendance"
+      title="Mark Attendance"
       backgroundColor="#F8F9FA"
     >
       <Animated.View style={[styles.container, animatedStyle]}>

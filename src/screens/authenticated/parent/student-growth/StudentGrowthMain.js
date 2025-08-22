@@ -8,17 +8,32 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import { theme } from "../../../../styles/theme";
 import { transformStudentWithProfilePicture } from "../../../../utils/studentProfileUtils";
 import { USER_CATEGORIES } from "../../../../constants/userCategories";
 import { setSelectedStudent } from "../../../../state-store/slices/app-slice";
-import BeeHiveMetrics from "../../../../components/student-growth/BeeHiveMetrics";
-import DynamicGrowthChart from "../../../../components/student-growth/DynamicGrowthChart";
-import { studentGrowthMetrics } from "../../../../data/studentGrowthData";
+import {
+  studentGrowthMetrics,
+  modernColors,
+} from "../../../../data/studentGrowthData";
+
+// Import new modern components
+import ModernStatsHeader from "../../../../components/student-growth/ModernStatsHeader";
+import IntelligenceCardsNetwork from "../../../../components/student-growth/IntelligenceCardsNetwork";
+import IntelligenceGridView from "../../../../components/student-growth/IntelligenceGridView";
+import IntelligenceDetailModal from "../../../../components/student-growth/IntelligenceDetailModal";
+import TermBasedRatingChart from "../../../../components/student-growth/TermBasedRatingChart";
+import EducatorFeedbackDrawer from "../../../../components/student-growth/EducatorFeedbackDrawer";
+import StudentAttendanceDrawer from "../../../../components/student-growth/StudentAttendanceDrawer";
 
 const StudentGrowthMain = () => {
   const dispatch = useDispatch();
   const [selectedMetric, setSelectedMetric] = useState(null);
+  const [selectedIntelligence, setSelectedIntelligence] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedIntelligenceForModal, setSelectedIntelligenceForModal] =
+    useState(null);
+  const [feedbackDrawerVisible, setFeedbackDrawerVisible] = useState(false);
+  const [attendanceDrawerVisible, setAttendanceDrawerVisible] = useState(false);
 
   // Get global state
   const { sessionData, selectedStudent } = useSelector((state) => state.app);
@@ -57,6 +72,50 @@ const StudentGrowthMain = () => {
     setSelectedMetric(metric);
   };
 
+  const handleIntelligenceSelect = (intelligence) => {
+    setSelectedIntelligence(intelligence);
+    setSelectedIntelligenceForModal(intelligence);
+    setModalVisible(true);
+    console.log("📊 Selected intelligence:", intelligence.title);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedIntelligenceForModal(null);
+  };
+
+  const handleEducatorFeedbackPress = () => {
+    console.log("📋 Opening Educator Feedback drawer");
+    console.log("📋 Selected student:", selectedStudent);
+    console.log("📋 Student ID being passed:", selectedStudent?.id || 0);
+    console.log(
+      "📋 Student name being passed:",
+      selectedStudent?.student_calling_name,
+    );
+    setFeedbackDrawerVisible(true);
+  };
+
+  const closeFeedbackDrawer = () => {
+    console.log("📋 Closing Educator Feedback drawer");
+    setFeedbackDrawerVisible(false);
+  };
+
+  const handleAttendancePress = () => {
+    console.log("🎯 Opening Student Attendance drawer");
+    console.log("🎯 Selected student:", selectedStudent);
+    console.log("🎯 Student ID being passed:", selectedStudent?.id || 0);
+    console.log(
+      "🎯 Student name being passed:",
+      selectedStudent?.student_calling_name,
+    );
+    setAttendanceDrawerVisible(true);
+  };
+
+  const closeAttendanceDrawer = () => {
+    console.log("🎯 Closing Student Attendance drawer");
+    setAttendanceDrawerVisible(false);
+  };
+
   // Debug logging
   console.log(
     "📈 StudentGrowthMain - User category:",
@@ -76,38 +135,59 @@ const StudentGrowthMain = () => {
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {/* Bee Hive Metrics Grid */}
-        <BeeHiveMetrics
-          selectedMetric={selectedMetric}
-          onMetricSelect={handleMetricSelect}
+        {/* Modern Stats Header */}
+
+        <ModernStatsHeader
+          title="Intelligence Assessment Dashboard"
+          subtitle={`${selectedStudent?.student_calling_name || "Student"} - 13 Areas of Development`}
         />
 
-        {/* Dynamic Growth Chart */}
-        <DynamicGrowthChart selectedMetric={selectedMetric} />
+        {/* Overall Rating Section - Second Section */}
+        {/* <IntelligenceCardsNetwork
+          onCardSelect={handleIntelligenceSelect}
+          selectedIntelligenceId={selectedIntelligence?.id}
+        /> */}
+        {/* Intelligence Grid View - First Section */}
+        <IntelligenceGridView
+          onCardSelect={handleIntelligenceSelect}
+          studentId={selectedStudent?.id}
+        />
 
-        {/* Action Buttons */}
-        <View style={styles.actionButtonsContainer}>
+        {/* Term-Based Rating Chart Section */}
+        <TermBasedRatingChart studentId={selectedStudent?.id} />
+
+        {/* Modern Action Buttons */}
+        <View style={styles.modernActionContainer}>
           <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => alert("Educator Feedback feature coming soon!")}
+            style={styles.modernActionButton}
+            onPress={handleEducatorFeedbackPress}
           >
-            <MaterialIcons name="feedback" size={24} color="#FFFFFF" />
-            <Text style={styles.actionButtonText}>View Educator Feedback</Text>
+            <View style={styles.actionIconContainer}>
+              <MaterialIcons name="feedback" size={20} color="#FFFFFF" />
+            </View>
+            <Text style={styles.modernActionText}>Educator Feedbacks</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.actionButton, styles.secondaryActionButton]}
-            onPress={() => alert("Attendance feature coming soon!")}
+            style={[styles.modernActionButton, styles.secondaryModernAction]}
+            onPress={handleAttendancePress}
           >
-            <MaterialIcons
-              name="event-available"
-              size={24}
-              color={theme.colors.primary}
-            />
+            <View
+              style={[
+                styles.actionIconContainer,
+                styles.secondaryIconContainer,
+              ]}
+            >
+              <MaterialIcons
+                name="event-available"
+                size={20}
+                color={"maroon"}
+              />
+            </View>
             <Text
               style={[
-                styles.actionButtonText,
-                styles.secondaryActionButtonText,
+                styles.modernActionText,
+                styles.secondaryModernActionText,
               ]}
             >
               View Attendance
@@ -115,45 +195,75 @@ const StudentGrowthMain = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Performance Summary */}
-        {selectedMetric && (
-          <View style={styles.summaryContainer}>
-            <Text style={styles.summaryTitle}>Performance Summary</Text>
-            <Text style={styles.summaryText}>
-              {selectedStudent?.student_calling_name} is performing{" "}
-              <Text
-                style={[
-                  styles.summaryHighlight,
-                  { color: selectedMetric.color },
-                ]}
-              >
-                {selectedMetric.rating >= 4.5
-                  ? "excellently"
-                  : selectedMetric.rating >= 3.5
-                    ? "well"
-                    : selectedMetric.rating >= 2.5
-                      ? "adequately"
-                      : "below expectations"}
-              </Text>{" "}
-              in {selectedMetric.title.toLowerCase()}. Current rating is{" "}
-              <Text
-                style={[
-                  styles.summaryHighlight,
-                  { color: selectedMetric.color },
-                ]}
-              >
-                {selectedMetric.rating.toFixed(1)}/5.0
-              </Text>
-              {selectedMetric.rating < 3 && (
-                <Text style={styles.warningText}>
-                  {" "}
-                  ⚠️ This area needs attention and improvement.
-                </Text>
-              )}
-            </Text>
+        {/* Modern Performance Summary */}
+        {/* <View style={styles.modernSummaryContainer}>
+          <View style={styles.summaryHeader}>
+            <MaterialIcons
+              name="analytics"
+              size={24}
+              color={modernColors.primary}
+            />
+            <Text style={styles.modernSummaryTitle}>Performance Insights</Text>
           </View>
-        )}
+          <Text style={styles.modernSummaryText}>
+            {selectedStudent?.student_calling_name || "Student"} is showing{" "}
+            <Text
+              style={[styles.summaryHighlight, { color: modernColors.success }]}
+            >
+              excellent progress
+            </Text>{" "}
+            across multiple performance areas. Academic performance and
+            attendance are{" "}
+            <Text
+              style={[styles.summaryHighlight, { color: modernColors.primary }]}
+            >
+              particularly strong
+            </Text>{" "}
+            with consistent improvement trends.
+          </Text>
+
+          <View style={styles.insightCards}>
+            <View style={styles.insightCard}>
+              <Text style={styles.insightValue}>92%</Text>
+              <Text style={styles.insightLabel}>Overall Score</Text>
+            </View>
+            <View style={styles.insightCard}>
+              <Text style={styles.insightValue}>↗ 8%</Text>
+              <Text style={styles.insightLabel}>This Month</Text>
+            </View>
+            <View style={styles.insightCard}>
+              <Text style={styles.insightValue}>Top 5%</Text>
+              <Text style={styles.insightLabel}>Class Rank</Text>
+            </View>
+          </View>
+        </View> */}
+
+        {/* Add padding at bottom for better scrolling */}
+        <View style={{ height: 32 }} />
       </ScrollView>
+
+      {/* Intelligence Detail Modal */}
+      <IntelligenceDetailModal
+        visible={modalVisible}
+        intelligence={selectedIntelligenceForModal}
+        onClose={closeModal}
+      />
+
+      {/* Educator Feedback Drawer */}
+      <EducatorFeedbackDrawer
+        visible={feedbackDrawerVisible}
+        onClose={closeFeedbackDrawer}
+        studentId={selectedStudent?.id || 0}
+        studentName={selectedStudent?.student_calling_name}
+      />
+
+      {/* Student Attendance Drawer */}
+      <StudentAttendanceDrawer
+        visible={attendanceDrawerVisible}
+        onClose={closeAttendanceDrawer}
+        studentId={selectedStudent?.id || 0}
+        studentName={selectedStudent?.student_calling_name}
+      />
     </View>
   );
 };
@@ -161,105 +271,117 @@ const StudentGrowthMain = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: modernColors.backgroundSolid,
   },
   scrollContainer: {
     flex: 1,
+    paddingBottom: 20,
   },
-  chartPlaceholder: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 20,
-    margin: 20,
-    alignItems: "center",
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  chartTitle: {
-    fontSize: 18,
-    fontFamily: theme.fonts.bold,
-    color: "#000000",
-    marginBottom: 8,
-  },
-  chartSubtitle: {
-    fontSize: 16,
-    fontFamily: theme.fonts.medium,
-    color: theme.colors.primary,
-    marginBottom: 12,
-  },
-  chartDescription: {
-    fontSize: 14,
-    fontFamily: theme.fonts.regular,
-    color: "#666666",
-    textAlign: "center",
-  },
-  actionButtonsContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+  modernActionContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingBottom: 70,
     gap: 12,
   },
-  actionButton: {
+  modernActionButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: theme.colors.primary,
-    paddingVertical: 16,
+    backgroundColor: "maroon",
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 12,
-    gap: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  secondaryActionButton: {
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: theme.colors.primary,
-  },
-  actionButtonText: {
-    fontSize: 16,
-    fontFamily: theme.fonts.bold,
-    color: "#FFFFFF",
-  },
-  secondaryActionButtonText: {
-    color: theme.colors.primary,
-  },
-  summaryContainer: {
-    margin: 20,
-    padding: 20,
-    backgroundColor: "#FFFFFF",
     borderRadius: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: theme.colors.primary,
-    elevation: 2,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  summaryTitle: {
-    fontSize: 18,
-    fontFamily: theme.fonts.bold,
-    color: "#000000",
-    marginBottom: 12,
+  secondaryModernAction: {
+    backgroundColor: modernColors.surface,
+    borderWidth: 2,
+    borderColor: "maroon",
   },
-  summaryText: {
-    fontSize: 15,
-    fontFamily: theme.fonts.regular,
-    color: "#333333",
-    lineHeight: 22,
+  actionIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+  secondaryIconContainer: {
+    backgroundColor: modernColors.primary + "15",
+  },
+  modernActionText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    textAlign: "center",
+    flex: 1,
+  },
+  secondaryModernActionText: {
+    color: "maroon",
+  },
+  modernSummaryContainer: {
+    margin: 16,
+    padding: 20,
+    backgroundColor: modernColors.surface,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  summaryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  modernSummaryTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: modernColors.text,
+    marginLeft: 12,
+  },
+  modernSummaryText: {
+    fontSize: 16,
+    color: modernColors.text,
+    lineHeight: 24,
+    marginBottom: 20,
   },
   summaryHighlight: {
-    fontFamily: theme.fonts.bold,
+    fontWeight: "700",
   },
-  warningText: {
-    color: "#FF3B30",
-    fontFamily: theme.fonts.medium,
+  insightCards: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  insightCard: {
+    flex: 1,
+    backgroundColor: modernColors.primary + "08",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: modernColors.primary + "20",
+  },
+  insightValue: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: modernColors.primary,
+    marginBottom: 4,
+  },
+  insightLabel: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: modernColors.textSecondary,
+    textAlign: "center",
   },
 });
 

@@ -1,5 +1,6 @@
 import { apiServer1 } from "../api/api-server-1";
 import { apiService } from "../services/api/ApiService";
+import { studentExamApi } from "../api/student-exam-api";
 import appSlice from "./slices/app-slice";
 import schoolPostsSlice from "./slices/school-life/school-posts-slice";
 import classPostsSlice from "./slices/school-life/class-posts-slice";
@@ -9,6 +10,7 @@ import studentGrowthSlice from "./slices/student-growth/studentGrowthSlice";
 import educatorFeedbackSlice from "./slices/educator/educatorFeedbackSliceWithAPI";
 import attendanceSlice from "./slices/educator/attendanceSlice";
 import studentAnalysisSlice from "./slices/educator/studentAnalysisSlice";
+import paymentSlice from "./slices/payment/paymentSlice";
 import { userPostsMiddleware } from "./middleware/user-posts-middleware";
 import { studentSelectionMiddleware } from "./middleware/student-selection-middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -33,7 +35,11 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage: AsyncStorage,
-  blacklist: [apiServer1.reducerPath, apiService.reducerPath], // these reduce will not persist data (NOTE: blacklist rtk api slices so that to use tags)
+  blacklist: [
+    apiServer1.reducerPath,
+    apiService.reducerPath,
+    studentExamApi.reducerPath,
+  ], // these reduce will not persist data (NOTE: blacklist rtk api slices so that to use tags)
   // whitelist: ['users'], //these reduce will persist data
 };
 
@@ -71,6 +77,7 @@ const rootReducer = combineReducers({
   app: appSlice,
   apiServer1: apiServer1.reducer,
   [apiService.reducerPath]: apiService.reducer,
+  [studentExamApi.reducerPath]: studentExamApi.reducer,
   schoolPosts: schoolPostsSlice,
   classPosts: classPostsSlice,
   studentPosts: studentPostsSlice,
@@ -79,6 +86,7 @@ const rootReducer = combineReducers({
   educatorFeedback: educatorFeedbackSlice,
   attendance: attendanceSlice,
   studentAnalysis: studentAnalysisSlice,
+  payment: paymentSlice,
 });
 export type RootReducer = ReturnType<typeof rootReducer>;
 const persistedReducer = persistReducer<RootReducer>(
@@ -98,6 +106,7 @@ const store = configureStore({
     }).concat(
       apiServer1.middleware,
       apiService.middleware,
+      studentExamApi.middleware,
       rtkQueryErrorLogger,
       userPostsMiddleware,
       studentSelectionMiddleware,

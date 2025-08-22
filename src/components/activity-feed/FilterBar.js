@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,10 @@ import {
   Modal,
   Animated,
   Platform,
+  HapticFeedback,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { BlurView } from "expo-blur";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { theme } from "../../styles/theme";
@@ -179,6 +182,12 @@ const FilterBar = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [animatedHeight] = useState(new Animated.Value(80)); // Increased for better layout
 
+  // Premium filter toggle animations
+  const toggleScale = useRef(new Animated.Value(1)).current;
+  const toggleRotation = useRef(new Animated.Value(0)).current;
+  const badgeScale = useRef(new Animated.Value(0)).current;
+  const glowOpacity = useRef(new Animated.Value(0)).current;
+
   // Generate dynamic categories and hashtags from posts data
   const dynamicCategories = extractCategoriesFromPosts(postsData);
   const dynamicHashtags = extractHashtagsFromPosts(postsData);
@@ -340,6 +349,34 @@ const FilterBar = ({
   }, [isExpanded, showDateSection, filters, animatedHeight]);
 
   const toggleExpanded = () => {
+    // Add haptic feedback
+    if (Platform.OS === "ios" && HapticFeedback) {
+      HapticFeedback.impact(HapticFeedback.ImpactFeedbackStyle.Light);
+    }
+
+    // Press animation sequence
+    Animated.sequence([
+      Animated.timing(toggleScale, {
+        toValue: 0.85,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.spring(toggleScale, {
+        toValue: 1,
+        tension: 200,
+        friction: 6,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Rotation animation
+    Animated.spring(toggleRotation, {
+      toValue: isExpanded ? 0 : 1,
+      tension: 120,
+      friction: 8,
+      useNativeDriver: true,
+    }).start();
+
     setIsExpanded(!isExpanded);
   };
 
@@ -430,6 +467,58 @@ const FilterBar = ({
     );
   };
 
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (filters.searchTerm) count++;
+    if (filters.dateRange.start || filters.dateRange.end) count++;
+    if (filters.category !== "all") count++;
+    if (filters.hashtags.length > 0) count += filters.hashtags.length;
+    return count;
+  };
+
+  // Animate badge when filter count changes
+  useEffect(() => {
+    const activeCount = getActiveFilterCount();
+
+    if (activeCount > 0) {
+      // Show badge with bounce animation
+      Animated.spring(badgeScale, {
+        toValue: 1,
+        tension: 180,
+        friction: 6,
+        useNativeDriver: true,
+      }).start();
+
+      // Start glow animation
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(glowOpacity, {
+            toValue: 0.3,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(glowOpacity, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ]),
+      ).start();
+    } else {
+      // Hide badge
+      Animated.spring(badgeScale, {
+        toValue: 0,
+        tension: 180,
+        friction: 6,
+        useNativeDriver: true,
+      }).start();
+
+      // Stop glow animation
+      glowOpacity.stopAnimation();
+      glowOpacity.setValue(0);
+    }
+  }, [filters, badgeScale, glowOpacity]);
+
   const selectedCategory = categories.find(
     (cat) => cat.value === filters.category,
   );
@@ -455,11 +544,71 @@ const FilterBar = ({
           ) : null}
         </View>
 
-        {/* Filter Toggle Button */}
-        <TouchableOpacity style={styles.filterToggle} onPress={toggleExpanded}>
-          <Icon name="tune" size={20} color={theme.colors.primary} />
-          {hasActiveFilters() && <View style={styles.filterIndicator} />}
-        </TouchableOpacity>
+        {/* Premium Filter Toggle Button */}
+        <Animated.View
+          style={[
+            styles.filterToggleContainer,
+            { transform: [{ scale: toggleScale }] },
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.filterToggle}
+            onPress={toggleExpanded}
+            activeOpacity={0.8}
+          >
+            {/* Background Gradient */}
+            <LinearGradient
+              colors={
+                hasActiveFilters()
+                  ? ["#667eea", "#764ba2"]
+                  : ["#F2F2F7", "#E8E8ED"]
+              }
+              style={styles.toggleGradientBackground}
+            />
+
+            {/* Animated Icon */}
+            <Animated.View
+              style={[
+                styles.toggleIconContainer,
+                {
+                  transform: [
+                    {
+                      rotate: toggleRotation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["0deg", "180deg"],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Icon
+                name="tune"
+                size={24}
+                color={hasActiveFilters() ? "#FFFFFF" : theme.colors.primary}
+                style={styles.toggleIcon}
+              />
+            </Animated.View>
+
+            {/* Enhanced Badge with Count */}
+            {getActiveFilterCount() > 0 && (
+              <Animated.View
+                style={[
+                  styles.filterBadge,
+                  { transform: [{ scale: badgeScale }] },
+                ]}
+              >
+                <View style={styles.badgeBackground}>
+                  <Text style={styles.badgeText}>
+                    {getActiveFilterCount() > 99
+                      ? "99+"
+                      : getActiveFilterCount()}
+                  </Text>
+                </View>
+              </Animated.View>
+            )}
+          </TouchableOpacity>
+        </Animated.View>
       </View>
 
       {/* Expanded Filter Options */}
@@ -776,7 +925,7 @@ const FilterBar = ({
                   <View style={styles.selectedFilterChip}>
                     <Icon name="search" size={14} color="#34C759" />
                     <Text style={styles.selectedFilterText}>
-                      "{filters.searchTerm}"
+                      &quot;{filters.searchTerm}&quot;
                     </Text>
                     <TouchableOpacity
                       onPress={() =>
@@ -972,23 +1121,84 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
+  filterToggleContainer: {
+    position: "relative",
+  },
   filterToggle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#F2F2F7",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
+    overflow: "hidden",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
   },
-  filterIndicator: {
+  toggleGradientBackground: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: theme.colors.primary,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 24,
+  },
+  toggleIconContainer: {
+    zIndex: 2,
+  },
+  toggleIcon: {
+    zIndex: 3,
+  },
+  filterBadge: {
+    position: "absolute",
+    top: -6,
+    right: -6,
+    minWidth: 22,
+    height: 22,
+    borderRadius: 11,
+    overflow: "hidden",
+    zIndex: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  badgeBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 6,
+    borderRadius: 11,
+    backgroundColor: "#FF6B6B",
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    textAlign: "center",
+    lineHeight: 12,
   },
   expandedFilters: {
     paddingHorizontal: 16,

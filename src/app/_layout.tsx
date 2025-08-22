@@ -21,14 +21,14 @@ import { Platform, LogBox } from "react-native";
 import * as ExpoSplashScreen from "expo-splash-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import { SplashUtils } from "../utils/splash-utils";
+// import { SplashUtils } from "../utils/splash-utils";
 import "../../global.css";
 
 // Import debug utilities in development
-if (__DEV__) {
-  import("../utils/splash-debug");
-  import("../utils/testNotificationAPI");
-}
+// if (__DEV__) {
+//   import("../utils/splash-debug");
+//   import("../utils/testNotificationAPI");
+// }
 
 // Clean app layout without notifications/websockets but with previous functionality
 
@@ -90,32 +90,32 @@ function AppContent() {
   const finishInitialization = async () => {
     try {
       // Debug: Show all storage keys in development
-      if (__DEV__) {
-        await SplashUtils.debugAllStorageKeys();
-      }
+      // if (__DEV__) {
+      //   await SplashUtils.debugAllStorageKeys();
+      // }
 
       // Check if custom splash has been shown before (AFTER Redux persist is ready)
-      const hasShownSplash = await SplashUtils.hasShownSplash();
+      // const hasShownSplash = await SplashUtils.hasShownSplash();
 
-      if (__DEV__) {
-        console.log(`[AppContent] Splash check result:`, { hasShownSplash });
-      }
+      // if (__DEV__) {
+      //   console.log(`[AppContent] Splash check result:`, { hasShownSplash });
+      // }
 
-      if (!hasShownSplash) {
-        // First time launch - show custom splash
-        setShowCustomSplash(true);
-        await SplashUtils.markSplashAsShown();
+      // if (!hasShownSplash) {
+      //   // First time launch - show custom splash
+      //   setShowCustomSplash(true);
+      //   await SplashUtils.markSplashAsShown();
 
-        if (__DEV__) {
-          console.log(`[AppContent] Will show custom splash screen`);
-        }
-      } else {
-        if (__DEV__) {
-          console.log(
-            `[AppContent] Splash already shown, going directly to main app`,
-          );
-        }
-      }
+      //   if (__DEV__) {
+      //     console.log(`[AppContent] Will show custom splash screen`);
+      //   }
+      // } else {
+      //   if (__DEV__) {
+      //     console.log(
+      //       `[AppContent] Splash already shown, going directly to main app`
+      //     );
+      //   }
+      // }
 
       // Hide native splash
       await ExpoSplashScreen.hideAsync();

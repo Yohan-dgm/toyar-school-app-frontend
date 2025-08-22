@@ -23,7 +23,10 @@ import {
   TARGET_TYPES,
   NotificationType,
 } from "../../types/communication-management";
-import { USER_CATEGORIES, getUserCategoryDisplayName } from "../../constants/userCategories";
+import {
+  USER_CATEGORIES,
+  getUserCategoryDisplayName,
+} from "../../constants/userCategories";
 
 interface CreateNotificationModalProps {
   visible: boolean;
@@ -60,7 +63,7 @@ export default function CreateNotificationModal({
 
   useEffect(() => {
     if (notificationTypes.length > 0 && formData.notification_type_id === 0) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         notification_type_id: notificationTypes[0].id,
       }));
@@ -69,7 +72,8 @@ export default function CreateNotificationModal({
 
   const resetForm = () => {
     setFormData({
-      notification_type_id: notificationTypes.length > 0 ? notificationTypes[0].id : 0,
+      notification_type_id:
+        notificationTypes.length > 0 ? notificationTypes[0].id : 0,
       title: "",
       message: "",
       priority: "normal",
@@ -103,7 +107,7 @@ export default function CreateNotificationModal({
 
     try {
       const targetData: any = {};
-      
+
       if (formData.target_type === "role" && selectedRoles.length > 0) {
         targetData.roles = selectedRoles;
       } else if (formData.target_type === "user" && selectedUsers.length > 0) {
@@ -116,24 +120,29 @@ export default function CreateNotificationModal({
         message: formData.message.trim(),
         priority: formData.priority,
         target_type: formData.target_type,
-        target_data: Object.keys(targetData).length > 0 ? targetData : undefined,
+        target_data:
+          Object.keys(targetData).length > 0 ? targetData : undefined,
         action_url: formData.action_url.trim() || undefined,
         action_text: formData.action_text.trim() || undefined,
         image_url: formData.image_url.trim() || undefined,
         is_scheduled: formData.is_scheduled,
-        scheduled_at: formData.scheduled_at ? new Date(formData.scheduled_at).toISOString() : undefined,
-        expires_at: formData.expires_at ? new Date(formData.expires_at).toISOString() : undefined,
+        scheduled_at: formData.scheduled_at
+          ? new Date(formData.scheduled_at).toISOString()
+          : undefined,
+        expires_at: formData.expires_at
+          ? new Date(formData.expires_at).toISOString()
+          : undefined,
       };
 
       await createNotification(notificationData).unwrap();
-      
+
       Alert.alert("Success", "Notification created successfully!");
       onSuccess?.();
       handleClose();
     } catch (error: any) {
       Alert.alert(
         "Error",
-        error?.data?.message || "Failed to create notification"
+        error?.data?.message || "Failed to create notification",
       );
     }
   };
@@ -150,12 +159,18 @@ export default function CreateNotificationModal({
                 styles.typeButton,
                 {
                   borderColor: type.color,
-                  backgroundColor: formData.notification_type_id === type.id 
-                    ? type.color + "20" 
-                    : "#f9fafb",
+                  backgroundColor:
+                    formData.notification_type_id === type.id
+                      ? type.color + "20"
+                      : "#f9fafb",
                 },
               ]}
-              onPress={() => setFormData(prev => ({ ...prev, notification_type_id: type.id }))}
+              onPress={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  notification_type_id: type.id,
+                }))
+              }
             >
               <MaterialIcons
                 name={type.icon as any}
@@ -165,7 +180,12 @@ export default function CreateNotificationModal({
               <Text
                 style={[
                   styles.typeText,
-                  { color: formData.notification_type_id === type.id ? type.color : "#6b7280" },
+                  {
+                    color:
+                      formData.notification_type_id === type.id
+                        ? type.color
+                        : "#6b7280",
+                  },
                 ]}
               >
                 {type.name}
@@ -185,7 +205,9 @@ export default function CreateNotificationModal({
           style={styles.textInput}
           placeholder="Enter notification title"
           value={formData.title}
-          onChangeText={(text) => setFormData(prev => ({ ...prev, title: text }))}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, title: text }))
+          }
           maxLength={500}
         />
         <Text style={styles.charCount}>{formData.title.length}/500</Text>
@@ -197,7 +219,9 @@ export default function CreateNotificationModal({
           style={[styles.textInput, styles.multilineInput]}
           placeholder="Enter notification message"
           value={formData.message}
-          onChangeText={(text) => setFormData(prev => ({ ...prev, message: text }))}
+          onChangeText={(text) =>
+            setFormData((prev) => ({ ...prev, message: text }))
+          }
           multiline
           numberOfLines={4}
           textAlignVertical="top"
@@ -217,12 +241,17 @@ export default function CreateNotificationModal({
               styles.priorityButton,
               formData.priority === value && styles.selectedPriorityButton,
             ]}
-            onPress={() => setFormData(prev => ({ ...prev, priority: value as any }))}
+            onPress={() =>
+              setFormData((prev) => ({ ...prev, priority: value as any }))
+            }
           >
             <MaterialIcons
               name={
-                value === "urgent" ? "warning" :
-                value === "high" ? "priority-high" : "notifications"
+                value === "urgent"
+                  ? "warning"
+                  : value === "high"
+                    ? "priority-high"
+                    : "notifications"
               }
               size={16}
               color={formData.priority === value ? "#ffffff" : "#6b7280"}
@@ -252,7 +281,9 @@ export default function CreateNotificationModal({
               styles.targetButton,
               formData.target_type === value && styles.selectedTargetButton,
             ]}
-            onPress={() => setFormData(prev => ({ ...prev, target_type: value as any }))}
+            onPress={() =>
+              setFormData((prev) => ({ ...prev, target_type: value as any }))
+            }
           >
             <Text
               style={[
@@ -274,7 +305,7 @@ export default function CreateNotificationModal({
             {Object.entries(USER_CATEGORIES).map(([key, value]) => {
               const roleName = getUserCategoryDisplayName(value);
               const isSelected = selectedRoles.includes(key.toLowerCase());
-              
+
               return (
                 <TouchableOpacity
                   key={value}
@@ -284,9 +315,11 @@ export default function CreateNotificationModal({
                   ]}
                   onPress={() => {
                     if (isSelected) {
-                      setSelectedRoles(prev => prev.filter(r => r !== key.toLowerCase()));
+                      setSelectedRoles((prev) =>
+                        prev.filter((r) => r !== key.toLowerCase()),
+                      );
                     } else {
-                      setSelectedRoles(prev => [...prev, key.toLowerCase()]);
+                      setSelectedRoles((prev) => [...prev, key.toLowerCase()]);
                     }
                   }}
                 >
@@ -317,7 +350,9 @@ export default function CreateNotificationModal({
             style={styles.textInput}
             placeholder="e.g., View Details"
             value={formData.action_text}
-            onChangeText={(text) => setFormData(prev => ({ ...prev, action_text: text }))}
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, action_text: text }))
+            }
             maxLength={100}
           />
         </View>
@@ -327,7 +362,9 @@ export default function CreateNotificationModal({
             style={styles.textInput}
             placeholder="https://..."
             value={formData.action_url}
-            onChangeText={(text) => setFormData(prev => ({ ...prev, action_url: text }))}
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, action_url: text }))
+            }
             maxLength={500}
             keyboardType="url"
           />
@@ -339,12 +376,19 @@ export default function CreateNotificationModal({
   const renderSchedulingSettings = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Scheduling (Optional)</Text>
-      
+
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => setFormData(prev => ({ ...prev, is_scheduled: !prev.is_scheduled }))}
+        onPress={() =>
+          setFormData((prev) => ({ ...prev, is_scheduled: !prev.is_scheduled }))
+        }
       >
-        <View style={[styles.checkbox, formData.is_scheduled && styles.checkedCheckbox]}>
+        <View
+          style={[
+            styles.checkbox,
+            formData.is_scheduled && styles.checkedCheckbox,
+          ]}
+        >
           {formData.is_scheduled && (
             <MaterialIcons name="check" size={16} color="#ffffff" />
           )}
@@ -440,13 +484,20 @@ export default function CreateNotificationModal({
         {/* Date Pickers */}
         {showSchedulePicker && (
           <DateTimePicker
-            value={formData.scheduled_at ? new Date(formData.scheduled_at) : new Date()}
+            value={
+              formData.scheduled_at
+                ? new Date(formData.scheduled_at)
+                : new Date()
+            }
             mode="datetime"
             minimumDate={new Date()}
             onChange={(event, selectedDate) => {
               setShowSchedulePicker(false);
               if (selectedDate) {
-                setFormData(prev => ({ ...prev, scheduled_at: selectedDate }));
+                setFormData((prev) => ({
+                  ...prev,
+                  scheduled_at: selectedDate,
+                }));
               }
             }}
           />
@@ -454,13 +505,15 @@ export default function CreateNotificationModal({
 
         {showExpiryPicker && (
           <DateTimePicker
-            value={formData.expires_at ? new Date(formData.expires_at) : new Date()}
+            value={
+              formData.expires_at ? new Date(formData.expires_at) : new Date()
+            }
             mode="datetime"
             minimumDate={new Date()}
             onChange={(event, selectedDate) => {
               setShowExpiryPicker(false);
               if (selectedDate) {
-                setFormData(prev => ({ ...prev, expires_at: selectedDate }));
+                setFormData((prev) => ({ ...prev, expires_at: selectedDate }));
               }
             }}
           />

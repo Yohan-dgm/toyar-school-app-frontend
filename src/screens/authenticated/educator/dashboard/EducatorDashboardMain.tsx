@@ -13,6 +13,7 @@ import FullScreenModal from "../../principal/dashboard/components/FullScreenModa
 import StudentsModalContent from "../../principal/dashboard/components/StudentsModalContent";
 import TeachersModalContent from "../../principal/dashboard/components/TeachersModalContent";
 import EducatorFeedbackModal from "../../principal/dashboard/modals/EducatorFeedbackModal";
+import StudentAttendanceModal from "../../principal/dashboard/modals/StudentAttendanceModal";
 import AcademicReportsModal from "../../principal/dashboard/modals/AcademicReportsModal";
 import SchoolFacilitiesModal from "../../principal/dashboard/modals/SchoolFacilitiesModal";
 import FinancialOverviewModal from "../../principal/dashboard/modals/FinancialOverviewModal";
@@ -57,10 +58,19 @@ function EducatorDashboardMain() {
     setActiveModal("educator_feedback");
   };
 
+  const openStudentAttendanceModal = () => {
+    setActiveModal("student_attendance");
+  };
+
   const renderModalContent = (modalId: string) => {
     // Educator feedback now uses the dedicated modal component
     if (modalId === "educator_feedback") {
       return null; // Handled by separate EducatorFeedbackModal component
+    }
+
+    // Student attendance now uses the dedicated modal component
+    if (modalId === "student_attendance") {
+      return null; // Handled by separate StudentAttendanceModal component
     }
 
     // Students modal now uses the dedicated component with real API integration
@@ -165,6 +175,15 @@ function EducatorDashboardMain() {
       gradient: ["#920734", "#b8285a"],
       onPress: openEducatorFeedbackModal,
     },
+    {
+      id: "student_attendance",
+      title: "Student Attendance",
+      subtitle: "Attendance Management",
+      icon: "how-to-reg",
+      color: "#0057FF",
+      gradient: ["#0057FF", "#3d7cff"],
+      onPress: openStudentAttendanceModal,
+    },
   ];
 
   return (
@@ -194,6 +213,10 @@ function EducatorDashboardMain() {
         visible={activeModal === "educator_feedback"}
         onClose={handleCloseModal}
       />
+      <StudentAttendanceModal
+        visible={activeModal === "student_attendance"}
+        onClose={handleCloseModal}
+      />
       <AcademicReportsModal ref={academicReportsModalRef} />
       <SchoolFacilitiesModal ref={schoolFacilitiesModalRef} />
       <FinancialOverviewModal ref={financialOverviewModalRef} />
@@ -201,27 +224,29 @@ function EducatorDashboardMain() {
       <EmergencyManagementModal ref={emergencyManagementModalRef} />
 
       {/* Full-Screen Modal */}
-      {activeModal && activeModal !== "educator_feedback" && (
-        <FullScreenModal
-          visible={!!activeModal}
-          onClose={handleCloseModal}
-          title={(() => {
-            const modalConfig = {
-              all_students: "Students Overview",
-              all_teachers: "Teachers Directory",
-              sport_coaches: "Sports Information",
-              announcements: "School Communications",
-            };
-            return (
-              modalConfig[activeModal as keyof typeof modalConfig] ||
-              "Dashboard"
-            );
-          })()}
-          backgroundColor="#F8F9FA"
-        >
-          {renderModalContent(activeModal)}
-        </FullScreenModal>
-      )}
+      {activeModal &&
+        activeModal !== "educator_feedback" &&
+        activeModal !== "student_attendance" && (
+          <FullScreenModal
+            visible={!!activeModal}
+            onClose={handleCloseModal}
+            title={(() => {
+              const modalConfig = {
+                all_students: "Students Overview",
+                all_teachers: "Teachers Directory",
+                sport_coaches: "Sports Information",
+                announcements: "School Communications",
+              };
+              return (
+                modalConfig[activeModal as keyof typeof modalConfig] ||
+                "Dashboard"
+              );
+            })()}
+            backgroundColor="#F8F9FA"
+          >
+            {renderModalContent(activeModal)}
+          </FullScreenModal>
+        )}
     </View>
   );
 }

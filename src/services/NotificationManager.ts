@@ -47,7 +47,9 @@ export class NotificationManager {
 
   private connectWebSocket() {
     if (!this.authToken || !this.userId) {
-      console.warn("NotificationManager: Cannot connect without auth token and user ID");
+      console.warn(
+        "NotificationManager: Cannot connect without auth token and user ID",
+      );
       return;
     }
 
@@ -72,14 +74,24 @@ export class NotificationManager {
           const data: RealTimeEvent = JSON.parse(event.data);
           this.handleRealtimeEvent(data);
         } catch (error) {
-          console.error("NotificationManager: Failed to parse WebSocket message:", error);
+          console.error(
+            "NotificationManager: Failed to parse WebSocket message:",
+            error,
+          );
         }
       };
 
       this.websocket.onclose = (event) => {
-        console.log("NotificationManager: WebSocket disconnected:", event.code, event.reason);
+        console.log(
+          "NotificationManager: WebSocket disconnected:",
+          event.code,
+          event.reason,
+        );
         this.isConnected = false;
-        this.emit("connection.lost", { code: event.code, reason: event.reason });
+        this.emit("connection.lost", {
+          code: event.code,
+          reason: event.reason,
+        });
         this.attemptReconnect();
       };
 
@@ -88,7 +100,10 @@ export class NotificationManager {
         this.emit("connection.error", { error });
       };
     } catch (error) {
-      console.error("NotificationManager: Failed to create WebSocket connection:", error);
+      console.error(
+        "NotificationManager: Failed to create WebSocket connection:",
+        error,
+      );
       this.attemptReconnect();
     }
   }
@@ -115,7 +130,10 @@ export class NotificationManager {
           const data: RealTimeEvent = JSON.parse(event.data);
           this.handleRealtimeEvent(data);
         } catch (error) {
-          console.error("NotificationManager: Failed to parse SSE message:", error);
+          console.error(
+            "NotificationManager: Failed to parse SSE message:",
+            error,
+          );
         }
       };
 
@@ -127,7 +145,10 @@ export class NotificationManager {
         this.connectWebSocket();
       };
     } catch (error) {
-      console.error("NotificationManager: Failed to create SSE connection:", error);
+      console.error(
+        "NotificationManager: Failed to create SSE connection:",
+        error,
+      );
       this.connectWebSocket(); // Fallback to WebSocket
     }
   }
@@ -135,9 +156,9 @@ export class NotificationManager {
   private attemptReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.error("NotificationManager: Max reconnection attempts reached");
-      this.emit("connection.failed", { 
+      this.emit("connection.failed", {
         attempts: this.reconnectAttempts,
-        maxAttempts: this.maxReconnectAttempts 
+        maxAttempts: this.maxReconnectAttempts,
       });
       return;
     }
@@ -146,10 +167,12 @@ export class NotificationManager {
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
 
     setTimeout(() => {
-      console.log(`NotificationManager: Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
-      this.emit("connection.reconnecting", { 
+      console.log(
+        `NotificationManager: Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`,
+      );
+      this.emit("connection.reconnecting", {
         attempt: this.reconnectAttempts,
-        maxAttempts: this.maxReconnectAttempts 
+        maxAttempts: this.maxReconnectAttempts,
       });
       this.connectWebSocket();
     }, delay);
@@ -176,7 +199,11 @@ export class NotificationManager {
   // ========================================================================
 
   private async initializePushNotifications() {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+    if (
+      typeof window === "undefined" ||
+      !("serviceWorker" in navigator) ||
+      !("PushManager" in window)
+    ) {
       console.log("NotificationManager: Push notifications not supported");
       return;
     }
@@ -189,13 +216,17 @@ export class NotificationManager {
       }
 
       const registration = await navigator.serviceWorker.register("/sw.js");
-      const subscription = await this.subscribeToPushNotifications(registration);
-      
+      const subscription =
+        await this.subscribeToPushNotifications(registration);
+
       if (subscription) {
         await this.sendSubscriptionToServer(subscription);
       }
     } catch (error) {
-      console.error("NotificationManager: Failed to initialize push notifications:", error);
+      console.error(
+        "NotificationManager: Failed to initialize push notifications:",
+        error,
+      );
     }
   }
 
@@ -215,7 +246,9 @@ export class NotificationManager {
     return await Notification.requestPermission();
   }
 
-  private async subscribeToPushNotifications(registration: ServiceWorkerRegistration) {
+  private async subscribeToPushNotifications(
+    registration: ServiceWorkerRegistration,
+  ) {
     try {
       const vapidPublicKey = process.env.EXPO_PUBLIC_VAPID_PUBLIC_KEY;
       if (!vapidPublicKey) {
@@ -228,7 +261,10 @@ export class NotificationManager {
         applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey),
       });
     } catch (error) {
-      console.error("NotificationManager: Failed to subscribe to push notifications:", error);
+      console.error(
+        "NotificationManager: Failed to subscribe to push notifications:",
+        error,
+      );
       return null;
     }
   }
@@ -241,13 +277,13 @@ export class NotificationManager {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${this.authToken}`,
+            Authorization: `Bearer ${this.authToken}`,
           },
           body: JSON.stringify({
             subscription: subscription.toJSON(),
             device_type: "web",
           }),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -256,15 +292,20 @@ export class NotificationManager {
 
       console.log("NotificationManager: Push subscription sent to server");
     } catch (error) {
-      console.error("NotificationManager: Failed to send subscription to server:", error);
+      console.error(
+        "NotificationManager: Failed to send subscription to server:",
+        error,
+      );
     }
   }
 
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
     const rawData = window.atob(base64);
-    return new Uint8Array(rawData.split("").map(char => char.charCodeAt(0)));
+    return new Uint8Array(rawData.split("").map((char) => char.charCodeAt(0)));
   }
 
   // ========================================================================
@@ -305,7 +346,10 @@ export class NotificationManager {
     const notification = event.payload;
 
     // Show browser notification for urgent and high priority
-    if (notification.priority === "urgent" || notification.priority === "high") {
+    if (
+      notification.priority === "urgent" ||
+      notification.priority === "high"
+    ) {
       this.showBrowserNotification(notification);
     }
 
@@ -398,7 +442,10 @@ export class NotificationManager {
       },
     };
 
-    const browserNotification = new Notification(`📢 ${announcement.title}`, options);
+    const browserNotification = new Notification(
+      `📢 ${announcement.title}`,
+      options,
+    );
 
     browserNotification.onclick = () => {
       // Handle announcement click - navigate to announcement details
@@ -448,7 +495,10 @@ export class NotificationManager {
         try {
           callback(data);
         } catch (error) {
-          console.error(`NotificationManager: Error in event listener for ${event}:`, error);
+          console.error(
+            `NotificationManager: Error in event listener for ${event}:`,
+            error,
+          );
         }
       });
     }
@@ -477,7 +527,9 @@ export class NotificationManager {
   // Send a heartbeat to keep the connection alive
   sendHeartbeat() {
     if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
-      this.websocket.send(JSON.stringify({ type: "heartbeat", timestamp: Date.now() }));
+      this.websocket.send(
+        JSON.stringify({ type: "heartbeat", timestamp: Date.now() }),
+      );
     }
   }
 

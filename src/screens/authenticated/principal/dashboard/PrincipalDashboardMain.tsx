@@ -1294,7 +1294,8 @@ function PrincipalDashboardMain() {
 
         {/* Main Dashboard Grid */}
         <View style={styles.mainGridSection}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          {/* <Text style={styles.sectionTitle}>Quick Actions</Text> */}
+          <Text style={styles.sectionTitle}></Text>
           <DashboardGrid
             items={dashboardItems}
             onFullScreenPress={handleFullScreenPress}
@@ -1382,11 +1383,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 10,
     fontWeight: "700",
     color: "#1a1a1a",
-    marginBottom: 16,
-    marginTop: 5,
+    marginBottom: 1,
+    marginTop: 1,
   },
   fullScreenContent: {
     flex: 1,

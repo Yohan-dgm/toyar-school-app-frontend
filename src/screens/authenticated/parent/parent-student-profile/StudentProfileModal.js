@@ -165,7 +165,7 @@ const StudentProfileModal = ({ visible, onClose, student }) => {
           </View>
 
           {/* Modern Stats Cards */}
-          <View style={styles.statsGrid}>
+          {/* <View style={styles.statsGrid}>
             <View style={styles.statCard}>
               <View style={styles.statIcon}>
                 <Ionicons name="calendar-outline" size={24} color="#920734" />
@@ -193,7 +193,7 @@ const StudentProfileModal = ({ visible, onClose, student }) => {
               <Text style={styles.statNumber}>95%</Text>
               <Text style={styles.statTitle}>Attendance</Text>
             </View>
-          </View>
+          </View> */}
 
           {/* Personal Information Section */}
           <View style={styles.infoSection}>

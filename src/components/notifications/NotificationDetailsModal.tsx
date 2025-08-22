@@ -254,7 +254,7 @@ export default function NotificationDetailsModal({
               {String(
                 notification.message ||
                   notification.description ||
-                  "No message content"
+                  "No message content",
               )}
             </Text>
           </View>

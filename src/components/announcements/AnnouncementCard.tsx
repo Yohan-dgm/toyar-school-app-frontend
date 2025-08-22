@@ -51,12 +51,7 @@ export default function AnnouncementCard({
   );
 
   const renderStatusBadge = () => (
-    <View
-      style={[
-        styles.statusBadge,
-        { backgroundColor: statusColor + "20" },
-      ]}
-    >
+    <View style={[styles.statusBadge, { backgroundColor: statusColor + "20" }]}>
       <Text style={[styles.statusText, { color: statusColor }]}>
         {announcement.status_label}
       </Text>
@@ -79,10 +74,7 @@ export default function AnnouncementCard({
         style={styles.categoryIcon}
       />
       <Text
-        style={[
-          styles.categoryText,
-          { color: announcement.category.color },
-        ]}
+        style={[styles.categoryText, { color: announcement.category.color }]}
       >
         {announcement.category.name}
       </Text>
@@ -137,10 +129,7 @@ export default function AnnouncementCard({
         />
       )}
 
-      <Text
-        style={styles.excerpt}
-        numberOfLines={compact ? 2 : 4}
-      >
+      <Text style={styles.excerpt} numberOfLines={compact ? 2 : 4}>
         {announcement.excerpt}
       </Text>
 
@@ -159,15 +148,16 @@ export default function AnnouncementCard({
         </View>
       )}
 
-      {announcement.attachment_urls && announcement.attachment_urls.length > 0 && (
-        <View style={styles.attachmentIndicator}>
-          <MaterialIcons name="attach-file" size={16} color="#6b7280" />
-          <Text style={styles.attachmentText}>
-            {announcement.attachment_urls.length} attachment
-            {announcement.attachment_urls.length > 1 ? "s" : ""}
-          </Text>
-        </View>
-      )}
+      {announcement.attachment_urls &&
+        announcement.attachment_urls.length > 0 && (
+          <View style={styles.attachmentIndicator}>
+            <MaterialIcons name="attach-file" size={16} color="#6b7280" />
+            <Text style={styles.attachmentText}>
+              {announcement.attachment_urls.length} attachment
+              {announcement.attachment_urls.length > 1 ? "s" : ""}
+            </Text>
+          </View>
+        )}
     </View>
   );
 
@@ -194,9 +184,7 @@ export default function AnnouncementCard({
 
       <View style={styles.statsSpacer} />
 
-      <Text style={styles.creatorText}>
-        by {announcement.creator.name}
-      </Text>
+      <Text style={styles.creatorText}>by {announcement.creator.name}</Text>
     </View>
   );
 

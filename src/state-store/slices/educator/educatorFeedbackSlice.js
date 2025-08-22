@@ -57,7 +57,28 @@ export const submitEducatorFeedback = createAsyncThunk(
       // const response = await api.post("/api/educator/feedbacks", feedbackData);
       // return response.data;
 
-      // Mock response
+      // Mock network delay to simulate real API behavior
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 + Math.random() * 2000),
+      );
+
+      // Simulate occasional network errors for testing
+      if (Math.random() < 0.1) {
+        // 10% chance of network error
+        const error = new Error("Network request failed");
+        error.code = "NETWORK_ERROR";
+        throw error;
+      }
+
+      // Simulate timeout errors occasionally
+      if (Math.random() < 0.05) {
+        // 5% chance of timeout
+        const error = new Error("Request timeout");
+        error.code = "TIMEOUT";
+        throw error;
+      }
+
+      // Mock successful response
       return {
         id: Date.now(),
         ...feedbackData,
@@ -65,7 +86,25 @@ export const submitEducatorFeedback = createAsyncThunk(
         created_at: new Date().toISOString(),
       };
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      // Enhanced error handling with network error classification
+      const errorMessage = error.message || "Unknown error occurred";
+      const errorCode = error.code || "UNKNOWN_ERROR";
+
+      // Classify error types for better handling
+      const networkErrors = ["NETWORK_ERROR", "TIMEOUT", "CONNECTION_FAILED"];
+      const isNetworkError =
+        networkErrors.includes(errorCode) ||
+        errorMessage.toLowerCase().includes("network") ||
+        errorMessage.toLowerCase().includes("timeout") ||
+        errorMessage.toLowerCase().includes("connection");
+
+      return rejectWithValue({
+        message: errorMessage,
+        code: errorCode,
+        isNetworkError,
+        timestamp: new Date().toISOString(),
+        ...(error.response?.data || {}),
+      });
     }
   },
 );

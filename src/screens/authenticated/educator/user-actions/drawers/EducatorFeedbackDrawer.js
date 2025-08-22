@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
+import NetInfo from "@react-native-community/netinfo";
 import StarRating from "react-native-star-rating-widget";
 import { theme } from "../../../../../styles/theme";
 import AddCategoryPopup from "../../../../../components/educator-feedback/AddCategoryPopup";
@@ -54,6 +55,13 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [showAddCategoryPopup, setShowAddCategoryPopup] = useState(false);
+
+  // Network state management
+  const [isConnected, setIsConnected] = useState(true);
+  const [networkType, setNetworkType] = useState(null);
+  const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [submissionError, setSubmissionError] = useState(null);
 
   // Helper function to safely get profile image
   const getProfileImage = (student) => {
@@ -275,6 +283,27 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     },
   ];
 
+  // Network connectivity monitoring
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected ?? false);
+      setNetworkType(state.type);
+
+      // Clear errors when network is restored
+      if (state.isConnected && submissionError) {
+        setSubmissionError(null);
+      }
+    });
+
+    // Get initial network state
+    NetInfo.fetch().then((state) => {
+      setIsConnected(state.isConnected ?? false);
+      setNetworkType(state.type);
+    });
+
+    return unsubscribe;
+  }, [submissionError]);
+
   // Fetch existing feedbacks on component mount
   useEffect(() => {
     dispatch(fetchEducatorFeedbacks({ page: 1, limit: 50 }));
@@ -370,7 +399,65 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
     );
   };
 
+  // Utility function for exponential backoff delay
+  const getRetryDelay = (attempt) => {
+    return Math.min(1000 * Math.pow(2, attempt), 10000); // Max 10 seconds
+  };
+
+  // Utility function to check if error is network-related
+  const isNetworkError = (error) => {
+    if (!error) return false;
+    const errorMessage = error.message || error.toString().toLowerCase();
+    return (
+      errorMessage.includes("network") ||
+      errorMessage.includes("timeout") ||
+      errorMessage.includes("connection") ||
+      errorMessage.includes("fetch") ||
+      !isConnected
+    );
+  };
+
+  // Enhanced submission with retry logic
+  const attemptSubmission = async (feedbackData, attempt = 0) => {
+    try {
+      setSubmissionError(null);
+      const result = await dispatch(
+        submitEducatorFeedback(feedbackData),
+      ).unwrap();
+
+      // Reset retry count on success
+      setRetryCount(0);
+      setIsRetrying(false);
+
+      return result;
+    } catch (error) {
+      const isNetError = isNetworkError(error);
+      const maxRetries = 3;
+
+      if (isNetError && attempt < maxRetries) {
+        // Exponential backoff retry for network errors
+        const delay = getRetryDelay(attempt);
+        setRetryCount(attempt + 1);
+        setIsRetrying(true);
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
+
+        // Check network connectivity before retry
+        const networkState = await NetInfo.fetch();
+        if (networkState.isConnected) {
+          return attemptSubmission(feedbackData, attempt + 1);
+        } else {
+          throw new Error("No network connection available");
+        }
+      } else {
+        setIsRetrying(false);
+        throw error;
+      }
+    }
+  };
+
   const handleSubmitFeedback = async () => {
+    // Form validation
     if (
       !selectedGrade ||
       !selectedStudent ||
@@ -378,9 +465,17 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
       selectedCategories.length === 0 ||
       !comment.trim()
     ) {
-      Alert.alert(
-        "Error",
+      setSubmissionError(
         "Please fill in all required fields including grade level",
+      );
+      return;
+    }
+
+    // Check network connectivity first
+    const networkState = await NetInfo.fetch();
+    if (!networkState.isConnected) {
+      setSubmissionError(
+        "No internet connection. Please check your network and try again.",
       );
       return;
     }
@@ -396,8 +491,11 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
         educator_name: sessionData?.data?.full_name || sessionData?.full_name,
       };
 
-      await dispatch(submitEducatorFeedback(feedbackData)).unwrap();
+      // Use enhanced submission with retry logic
+      await attemptSubmission(feedbackData);
 
+      // Success - show success message and reset form
+      setSubmissionError(null);
       Alert.alert("Success", "Feedback submitted successfully");
 
       // Reset form
@@ -408,7 +506,67 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
       setComment("");
       setShowAddForm(false);
     } catch (error) {
-      Alert.alert("Error", error.message || "Failed to submit feedback");
+      const isNetError = isNetworkError(error);
+
+      if (isNetError) {
+        setSubmissionError(
+          "Network error occurred. The app will automatically retry when your connection improves.",
+        );
+      } else {
+        setSubmissionError(
+          error.message || "Failed to submit feedback. Please try again.",
+        );
+      }
+    }
+  };
+
+  // Manual retry function
+  const handleRetry = async () => {
+    if (
+      !selectedGrade ||
+      !selectedStudent ||
+      rating === 0 ||
+      selectedCategories.length === 0 ||
+      !comment.trim()
+    ) {
+      return;
+    }
+
+    const feedbackData = {
+      student_id: selectedStudent.id,
+      student_name: selectedStudent.student_calling_name,
+      rating,
+      categories: selectedCategories,
+      comment: comment.trim(),
+      educator_id: sessionData?.data?.id || sessionData?.id,
+      educator_name: sessionData?.data?.full_name || sessionData?.full_name,
+    };
+
+    try {
+      await attemptSubmission(feedbackData);
+
+      setSubmissionError(null);
+      Alert.alert("Success", "Feedback submitted successfully");
+
+      // Reset form
+      setSelectedGrade(null);
+      setSelectedStudent(null);
+      setRating(0);
+      setSelectedCategories([]);
+      setComment("");
+      setShowAddForm(false);
+    } catch (error) {
+      const isNetError = isNetworkError(error);
+
+      if (isNetError) {
+        setSubmissionError(
+          "Network error occurred. Please check your connection and try again.",
+        );
+      } else {
+        setSubmissionError(
+          error.message || "Failed to submit feedback. Please try again.",
+        );
+      }
     }
   };
 
@@ -429,6 +587,9 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
         ? studentListData.data.grades
         : FRONTEND_GRADES;
 
+    // Check if we should disable grade selection
+    const isGradeSelectionDisabled = studentsLoading;
+
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Select Grade Level</Text>
@@ -443,35 +604,79 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
             Failed to load grades. Check console for details.
           </Text>
         )}
+        {isGradeSelectionDisabled && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+            <Text style={styles.loadingText}>
+              Loading students for selected grade...
+            </Text>
+          </View>
+        )}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.gradeScroll}
         >
-          {grades.map((grade) => (
-            <TouchableOpacity
-              key={grade.id}
-              style={[
-                styles.gradeCard,
-                selectedGrade?.id === grade.id && styles.selectedGradeCard,
-              ]}
-              onPress={() => {
-                console.log("🎯 Selected Grade:", grade);
-                setSelectedGrade(grade);
-                setSelectedStudent(null); // Reset student selection when grade changes
-                // Force refetch students for the new grade
-                if (refetchStudents) {
-                  refetchStudents();
-                }
-              }}
-            >
-              <Text style={styles.gradeName}>{grade.name}</Text>
-              <Text style={styles.gradeStudentCount}>
-                {grade.student_list_count || grade.students_count || "N/A"}{" "}
-                students
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {grades.map((grade) => {
+            const isCurrentlySelected = selectedGrade?.id === grade.id;
+            const isDisabled = isGradeSelectionDisabled && !isCurrentlySelected;
+
+            return (
+              <TouchableOpacity
+                key={grade.id}
+                style={[
+                  styles.gradeCard,
+                  isCurrentlySelected && styles.selectedGradeCard,
+                  isDisabled && styles.disabledGradeCard,
+                  isCurrentlySelected &&
+                    studentsLoading &&
+                    styles.loadingGradeCard,
+                ]}
+                disabled={isDisabled}
+                onPress={() => {
+                  // Prevent action if students are currently loading for another grade
+                  if (isGradeSelectionDisabled && !isCurrentlySelected) {
+                    return;
+                  }
+
+                  console.log("🎯 Selected Grade:", grade);
+                  setSelectedGrade(grade);
+                  setSelectedStudent(null); // Reset student selection when grade changes
+                  // Force refetch students for the new grade
+                  if (refetchStudents) {
+                    refetchStudents();
+                  }
+                }}
+              >
+                <View style={styles.gradeCardContent}>
+                  {isCurrentlySelected && studentsLoading && (
+                    <ActivityIndicator
+                      size="small"
+                      color={theme.colors.primary}
+                      style={styles.gradeLoadingIndicator}
+                    />
+                  )}
+                  <Text
+                    style={[
+                      styles.gradeName,
+                      isDisabled && styles.disabledGradeText,
+                    ]}
+                  >
+                    {grade.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.gradeStudentCount,
+                      isDisabled && styles.disabledGradeText,
+                    ]}
+                  >
+                    {grade.student_list_count || grade.students_count || "N/A"}{" "}
+                    students
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
     );
@@ -533,11 +738,24 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
           </View>
         )}
         {studentsError && (
-          <Text style={styles.errorText}>
-            Failed to load students. Check console for details.
-          </Text>
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              Failed to load students for {selectedGrade?.name}
+            </Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={() => {
+                if (refetchStudents) {
+                  refetchStudents();
+                }
+              }}
+            >
+              <MaterialIcons name="refresh" size={16} color="white" />
+              <Text style={styles.retryButtonText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
         )}
-        {studentsToShow.length === 0 && !studentsLoading && (
+        {studentsToShow.length === 0 && !studentsLoading && !studentsError && (
           <Text style={styles.noGradeText}>
             No students found for {selectedGrade?.name}
           </Text>
@@ -547,37 +765,52 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
           showsHorizontalScrollIndicator={false}
           style={styles.studentScroll}
         >
-          {studentsToShow.map((student) => (
-            <TouchableOpacity
-              key={student.id}
-              style={[
-                styles.studentCard,
-                selectedStudent?.id === student.id &&
-                  styles.selectedStudentCard,
-              ]}
-              onPress={() => setSelectedStudent(student)}
-            >
-              <View style={styles.studentAvatar}>
-                <Image
-                  source={getProfileImage(student)}
-                  style={styles.avatarImage}
-                  onError={() => {
-                    console.warn(
-                      "Failed to load profile image for student:",
-                      student?.id,
-                    );
-                  }}
-                />
-              </View>
-              <Text style={styles.studentName}>
-                {student.student_calling_name || student.name}
-              </Text>
-              <Text style={styles.studentInfo}>{student.admission_number}</Text>
-              <Text style={styles.studentInfo}>
-                {student.grade || `Grade ${student.grade_level_id || "N/A"}`}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {studentsToShow.map((student) => {
+            // Safety check for student data
+            if (!student || !student.id) {
+              console.warn("Invalid student data:", student);
+              return null;
+            }
+
+            return (
+              <TouchableOpacity
+                key={student.id}
+                style={[
+                  styles.studentCard,
+                  selectedStudent?.id === student.id &&
+                    styles.selectedStudentCard,
+                ]}
+                onPress={() => {
+                  // Additional safety check before selection
+                  if (student && student.id && !studentsLoading) {
+                    setSelectedStudent(student);
+                  }
+                }}
+              >
+                <View style={styles.studentAvatar}>
+                  <Image
+                    source={getProfileImage(student)}
+                    style={styles.avatarImage}
+                    onError={() => {
+                      console.warn(
+                        "Failed to load profile image for student:",
+                        student?.id,
+                      );
+                    }}
+                  />
+                </View>
+                <Text style={styles.studentName}>
+                  {student.student_calling_name || student.name}
+                </Text>
+                <Text style={styles.studentInfo}>
+                  {student.admission_number}
+                </Text>
+                <Text style={styles.studentInfo}>
+                  {student.grade || `Grade ${student.grade_level_id || "N/A"}`}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
     );
@@ -670,6 +903,53 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
         {renderCategoriesSection()}
         {renderCommentSection()}
 
+        {/* Network Status Indicator */}
+        {!isConnected && (
+          <View style={styles.networkStatusContainer}>
+            <MaterialIcons name="wifi-off" size={20} color="#F44336" />
+            <Text style={styles.networkStatusText}>
+              No internet connection. Please check your network.
+            </Text>
+          </View>
+        )}
+
+        {/* Submission Error Display */}
+        {submissionError && (
+          <View style={styles.errorContainer}>
+            <MaterialIcons name="error-outline" size={20} color="#F44336" />
+            <Text style={styles.errorText}>{submissionError}</Text>
+            {isNetworkError({ message: submissionError }) && (
+              <TouchableOpacity
+                style={styles.retryButton}
+                onPress={handleRetry}
+                disabled={submitting || isRetrying}
+              >
+                <MaterialIcons name="refresh" size={16} color="white" />
+                <Text style={styles.retryButtonText}>
+                  {isRetrying ? "Retrying..." : "Retry"}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
+        {/* Loading State Display */}
+        {(submitting || isRetrying) && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+            <Text style={styles.loadingText}>
+              {isRetrying
+                ? `Retrying submission... (${retryCount}/3)`
+                : "Submitting feedback..."}
+            </Text>
+            {networkType === "cellular" && (
+              <Text style={styles.networkHintText}>
+                Using mobile data - this may take longer
+              </Text>
+            )}
+          </View>
+        )}
+
         <View style={styles.formActions}>
           <TouchableOpacity
             style={styles.cancelButton}
@@ -678,10 +958,31 @@ const EducatorFeedbackDrawer = ({ modalRef }) => {
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.saveButton}
+            style={[
+              styles.saveButton,
+              (!isConnected || submitting || isRetrying) &&
+                styles.disabledSaveButton,
+            ]}
             onPress={handleSubmitFeedback}
+            disabled={!isConnected || submitting || isRetrying}
           >
-            <Text style={styles.saveButtonText}>Save</Text>
+            {submitting || isRetrying ? (
+              <View style={styles.submittingContainer}>
+                <ActivityIndicator size="small" color="white" />
+                <Text style={styles.submittingText}>
+                  {isRetrying ? "Retrying..." : "Submitting..."}
+                </Text>
+              </View>
+            ) : (
+              <Text
+                style={[
+                  styles.saveButtonText,
+                  !isConnected && styles.disabledSaveButtonText,
+                ]}
+              >
+                {!isConnected ? "No Connection" : "Save"}
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -931,6 +1232,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   retryButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: theme.spacing.lg,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
@@ -941,6 +1245,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "600",
+    marginLeft: theme.spacing.xs,
   },
   addButton: {
     flexDirection: "row",
@@ -1020,6 +1325,23 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
     backgroundColor: theme.colors.primary + "20",
   },
+  disabledGradeCard: {
+    opacity: 0.5,
+    backgroundColor: theme.colors.border + "30",
+  },
+  loadingGradeCard: {
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.primary + "10",
+  },
+  gradeCardContent: {
+    alignItems: "center",
+    position: "relative",
+  },
+  gradeLoadingIndicator: {
+    position: "absolute",
+    top: -8,
+    right: -8,
+  },
   gradeName: {
     fontSize: 14,
     fontWeight: "600",
@@ -1032,18 +1354,16 @@ const styles = StyleSheet.create({
     color: theme.colors.secondary,
     textAlign: "center",
   },
+  disabledGradeText: {
+    opacity: 0.6,
+    color: theme.colors.secondary,
+  },
   noGradeText: {
     fontSize: 14,
     color: theme.colors.secondary,
     textAlign: "center",
     padding: theme.spacing.lg,
     fontStyle: "italic",
-  },
-  errorText: {
-    fontSize: 12,
-    color: "#F44336",
-    textAlign: "center",
-    marginBottom: theme.spacing.sm,
   },
   studentCard: {
     backgroundColor: theme.colors.card,
@@ -1165,6 +1485,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "white",
+  },
+  disabledSaveButton: {
+    backgroundColor: theme.colors.border,
+    opacity: 0.6,
+  },
+  disabledSaveButtonText: {
+    color: theme.colors.secondary,
+  },
+  submittingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submittingText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: theme.spacing.sm,
+  },
+  networkStatusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF5F5",
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: "#FED7D7",
+  },
+  networkStatusText: {
+    fontSize: 14,
+    color: "#D32F2F",
+    marginLeft: theme.spacing.sm,
+    flex: 1,
+  },
+  networkHintText: {
+    fontSize: 12,
+    color: theme.colors.secondary,
+    marginTop: theme.spacing.xs,
+    textAlign: "center",
   },
   feedbacksList: {
     flex: 1,

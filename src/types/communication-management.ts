@@ -9,7 +9,7 @@
 
 export const NOTIFICATION_PRIORITIES = {
   NORMAL: "normal",
-  HIGH: "high", 
+  HIGH: "high",
   URGENT: "urgent",
 } as const;
 
@@ -21,7 +21,7 @@ export const ANNOUNCEMENT_PRIORITY_LEVELS = {
 
 export const ANNOUNCEMENT_STATUS = {
   DRAFT: "draft",
-  SCHEDULED: "scheduled", 
+  SCHEDULED: "scheduled",
   PUBLISHED: "published",
   ARCHIVED: "archived",
 } as const;
@@ -29,7 +29,7 @@ export const ANNOUNCEMENT_STATUS = {
 export const TARGET_TYPES = {
   BROADCAST: "broadcast",
   USER: "user",
-  ROLE: "role", 
+  ROLE: "role",
   CLASS: "class",
   GRADE: "grade",
 } as const;
@@ -37,7 +37,7 @@ export const TARGET_TYPES = {
 export const NOTIFICATION_FILTERS = {
   ALL: "all",
   READ: "read",
-  UNREAD: "unread", 
+  UNREAD: "unread",
   DELIVERED: "delivered",
   PENDING: "pending",
 } as const;
@@ -51,7 +51,7 @@ export const BULK_OPERATIONS = {
 export const ANNOUNCEMENT_ACTIONS = {
   LIKE: "like",
   UNLIKE: "unlike",
-  BOOKMARK: "bookmark", 
+  BOOKMARK: "bookmark",
   UNBOOKMARK: "unbookmark",
 } as const;
 
@@ -64,14 +64,14 @@ export const NOTIFICATION_TYPES = [
   {
     id: 1,
     name: "System",
-    slug: "system", 
+    slug: "system",
     description: "System-generated notifications",
     icon: "cog",
     color: "#6b7280",
   },
   {
     id: 2,
-    name: "Announcement", 
+    name: "Announcement",
     slug: "announcement",
     description: "Official announcements",
     icon: "megaphone",
@@ -81,7 +81,7 @@ export const NOTIFICATION_TYPES = [
     id: 3,
     name: "Academic",
     slug: "academic",
-    description: "Academic-related notifications", 
+    description: "Academic-related notifications",
     icon: "book-open",
     color: "#10b981",
   },
@@ -96,7 +96,7 @@ export const NOTIFICATION_TYPES = [
   {
     id: 5,
     name: "Alert",
-    slug: "alert", 
+    slug: "alert",
     description: "Important alerts and warnings",
     icon: "exclamation-triangle",
     color: "#ef4444",
@@ -106,7 +106,7 @@ export const NOTIFICATION_TYPES = [
     name: "Attendance",
     slug: "attendance",
     description: "Attendance-related notifications",
-    icon: "user-check", 
+    icon: "user-check",
     color: "#8b5cf6",
   },
   {
@@ -121,7 +121,7 @@ export const NOTIFICATION_TYPES = [
     id: 8,
     name: "Social",
     slug: "social",
-    description: "Social activities and community events", 
+    description: "Social activities and community events",
     icon: "users",
     color: "#ec4899",
   },
@@ -139,7 +139,7 @@ export const ANNOUNCEMENT_CATEGORIES = [
     sort_order: 1,
   },
   {
-    id: 2, 
+    id: 2,
     name: "Academic",
     slug: "academic",
     description: "Academic announcements",
@@ -149,7 +149,7 @@ export const ANNOUNCEMENT_CATEGORIES = [
   },
   {
     id: 3,
-    name: "Events", 
+    name: "Events",
     slug: "events",
     description: "School events and activities",
     icon: "calendar",
@@ -168,7 +168,7 @@ export const ANNOUNCEMENT_CATEGORIES = [
   {
     id: 5,
     name: "Administrative",
-    slug: "administrative", 
+    slug: "administrative",
     description: "Administrative announcements",
     icon: "clipboard-list",
     color: "#8b5cf6",
@@ -188,7 +188,7 @@ export const ANNOUNCEMENT_CATEGORIES = [
     name: "Health & Safety",
     slug: "health-safety",
     description: "Health and safety announcements",
-    icon: "shield-check", 
+    icon: "shield-check",
     color: "#84cc16",
     sort_order: 7,
   },
@@ -206,7 +206,7 @@ export const ANNOUNCEMENT_CATEGORIES = [
 // Priority Display Configurations
 export const PRIORITY_COLORS = {
   [NOTIFICATION_PRIORITIES.NORMAL]: "#6b7280",
-  [NOTIFICATION_PRIORITIES.HIGH]: "#f59e0b", 
+  [NOTIFICATION_PRIORITIES.HIGH]: "#f59e0b",
   [NOTIFICATION_PRIORITIES.URGENT]: "#ef4444",
   [ANNOUNCEMENT_PRIORITY_LEVELS.LOW]: "#6b7280",
   [ANNOUNCEMENT_PRIORITY_LEVELS.MEDIUM]: "#f59e0b",
@@ -225,19 +225,25 @@ export const STATUS_COLORS = {
 // ========================================================================
 
 // Basic Type Unions
-export type NotificationPriority = typeof NOTIFICATION_PRIORITIES[keyof typeof NOTIFICATION_PRIORITIES];
-export type AnnouncementPriorityLevel = typeof ANNOUNCEMENT_PRIORITY_LEVELS[keyof typeof ANNOUNCEMENT_PRIORITY_LEVELS];
-export type AnnouncementStatus = typeof ANNOUNCEMENT_STATUS[keyof typeof ANNOUNCEMENT_STATUS];
-export type TargetType = typeof TARGET_TYPES[keyof typeof TARGET_TYPES];
-export type NotificationFilter = typeof NOTIFICATION_FILTERS[keyof typeof NOTIFICATION_FILTERS];
-export type BulkOperation = typeof BULK_OPERATIONS[keyof typeof BULK_OPERATIONS];
-export type AnnouncementAction = typeof ANNOUNCEMENT_ACTIONS[keyof typeof ANNOUNCEMENT_ACTIONS];
+export type NotificationPriority =
+  (typeof NOTIFICATION_PRIORITIES)[keyof typeof NOTIFICATION_PRIORITIES];
+export type AnnouncementPriorityLevel =
+  (typeof ANNOUNCEMENT_PRIORITY_LEVELS)[keyof typeof ANNOUNCEMENT_PRIORITY_LEVELS];
+export type AnnouncementStatus =
+  (typeof ANNOUNCEMENT_STATUS)[keyof typeof ANNOUNCEMENT_STATUS];
+export type TargetType = (typeof TARGET_TYPES)[keyof typeof TARGET_TYPES];
+export type NotificationFilter =
+  (typeof NOTIFICATION_FILTERS)[keyof typeof NOTIFICATION_FILTERS];
+export type BulkOperation =
+  (typeof BULK_OPERATIONS)[keyof typeof BULK_OPERATIONS];
+export type AnnouncementAction =
+  (typeof ANNOUNCEMENT_ACTIONS)[keyof typeof ANNOUNCEMENT_ACTIONS];
 
 // Core Data Interfaces
 export interface NotificationType {
   id: number;
   name: string;
-  slug: string; 
+  slug: string;
   description: string;
   icon: string;
   color: string;
@@ -445,7 +451,10 @@ export interface NotificationEvent extends RealTimeEvent {
 }
 
 export interface AnnouncementEvent extends RealTimeEvent {
-  type: "announcement.published" | "announcement.updated" | "announcement.deleted";
+  type:
+    | "announcement.published"
+    | "announcement.updated"
+    | "announcement.deleted";
   payload: AnnouncementItem;
 }
 
@@ -536,12 +545,20 @@ export interface FilterBarProps {
 }
 
 // Utility Type Helpers
-export type NotificationWithoutId = Omit<NotificationItem, "id" | "created_at" | "updated_at" | "time_ago">;
-export type AnnouncementWithoutId = Omit<AnnouncementItem, "id" | "created_at" | "updated_at" | "time_ago" | "creator">;
-export type PartialNotification = Partial<NotificationItem> & Pick<NotificationItem, "id">;
-export type PartialAnnouncement = Partial<AnnouncementItem> & Pick<AnnouncementItem, "id">;
+export type NotificationWithoutId = Omit<
+  NotificationItem,
+  "id" | "created_at" | "updated_at" | "time_ago"
+>;
+export type AnnouncementWithoutId = Omit<
+  AnnouncementItem,
+  "id" | "created_at" | "updated_at" | "time_ago" | "creator"
+>;
+export type PartialNotification = Partial<NotificationItem> &
+  Pick<NotificationItem, "id">;
+export type PartialAnnouncement = Partial<AnnouncementItem> &
+  Pick<AnnouncementItem, "id">;
 
-// Hook Return Types  
+// Hook Return Types
 export interface UseNotificationsReturn {
   notifications: NotificationItem[];
   stats: NotificationStats | null;

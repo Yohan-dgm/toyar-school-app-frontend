@@ -904,7 +904,12 @@ const StudentSelectionWithPagination: React.FC<
   }
 
   // No students found in selected grade
-  if (allLoadedStudents.length === 0 && !isLoading && !isSearching) {
+  if (
+    allLoadedStudents.length === 0 &&
+    !isInitialLoading &&
+    !isFetchingAllStudents &&
+    !isSearching
+  ) {
     const gradeName = getGradeNameById(gradeId) || `Grade ${gradeId}`;
     const emptyMessage = activeSearchTerm
       ? `No students found for "${activeSearchTerm}" in ${gradeName}`
@@ -1029,7 +1034,7 @@ const StudentSelectionWithPagination: React.FC<
           <TouchableOpacity
             style={styles.loadMoreButton}
             onPress={loadNextPage}
-            disabled={isLoading}
+            disabled={isInitialLoading || isFetchingAllStudents}
           >
             <MaterialIcons name="add" size={24} color="#920734" />
             <Text style={styles.loadMoreButtonText}>Load More</Text>

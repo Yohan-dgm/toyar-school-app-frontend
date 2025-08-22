@@ -12,6 +12,7 @@ export const apiServer1 = createApi({
     "Attendance",
     "StudentAttendance",
     "StudentAttendanceAggregated",
+    "StudentAttendanceById",
     "Auth",
     "News",
     "NewsCategories",
@@ -22,6 +23,8 @@ export const apiServer1 = createApi({
     "NotificationStats",
     "Announcements",
     "AnnouncementCategories",
+    "StudentGrowth",
+    "Payment",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.EXPO_PUBLIC_BASE_URL_API_SERVER_1,
